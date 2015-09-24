@@ -1,0 +1,28 @@
+﻿{
+	Identifier:{Value:10000},
+	Chapters:[
+		{
+			Catalog: 
+			{
+				Width:1024,
+				Height:1024,
+				Depth:1,
+				MinFilter:9729,
+				MagFilter:9729,
+				TextureWrapS:10496,
+				TextureWrapT:10496,
+			},
+			Pages:
+			[
+				{
+					Asset:{
+						Identifier:{Value:0001},
+						Name:"KoreanBBQ",
+						Version:1,
+					},
+					RelativePath:"KoreanBBQ.png"
+				}
+			],
+		},
+	],
+}

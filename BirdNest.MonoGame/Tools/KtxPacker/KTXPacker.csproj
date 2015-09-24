@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{9D5688FD-5069-4773-A78E-24E7B5700CA9}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>KTXPacker</RootNamespace>
+    <AssemblyName>KTXPacker</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Externalconsole>true</Externalconsole>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>full</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Externalconsole>true</Externalconsole>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="OpenTK">
+      <HintPath>..\packages\OpenTK.1.1.1589.5942\lib\NET40\OpenTK.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <None Include="packages.config" />
+    <None Include="..\KtxPacker\media\KoreanBBQ.astc" />
+    <None Include="..\KtxPacker\media\KoreanBBQ_mip_1.astc" />
+    <None Include="..\KtxPacker\media\KoreanBBQ_mip_10.astc" />
+    <None Include="..\KtxPacker\media\KoreanBBQ_mip_2.astc" />
+    <None Include="..\KtxPacker\media\KoreanBBQ_mip_3.astc" />
+    <None Include="..\KtxPacker\media\KoreanBBQ_mip_4.astc" />
+    <None Include="..\KtxPacker\media\KoreanBBQ_mip_5.astc" />
+    <None Include="..\KtxPacker\media\KoreanBBQ_mip_6.astc" />
+    <None Include="..\KtxPacker\media\KoreanBBQ_mip_7.astc" />
+    <None Include="..\KtxPacker\media\KoreanBBQ_mip_8.astc" />
+    <None Include="..\KtxPacker\media\KoreanBBQ_mip_9.astc" />
+    <None Include="..\KtxPacker\media\10000\1.ktx" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\KtxSharp\KtxSharp.csproj">
+      <Project>{F5F42399-9D4B-42BC-8E2B-172DB4DA9A79}</Project>
+      <Name>KtxSharp</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\KtxSharp.JsonNET\KtxSharp.JsonNET.csproj">
+      <Project>{ACBEAF7B-1403-40F6-9767-378B8E824443}</Project>
+      <Name>KtxSharp.JsonNET</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BirdNest.Core\BirdNest.Core.csproj">
+      <Project>{AB25A0BE-77B4-4940-B59B-43E938A89C44}</Project>
+      <Name>BirdNest.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\KtxPacker\1.ktx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="media\10000\10000.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="media\10000\1.ktx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="media\" />
+    <Folder Include="media\10000\" />
+  </ItemGroup>
+</Project>

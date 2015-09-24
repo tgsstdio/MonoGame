@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{9D3DE491-E6D0-4D12-9A2D-D31B23D7D71D}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>BirdNest.MonoGame.FileSystem.Dirs</RootNamespace>
+    <AssemblyName>BirdNest.MonoGame.FileSystem.Dirs</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>full</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="DirectoryFileSystem.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <ProjectReference Include="..\BirdNest.MonoGame.Core\BirdNest.MonoGame.Core.csproj">
+      <Project>{AB25A0BE-77B4-4940-B59B-43E938A89C44}</Project>
+      <Name>BirdNest.MonoGame.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BirdNest.MonoGame.Blocks\BirdNest.MonoGame.Blocks.csproj">
+      <Project>{F218D143-486C-4018-8DAD-B970088EA505}</Project>
+      <Name>BirdNest.MonoGame.Blocks</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BirdNest.MonoGame.FileSystem\BirdNest.MonoGame.FileSystem.csproj">
+      <Project>{E44E47ED-2203-4E45-85A9-C755B10AC044}</Project>
+      <Name>BirdNest.MonoGame.FileSystem</Name>
+    </ProjectReference>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{F5F42399-9D4B-42BC-8E2B-172DB4DA9A79}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>BirdNest.MonoGame.Graphics.Ktx</RootNamespace>
+    <AssemblyName>KtxSharp</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>full</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="OpenTK">
+      <HintPath>packages\OpenTK.1.1.1589.5942\lib\NET40\OpenTK.dll</HintPath>
+    </Reference>
+    <Reference Include="System.IO.Compression" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TextureAtlas\ITextureAtlas.cs" />
+    <Compile Include="TextureAtlas\SparseTextureAtlas.cs" />
+    <Compile Include="TextureAtlas\SparseTextureChapterAllocator.cs" />
+    <Compile Include="TextureAtlas\SparseTextureChapter.cs" />
+    <Compile Include="TextureAtlas\SparseTexturePage.cs" />
+    <Compile Include="TextureAtlas\ISparseTexturePageAllocator.cs" />
+    <Compile Include="TextureAtlas\ITextureLookup.cs" />
+    <Compile Include="TextureAtlas\ITexturePage.cs" />
+    <Compile Include="TextureAtlas\ITextureChapter.cs" />
+    <Compile Include="TextureAtlas\SparseTexturePageAllocator.cs" />
+    <Compile Include="TextureAtlas\MipmapData.cs" />
+    <Compile Include="TextureAtlas\ISparseTextureChapter.cs" />
+    <Compile Include="TextureAtlas\SparseTextureReference.cs" />
+    <Compile Include="TextureAtlas\SparseTextureLookup.cs" />
+    <Compile Include="Common\GLImageType.cs" />
+    <Compile Include="KTXHeader.cs" />
+    <Compile Include="KeyValueArrayData.cs" />
+    <Compile Include="Common\TextureLoadedEvent.cs" />
+    <Compile Include="ETCUnpacker.cs" />
+    <Compile Include="IETCUnpacker.cs" />
+    <Compile Include="KTXTextureManager.cs" />
+    <Compile Include="IgnoreETCUnpacking.cs" />
+    <Compile Include="KTXError.cs" />
+    <Compile Include="TextureAtlas\ITextureChapterAllocator.cs" />
+    <Compile Include="TextureAtlas\SingleTextureChapter.cs" />
+    <Compile Include="TextureAtlas\ISingleTextureChapter.cs" />
+    <Compile Include="TextureAtlas\SingleTexturePage.cs" />
+    <Compile Include="TextureAtlas\ISinglePageAllocator.cs" />
+    <Compile Include="TextureAtlas\SinglePageAllocator.cs" />
+    <Compile Include="TextureAtlas\ArrayTextureLocation.cs" />
+    <Compile Include="TextureAtlas\TextureHandle.cs" />
+    <Compile Include="TextureAtlas\ITextureHandleLookup.cs" />
+    <Compile Include="TextureAtlas\TextureHandleReference.cs" />
+    <Compile Include="TextureAtlas\BindlessHandleLookup.cs" />
+    <Compile Include="TextureAtlas\SparseCubeMapChapter.cs" />
+    <Compile Include="TextureAtlas\ISparseCubeMapChapter.cs" />
+    <Compile Include="TextureAtlas\ISparseCubeMapPageAllocator.cs" />
+    <Compile Include="TextureAtlas\SparseCubeMapPage.cs" />
+    <Compile Include="TextureAtlas\SparseArrayTextureChapter.cs" />
+    <Compile Include="TextureAtlas\SparseCubeMapPageAllocator.cs" />
+    <Compile Include="GLContextCapabilities.cs" />
+    <Compile Include="GLR16Formats.cs" />
+    <Compile Include="GLSizedFormats.cs" />
+    <Compile Include="KTXLoadInstructions.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="TextureAtlas\" />
+    <Folder Include="Common\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BirdNest.MonoGame.Graphics\BirdNest.MonoGame.Graphics.csproj">
+      <Project>{2F0797E0-AA35-4C38-9CE0-0055A3E41C64}</Project>
+      <Name>BirdNest.MonoGame.Graphics</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BirdNest.MonoGame.Core\BirdNest.MonoGame.Core.csproj">
+      <Project>{AB25A0BE-77B4-4940-B59B-43E938A89C44}</Project>
+      <Name>BirdNest.MonoGame.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BirdNest.MonoGame.Blocks\BirdNest.MonoGame.Blocks.csproj">
+      <Project>{F218D143-486C-4018-8DAD-B970088EA505}</Project>
+      <Name>BirdNest.MonoGame.Blocks</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BirdNest.MonoGame.FileSystem\BirdNest.MonoGame.FileSystem.csproj">
+      <Project>{E44E47ED-2203-4E45-85A9-C755B10AC044}</Project>
+      <Name>BirdNest.MonoGame.FileSystem</Name>
+    </ProjectReference>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>BirdNest.Serializers.ProtobufNet</id>
+    <version>0.1</version>
+    <authors>David Young</authors>
+    <owners>David Young</owners>
+    <licenseUrl>https://github.com/tgsstdio/KTX/CSharp/blob/master/LICENSE.txt</licenseUrl>
+    <projectUrl>https://github.com/tgsstdio/KTX/CSharp/</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Core classes for BirdNest engine</description>
+    <releaseNotes>Initial check-in</releaseNotes>
+    <copyright>Copyright 2015</copyright>
+    <tags>OpenGL C# OpenTK</tags>
+    <dependencies>
+    </dependencies>
+  </metadata>
+</package>

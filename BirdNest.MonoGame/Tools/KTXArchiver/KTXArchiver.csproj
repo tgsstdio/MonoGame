@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{85474135-9FBB-4D7F-B482-29D38B1C6B57}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>KTXArchiver</RootNamespace>
+    <AssemblyName>KTXArchiver</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Externalconsole>true</Externalconsole>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>full</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Externalconsole>true</Externalconsole>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="OpenTK">
+      <HintPath>..\packages\OpenTK.1.1.1589.5942\lib\NET40\OpenTK.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ASTCHeader.cs" />
+    <Compile Include="ASTCEncoder.cs" />
+    <Compile Include="EncoderStartInfo.cs" />
+    <Compile Include="IMipmapGenerator.cs" />
+    <Compile Include="MipmapGenerator.cs" />
+    <Compile Include="BlockImageInfo.cs" />
+    <Compile Include="MockMipmapGenerator.cs" />
+    <Compile Include="FasTCEncoder.cs" />
+    <Compile Include="IMipmapEncoder.cs" />
+    <Compile Include="IKTXPacker.cs" />
+    <Compile Include="BaseKTXPacker.cs" />
+    <Compile Include="KTXArchiver.cs" />
+    <Compile Include="ASTCPacker.cs" />
+    <Compile Include="FasTCPacker.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <ProjectReference Include="..\KtxSharp.JsonNET\KtxSharp.JsonNET.csproj">
+      <Project>{ACBEAF7B-1403-40F6-9767-378B8E824443}</Project>
+      <Name>KtxSharp.JsonNET</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\KtxSharp.Protobuf\KtxSharp.Protobuf.csproj">
+      <Project>{10B5AAAF-B499-4C43-8ED1-7DA1B867ECDE}</Project>
+      <Name>KtxSharp.Protobuf</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\KtxSharp\KtxSharp.csproj">
+      <Project>{F5F42399-9D4B-42BC-8E2B-172DB4DA9A79}</Project>
+      <Name>KtxSharp</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FreeImage .NET\FreeImage .NET.csproj">
+      <Project>{6598A7CD-8F27-4D3F-A675-5AE63113A7C3}</Project>
+      <Name>FreeImage .NET</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BirdNest.Core\BirdNest.Core.csproj">
+      <Project>{AB25A0BE-77B4-4940-B59B-43E938A89C44}</Project>
+      <Name>BirdNest.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="astcenc.exe">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="BlockFile001.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="KoreanBBQ.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="FreeImage.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="tc.exe">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+    <None Include="FreeImage.lib">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+</Project>

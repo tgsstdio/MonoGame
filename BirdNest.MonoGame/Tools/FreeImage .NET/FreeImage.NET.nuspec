@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>FreeImage.NET</id>
+    <version>3.17</version>
+    <authors>FreeImage.NET developers</authors>
+    <owners>FreeImage.NET developers</owners>
+    <licenseUrl>https://github.com/tgsstdio/KTX/CSharp/blob/master/LICENSE.txt</licenseUrl>
+    <projectUrl>https://github.com/tgsstdio/KTX/CSharp/</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>FreeImage .NET 4.5 framework wrapper</description>
+    <releaseNotes>Initial check-in</releaseNotes>
+    <copyright>Copyright 2015</copyright>
+    <tags>C# Images FreeImage</tags>
+    <dependencies>
+    </dependencies>
+  </metadata>
+</package>

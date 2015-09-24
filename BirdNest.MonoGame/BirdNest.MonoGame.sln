@@ -1,0 +1,71 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BirdNest.MonoGame", "BirdNest.MonoGame.csproj", "{A978C860-F0DB-4B9F-88AA-E0F002F0312B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BirdNest.MonoGame.Blocks", "BirdNest.MonoGame.Blocks\BirdNest.MonoGame.Blocks.csproj", "{F218D143-486C-4018-8DAD-B970088EA505}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BirdNest.MonoGame.Core", "BirdNest.MonoGame.Core\BirdNest.MonoGame.Core.csproj", "{AB25A0BE-77B4-4940-B59B-43E938A89C44}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BirdNest.MonoGame.FileSystem", "BirdNest.MonoGame.FileSystem\BirdNest.MonoGame.FileSystem.csproj", "{E44E47ED-2203-4E45-85A9-C755B10AC044}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BirdNest.MonoGame.Graphics", "BirdNest.MonoGame.Graphics\BirdNest.MonoGame.Graphics.csproj", "{2F0797E0-AA35-4C38-9CE0-0055A3E41C64}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BirdNest.MonoGame.Blocks.JsonNET", "BirdNest.MonoGame.Blocks.JsonNET\BirdNest.MonoGame.Blocks.JsonNET.csproj", "{ACBEAF7B-1403-40F6-9767-378B8E824443}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BirdNest.MonoGame.Blocks.Protobuf", "BirdNest.MonoGame.Blocks.Protobuf\BirdNest.MonoGame.Blocks.Protobuf.csproj", "{10B5AAAF-B499-4C43-8ED1-7DA1B867ECDE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BirdNest.MonoGame.FileSystem.Zips", "BirdNest.MonoGame.FileSystem.ZippedSystem\BirdNest.MonoGame.FileSystem.Zips.csproj", "{07215252-1A6D-499C-9D73-7BA3E4B60910}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BirdNest.MonoGame.Graphics.Ktx", "BirdNest.MonoGame.Graphics.Ktx\BirdNest.MonoGame.Graphics.Ktx.csproj", "{F5F42399-9D4B-42BC-8E2B-172DB4DA9A79}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BirdNest.MonoGame.FileSystem.Dirs", "BirdNest.MonoGame.FileSystem.Directories\BirdNest.MonoGame.FileSystem.Dirs.csproj", "{9D3DE491-E6D0-4D12-9A2D-D31B23D7D71D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{07215252-1A6D-499C-9D73-7BA3E4B60910}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{07215252-1A6D-499C-9D73-7BA3E4B60910}.Debug|x86.Build.0 = Debug|Any CPU
+		{07215252-1A6D-499C-9D73-7BA3E4B60910}.Release|x86.ActiveCfg = Release|Any CPU
+		{07215252-1A6D-499C-9D73-7BA3E4B60910}.Release|x86.Build.0 = Release|Any CPU
+		{10B5AAAF-B499-4C43-8ED1-7DA1B867ECDE}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{10B5AAAF-B499-4C43-8ED1-7DA1B867ECDE}.Debug|x86.Build.0 = Debug|Any CPU
+		{10B5AAAF-B499-4C43-8ED1-7DA1B867ECDE}.Release|x86.ActiveCfg = Release|Any CPU
+		{10B5AAAF-B499-4C43-8ED1-7DA1B867ECDE}.Release|x86.Build.0 = Release|Any CPU
+		{2F0797E0-AA35-4C38-9CE0-0055A3E41C64}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{2F0797E0-AA35-4C38-9CE0-0055A3E41C64}.Debug|x86.Build.0 = Debug|Any CPU
+		{2F0797E0-AA35-4C38-9CE0-0055A3E41C64}.Release|x86.ActiveCfg = Release|Any CPU
+		{2F0797E0-AA35-4C38-9CE0-0055A3E41C64}.Release|x86.Build.0 = Release|Any CPU
+		{9D3DE491-E6D0-4D12-9A2D-D31B23D7D71D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{9D3DE491-E6D0-4D12-9A2D-D31B23D7D71D}.Debug|x86.Build.0 = Debug|Any CPU
+		{9D3DE491-E6D0-4D12-9A2D-D31B23D7D71D}.Release|x86.ActiveCfg = Release|Any CPU
+		{9D3DE491-E6D0-4D12-9A2D-D31B23D7D71D}.Release|x86.Build.0 = Release|Any CPU
+		{A978C860-F0DB-4B9F-88AA-E0F002F0312B}.Debug|x86.ActiveCfg = Debug|x86
+		{A978C860-F0DB-4B9F-88AA-E0F002F0312B}.Debug|x86.Build.0 = Debug|x86
+		{A978C860-F0DB-4B9F-88AA-E0F002F0312B}.Release|x86.ActiveCfg = Release|x86
+		{A978C860-F0DB-4B9F-88AA-E0F002F0312B}.Release|x86.Build.0 = Release|x86
+		{AB25A0BE-77B4-4940-B59B-43E938A89C44}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{AB25A0BE-77B4-4940-B59B-43E938A89C44}.Debug|x86.Build.0 = Debug|Any CPU
+		{AB25A0BE-77B4-4940-B59B-43E938A89C44}.Release|x86.ActiveCfg = Release|Any CPU
+		{AB25A0BE-77B4-4940-B59B-43E938A89C44}.Release|x86.Build.0 = Release|Any CPU
+		{ACBEAF7B-1403-40F6-9767-378B8E824443}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{ACBEAF7B-1403-40F6-9767-378B8E824443}.Debug|x86.Build.0 = Debug|Any CPU
+		{ACBEAF7B-1403-40F6-9767-378B8E824443}.Release|x86.ActiveCfg = Release|Any CPU
+		{ACBEAF7B-1403-40F6-9767-378B8E824443}.Release|x86.Build.0 = Release|Any CPU
+		{E44E47ED-2203-4E45-85A9-C755B10AC044}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E44E47ED-2203-4E45-85A9-C755B10AC044}.Debug|x86.Build.0 = Debug|Any CPU
+		{E44E47ED-2203-4E45-85A9-C755B10AC044}.Release|x86.ActiveCfg = Release|Any CPU
+		{E44E47ED-2203-4E45-85A9-C755B10AC044}.Release|x86.Build.0 = Release|Any CPU
+		{F218D143-486C-4018-8DAD-B970088EA505}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{F218D143-486C-4018-8DAD-B970088EA505}.Debug|x86.Build.0 = Debug|Any CPU
+		{F218D143-486C-4018-8DAD-B970088EA505}.Release|x86.ActiveCfg = Release|Any CPU
+		{F218D143-486C-4018-8DAD-B970088EA505}.Release|x86.Build.0 = Release|Any CPU
+		{F5F42399-9D4B-42BC-8E2B-172DB4DA9A79}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{F5F42399-9D4B-42BC-8E2B-172DB4DA9A79}.Debug|x86.Build.0 = Debug|Any CPU
+		{F5F42399-9D4B-42BC-8E2B-172DB4DA9A79}.Release|x86.ActiveCfg = Release|Any CPU
+		{F5F42399-9D4B-42BC-8E2B-172DB4DA9A79}.Release|x86.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
