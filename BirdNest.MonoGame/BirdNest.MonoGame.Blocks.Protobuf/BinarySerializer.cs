@@ -3,9 +3,8 @@ using ProtoBuf;
 using ProtoBuf.Meta;
 using BirdNest.MonoGame.Blocks;
 using BirdNest.MonoGame.Core;
-using BirdNest.MonoGame.Graphics;
 
-namespace BirdNest.MonoGame.Graphics.Ktx
+namespace BirdNest.MonoGame.Blocks.Protobuf
 {
 	public class BinarySerializer : IBlockFileSerializer
 	{
@@ -41,8 +40,8 @@ namespace BirdNest.MonoGame.Graphics.Ktx
 				.Add (2, "Pages");
 
 			RuntimeTypeModel.Default.Add (typeof(BlockFile), false)
-				.Add (1, "BlockId")
-				.Add (2, "Chapters");	
+				.Add (1, "Identifier")
+				.Add (2, "Chapters");
 		}
 
 		public string GetBlockPath (BlockIdentifier id)

@@ -15,11 +15,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BirdNest.MonoGame.Blocks.Js
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BirdNest.MonoGame.Blocks.Protobuf", "BirdNest.MonoGame.Blocks.Protobuf\BirdNest.MonoGame.Blocks.Protobuf.csproj", "{10B5AAAF-B499-4C43-8ED1-7DA1B867ECDE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BirdNest.MonoGame.FileSystem.Zips", "BirdNest.MonoGame.FileSystem.ZippedSystem\BirdNest.MonoGame.FileSystem.Zips.csproj", "{07215252-1A6D-499C-9D73-7BA3E4B60910}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BirdNest.MonoGame.Graphics.Ktx", "BirdNest.MonoGame.Graphics.Ktx\BirdNest.MonoGame.Graphics.Ktx.csproj", "{F5F42399-9D4B-42BC-8E2B-172DB4DA9A79}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BirdNest.MonoGame.FileSystem.Dirs", "BirdNest.MonoGame.FileSystem.Directories\BirdNest.MonoGame.FileSystem.Dirs.csproj", "{9D3DE491-E6D0-4D12-9A2D-D31B23D7D71D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BirdNest.MonoGame.FileSystem.Zips", "BirdNest.MonoGame.FileSystem.Zips\BirdNest.MonoGame.FileSystem.Zips.csproj", "{07215252-1A6D-499C-9D73-7BA3E4B60910}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BirdNest.MonoGame.FileSystem.Dirs", "BirdNest.MonoGame.FileSystem.Dirs\BirdNest.MonoGame.FileSystem.Dirs.csproj", "{9D3DE491-E6D0-4D12-9A2D-D31B23D7D71D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

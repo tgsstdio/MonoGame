@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using BirdNest.MonoGame.Blocks;
-using BirdNest.MonoGame.Core;
 
 namespace BirdNest.MonoGame.Graphics.Ktx
 {

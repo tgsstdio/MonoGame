@@ -1,6 +1,4 @@
-using System;
 using OpenTK.Graphics.OpenGL;
-using System.Diagnostics;
 
 namespace BirdNest.MonoGame.Graphics.Ktx
 {

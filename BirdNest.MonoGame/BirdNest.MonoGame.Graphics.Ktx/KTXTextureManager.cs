@@ -40,14 +40,23 @@ namespace BirdNest.MonoGame.Graphics.Ktx
 				using (var fs = mFileSystem.OpenStream (result.Asset.Block, imageFileName))
 				{
 					KTXHeader header = null;
-					var status = ReadHeader (fs, out header);
-					if (status != KTXError.Success)
+
+					var headerChunk = new byte[header.KTX_HEADER_SIZE];
+					int count = fs.Read (headerChunk, 0, header.KTX_HEADER_SIZE);
+					if (count != header.KTX_HEADER_SIZE)
 					{
 						return false;
 					}
 
+					var status = ReadHeader (headerChunk, out header);
+					if (status != KTXError.Success)
+					{
+						return false;
+					}
+					ReadKeyValueDataSection (fs, header.KeyValueData, (int)header.BytesOfKeyValueData);
+
 					//KeyValueArrayData[] inputData = GenerateKeyValueArray (destHeader);
-					bool isMipmapped = false;
+					bool isMipmapped;
 					ErrorCode glErrorCode;
 
 					status = LoadTexture(fs, result, header, out isMipmapped, out glErrorCode);
@@ -104,7 +113,7 @@ namespace BirdNest.MonoGame.Graphics.Ktx
 	//		 * @author Georg Kolling, Imagination Technology
 	//		 * @author Mark Callow, HI Corporation
 	//		 */
-		static KTXError ReadKeyValueDataSection (Stream stream, byte[] buffer, int offset, int count)
+		static KTXError ReadKeyValueDataSection (Stream stream, byte[] buffer, int count)
 		{
 			if (count <= 0)
 			{
@@ -118,7 +127,7 @@ namespace BirdNest.MonoGame.Graphics.Ktx
 				return KTXError.Success;
 			}
 
-			int kvdCount = stream.Read (buffer, offset, count);
+			int kvdCount = stream.Read (buffer, 0, count);
 			if (kvdCount != count)
 			{
 				return KTXError.InvalidOperation;
@@ -127,22 +136,10 @@ namespace BirdNest.MonoGame.Graphics.Ktx
 			return KTXError.Success;
 		}
 
-		private static KTXError ReadHeader (Stream stream, out KTXHeader header)
+		private static KTXError ReadHeader (byte[] headerChunk, out KTXHeader header)
 		{			
-			header = null;
-
 			KTXError errorCode = KTXError.Success;
-			if (stream == null)
-			{
-				return KTXError.InvalidValue;
-			}
 			header = new KTXHeader ();
-			byte[] headerChunk = new byte[header.KTX_HEADER_SIZE];
-			int count = stream.Read (headerChunk, 0, header.KTX_HEADER_SIZE);
-			if (count != header.KTX_HEADER_SIZE)
-			{
-				return KTXError.InvalidOperation;
-			}
 			header.Populate (headerChunk);
 			if (header.Instructions.Result != KTXError.Success)
 			{
@@ -153,7 +150,6 @@ namespace BirdNest.MonoGame.Graphics.Ktx
 			{
 				return KTXError.OutOfMemory;
 			}
-			ReadKeyValueDataSection (stream, header.KeyValueData, 0, (int)header.BytesOfKeyValueData);
 			return errorCode;
 		}
 
