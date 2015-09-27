@@ -36,21 +36,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TextureAtlas\ITextureAtlas.cs" />
-    <Compile Include="TextureAtlas\SparseTextureAtlas.cs" />
-    <Compile Include="TextureAtlas\SparseTextureChapterAllocator.cs" />
-    <Compile Include="TextureAtlas\SparseTextureChapter.cs" />
-    <Compile Include="TextureAtlas\SparseTexturePage.cs" />
-    <Compile Include="TextureAtlas\ISparseTexturePageAllocator.cs" />
-    <Compile Include="TextureAtlas\ITextureLookup.cs" />
-    <Compile Include="TextureAtlas\ITexturePage.cs" />
-    <Compile Include="TextureAtlas\ITextureChapter.cs" />
-    <Compile Include="TextureAtlas\SparseTexturePageAllocator.cs" />
-    <Compile Include="TextureAtlas\MipmapData.cs" />
-    <Compile Include="TextureAtlas\ISparseTextureChapter.cs" />
-    <Compile Include="TextureAtlas\SparseTextureReference.cs" />
-    <Compile Include="TextureAtlas\SparseTextureLookup.cs" />
-    <Compile Include="Common\GLImageType.cs" />
     <Compile Include="KTXHeader.cs" />
     <Compile Include="KeyValueArrayData.cs" />
     <Compile Include="Common\TextureLoadedEvent.cs" />
@@ -59,34 +44,17 @@
     <Compile Include="KTXTextureManager.cs" />
     <Compile Include="IgnoreETCUnpacking.cs" />
     <Compile Include="KTXError.cs" />
-    <Compile Include="TextureAtlas\ITextureChapterAllocator.cs" />
-    <Compile Include="TextureAtlas\SingleTextureChapter.cs" />
-    <Compile Include="TextureAtlas\ISingleTextureChapter.cs" />
-    <Compile Include="TextureAtlas\SingleTexturePage.cs" />
-    <Compile Include="TextureAtlas\ISinglePageAllocator.cs" />
-    <Compile Include="TextureAtlas\SinglePageAllocator.cs" />
-    <Compile Include="TextureAtlas\ArrayTextureLocation.cs" />
-    <Compile Include="TextureAtlas\TextureHandle.cs" />
-    <Compile Include="TextureAtlas\ITextureHandleLookup.cs" />
-    <Compile Include="TextureAtlas\TextureHandleReference.cs" />
-    <Compile Include="TextureAtlas\BindlessHandleLookup.cs" />
-    <Compile Include="TextureAtlas\SparseCubeMapChapter.cs" />
-    <Compile Include="TextureAtlas\ISparseCubeMapChapter.cs" />
-    <Compile Include="TextureAtlas\ISparseCubeMapPageAllocator.cs" />
-    <Compile Include="TextureAtlas\SparseCubeMapPage.cs" />
-    <Compile Include="TextureAtlas\SparseArrayTextureChapter.cs" />
-    <Compile Include="TextureAtlas\SparseCubeMapPageAllocator.cs" />
     <Compile Include="GLContextCapabilities.cs" />
     <Compile Include="GLR16Formats.cs" />
     <Compile Include="GLSizedFormats.cs" />
     <Compile Include="KTXLoadInstructions.cs" />
+    <Compile Include="KTXMipmapData.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="TextureAtlas\" />
     <Folder Include="Common\" />
   </ItemGroup>
   <ItemGroup>

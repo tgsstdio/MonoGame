@@ -34,6 +34,13 @@
     <Compile Include="ITextureManager.cs" />
     <Compile Include="ITexturePageLookup.cs" />
     <Compile Include="ImageDimensions.cs" />
+    <Compile Include="ITextureAtlas.cs" />
+    <Compile Include="ITextureChapter.cs" />
+    <Compile Include="ITextureChapterAllocator.cs" />
+    <Compile Include="AtlasTextureTarget.cs" />
+    <Compile Include="ITexturePage.cs" />
+    <Compile Include="MipmapData.cs" />
+    <Compile Include="AtlasTextureType.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>

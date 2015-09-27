@@ -226,7 +226,7 @@ namespace BirdNest.MonoGame.Graphics.Ktx
 				//	#endif
 			}
 
-			var imageType = new GLImageType {
+			var imageType = new AtlasTextureType {
 				GlType = (int) header.GlType,
 				GlTypeSize = (int) header.GlTypeSize,
 				GlFormat = (int) header.Instructions.GlFormat,
@@ -244,10 +244,26 @@ namespace BirdNest.MonoGame.Graphics.Ktx
 			};
 
 			// added a new chapter if required
-			var chapter = mTextureAtlas.Add (pageInfo.Catalog, imageType, glTarget, dims);
+			var chapter = mTextureAtlas.Add (pageInfo.Catalog, imageType, ConvertTargetType(glTarget), dims);
 			var page = chapter.GeneratePage (pageInfo);
 			return page;
 		}
+
+		static AtlasTextureTarget ConvertTargetType(TextureTarget glTarget)
+		{
+			switch (glTarget)
+			{
+			case TextureTarget.Texture1D:
+				return AtlasTextureTarget.Texture1D;
+			case TextureTarget.Texture2D:
+				return AtlasTextureTarget.Texture2D;
+			case TextureTarget.TextureCubeMapPositiveX:
+				return AtlasTextureTarget.TextureCubeMap;
+			default:
+				throw new NotSupportedException ();
+			}
+		}
+
 
 		//		/*
 		//		 * @~English
@@ -384,10 +400,10 @@ namespace BirdNest.MonoGame.Graphics.Ktx
 						}
 					}
 
-					var mipmap = new MipmapData();
-					mipmap.Level = level;
-					mipmap.Data = data;
-					mipmap.Size = (int)faceLodSize;
+					var mipmap = new KTXMipmapData();
+					mipmap.Common.Level = level;
+					mipmap.Common.Data = data;
+					mipmap.Common.Size = (int)faceLodSize;
 					mipmap.SizeRounded = faceLodSizeRounded;
 
 					var loadError = ExtractFace (stream, header, mipmap, texPage);
@@ -447,7 +463,7 @@ namespace BirdNest.MonoGame.Graphics.Ktx
 			Stream stream,
 			//int level,
 			KTXHeader header,
-			MipmapData mipmap,
+			KTXMipmapData mipmap,
 			ITexturePage texPage
 			//byte[] data,
 			//UInt32 faceLodSize,
@@ -455,13 +471,13 @@ namespace BirdNest.MonoGame.Graphics.Ktx
 			//ref ErrorCode pGlerror
 			)
 		{
-			mipmap.PixelWidth = (int)Math.Max (1, header.PixelWidth >> mipmap.Level);
-			mipmap.PixelHeight = (int)Math.Max (1, header.PixelHeight >> mipmap.Level);
-			mipmap.PixelDepth = (int)Math.Max (1, header.PixelDepth >> mipmap.Level);
+			mipmap.Common.PixelWidth = (int)Math.Max (1, header.PixelWidth >> mipmap.Common.Level);
+			mipmap.Common.PixelHeight = (int)Math.Max (1, header.PixelHeight >> mipmap.Common.Level);
+			mipmap.Common.PixelDepth = (int)Math.Max (1, header.PixelDepth >> mipmap.Common.Level);
 
 			for (int face = 0; face < header.NumberOfFaces; ++face)
 			{
-				var bytesRead = stream.Read (mipmap.Data, 0,  mipmap.SizeRounded);
+				var bytesRead = stream.Read (mipmap.Common.Data, 0,  mipmap.SizeRounded);
 				if (bytesRead != mipmap.SizeRounded)
 				{
 					return KTXError.UnexpectedEndOfFile;
@@ -470,18 +486,18 @@ namespace BirdNest.MonoGame.Graphics.Ktx
 				/* Perform endianness conversion on texture data */
 				if (header.RequiresSwap() && header.GlTypeSize == 2)
 				{
-					KTXHeader.SwapEndian16 (mipmap.Data, (int)mipmap.Size);
+					KTXHeader.SwapEndian16 (mipmap.Common.Data, (int)mipmap.Common.Size);
 				}
 				else if (header.RequiresSwap() && header.GlTypeSize == 4)
 				{
-					KTXHeader.SwapEndian32 (mipmap.Data, (int)mipmap.Size);
+					KTXHeader.SwapEndian32 (mipmap.Common.Data, (int)mipmap.Common.Size);
 				}
 
-				mipmap.NumberOfFaces = (int)header.NumberOfFaces;
+				mipmap.Common.NumberOfFaces = (int)header.NumberOfFaces;
 				mipmap.Target = (TextureTarget) header.Instructions.GlTarget;
-				mipmap.IsCompressed = header.Instructions.IsCompressed;
-				mipmap.TextureDimensions = header.Instructions.TextureDimensions;
-				mipmap.FaceIndex = face;
+				mipmap.Common.IsCompressed = header.Instructions.IsCompressed;
+				mipmap.Common.TextureDimensions = header.Instructions.TextureDimensions;
+				mipmap.Common.FaceIndex = face;
 
 				if (header.Instructions.TextureDimensions == 1)
 				{					
@@ -513,7 +529,7 @@ namespace BirdNest.MonoGame.Graphics.Ktx
 				{
 					if (header.NumberOfArrayElements > 0)
 					{
-						mipmap.PixelHeight = (int)header.NumberOfArrayElements;
+						mipmap.Common.PixelHeight = (int)header.NumberOfArrayElements;
 					}
 //					if (header.Instructions.IsCompressed)
 //					{
@@ -548,7 +564,7 @@ namespace BirdNest.MonoGame.Graphics.Ktx
 				{
 					if (header.NumberOfArrayElements > 0)
 					{
-						mipmap.PixelDepth = (int)header.NumberOfArrayElements;
+						mipmap.Common.PixelDepth = (int)header.NumberOfArrayElements;
 					}
 //					if (header.Instructions.IsCompressed)
 //					{
@@ -578,7 +594,7 @@ namespace BirdNest.MonoGame.Graphics.Ktx
 //							mipmap.Data);
 //					}
 				}
-				texPage.Initialise(mipmap);
+				texPage.Initialise(mipmap.Common);
 				mipmap.GLError = GL.GetError ();
 
 				// Renderion is returning INVALID_VALUE. Oops!!
@@ -586,11 +602,11 @@ namespace BirdNest.MonoGame.Graphics.Ktx
 				{
 					var result = mETCUnpacker.UnpackCompressedTexture (
 						header.Instructions,
-						mipmap.Level,
+						mipmap.Common.Level,
 						face,
-						mipmap.PixelWidth,
-						mipmap.PixelHeight,
-						mipmap.Data);
+						mipmap.Common.PixelWidth,
+						mipmap.Common.PixelHeight,
+						mipmap.Common.Data);
 					
 					if (result != KTXError.Success)
 					{
