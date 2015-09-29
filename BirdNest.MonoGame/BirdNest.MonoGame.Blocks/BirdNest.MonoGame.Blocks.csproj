@@ -38,6 +38,7 @@
     <Compile Include="TexturePageInfo.cs" />
     <Compile Include="IAssetLocator.cs" />
     <Compile Include="IAssetManager.cs" />
+    <Compile Include="ShaderInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>

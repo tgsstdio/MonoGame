@@ -6,6 +6,7 @@ namespace BirdNest.MonoGame.Blocks
 	{
 		public BlockIdentifier Identifier { get; set; }
 		public TextureChapterInfo[] Chapters {get;set;}
+		public ShaderInfo[] Shaders {get;set;}
 	}
 }
 

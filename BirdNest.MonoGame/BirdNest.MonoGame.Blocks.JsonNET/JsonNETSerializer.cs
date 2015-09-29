@@ -10,7 +10,7 @@ namespace BirdNest.MonoGame.Blocks.JsonNET
 
 		public string GetBlockPath (BlockIdentifier id)
 		{
-			return id.Block + ".json";
+			return id.BlockId + ".json";
 		}
 
 		public BlockFile Read (Stream fs)

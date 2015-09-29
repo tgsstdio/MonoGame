@@ -22,7 +22,7 @@ namespace BirdNest.MonoGame.FileSystem.Dirs
 		public Stream OpenStream (BlockIdentifier identifier, string path)
 		{
 			DirectoryBlockEntry found = null;
-			if (!mBlocks.TryGetValue (identifier.Block, out found))
+			if (!mBlocks.TryGetValue (identifier.BlockId, out found))
 			{
 				throw new KeyNotFoundException ();
 			}
@@ -42,7 +42,7 @@ namespace BirdNest.MonoGame.FileSystem.Dirs
 
 		public bool Register (BlockIdentifier identifier)
 		{
-			string dirPath = System.IO.Path.Combine (Path, identifier.Block.ToString());
+			string dirPath = System.IO.Path.Combine (Path, identifier.BlockId.ToString());
 
 			if (!Directory.Exists (dirPath))
 			{
@@ -54,7 +54,7 @@ namespace BirdNest.MonoGame.FileSystem.Dirs
 			archive.Path = dirPath;
 			archive.BlockFile = System.IO.Path.Combine (dirPath, mLocator.Serializer.GetBlockPath (identifier));
 
-			mBlocks.Add (archive.Id.Block, archive);
+			mBlocks.Add (archive.Id.BlockId, archive);
 
 			using (var fs = File.OpenRead(archive.BlockFile))
 			{
@@ -65,7 +65,7 @@ namespace BirdNest.MonoGame.FileSystem.Dirs
 
 		public bool IsRegistered (BlockIdentifier identifier)
 		{
-			return mBlocks.ContainsKey (identifier.Block);
+			return mBlocks.ContainsKey (identifier.BlockId);
 		}
 	}
 }

@@ -68,6 +68,14 @@
     <Compile Include="TextureAtlas\TextureHandle.cs" />
     <Compile Include="TextureAtlas\TextureHandleReference.cs" />
     <Compile Include="TextureAtlas\SparseTextureAtlas.cs" />
+    <Compile Include="ShaderLoader\ShaderInfoLookup.cs" />
+    <Compile Include="ShaderLoader\GLShaderRegistry.cs" />
+    <Compile Include="ShaderLoader\IShaderRegistry.cs" />
+    <Compile Include="ShaderLoader\GLSLTextShaderManager.cs" />
+    <Compile Include="ShaderLoader\GLSLBinaryShaderLoader.cs" />
+    <Compile Include="ShaderLoader\GLSLTextShaderLoader.cs" />
+    <Compile Include="ShaderLoader\GLSLBinaryProgramWriter.cs" />
+    <Compile Include="ShaderLoader\IBinaryShaderProgramWriter.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -83,8 +91,15 @@
       <Project>{AB25A0BE-77B4-4940-B59B-43E938A89C44}</Project>
       <Name>BirdNest.MonoGame.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="BirdNest.MonoGame.FileSystem\BirdNest.MonoGame.FileSystem.csproj">
+      <Project>{E44E47ED-2203-4E45-85A9-C755B10AC044}</Project>
+      <Name>BirdNest.MonoGame.FileSystem</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ShaderLoader\" />
   </ItemGroup>
 </Project>

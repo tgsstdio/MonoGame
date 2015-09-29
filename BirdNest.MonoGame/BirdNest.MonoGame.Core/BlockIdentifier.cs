@@ -2,7 +2,7 @@
 {
 	public struct BlockIdentifier
 	{
-		public ulong Block {get;set;}
+		public ulong BlockId {get;set;}
 	}
 }
 

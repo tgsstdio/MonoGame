@@ -60,7 +60,15 @@ namespace BirdNest.MonoGame.Graphics.Ktx
 					ErrorCode glErrorCode;
 
 					status = LoadTexture(fs, result, header, out isMipmapped, out glErrorCode);
-					return (status == KTXError.Success);
+					if (status == KTXError.Success)
+					{
+						mAssetManager.Add (result.Asset);
+						return true;	
+					} 
+					else
+					{
+						return false;
+					}
 				}
 			}
 			else

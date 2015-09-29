@@ -33,7 +33,7 @@ namespace BirdNest.MonoGame.FileSystem.Zips
 				return true;
 			}
 
-			string dirPath = System.IO.Path.Combine (Path, identifier.Block.ToString());
+			string dirPath = System.IO.Path.Combine (Path, identifier.BlockId.ToString());
 
 			if (!Directory.Exists (dirPath))
 			{
@@ -66,7 +66,7 @@ namespace BirdNest.MonoGame.FileSystem.Zips
 
 		private static string GetBlockFileName (BlockIdentifier identifier)
 		{
-			return identifier.Block + ".zip";
+			return identifier.BlockId + ".zip";
 		}
 
 		public void Initialise (string path)
@@ -77,13 +77,13 @@ namespace BirdNest.MonoGame.FileSystem.Zips
 
 		public bool IsRegistered (BlockIdentifier identifier)
 		{
-			return mBlocks.ContainsKey (identifier.Block);
+			return mBlocks.ContainsKey (identifier.BlockId);
 		}
 
 		public Stream OpenStream (BlockIdentifier identifier, string path)
 		{
 			ZippedBlockEntry found = null;
-			if (!mBlocks.TryGetValue (identifier.Block, out found))
+			if (!mBlocks.TryGetValue (identifier.BlockId, out found))
 			{
 				throw new KeyNotFoundException ();
 			}

@@ -3,6 +3,7 @@
 	public enum AssetType
 	{
 		Texture,
+		Shader,
 		Mesh
 	}
 }

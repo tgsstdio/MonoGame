@@ -18,9 +18,10 @@ namespace BirdNest.MonoGame.Blocks.Protobuf
 
 			RuntimeTypeModel.Default.Add (typeof(AssetInfo), false)
 				.Add (1, "Identifier")
-				//.Add (2, "AssetType")
+				//.Add (2, "AssetType") IGNORE
 				.Add (3, "Name")
 				.Add (4, "Version");
+				//.Add (5, "Block") IGNORE TOO
 
 			RuntimeTypeModel.Default.Add (typeof(TexturePageInfo), false)
 				.Add (1, "Asset")
@@ -39,14 +40,23 @@ namespace BirdNest.MonoGame.Blocks.Protobuf
 				.Add (1, "Catalog")
 				.Add (2, "Pages");
 
+			RuntimeTypeModel.Default.Add (typeof(ShaderInfo), false)
+				.Add (1, "Asset")
+				.Add (2, "ComputePath")
+				.Add (3, "FragmentPath")
+				.Add (4, "VertexPath");
+
 			RuntimeTypeModel.Default.Add (typeof(BlockFile), false)
 				.Add (1, "Identifier")
-				.Add (2, "Chapters");
+				.Add (2, "Chapters")
+				.Add (3, "Shaders");
+
+
 		}
 
 		public string GetBlockPath (BlockIdentifier id)
 		{
-			return id.Block + ".pbb";
+			return id.BlockId + ".pbb";
 		}
 
 		public BlockFile Read (Stream reader)
