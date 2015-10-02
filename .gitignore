@@ -81,6 +81,7 @@ Test/*.csproj
 
 #Nuget Packages
 **/*.nupkg
+packages/*
 
 #Zip files
 *.zip
