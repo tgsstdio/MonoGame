@@ -2,7 +2,6 @@
 using BirdNest.MonoGame.FileSystem;
 using BirdNest.MonoGame.Core;
 using BirdNest.MonoGame.Blocks;
-using OpenTK.Graphics.OpenGL;
 
 namespace BirdNest.MonoGame
 {
@@ -46,7 +45,7 @@ namespace BirdNest.MonoGame
 					}
 				} else
 				{
-					using (var vert = mFileSystem.OpenStream (scannedAsset.Asset.Block, scannedAsset.ComputePath))
+					using (var vert = mFileSystem.OpenStream (scannedAsset.Asset.Block, scannedAsset.VertexPath))
 					using (var frag = mFileSystem.OpenStream (scannedAsset.Asset.Block, scannedAsset.FragmentPath))
 					{
 						// TODO : prefixes ???						

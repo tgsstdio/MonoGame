@@ -44,6 +44,7 @@
     <Compile Include="IShaderLoader.cs" />
     <Compile Include="IShaderInfoLookup.cs" />
     <Compile Include="ShaderProgramData.cs" />
+    <Compile Include="NullTexturePageLookup.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>

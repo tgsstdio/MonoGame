@@ -1,0 +1,15 @@
+{
+	Identifier:{BlockId:10001},
+	Shaders:
+	[
+		{
+			Asset:{
+				Identifier:{AssetId:2000},
+				Name:"GLSL Depth shader",
+				Version:1,
+			},
+			FragmentPath:"DepthMap.frag",
+			VertexPath:"DepthMap.vert",
+		},
+	],
+}
