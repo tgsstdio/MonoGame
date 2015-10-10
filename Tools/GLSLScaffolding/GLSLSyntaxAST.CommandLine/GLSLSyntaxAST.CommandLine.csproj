@@ -93,6 +93,12 @@
     <Content Include="Shaders\BindlessTex.vert">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Shaders\DepthMap.frag">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Shaders\DepthMap.vert">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GLSLSyntaxAST\GLSLSyntaxAST.csproj">

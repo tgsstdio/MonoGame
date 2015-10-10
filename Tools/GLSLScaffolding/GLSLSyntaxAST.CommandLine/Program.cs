@@ -1,6 +1,5 @@
 ﻿using System;
 using GLSLSyntaxAST.CodeDom;
-using System.Reflection;
 using System.IO;
 using Microsoft.CSharp;
 using System.CodeDom.Compiler;
@@ -54,7 +53,7 @@ namespace GLSLSyntaxAST.CommandLine
 			Console.WriteLine (" [optional arguments]");
 			Console.WriteLine (" Must appear before -F switch");
 			Console.WriteLine (" -c {file} => will generate C# source code");
-			Console.WriteLine (" i.e. -c Sample.c => Sample.c contain generated classes");
+			Console.WriteLine (" i.e. -c Sample.cs => Sample.cs contain generated classes");
 			Console.WriteLine (" -a {file} => will generate C# assembly ");
 			Console.WriteLine (" i.e. -a Program.dll => Program.dll contain generated classes");
 			Console.WriteLine (" -ns {file} => namespace for the classes ");
@@ -137,6 +136,7 @@ namespace GLSLSyntaxAST.CommandLine
 				returnCode = 1;
 			}
 
+			Console.ReadKey ();
 			return returnCode;
 		}
 	}
