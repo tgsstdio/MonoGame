@@ -104,7 +104,7 @@ namespace GLSLSyntaxAST.CodeDom
 						StructInfo found = null;
 						if (mBlocks.TryGetValue(temp.TypeString.ToLower(), out found))
 						{
-							temp.ArrayDetails.StructType = found;
+							temp.ArrayDetails.TypeInformation = found;
 						}
 					}
 					var constNode = arraySpecifier.ChildNodes.Find (p => p.Term == mLanguage.ConstantExpression);
@@ -154,7 +154,7 @@ namespace GLSLSyntaxAST.CodeDom
 			var uniform = new StructMember ();
 			uniform.Name = uniformName.Token.ValueString;
 			uniform.ArrayDetails = new ArraySpecification ();
-			uniform.ArrayDetails.StructType = info;
+			uniform.ArrayDetails.TypeInformation = info;
 			uniform.ArrayDetails.ArraySize = (int) constNode.ChildNodes[0].Token.Value;
 
 			var key = uniform.Name;

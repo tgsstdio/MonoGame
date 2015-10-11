@@ -5,8 +5,11 @@ using System.CodeDom;
 using System.Reflection;
 using System.IO;
 using System.Runtime.InteropServices;
+using BirdNest.MonoGame;
+using System.Collections.Generic;
+using GLSLSyntaxAST.CodeDom;
 
-namespace GLSLSyntaxAST.CodeDom
+namespace GLSLSyntaxAST.CommandLine
 {
 	public class GLSLStructGenerator : IGLSLStructGenerator
 	{
@@ -23,7 +26,7 @@ namespace GLSLSyntaxAST.CodeDom
 
 		}
 
-		private static CodeTypeDeclaration CreateClassType(CodeNamespace contentNs, string folderName)
+		private static CodeTypeDeclaration CreateClassType(string folderName)
 		{
 			var textures = new CodeTypeDeclaration (folderName);
 			textures.IsClass = true;
@@ -56,7 +59,7 @@ namespace GLSLSyntaxAST.CodeDom
 				{
 					if (member.ClosestType != null)
 					{
-						var field1 = new CodeMemberField (member.ClosestType, member.Name);
+						var field1 = new CodeMemberField (member.ClosestType.MatchingType, member.Name);
 						field1.Attributes = MemberAttributes.Public;
 						structType.Members.Add (field1);
 					}
@@ -154,6 +157,209 @@ namespace GLSLSyntaxAST.CodeDom
 			}
 		}
 
+		static CodeMemberMethod GenerateProtectedMethod (CodeTypeDeclaration dest, string methodName)
+		{
+			var method = new CodeMemberMethod ();
+			method.Name = methodName;
+			method.Attributes = MemberAttributes.Family | MemberAttributes.Override;
+			dest.Members.Add (method);
+			return method;
+		}
+
+		static void PopulateStatements (List<string> names, CodeMemberMethod dest, string methodName, params CodeExpression[] args)
+		{
+			foreach (var name in names)
+			{
+				dest.Statements.Add (new CodeMethodInvokeExpression (new CodeFieldReferenceExpression (new CodeThisReferenceExpression (), name), methodName, args));
+			}
+		}
+
+		void GenerateVertexBuffer (CodeNamespace contentNs)
+		{
+			var vBuffer = CreateClassType ("VertexBuffer2");
+			contentNs.Types.Add (vBuffer);
+
+			vBuffer.BaseTypes.Add(new CodeTypeReference(typeof(VertexBuffer)));
+
+			// constructor
+			var constructor = new CodeConstructor();
+			//constructor.StartDirectives.Add(new CodeRegionDirective(CodeRegionMode.Start, "constructor"));
+			constructor.Attributes =MemberAttributes.Public | MemberAttributes.Final;
+			//constructor.EndDirectives.Add(new CodeRegionDirective(CodeRegionMode.End, "constructor"));
+			vBuffer.Members.Add (constructor);
+
+			var attributes = new List<string> ();
+			foreach (var member in mExtractor.Attributes)
+			{
+				if (member.Direction.StartsWith ("in", StringComparison.Ordinal))
+				{
+					var field1 = new CodeMemberField ();
+					field1.Name = member.Name;
+					field1.Attributes = MemberAttributes.Public;
+
+					var attributeType = typeof(int);
+					if (member.ClosestType.ComponentType == typeof(float))
+					{
+						attributeType = typeof(FloatAttributeBinding);
+
+					}
+					else if (member.ClosestType.ComponentType == typeof(int) || member.ClosestType.ComponentType == typeof(uint))
+					{
+						attributeType = typeof(IntAttributeBinding);	
+					}
+
+					if (attributeType != typeof(int))
+					{
+						field1.Type = new CodeTypeReference(attributeType);	
+
+						var objCreation = new CodeObjectCreateExpression (field1.Type);
+						objCreation.Parameters.Add (new CodePrimitiveExpression (member.Name));					
+						if (member.Layout.Location.HasValue)
+						{
+							objCreation.Parameters.Add (new CodePrimitiveExpression (member.Layout.Location.Value));
+						}
+						else
+						{
+							objCreation.Parameters.Add (new CodePrimitiveExpression (0));
+						}
+
+						if (member.ClosestType != null)
+						{
+							objCreation.Parameters.Add (new CodePrimitiveExpression (member.ClosestType.NoOfComponents));
+						}
+						else
+						{
+							objCreation.Parameters.Add (new CodePrimitiveExpression (0));
+						}
+
+						constructor.Statements.Add (
+							new CodeAssignStatement (
+									// left
+									new CodePropertyReferenceExpression(
+										new CodeThisReferenceExpression(),
+										member.Name
+									),
+									// right
+									objCreation
+							)
+						);
+					}
+
+					vBuffer.Members.Add (field1);
+					attributes.Add (member.Name);
+				}
+			}
+
+			// protected abstract void InitialiseBuffers ();
+			var initMethod = GenerateProtectedMethod (vBuffer, "InitialiseBuffers");
+			PopulateStatements (attributes, initMethod, "Initialise");
+
+			// protected abstract void BindBuffersManually(int programID);
+			var bindManally = GenerateProtectedMethod(vBuffer, "BindBuffersManually");
+			bindManally.Parameters.Add (new CodeParameterDeclarationExpression(typeof(int), "programID"));
+			PopulateStatements (attributes, bindManally, "BindManually", new CodeArgumentReferenceExpression("programID"));
+
+			// protected abstract void ReleaseManagedResources ();
+			var rmrMethod = GenerateProtectedMethod(vBuffer, "ReleaseManagedResources");
+			PopulateStatements (attributes, rmrMethod, "Dispose");
+		}
+
+		void GenerateProgram (CodeNamespace contentNs)
+		{
+			var program = CreateClassType ("Program");
+
+			program.BaseTypes.Add(new CodeTypeReference(typeof(RenderUnit)));
+
+			foreach (var member in mExtractor.Uniforms)
+			{
+				var field1 = new CodeMemberField (typeof(int), member.Name);
+				field1.Attributes = MemberAttributes.Public;
+				program.Members.Add (field1);
+			}
+
+			var fields = new List<string> ();
+			foreach (var member in mExtractor.Blocks)
+			{
+				if (member.StructType == GLSLStructType.Buffer)
+				{
+					CodeTypeReference bufferType = null;
+					// buffer array 
+					if (member.Members.Count == 1 && member.Members[0].ArrayDetails.TypeInformation.StructType == GLSLStructType.Struct)
+					{
+						bufferType = new CodeTypeReference (typeof(ShaderStorageBuffer<>));
+						bufferType.TypeArguments.Add(new CodeTypeReference (member.Members[0].TypeString));
+					}
+					bufferType = bufferType ?? new CodeTypeReference (typeof(int));
+//
+					var field1 = new CodeMemberField (bufferType, member.Name);
+					field1.Attributes = MemberAttributes.Public;
+//					if (member.Layout != null && member.Layout.Binding.HasValue)
+//					{
+//						field1.InitExpression = new CodePrimitiveExpression (member.Layout.Binding.Value);
+//					}
+					program.Members.Add (field1);
+					fields.Add (field1.Name);
+				}
+			}
+			contentNs.Types.Add (program);
+
+			// protected abstract void BindShaderStorage();
+			var bind = GenerateProtectedMethod (program, "BindShaderStorage");
+			PopulateStatements (fields, bind, "Bind");
+
+			// protected abstract void UnbindShaderStorage();
+			var unbind = GenerateProtectedMethod (program, "UnbindShaderStorage");
+			PopulateStatements (fields, unbind, "Unbind");
+
+			// protected abstract void ReleaseManagedResources();
+			var rmr = GenerateProtectedMethod (program, "ReleaseManagedResources");
+			PopulateStatements (fields, rmr, "Dispose");
+
+			var uniforms = CreateClassType ("Uniforms");
+			var inputBindings = CreateClassType ("InputBindings");
+			var outputBindings = CreateClassType ("OutputBindings");
+			var bufferBindings = CreateClassType ("BufferBindings");
+			var defaultConstructor = new CodeConstructor ();
+			defaultConstructor.Attributes = MemberAttributes.Public;
+			program.Members.Add (defaultConstructor);
+
+			AddUniforms (uniforms, defaultConstructor);
+			AddAttributes (inputBindings, outputBindings);
+			SetBufferBindings (bufferBindings);
+			if (uniforms.Members.Count > 0)
+			{
+				uniforms.Members.Add (defaultConstructor);
+				contentNs.Types.Add (uniforms);
+			}
+			if (inputBindings.Members.Count > 0)
+			{
+				contentNs.Types.Add (inputBindings);
+				var method = new CodeMemberMethod ();
+				method.Attributes = MemberAttributes.Public;
+				method.Name = "SetInputs";
+				method.Parameters.Add (new CodeParameterDeclarationExpression (new CodeTypeReference ("InputBindings"), "bindings"));
+				program.Members.Add (method);
+			}
+			if (outputBindings.Members.Count > 0)
+			{
+				var method = new CodeMemberMethod ();
+				method.Name = "SetOutputs";
+				method.Attributes = MemberAttributes.Public;
+				method.Parameters.Add (new CodeParameterDeclarationExpression (new CodeTypeReference ("OutputBindings"), "bindings"));
+				program.Members.Add (method);
+				contentNs.Types.Add (outputBindings);
+			}
+			if (bufferBindings.Members.Count > 0)
+			{
+				var method = new CodeMemberMethod ();
+				method.Name = "SetBuffers";
+				method.Attributes = MemberAttributes.Public;
+				method.Parameters.Add (new CodeParameterDeclarationExpression (new CodeTypeReference ("BufferBindings"), "bindings"));
+				program.Members.Add (method);
+				contentNs.Types.Add (bufferBindings);
+			}
+		}
+
 		public CodeCompileUnit InitialiseCompileUnit (GLSLAssembly assembly)
 		{
 			var contentUnit = new CodeCompileUnit ();
@@ -176,97 +382,10 @@ namespace GLSLSyntaxAST.CodeDom
 
 			DeclareStructs (contentNs);
 
-			var program = CreateClassType (contentNs, "Program");
-			foreach (var member in mExtractor.Uniforms)
-			{
-				var field1 = new CodeMemberField (typeof(int), member.Name);
-				field1.Attributes = MemberAttributes.Public;
+			GenerateVertexBuffer (contentNs);
 
-				program.Members.Add (field1);
-			}
+			GenerateProgram (contentNs);
 
-			foreach (var member in mExtractor.Blocks)
-			{
-				if (member.StructType == GLSLStructType.Buffer)
-				{
-					var field1 = new CodeMemberField (typeof(int), member.Name);
-					field1.Attributes = MemberAttributes.Public;
-
-					if (member.Layout != null && member.Layout.Binding.HasValue)
-					{
-						field1.InitExpression = new CodePrimitiveExpression (member.Layout.Binding.Value);
-					}
-
-					program.Members.Add (field1);
-				}
-			}
-			contentNs.Types.Add (program);
-
-
-			var uniforms = CreateClassType (contentNs, "Uniforms");
-			var inputBindings = CreateClassType (contentNs, "InputBindings");
-			var outputBindings = CreateClassType (contentNs, "OutputBindings");
-			var bufferBindings = CreateClassType (contentNs, "BufferBindings");
-
-			var defaultConstructor = new CodeConstructor ();
-			defaultConstructor.Attributes = MemberAttributes.Public;
-
-			AddUniforms (uniforms, defaultConstructor);
-
-			AddAttributes (inputBindings, outputBindings);
-
-			SetBufferBindings (bufferBindings);
-
-			if (uniforms.Members.Count > 0)
-			{
-				uniforms.Members.Add (defaultConstructor);
-				contentNs.Types.Add (uniforms);
-			}
-
-			if (inputBindings.Members.Count > 0)
-			{
-				contentNs.Types.Add (inputBindings);
-				var method = new CodeMemberMethod ();
-				method.Attributes = MemberAttributes.Public;
-				method.Name = "SetInputs";
-				method.Parameters.Add(
-					new CodeParameterDeclarationExpression(
-						new CodeTypeReference("InputBindings"),
-						"bindings"
-						)
-					);
-				program.Members.Add (method);
-			}
-
-			if (outputBindings.Members.Count > 0)
-			{
-				var method = new CodeMemberMethod ();
-				method.Name = "SetOutputs";
-				method.Attributes = MemberAttributes.Public;
-				method.Parameters.Add(
-					new CodeParameterDeclarationExpression(
-						new CodeTypeReference("OutputBindings"),
-								"bindings"
-						)
-					);
-				program.Members.Add (method);							
-				contentNs.Types.Add (outputBindings);
-			}
-
-			if (bufferBindings.Members.Count > 0)
-			{
-				var method = new CodeMemberMethod ();
-				method.Name = "SetBuffers";
-				method.Attributes = MemberAttributes.Public;
-				method.Parameters.Add(
-					new CodeParameterDeclarationExpression(
-						new CodeTypeReference("BufferBindings"),
-						"bindings"
-					)
-				);
-				program.Members.Add (method);							
-				contentNs.Types.Add (bufferBindings);
-			}
 			//defaultConstructor.Statements.Add (new CodeVariableDeclarationStatement (typeof(int), "testInt", new CodePrimitiveExpression (0)));
 
 			return contentUnit;
@@ -282,7 +401,7 @@ namespace GLSLSyntaxAST.CodeDom
 					foreach (var member in block.Members)
 					{
 						var typeDecl = (member.ArrayDetails != null)
-							?  new CodeTypeReference (member.ArrayDetails.StructType.Name + "[]")
+							?  new CodeTypeReference (member.ArrayDetails.TypeInformation.Name + "[]")
 							: new CodeTypeReference (member.TypeString);						
 						var field1 = new CodeMemberField (typeDecl, member.Name);
 						field1.Attributes = MemberAttributes.Public;
@@ -296,13 +415,13 @@ namespace GLSLSyntaxAST.CodeDom
 		{
 			if (member.ClosestType != null)
 			{
-				var field1 = new CodeMemberField (member.ClosestType, member.Name);
+				var field1 = new CodeMemberField (member.ClosestType.MatchingType, member.Name);
 				field1.Attributes = MemberAttributes.Public;
 				dest.Members.Add (field1);
 			}
 			else if (member.ArrayDetails != null)
 			{
-				var arrayType = new CodeTypeReference (member.ArrayDetails.StructType.Name + "[]");
+				var arrayType = new CodeTypeReference (member.ArrayDetails.TypeInformation.Name + "[]");
 				var field1 = new CodeMemberField (arrayType, member.Name);
 				field1.Attributes = MemberAttributes.Public;
 				dest.Members.Add (field1);

@@ -54,6 +54,7 @@
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="GLSLStructGenerator.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -101,21 +102,25 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\GLSLSyntaxAST\GLSLSyntaxAST.csproj">
-      <Project>{B23CADAF-63EE-4EEB-9BD8-FC452BFC5D5C}</Project>
-      <Name>GLSLSyntaxAST</Name>
+    <ProjectReference Include="..\Irony\Irony.csproj">
+      <Project>{0A832F99-F59C-4D75-B5CC-9CD3317060A6}</Project>
+      <Name>Irony</Name>
     </ProjectReference>
     <ProjectReference Include="..\GLSLSyntaxAST.CodeDom\GLSLSyntaxAST.CodeDom.csproj">
       <Project>{D5B25375-C28B-4544-A331-8BE9E6971719}</Project>
       <Name>GLSLSyntaxAST.CodeDom</Name>
     </ProjectReference>
+    <ProjectReference Include="..\GLSLSyntaxAST\GLSLSyntaxAST.csproj">
+      <Project>{B23CADAF-63EE-4EEB-9BD8-FC452BFC5D5C}</Project>
+      <Name>GLSLSyntaxAST</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GLSLSyntaxAST.Preprocessor\GLSLSyntaxAST.Preprocessor.csproj">
       <Project>{ED65DE39-181D-4C06-9BA9-6B568614652B}</Project>
       <Name>GLSLSyntaxAST.Preprocessor</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Irony\Irony.csproj">
-      <Project>{0A832F99-F59C-4D75-B5CC-9CD3317060A6}</Project>
-      <Name>Irony</Name>
+    <ProjectReference Include="..\..\..\BirdNest.MonoGame\BirdNest.MonoGame.csproj">
+      <Project>{A978C860-F0DB-4B9F-88AA-E0F002F0312B}</Project>
+      <Name>BirdNest.MonoGame</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>

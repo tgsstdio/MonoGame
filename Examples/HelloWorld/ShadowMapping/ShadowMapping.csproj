@@ -41,8 +41,6 @@
     <Compile Include="GameWorld.cs" />
     <Compile Include="CameraInfo.cs" />
     <Compile Include="CameraData.cs" />
-    <Compile Include="ShaderStorageBuffer.cs" />
-    <Compile Include="ShaderStorageBufferBinder.cs" />
     <Compile Include="DryIoc\Container.cs" />
     <Compile Include="DryIoc\FactoryCompiler.cs" />
     <Compile Include="DryIoc\InternalsVisibleToDryIocFactoryCompilerDynamicAssembly.cs" />

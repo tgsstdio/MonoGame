@@ -8,7 +8,7 @@ namespace GLSLSyntaxAST.CodeDom
 		public string Direction {get;set;}
 		public LayoutInformation Layout {get;set;}
 		public string TypeString;
-		public Type ClosestType;
+		public GLSLVariableType ClosestType;
 	}
 }
 

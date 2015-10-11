@@ -2,7 +2,7 @@
 using OpenTK.Graphics.OpenGL;
 using System.Runtime.InteropServices;
 
-namespace ShadowMapping
+namespace  BirdNest.MonoGame
 {
 	/// <summary>
 	/// Shader storage buffer for static data

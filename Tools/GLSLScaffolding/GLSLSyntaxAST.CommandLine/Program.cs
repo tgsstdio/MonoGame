@@ -38,7 +38,8 @@ namespace GLSLSyntaxAST.CommandLine
 			};
 			foreach (var tex in texTypes)
 			{
-				lookup.AddNewTranslation (tex, typeof(long));
+				var entry = new GLSLVariableType{ TypeNameKey = tex, MatchingType = typeof(long), ComponentType = typeof(long), NoOfComponents = 1 };
+				lookup.AddNewTranslation (entry.TypeNameKey, entry);
 			}
 		}
 
@@ -98,7 +99,7 @@ namespace GLSLSyntaxAST.CommandLine
 				var output = new GLSLAssembly ();
 				output.Version = "1.0.0.1";
 				output.Namespace = parser.Namespace;
-				output.ReferencedAssemblies = new string[]{"OpenTK.dll"};
+				output.ReferencedAssemblies = new string[]{"OpenTK.dll", "BirdNest.MonoGame.dll"};
 
 				var generator = new GLSLStructGenerator(extractor);
 				if (parser.GenerateAssembly)
@@ -135,7 +136,7 @@ namespace GLSLSyntaxAST.CommandLine
 				PrintHelp ();
 				returnCode = 1;
 			}
-
+			Console.WriteLine ("Press a key to exit");
 			Console.ReadKey ();
 			return returnCode;
 		}

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace ShadowMapping
+namespace BirdNest.MonoGame
 {
 	/// <summary>
 	/// For converting application info classes to shader data struct when passing data to shader storage buffer.

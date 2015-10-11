@@ -75,6 +75,14 @@
     <Compile Include="ShaderLoader\GLSLTextShaderLoader.cs" />
     <Compile Include="ShaderLoader\GLSLBinaryProgramWriter.cs" />
     <Compile Include="ShaderLoader\IBinaryShaderProgramWriter.cs" />
+    <Compile Include="ShaderStorageBuffer.cs" />
+    <Compile Include="ShaderStorageBufferBinder.cs" />
+    <Compile Include="DrawElementsIndirectCommand.cs" />
+    <Compile Include="FloatAttributeBinding.cs" />
+    <Compile Include="IntAttributeBinding.cs" />
+    <Compile Include="IVertexAttributeBinding.cs" />
+    <Compile Include="VertexBuffer.cs" />
+    <Compile Include="RenderUnit.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
