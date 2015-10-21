@@ -3,53 +3,70 @@ using OpenTK.Graphics.OpenGL;
 
 namespace BirdNest.MonoGame
 {
-	public abstract class RenderUnit : IDisposable
+	public class RenderUnit : IDisposable
 	{
-		protected DrawElementsIndirectCommand[] DrawCommands;	
-		protected VertexBuffer TextBuffer;
+		protected IDrawElementsCommandFilter Filter;	
+		protected VertexBuffer Buffer;
 		protected int Stride;
-		protected RenderUnit (VertexBuffer v, DrawElementsIndirectCommand[] dc)
+		public RenderUnit (VertexBuffer v, IDrawElementsCommandFilter f)
 		{
-			TextBuffer = v;
-			DrawCommands = dc;
+			Buffer = v;
+			Filter = f;
 			Stride = System.Runtime.InteropServices.Marshal.SizeOf (typeof(DrawElementsIndirectCommand));
 		}
 
-		protected abstract void BindShaderStorage();
-		protected abstract void UnbindShaderStorage();
-		protected abstract void ReleaseManagedResources ();
+		protected virtual void BindShaderStorage()
+		{
+
+		}
+
+		protected virtual void UnbindShaderStorage()
+		{
+
+		}
+
+		protected virtual void ReleaseManagedResources ()
+		{
+
+		}
+
+		public virtual void InitialiseUniforms (int programID)
+		{
+
+		}
 
 		public void Render()
 		{
+			var commands = Filter.ToArray ();
 			GL.MultiDrawElementsIndirect<DrawElementsIndirectCommand> (
 				All.Triangles,
 				All.UnsignedInt,
-				DrawCommands,
-				DrawCommands.Length,
+				commands,
+				commands.Length,
 				Stride);
 		}
 
 		public void Bind()
 		{
-			TextBuffer.Bind ();
+			Buffer.Bind ();
 			BindShaderStorage ();
 		}
 
 		public void Unbind()
 		{
 			UnbindShaderStorage ();
-			TextBuffer.Unbind ();
+			Buffer.Unbind ();
+		}
+
+		public void BindManually(int programID)
+		{
+			Buffer.BindManually (programID);
 		}
 
 		#region IDisposable implementation
 		~RenderUnit()
 		{
 			Dispose (false);
-		}
-
-		public void BindManually(int programID)
-		{
-			TextBuffer.BindManually (programID);
 		}
 
 		public void Dispose ()
@@ -66,8 +83,8 @@ namespace BirdNest.MonoGame
 
 			if (disposing)
 			{
-				DrawCommands = null;
-				TextBuffer.Dispose ();
+				Filter = null;
+				Buffer = null;
 				ReleaseManagedResources ();
 			}
 			mDisposed = true;

@@ -83,6 +83,14 @@
     <Compile Include="IVertexAttributeBinding.cs" />
     <Compile Include="VertexBuffer.cs" />
     <Compile Include="RenderUnit.cs" />
+    <Compile Include="IDrawElementsCommandFilter.cs" />
+    <Compile Include="DefaultDrawElementsCommandFilter.cs" />
+    <Compile Include="ShaderProgramGroup.cs" />
+    <Compile Include="ShaderProgramRoot.cs" />
+    <Compile Include="DrawState.cs" />
+    <Compile Include="RenderTarget\NullRenderTarget.cs" />
+    <Compile Include="RenderTarget\RenderTargetRange.cs" />
+    <Compile Include="RenderTarget\FrameBufferObject.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -105,6 +113,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="ShaderLoader\" />
+    <Folder Include="RenderTarget\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

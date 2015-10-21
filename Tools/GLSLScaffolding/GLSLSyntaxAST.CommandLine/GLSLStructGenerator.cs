@@ -277,6 +277,16 @@ namespace GLSLSyntaxAST.CommandLine
 				program.Members.Add (field1);
 			}
 
+			var defaultConstructor = new CodeConstructor ();
+			defaultConstructor.Attributes = MemberAttributes.Public;
+			program.Members.Add (defaultConstructor);
+
+			defaultConstructor.Parameters.Add (new CodeParameterDeclarationExpression(typeof(VertexBuffer), "v"));
+			defaultConstructor.Parameters.Add (new CodeParameterDeclarationExpression(typeof(IDrawElementsCommandFilter), "f"));
+
+			defaultConstructor.BaseConstructorArgs.Add (new CodeArgumentReferenceExpression ("v"));
+			defaultConstructor.BaseConstructorArgs.Add (new CodeArgumentReferenceExpression ("f"));
+
 			var fields = new List<string> ();
 			foreach (var member in mExtractor.Blocks)
 			{
@@ -297,6 +307,21 @@ namespace GLSLSyntaxAST.CommandLine
 //					{
 //						field1.InitExpression = new CodePrimitiveExpression (member.Layout.Binding.Value);
 //					}
+
+					var parameter = new CodeParameterDeclarationExpression(bufferType, member.Name);
+					defaultConstructor.Parameters.Add (parameter);
+					defaultConstructor.Statements.Add (
+						new CodeAssignStatement (
+							// left
+							new CodePropertyReferenceExpression (
+								new CodeThisReferenceExpression (),
+								member.Name
+							),
+							// right
+							new CodeArgumentReferenceExpression (member.Name)
+						)
+					);
+
 					program.Members.Add (field1);
 					fields.Add (field1.Name);
 				}
@@ -314,23 +339,42 @@ namespace GLSLSyntaxAST.CommandLine
 			// protected abstract void ReleaseManagedResources();
 			var rmr = GenerateProtectedMethod (program, "ReleaseManagedResources");
 			PopulateStatements (fields, rmr, "Dispose");
+			foreach (var name in fields)
+			{
+				rmr.Statements.Add(new CodeAssignStatement(
+					// left
+					new CodePropertyReferenceExpression (
+						new CodeThisReferenceExpression (),
+						name
+					),
+					new CodePrimitiveExpression (null))
+				);
+			}
 
 			var uniforms = CreateClassType ("Uniforms");
 			var inputBindings = CreateClassType ("InputBindings");
 			var outputBindings = CreateClassType ("OutputBindings");
-			var bufferBindings = CreateClassType ("BufferBindings");
-			var defaultConstructor = new CodeConstructor ();
-			defaultConstructor.Attributes = MemberAttributes.Public;
-			program.Members.Add (defaultConstructor);
+//			var bufferBindings = CreateClassType ("BufferBindings");
 
-			AddUniforms (uniforms, defaultConstructor);
-			AddAttributes (inputBindings, outputBindings);
-			SetBufferBindings (bufferBindings);
+			var uniformConstructor = new CodeConstructor ();
+			uniformConstructor.Attributes = MemberAttributes.Public;
+			uniforms.Members.Add (uniformConstructor);
 			if (uniforms.Members.Count > 0)
-			{
-				uniforms.Members.Add (defaultConstructor);
+			{				
 				contentNs.Types.Add (uniforms);
 			}
+			AddUniforms (uniforms, uniformConstructor);
+
+			var initUniforms = new CodeMemberMethod();
+			initUniforms.Name = "InitialiseUniforms";
+			initUniforms.Attributes = MemberAttributes.Public | MemberAttributes.Override;
+			initUniforms.Parameters.Add (new CodeParameterDeclarationExpression(typeof(int), "programID"));
+			program.Members.Add (initUniforms);
+
+			AddAttributes (inputBindings, outputBindings);
+			//SetBufferBindings (bufferBindings);
+
+
 			if (inputBindings.Members.Count > 0)
 			{
 				contentNs.Types.Add (inputBindings);
@@ -349,15 +393,15 @@ namespace GLSLSyntaxAST.CommandLine
 				program.Members.Add (method);
 				contentNs.Types.Add (outputBindings);
 			}
-			if (bufferBindings.Members.Count > 0)
-			{
-				var method = new CodeMemberMethod ();
-				method.Name = "SetBuffers";
-				method.Attributes = MemberAttributes.Public;
-				method.Parameters.Add (new CodeParameterDeclarationExpression (new CodeTypeReference ("BufferBindings"), "bindings"));
-				program.Members.Add (method);
-				contentNs.Types.Add (bufferBindings);
-			}
+//			if (bufferBindings.Members.Count > 0)
+//			{
+//				var method = new CodeMemberMethod ();
+//				method.Name = "SetBuffers";
+//				method.Attributes = MemberAttributes.Public;
+//				method.Parameters.Add (new CodeParameterDeclarationExpression (new CodeTypeReference ("BufferBindings"), "bindings"));
+//				program.Members.Add (method);
+//				contentNs.Types.Add (bufferBindings);
+//			}
 		}
 
 		public CodeCompileUnit InitialiseCompileUnit (GLSLAssembly assembly)

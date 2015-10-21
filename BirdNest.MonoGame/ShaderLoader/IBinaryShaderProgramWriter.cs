@@ -6,7 +6,7 @@ namespace BirdNest.MonoGame
 	public interface IBinaryShaderProgramWriter
 	{
 		void Initialise(int bufSize);
-		void WriteBinary(ShaderProgramData program);
+		void WriteBinary(ShaderProgram program);
 	}
 }
 

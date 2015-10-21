@@ -2,7 +2,7 @@
 
 namespace BirdNest.MonoGame.Graphics
 {
-	public class ShaderProgramData
+	public class ShaderProgram
 	{
 		public AssetIdentifier Identifier { get; set; }
 		public BlockIdentifier Block {get;set;}

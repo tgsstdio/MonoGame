@@ -9,12 +9,12 @@ namespace BirdNest.MonoGame
 {
 	public class GLShaderRegistry : IShaderRegistry
 	{
-		private readonly Dictionary<ulong, ShaderProgramData> mPrograms;
+		private readonly Dictionary<ulong, ShaderProgram> mPrograms;
 		private readonly IAssetManager mAssetManager;
 		public GLShaderRegistry (IAssetManager manager)
 		{
 			mAssetManager = manager;
-			mPrograms = new Dictionary<ulong, ShaderProgramData> ();
+			mPrograms = new Dictionary<ulong, ShaderProgram> ();
 		}
 
 		~GLShaderRegistry()
@@ -52,18 +52,18 @@ namespace BirdNest.MonoGame
 
 		#region IShaderRegistry implementation
 
-		public bool TryGetValue (AssetIdentifier identifier, out ShaderProgramData result)
+		public bool TryGetValue (AssetIdentifier identifier, out ShaderProgram result)
 		{
 			return mPrograms.TryGetValue (identifier.AssetId, out result);
 		}
 
-		public void Add (AssetInfo key, ShaderProgramData program)
+		public void Add (AssetInfo key, ShaderProgram program)
 		{
 			mAssetManager.Add (key);
 			mPrograms.Add (key.Identifier.AssetId, program);
 		}
 
-		public void Remove (ShaderProgramData program)
+		public void Remove (ShaderProgram program)
 		{
 			mPrograms.Remove (program.Identifier.AssetId);
 			mAssetManager.Remove (program.Identifier);

@@ -4,7 +4,7 @@ namespace BirdNest.MonoGame.Graphics
 {
 	public interface IShaderLoader
 	{
-		ShaderProgramData Load(AssetIdentifier identifier);
+		ShaderProgram Load(AssetIdentifier identifier);
 	}
 }
 

@@ -8,8 +8,8 @@
     <OutputType>Library</OutputType>
     <RootNamespace>BirdNest.MonoGame.Graphics</RootNamespace>
     <AssemblyName>BirdNest.MonoGame.Graphics</AssemblyName>
-    <TargetFrameworkProfile>Profile78</TargetFrameworkProfile>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Profile344</TargetFrameworkProfile>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -43,8 +43,11 @@
     <Compile Include="AtlasTextureType.cs" />
     <Compile Include="IShaderLoader.cs" />
     <Compile Include="IShaderInfoLookup.cs" />
-    <Compile Include="ShaderProgramData.cs" />
     <Compile Include="NullTexturePageLookup.cs" />
+    <Compile Include="ShaderProgram.cs" />
+    <Compile Include="IRenderTargetRange.cs" />
+    <Compile Include="IRenderTarget.cs" />
+    <Compile Include="InstanceIdentifier.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>

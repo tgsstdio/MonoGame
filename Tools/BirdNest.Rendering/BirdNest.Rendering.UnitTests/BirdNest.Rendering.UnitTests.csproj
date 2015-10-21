@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{B7F0D509-8C71-4804-B179-DA6B27DE6C26}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>BirdNest.Rendering.UnitTests</RootNamespace>
+    <AssemblyName>BirdNest.Rendering.UnitTests</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>full</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="nunit.framework">
+      <HintPath>..\..\..\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Test.cs" />
+    <Compile Include="TechniqueUnitTests.cs" />
+    <Compile Include="Technique.cs" />
+    <Compile Include="DataIterator.cs" />
+    <Compile Include="IDataIterator.cs" />
+    <Compile Include="LightInfo.cs" />
+    <Compile Include="NestedLoop.cs" />
+    <Compile Include="SceneNodeTests.cs" />
+    <Compile Include="MeshMarker.cs" />
+    <Compile Include="IMeshMarker.cs" />
+    <Compile Include="FlattenerUnitTests.cs" />
+    <Compile Include="SceneNodeFlattener.cs" />
+    <Compile Include="INodeFlattener.cs" />
+    <Compile Include="MockShaderProgramCache.cs" />
+    <Compile Include="PassOptimizer.cs" />
+    <Compile Include="VertexBufferSlotCollator.cs" />
+    <Compile Include="IPassOptimizerLogger.cs" />
+    <Compile Include="IFrameDuplicator.cs" />
+    <Compile Include="FrameDuplicator.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <ProjectReference Include="..\BirdNest.Rendering.csproj">
+      <Project>{E3FE7233-1F10-4A28-A1F0-EDA3600B144F}</Project>
+      <Name>BirdNest.Rendering</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\BirdNest.MonoGame.Blocks\BirdNest.MonoGame.Blocks.csproj">
+      <Project>{F218D143-486C-4018-8DAD-B970088EA505}</Project>
+      <Name>BirdNest.MonoGame.Blocks</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\BirdNest.MonoGame.Core\BirdNest.MonoGame.Core.csproj">
+      <Project>{AB25A0BE-77B4-4940-B59B-43E938A89C44}</Project>
+      <Name>BirdNest.MonoGame.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\BirdNest.MonoGame.Graphics\BirdNest.MonoGame.Graphics.csproj">
+      <Project>{2F0797E0-AA35-4C38-9CE0-0055A3E41C64}</Project>
+      <Name>BirdNest.MonoGame.Graphics</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+</Project>

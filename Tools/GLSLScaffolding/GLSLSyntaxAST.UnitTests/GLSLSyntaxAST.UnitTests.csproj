@@ -50,7 +50,6 @@
     <Reference Include="nunit.framework">
       <HintPath>..\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.TeamFoundation.VersionControl.Common, Version=12.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Test.cs" />
@@ -78,6 +77,7 @@
     <Compile Include="GLSLStructGenerator\CodeDomFuncNoParams.cs" />
     <Compile Include="GLSLStructGenerator\CodeDomSimpleVariableAssignment.cs" />
     <Compile Include="GLSLStructGenerator\CodeDomBasicStruct.cs" />
+    <Compile Include="GLSLStructGenerator\CodeDomUniformFields.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -97,13 +97,13 @@
       <Project>{B23CADAF-63EE-4EEB-9BD8-FC452BFC5D5C}</Project>
       <Name>GLSLSyntaxAST</Name>
     </ProjectReference>
-    <ProjectReference Include="..\GLSLSyntaxAST.Preprocessor\GLSLSyntaxAST.Preprocessor.csproj">
-      <Project>{ED65DE39-181D-4C06-9BA9-6B568614652B}</Project>
-      <Name>GLSLSyntaxAST.Preprocessor</Name>
-    </ProjectReference>
     <ProjectReference Include="..\GLSLSyntaxAST.CodeDom\GLSLSyntaxAST.CodeDom.csproj">
       <Project>{D5B25375-C28B-4544-A331-8BE9E6971719}</Project>
       <Name>GLSLSyntaxAST.CodeDom</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GLSLSyntaxAST.Preprocessor\GLSLSyntaxAST.Preprocessor.csproj">
+      <Project>{ED65DE39-181D-4C06-9BA9-6B568614652B}</Project>
+      <Name>GLSLSyntaxAST.Preprocessor</Name>
     </ProjectReference>
     <ProjectReference Include="..\Irony\Irony.csproj">
       <Project>{0A832F99-F59C-4D75-B5CC-9CD3317060A6}</Project>

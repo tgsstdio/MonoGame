@@ -238,9 +238,87 @@ namespace GLSLSyntaxAST.CodeDom
 			}
 		}
 
+		bool IsUniformField (ParseTreeNode fullSpecifiedType)
+		{
+			ParseTreeNode typeQualifier = fullSpecifiedType.ChildNodes.Find (p => p.Term == mLanguage.TypeQualifier);
+			if (typeQualifier == null)
+			{
+				return false;
+			}
+			ParseTreeNode storageQualifier = typeQualifier.ChildNodes.Find (p => p.Term == mLanguage.StorageQualifier);
+			if (storageQualifier == null)
+			{
+				return false;
+			}
+			ParseTreeNode uniformTag = storageQualifier.ChildNodes.Find (p => p.Term == mLanguage.UNIFORM);
+			if (uniformTag == null)
+			{
+				return false;
+			}
+			return true;
+		}
+
 		private int FindUniforms(ParseTreeNode node, int level)
 		{
-			return 0;
+			if (node == null)
+			{
+				return 0;
+			}
+
+			if (node.Term == mLanguage.Declaration)
+			{
+				var parent = node.ChildNodes.Find (p => p.Term == mLanguage.SingleDeclaration);
+				if (parent == null)
+				{
+					return 0;
+				}
+
+				ParseTreeNode fullSpecifiedType = parent.ChildNodes.Find (p => p.Term == mLanguage.FullySpecifiedType);
+				if (fullSpecifiedType == null)
+				{
+					return 0;
+				}
+
+				if (!IsUniformField (fullSpecifiedType))
+				{
+					return 0;
+				}
+
+				var identifier = parent.ChildNodes.Find (p => p.Term == mLanguage.IDENTIFIER);
+				if (identifier == null)
+				{
+					return 0;
+				}
+
+				if (fullSpecifiedType.ChildNodes.Count < 2)
+				{
+					return 0;
+				}
+
+				var temp = new StructMember ();
+				temp.Name = identifier.Token.ValueString;
+				temp.TypeString = fullSpecifiedType.ChildNodes [1].Token.ValueString;
+				temp.ClosestType = mTypeLookup.FindClosestType (temp.TypeString);
+				var key = temp.Name;
+				if (!mUniforms.ContainsKey (key))
+				{
+					mUniforms.Add (temp.Name, temp);
+					return 1;
+				}
+				else
+				{
+					return 0;
+				}
+			} 
+			else
+			{
+				int total = 0;
+				foreach (ParseTreeNode child in node.ChildNodes)
+				{
+					total += FindUniforms (child, level + 1);
+				}
+				return total;
+			}
 		}
 
 		private void ExtractLayout(LayoutInformation info, ParseTreeNode parent)

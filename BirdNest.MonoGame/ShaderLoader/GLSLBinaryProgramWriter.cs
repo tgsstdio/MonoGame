@@ -26,7 +26,7 @@ namespace BirdNest.MonoGame
 			mBuffer = new byte[mBufferSize];
 		}
 
-		public void WriteBinary (ShaderProgramData program)
+		public void WriteBinary (ShaderProgram program)
 		{
 			int length;
 			BinaryFormat format;

@@ -21,12 +21,12 @@ namespace BirdNest.MonoGame
 
 		#region IShaderLoader implementation
 
-		public ShaderProgramData Load (AssetIdentifier identifier)
+		public ShaderProgram Load (AssetIdentifier identifier)
 		{
-			ShaderProgramData existingProgram;
+			ShaderProgram existingProgram;
 			if (mRegistry.TryGetValue (identifier, out existingProgram))
 			{				
-				var result = new ShaderProgramData{ Identifier = identifier};				
+				var result = new ShaderProgram{ Identifier = identifier};				
 				result.ProgramID = existingProgram.ProgramID;
 				result.Block = existingProgram.Block;
 				result.IsLoaded = true;
@@ -36,7 +36,7 @@ namespace BirdNest.MonoGame
 			ShaderInfo scannedAsset = null;
 			if (mLookup.TryGetValue (identifier, out scannedAsset))
 			{
-				var result = new ShaderProgramData{ Identifier = identifier};
+				var result = new ShaderProgram{ Identifier = identifier};
 
 				string programFilePath = identifier.AssetId + "_glsl.bin";
 				if (!string.IsNullOrWhiteSpace (scannedAsset.ComputePath))
@@ -57,7 +57,7 @@ namespace BirdNest.MonoGame
 			}
 			else
 			{
-				var result = new ShaderProgramData{ Identifier = identifier};
+				var result = new ShaderProgram{ Identifier = identifier};
 				result.IsLoaded = false;
 				return result;
 			}

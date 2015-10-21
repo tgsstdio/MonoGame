@@ -8,8 +8,8 @@
     <OutputType>Library</OutputType>
     <RootNamespace>BirdNest.MonoGame.Blocks</RootNamespace>
     <AssemblyName>BirdNest.MonoGame.Blocks</AssemblyName>
-    <TargetFrameworkProfile>Profile78</TargetFrameworkProfile>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Profile344</TargetFrameworkProfile>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -45,6 +45,7 @@
     <ProjectReference Include="..\BirdNest.MonoGame.Core\BirdNest.MonoGame.Core.csproj">
       <Project>{AB25A0BE-77B4-4940-B59B-43E938A89C44}</Project>
       <Name>BirdNest.MonoGame.Core</Name>
+      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
 </Project>
