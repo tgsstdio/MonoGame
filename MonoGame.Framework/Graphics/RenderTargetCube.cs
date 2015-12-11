@@ -88,19 +88,23 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <summary>
         /// Initializes a new instance of the <see cref="RenderTargetCube"/> class.
         /// </summary>
+		/// <param name = "baseTexture"></param>
+		/// <param name = "cubeTexture"></param>
         /// <param name="graphicsDevice">The graphics device.</param>
         /// <param name="size">The width and height of a texture cube face in pixels.</param>
         /// <param name="mipMap"><see langword="true"/> to generate a full mipmap chain; otherwise <see langword="false"/>.</param>
         /// <param name="preferredFormat">The preferred format of the surface.</param>
         /// <param name="preferredDepthFormat">The preferred format of the depth-stencil buffer.</param>
-        public RenderTargetCube(GraphicsDevice graphicsDevice, int size, bool mipMap, SurfaceFormat preferredFormat, DepthFormat preferredDepthFormat)
-            : this(graphicsDevice, size, mipMap, preferredFormat, preferredDepthFormat, 0, RenderTargetUsage.DiscardContents)
+		public RenderTargetCube(ITexturePlatform baseTexture, ITextureCubePlatform cubeTexture, GraphicsDevice graphicsDevice, int size, bool mipMap, SurfaceFormat preferredFormat, DepthFormat preferredDepthFormat)
+			: this(baseTexture, cubeTexture, graphicsDevice, size, mipMap, preferredFormat, preferredDepthFormat, 0, RenderTargetUsage.DiscardContents)
         {            
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RenderTargetCube"/> class.
         /// </summary>
+		/// <param name = "baseTexture"></param>
+		/// <param name = "cubeTexture"></param>
         /// <param name="graphicsDevice">The graphics device.</param>
         /// <param name="size">The width and height of a texture cube face in pixels.</param>
         /// <param name="mipMap"><see langword="true"/> to generate a full mipmap chain; otherwise <see langword="false"/>.</param>
@@ -108,8 +112,8 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <param name="preferredDepthFormat">The preferred format of the depth-stencil buffer.</param>
         /// <param name="preferredMultiSampleCount">The preferred number of multisample locations.</param>
         /// <param name="usage">The usage mode of the render target.</param>
-        public RenderTargetCube(GraphicsDevice graphicsDevice, int size, bool mipMap, SurfaceFormat preferredFormat, DepthFormat preferredDepthFormat, int preferredMultiSampleCount, RenderTargetUsage usage)
-            : base(graphicsDevice, size, mipMap, preferredFormat, true)
+		public RenderTargetCube(ITexturePlatform baseTexture, ITextureCubePlatform cubeTexture, GraphicsDevice graphicsDevice, int size, bool mipMap, SurfaceFormat preferredFormat, DepthFormat preferredDepthFormat, int preferredMultiSampleCount, RenderTargetUsage usage)
+			: base(baseTexture, cubeTexture, graphicsDevice, size, mipMap, preferredFormat, true)
         {
             DepthStencilFormat = preferredDepthFormat;
             MultiSampleCount = preferredMultiSampleCount;

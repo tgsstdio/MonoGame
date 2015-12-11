@@ -18,7 +18,7 @@ using Android.Runtime;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
-    public sealed class GraphicsAdapter : IDisposable
+    public sealed class GraphicsAdapter : IGraphicsAdapter, IDisposable
     {
         /// <summary>
         /// Defines the driver type for graphics adapter. Usable only on DirectX platforms for now.

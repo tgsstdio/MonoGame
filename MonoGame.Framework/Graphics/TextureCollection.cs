@@ -13,13 +13,15 @@ namespace Microsoft.Xna.Framework.Graphics
         private readonly bool _applyToVertexStage;
         private int _dirty;
 
-        internal TextureCollection(GraphicsDevice graphicsDevice, int maxTextures, bool applyToVertexStage)
+		private ITextureCollectionPlatform mPlatform;
+        internal TextureCollection(ITextureCollectionPlatform platform, GraphicsDevice graphicsDevice, int maxTextures, bool applyToVertexStage)
         {
+			mPlatform = platform;
             _graphicsDevice = graphicsDevice;
             _textures = new Texture[maxTextures];
             _applyToVertexStage = applyToVertexStage;
             _dirty = int.MaxValue;
-            PlatformInit();
+			mPlatform.Init();
         }
 
         public Texture this[int index]
@@ -46,7 +48,7 @@ namespace Microsoft.Xna.Framework.Graphics
             for (var i = 0; i < _textures.Length; i++)
                 _textures[i] = null;
 
-            PlatformClear();
+			mPlatform.Clear();
             _dirty = int.MaxValue;
         }
 
@@ -62,7 +64,7 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             if (_applyToVertexStage && !device.GraphicsCapabilities.SupportsVertexTextures)
                 return;
-            PlatformSetTextures(device);
+			mPlatform.SetTextures(device);
         }
     }
 }

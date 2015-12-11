@@ -19,9 +19,9 @@ namespace Microsoft.Xna.Framework.Media
         /// </summary>
         public Album Album
         {
-            get { return PlatformGetAlbum(); }
+            get { return mPlatform.GetAlbum(); }
 #if WINDOWS_STOREAPP || WINDOWS_UAP
-            internal set { PlatformSetAlbum(value); }
+            internal set { mPlatform.SetAlbum(value); }
 #endif
         }
 
@@ -30,7 +30,7 @@ namespace Microsoft.Xna.Framework.Media
         /// </summary>
         public Artist Artist
         {
-            get { return PlatformGetArtist(); }
+            get { return mPlatform.GetArtist(); }
         }
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace Microsoft.Xna.Framework.Media
         /// </summary>
         public Genre Genre
         {
-            get { return PlatformGetGenre(); }
+            get { return mPlatform.GetGenre(); }
         }
 
 #if ANDROID || OPENAL || WEB || IOS
@@ -47,17 +47,20 @@ namespace Microsoft.Xna.Framework.Media
         event FinishedPlayingHandler DonePlaying;
 #endif
 #endif
-        internal Song(string fileName, int durationMS)
-            : this(fileName)
+
+		internal Song(ISongPlatform platform, string fileName, int durationMS)
+			: this(platform, fileName)
         {
             _duration = TimeSpan.FromMilliseconds(durationMS);
         }
 
-		internal Song(string fileName)
+		private ISongPlatform mPlatform;
+		internal Song(ISongPlatform platform, string fileName)
 		{			
+			mPlatform = platform;
 			_name = fileName;
 
-            PlatformInitialize(fileName);
+			mPlatform.Initialize(fileName);
         }
 
         ~Song()
@@ -70,11 +73,11 @@ namespace Microsoft.Xna.Framework.Media
 			get { return _name; }
 		}
 
-        public static Song FromUri(string name, Uri uri)
+		public static Song FromUri(ISongPlatform platform, string name, Uri uri)
         {
             if (!uri.IsAbsoluteUri)
             {
-                var song = new Song(uri.OriginalString);
+				var song = new Song(platform, uri.OriginalString);
                 song._name = name;
                 return song;
             }
@@ -96,7 +99,7 @@ namespace Microsoft.Xna.Framework.Media
             {
                 if (disposing)
                 {
-                    PlatformDispose(disposing);
+                    mPlatform.Dispose(disposing);
                 }
 
                 disposed = true;
@@ -145,37 +148,37 @@ namespace Microsoft.Xna.Framework.Media
 
         public TimeSpan Duration
         {
-            get { return PlatformGetDuration(); }
+			get { return mPlatform.GetDuration(); }
         }	
 
         public bool IsProtected
         {
-            get { return PlatformIsProtected(); }
+			get { return mPlatform.IsProtected(); }
         }
 
         public bool IsRated
         {
-            get { return PlatformIsRated(); }
+			get { return mPlatform.IsRated(); }
         }
 
         public string Name
         {
-            get { return PlatformGetName(); }
+			get { return mPlatform.GetName(); }
         }
 
         public int PlayCount
         {
-            get { return PlatformGetPlayCount(); }
+			get { return mPlatform.GetPlayCount(); }
         }
 
         public int Rating
         {
-            get { return PlatformGetRating(); }
+			get { return mPlatform.GetRating(); }
         }
 
         public int TrackNumber
         {
-            get { return PlatformGetTrackNumber(); }
+			get { return mPlatform.GetTrackNumber(); }
         }
     }
 }

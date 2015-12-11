@@ -22,7 +22,7 @@ struct CameraData
 layout(binding = 1, std430) buffer ssbo_1
 {
 	CameraData cameras[];
-}
+};
 
 struct LightData
 {
@@ -34,7 +34,7 @@ struct LightData
 layout(binding = 2, std430) buffer ssbo_2
 {
 	LightData lights[];
-}
+};
  
 // Values that stay constant for the whole mesh.
 

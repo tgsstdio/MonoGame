@@ -80,7 +80,7 @@ using Microsoft.Xna.Framework.Input;
 using OpenTK;
 using OpenTK.Graphics;
 
-namespace Microsoft.Xna.Framework
+namespace Microsoft.Xna.Framework.DesktopGL
 {
     class OpenTKGamePlatform : GamePlatform
     {
@@ -91,11 +91,11 @@ namespace Microsoft.Xna.Framework
         private Toolkit toolkit;
         private int isExiting; // int, so we can use Interlocked.Increment
         
-		public OpenTKGamePlatform(Game game)
+		public OpenTKGamePlatform(Game game, OpenTKGameWindow view)
             : base(game)
         {
             toolkit = Toolkit.Init();
-            _view = new OpenTKGameWindow(game);
+			_view = view;
             this.Window = _view;
 
 			// Setup our OpenALSoundController to handle our SoundBuffer pools

@@ -17,6 +17,11 @@ namespace Microsoft.Xna.Framework.Audio
     {
         #region Internal Audio Data
 
+		public static void PlatformShutdown ()
+		{
+			throw new NotImplementedException ();
+		}
+
         private string _name;
         
         private bool _isDisposed = false;
@@ -32,16 +37,20 @@ namespace Microsoft.Xna.Framework.Audio
 
         #region Public Constructors
 
+		public ISoundEffectPlatform Platform { get; private set; }
+		/// <param name = "platform">Platform for device</param>
         /// <param name="buffer">Buffer containing PCM wave data.</param>
         /// <param name="sampleRate">Sample rate, in Hertz (Hz)</param>
         /// <param name="channels">Number of channels (mono or stereo).</param>
-        public SoundEffect(byte[] buffer, int sampleRate, AudioChannels channels)
+		public SoundEffect(ISoundEffectPlatform platform, byte[] buffer, int sampleRate, AudioChannels channels)
         {
+			Platform = platform;
             _duration = GetSampleDuration(buffer.Length, sampleRate, channels);
 
-            PlatformInitialize(buffer, sampleRate, channels);
+			Platform.Initialize(buffer, sampleRate, channels);
         }
 
+		/// <param name = "platform"></param>
         /// <param name="buffer">Buffer containing PCM wave data.</param>
         /// <param name="offset">Offset, in bytes, to the starting position of the audio data.</param>
         /// <param name="count">Amount, in bytes, of audio data.</param>
@@ -50,11 +59,12 @@ namespace Microsoft.Xna.Framework.Audio
         /// <param name="loopStart">The position, in samples, where the audio should begin looping.</param>
         /// <param name="loopLength">The duration, in samples, that audio should loop over.</param>
         /// <remarks>Use SoundEffect.GetSampleDuration() to convert time to samples.</remarks>
-        public SoundEffect(byte[] buffer, int offset, int count, int sampleRate, AudioChannels channels, int loopStart, int loopLength)
+		public SoundEffect(ISoundEffectPlatform platform, byte[] buffer, int offset, int count, int sampleRate, AudioChannels channels, int loopStart, int loopLength)
         {
+			Platform = platform;
             _duration = GetSampleDuration(count, sampleRate, channels);
 
-            PlatformInitialize(buffer, offset, count, sampleRate, channels, loopStart, loopLength);
+			Platform.Initialize(buffer, offset, count, sampleRate, channels, loopStart, loopLength);
         }
 
         #endregion
@@ -79,16 +89,16 @@ namespace Microsoft.Xna.Framework.Audio
         /// </summary>
         /// <returns>A new SoundEffectInstance for this SoundEffect.</returns>
         /// <remarks>Creating a SoundEffectInstance before calling SoundEffectInstance.Play() allows you to access advanced playback features, such as volume, pitch, and 3D positioning.</remarks>
-        public SoundEffectInstance CreateInstance()
-        {
-            var inst = new SoundEffectInstance();
-            PlatformSetupInstance(inst);
-
-            inst._isPooled = false;
-            inst._effect = this;
-
-            return inst;
-        }
+//        public SoundEffectInstance CreateInstance()
+//        {
+//            var inst = new SoundEffectInstance();
+//            PlatformSetupInstance(inst);
+//
+//            inst._isPooled = false;
+//            inst._effect = this;
+//
+//            return inst;
+//        }
 
         /// <summary>
         /// Creates a SoundEffect object based on the specified data stream.
@@ -112,7 +122,7 @@ namespace Microsoft.Xna.Framework.Audio
 
             var sfx = new SoundEffect();
 
-            sfx.PlatformLoadAudioStream(s);
+            sfx.Platform.LoadAudioStream(s);
 
             return sfx;
         }
@@ -173,7 +183,7 @@ namespace Microsoft.Xna.Framework.Audio
         /// </remarks>
         public bool Play()
         {
-            var inst = GetPooledInstance(false);
+			var inst = GetPooledInstance(false);
             if (inst == null)
                 return false;
 
@@ -194,7 +204,7 @@ namespace Microsoft.Xna.Framework.Audio
         /// </remarks>
         public bool Play(float volume, float pitch, float pan)
         {
-            var inst = GetPooledInstance(false);
+			var inst = GetPooledInstance(false);
             if (inst == null)
                 return false;
 
@@ -210,14 +220,14 @@ namespace Microsoft.Xna.Framework.Audio
         /// <summary>
         /// Returns a sound effect instance from the pool or null if none are available.
         /// </summary>
-        internal SoundEffectInstance GetPooledInstance(bool forXAct)
+		internal SoundEffectInstance GetPooledInstance(bool forXAct)
         {
             if (!SoundEffectInstancePool.SoundsAvailable)
                 return null;
 
             var inst = SoundEffectInstancePool.GetInstance(forXAct);
             inst._effect = this;
-            PlatformSetupInstance(inst);
+			Platform.SetupInstance(inst);
 
             return inst;
         }
@@ -353,7 +363,7 @@ namespace Microsoft.Xna.Framework.Audio
         {
             if (!_isDisposed)
             {
-                PlatformDispose(disposing);
+                Platform.Dispose(disposing);
                 _isDisposed = true;
             }
         }

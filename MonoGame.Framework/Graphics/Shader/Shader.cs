@@ -41,9 +41,11 @@ namespace Microsoft.Xna.Framework.Graphics
 	    public int[] CBuffers { get; private set; }
 
         public ShaderStage Stage { get; private set; }
-		
-        internal Shader(GraphicsDevice device, BinaryReader reader)
+
+		private IShaderPlatform mPlatform;
+        internal Shader(IShaderPlatform platform, GraphicsDevice device, BinaryReader reader)
         {
+			mPlatform = platform;
             GraphicsDevice = device;
 
             var isVertexShader = reader.ReadBoolean();
@@ -90,12 +92,12 @@ namespace Microsoft.Xna.Framework.Graphics
             for (var c = 0; c < cbufferCount; c++)
                 CBuffers[c] = reader.ReadByte();
 
-            PlatformConstruct(reader, isVertexShader, shaderBytecode);
+			mPlatform.Construct(reader, isVertexShader, shaderBytecode);
         }
 
         internal protected override void GraphicsDeviceResetting()
         {
-            PlatformGraphicsDeviceResetting();
+			mPlatform.GraphicsDeviceResetting();
         }
 	}
 }

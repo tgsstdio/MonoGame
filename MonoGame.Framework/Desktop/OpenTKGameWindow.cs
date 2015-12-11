@@ -37,6 +37,7 @@ permitted under your local laws, the contributors exclude the implied warranties
 purpose and non-infringement.
 */
 using MonoGame.Utilities;
+using Microsoft.Xna.Framework.DesktopGL.Input;
 
 
 #endregion License
@@ -55,7 +56,7 @@ using OpenTK.Graphics;
 
 #endregion Using Statements
 
-namespace Microsoft.Xna.Framework
+namespace Microsoft.Xna.Framework.DesktopGL
 {
     class OpenTKGameWindow : GameWindow, IDisposable
     {
@@ -125,13 +126,13 @@ namespace Microsoft.Xna.Framework
             get { return DisplayOrientation.LandscapeLeft; }
         }
 #if DESKTOPGL
-        public override Microsoft.Xna.Framework.Point Position
+        public Microsoft.Xna.Framework.Point Position
         {
             get { return new Microsoft.Xna.Framework.Point(window.Location.X,window.Location.Y); }
             set { window.Location = new System.Drawing.Point(value.X,value.Y); }
         }
 
-        public override System.Drawing.Icon Icon
+        public System.Drawing.Icon Icon
         {
             get
             {
@@ -143,7 +144,7 @@ namespace Microsoft.Xna.Framework
             }
         }
 #endif
-        protected internal override void SetSupportedOrientations(DisplayOrientation orientations)
+        public override void SetSupportedOrientations(DisplayOrientation orientations)
         {
             // Do nothing.  Desktop platforms don't do orientation.
         }
@@ -168,9 +169,12 @@ namespace Microsoft.Xna.Framework
 
         #endregion
 
-        public OpenTKGameWindow(Game game)
+		private IMouseListener mMouse;
+		public OpenTKGameWindow(Game game, INativeWindow emptyWindow, IMouseListener mouseListener)
         {
-            Initialize(game);
+			Game = game;
+			mMouse = mouseListener;
+			Initialize(emptyWindow);
         }
 
         ~OpenTKGameWindow()
@@ -294,6 +298,21 @@ namespace Microsoft.Xna.Framework
             }
         }
 
+		#if WINDOWS || WINDOWS_UAP || DESKTOPGL|| ANGLE
+
+		/// <summary>
+		/// Use this event to retrieve text for objects like textbox's.
+		/// This event is not raised by noncharacter keys.
+		/// This event also supports key repeat.
+		/// For more information this event is based off:
+		/// http://msdn.microsoft.com/en-AU/library/system.windows.forms.control.keypress.aspx
+		/// </summary>
+		/// <remarks>
+		/// This event is only supported on the Windows DirectX, Windows OpenGL and Linux platforms.
+		/// </remarks>
+		public event EventHandler<TextInputEventArgs> TextInput;
+		#endif
+
         private void HandleInput()
         {
             // mouse doesn't need to be treated here, Mouse class does it alone
@@ -307,15 +326,19 @@ namespace Microsoft.Xna.Framework
             OnTextInput(sender, new TextInputEventArgs(e.KeyChar));
         }
         
+		protected void OnTextInput(object sender, TextInputEventArgs e)
+		{
+			if (TextInput != null)
+				TextInput(sender, e);
+		}
+
         #endregion
 
-        private void Initialize(Game game)
+		private void Initialize(INativeWindow emptyWindow)
         {
-            Game = game;
-
             GraphicsContext.ShareContexts = true;
 
-            window = new NativeWindow();
+			window = emptyWindow;
             window.WindowBorder = WindowBorder.Resizable;
             window.Closing += new EventHandler<CancelEventArgs>(OpenTkGameWindow_Closing);
             window.Resize += OnResize;
@@ -348,7 +371,7 @@ namespace Microsoft.Xna.Framework
             // mouse
             // TODO review this when opentk 1.1 is released
 #if DESKTOPGL || ANGLE
-            Mouse.setWindows(this);
+			mMouse.PrimaryWindow = this;
 #else
             Mouse.UpdateMouseInfo(window.Mouse);
 #endif

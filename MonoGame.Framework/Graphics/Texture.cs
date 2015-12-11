@@ -10,6 +10,12 @@ namespace Microsoft.Xna.Framework.Graphics
 {
 	public abstract partial class Texture : GraphicsResource
 	{
+		private ITexturePlatform Platform;
+		protected Texture(ITexturePlatform platform)
+		{
+			Platform = platform;
+		}
+
 		internal SurfaceFormat _format;
 		internal int _levelCount;
 
@@ -84,7 +90,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal protected override void GraphicsDeviceResetting()
         {
-            PlatformGraphicsDeviceResetting();
+            Platform.GraphicsDeviceResetting();
         }
     }
 }

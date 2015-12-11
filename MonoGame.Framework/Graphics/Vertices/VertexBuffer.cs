@@ -14,9 +14,11 @@ namespace Microsoft.Xna.Framework.Graphics
 		public int VertexCount { get; private set; }
 		public VertexDeclaration VertexDeclaration { get; private set; }
 		public BufferUsage BufferUsage { get; private set; }
-		
-		protected VertexBuffer(GraphicsDevice graphicsDevice, VertexDeclaration vertexDeclaration, int vertexCount, BufferUsage bufferUsage, bool dynamic)
+
+		private IVertexBufferPlatform mPlatform;
+		protected VertexBuffer(IVertexBufferPlatform platform, GraphicsDevice graphicsDevice, VertexDeclaration vertexDeclaration, int vertexCount, BufferUsage bufferUsage, bool dynamic)
 		{
+			mPlatform = platform;
 		    if (graphicsDevice == null)
 		    {
 		        throw new ArgumentNullException("graphicsDevice", FrameworkResources.ResourceCreationWhenDeviceIsNull);
@@ -32,16 +34,16 @@ namespace Microsoft.Xna.Framework.Graphics
 
             _isDynamic = dynamic;
 
-            PlatformConstruct();
+			mPlatform.Construct();
 		}
 
-        public VertexBuffer(GraphicsDevice graphicsDevice, VertexDeclaration vertexDeclaration, int vertexCount, BufferUsage bufferUsage) :
-			this(graphicsDevice, vertexDeclaration, vertexCount, bufferUsage, false)
+		public VertexBuffer(IVertexBufferPlatform platform, GraphicsDevice graphicsDevice, VertexDeclaration vertexDeclaration, int vertexCount, BufferUsage bufferUsage) :
+			this(platform, graphicsDevice, vertexDeclaration, vertexCount, bufferUsage, false)
         {
         }
 		
-		public VertexBuffer(GraphicsDevice graphicsDevice, Type type, int vertexCount, BufferUsage bufferUsage) :
-			this(graphicsDevice, VertexDeclaration.FromType(type), vertexCount, bufferUsage, false)
+		public VertexBuffer(IVertexBufferPlatform platform, GraphicsDevice graphicsDevice, Type type, int vertexCount, BufferUsage bufferUsage) :
+			this(platform,graphicsDevice, VertexDeclaration.FromType(type), vertexCount, bufferUsage, false)
 		{
         }
 
@@ -50,7 +52,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </summary>
         internal protected override void GraphicsDeviceResetting()
         {
-            PlatformGraphicsDeviceResetting();
+            mPlatform.GraphicsDeviceResetting();
         }
 
         public void GetData<T> (int offsetInBytes, T[] data, int startIndex, int elementCount, int vertexStride) where T : struct
@@ -69,7 +71,7 @@ namespace Microsoft.Xna.Framework.Graphics
 			if (elementCount > 1 && (elementCount * vertexStride) > (VertexCount * VertexDeclaration.VertexStride))
                 throw new InvalidOperationException("The array is not the correct size for the amount of data requested.");
 
-            PlatformGetData<T>(offsetInBytes, data, startIndex, elementCount, vertexStride);
+			mPlatform.GetData<T>(offsetInBytes, data, startIndex, elementCount, vertexStride);
         }
 
         public void GetData<T>(T[] data, int startIndex, int elementCount) where T : struct
@@ -181,7 +183,7 @@ namespace Microsoft.Xna.Framework.Graphics
             if (vertexStride < elementSizeInBytes)
                 throw new ArgumentOutOfRangeException("The vertex stride must be greater than or equal to the size of the specified data (" + elementSizeInBytes + ").");            
 
-            PlatformSetDataInternal<T>(offsetInBytes, data, startIndex, elementCount, vertexStride, options, bufferSize, elementSizeInBytes);
+			mPlatform.SetDataInternal<T>(offsetInBytes, data, startIndex, elementCount, vertexStride, options, bufferSize, elementSizeInBytes);
         }
     }
 }

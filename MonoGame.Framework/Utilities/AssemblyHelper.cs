@@ -3,7 +3,7 @@ using System.Reflection;
 
 namespace MonoGame.Utilities
 {
-    internal static class AssemblyHelper
+    public static class AssemblyHelper
     {
         public static string GetDefaultWindowTitle()
         {

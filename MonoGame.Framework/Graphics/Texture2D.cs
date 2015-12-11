@@ -9,13 +9,6 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     public partial class Texture2D : Texture
     {
-        internal protected enum SurfaceType
-        {
-            Texture,
-            RenderTarget,
-            SwapChainRenderTarget,
-        }
-
 		internal int width;
 		internal int height;
         internal int ArraySize;
@@ -28,29 +21,32 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        public Texture2D(GraphicsDevice graphicsDevice, int width, int height)
-            : this(graphicsDevice, width, height, false, SurfaceFormat.Color, SurfaceType.Texture, false, 1)
+		private ITexture2DPlatform mTex2DPlatform;
+		public Texture2D(ITexturePlatform platform, ITexture2DPlatform tex2DPlatform, GraphicsDevice graphicsDevice, int width, int height)
+			: this(platform, tex2DPlatform, graphicsDevice, width, height, false, SurfaceFormat.Color, SurfaceType.Texture, false, 1)
         {
         }
 
-        public Texture2D(GraphicsDevice graphicsDevice, int width, int height, bool mipmap, SurfaceFormat format)
-            : this(graphicsDevice, width, height, mipmap, format, SurfaceType.Texture, false, 1)
+		public Texture2D(ITexturePlatform platform, ITexture2DPlatform tex2DPlatform, GraphicsDevice graphicsDevice, int width, int height, bool mipmap, SurfaceFormat format)
+			: this(platform, tex2DPlatform, graphicsDevice, width, height, mipmap, format, SurfaceType.Texture, false, 1)
         {
         }
 
-        public Texture2D(GraphicsDevice graphicsDevice, int width, int height, bool mipmap, SurfaceFormat format, int arraySize)
-            : this(graphicsDevice, width, height, mipmap, format, SurfaceType.Texture, false, arraySize)
+		public Texture2D(ITexturePlatform platform, ITexture2DPlatform tex2DPlatform, GraphicsDevice graphicsDevice, int width, int height, bool mipmap, SurfaceFormat format, int arraySize)
+			: this(platform, tex2DPlatform, graphicsDevice, width, height, mipmap, format, SurfaceType.Texture, false, arraySize)
         {
             
         }
 
-        internal Texture2D(GraphicsDevice graphicsDevice, int width, int height, bool mipmap, SurfaceFormat format, SurfaceType type)
-            : this(graphicsDevice, width, height, mipmap, format, type, false, 1)
+		internal Texture2D(ITexturePlatform platform, ITexture2DPlatform tex2DPlatform, GraphicsDevice graphicsDevice, int width, int height, bool mipmap, SurfaceFormat format, SurfaceType type)
+			: this(platform, tex2DPlatform, graphicsDevice, width, height, mipmap, format, type, false, 1)
         {
         }
 
-        protected Texture2D(GraphicsDevice graphicsDevice, int width, int height, bool mipmap, SurfaceFormat format, SurfaceType type, bool shared, int arraySize)
+		protected Texture2D(ITexturePlatform platform, ITexture2DPlatform tex2DPlatform, GraphicsDevice graphicsDevice, int width, int height, bool mipmap, SurfaceFormat format, SurfaceType type, bool shared, int arraySize)
+			: base(platform)
 		{
+			mTex2DPlatform = tex2DPlatform;
             if (graphicsDevice == null)
             {
                 throw new ArgumentNullException("graphicsDevice", FrameworkResources.ResourceCreationWhenDeviceIsNull);
@@ -69,7 +65,7 @@ namespace Microsoft.Xna.Framework.Graphics
 		    if (type == SurfaceType.SwapChainRenderTarget)
 		        return;
 
-            PlatformConstruct(width, height, mipmap, format, type, shared);
+			mTex2DPlatform.Construct(width, height, mipmap, format, type, shared);
         }
 
         public int Width
@@ -96,7 +92,7 @@ namespace Microsoft.Xna.Framework.Graphics
             if (arraySlice > 0 && !GraphicsDevice.GraphicsCapabilities.SupportsTextureArrays)
                 throw new ArgumentException("Texture arrays are not supported on this graphics device", "arraySlice");
 
-            PlatformSetData<T>(level, arraySlice, rect, data, startIndex, elementCount);
+			mTex2DPlatform.SetData<T>(level, arraySlice, rect, data, startIndex, elementCount);
         }
 
         public void SetData<T>(int level, Rectangle? rect, T[] data, int startIndex, int elementCount) where T : struct 
@@ -123,7 +119,7 @@ namespace Microsoft.Xna.Framework.Graphics
             if (arraySlice > 0 && !GraphicsDevice.GraphicsCapabilities.SupportsTextureArrays)
                 throw new ArgumentException("Texture arrays are not supported on this graphics device", "arraySlice");
 
-            PlatformGetData<T>(level, arraySlice, rect, data, startIndex, elementCount);
+			mTex2DPlatform.GetData<T>(level, arraySlice, rect, data, startIndex, elementCount);
         }
 		
 		public void GetData<T>(int level, Rectangle? rect, T[] data, int startIndex, int elementCount) where T : struct
@@ -141,26 +137,26 @@ namespace Microsoft.Xna.Framework.Graphics
 			this.GetData(0, null, data, 0, data.Length);
 		}
 		
-		public static Texture2D FromStream(GraphicsDevice graphicsDevice, Stream stream)
-		{
-            return PlatformFromStream(graphicsDevice, stream);
-        }
+//		public static Texture2D FromStream(GraphicsDevice graphicsDevice, Stream stream)
+//		{
+//			return mTex2DPlatform.FromStream(graphicsDevice, stream);
+//        }
 
         public void SaveAsJpeg(Stream stream, int width, int height)
         {
-            PlatformSaveAsJpeg(stream, width, height);
+			mTex2DPlatform.SaveAsJpeg(stream, width, height);
         }
 
         public void SaveAsPng(Stream stream, int width, int height)
         {
-            PlatformSaveAsPng(stream, width, height);
+			mTex2DPlatform.SaveAsPng(stream, width, height);
         }
 
         // This method allows games that use Texture2D.FromStream 
         // to reload their textures after the GL context is lost.
         public void Reload(Stream textureStream)
         {
-            PlatformReload(textureStream);
+			mTex2DPlatform.Reload(textureStream);
         }
 
         //Converts Pixel Data from ARGB to ABGR

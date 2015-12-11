@@ -109,7 +109,8 @@ namespace Microsoft.Xna.Framework.Graphics
         public static readonly RasterizerState CullCounterClockwise;
         public static readonly RasterizerState CullNone;
 
-        public RasterizerState()
+		public IRasterizerStatePlatform Platform { get; private set; }
+		public RasterizerState(IRasterizerStatePlatform platform)
 		{
 			CullMode = CullMode.CullCounterClockwiseFace;
 			FillMode = FillMode.Solid;
@@ -120,8 +121,8 @@ namespace Microsoft.Xna.Framework.Graphics
             DepthClipEnable = true;
 		}
 
-	    private RasterizerState(string name, CullMode cullMode)
-            : this()
+		private RasterizerState(IRasterizerStatePlatform platform, string name, CullMode cullMode)
+			: this(platform)
 	    {
 	        Name = name;
 	        _cullMode = cullMode;
@@ -130,6 +131,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
 	    private RasterizerState(RasterizerState cloneSource)
 	    {
+			Platform = cloneSource.Platform;
 	        Name = cloneSource.Name;
 	        _cullMode = cloneSource._cullMode;
 	        _fillMode = cloneSource._fillMode;
@@ -140,11 +142,12 @@ namespace Microsoft.Xna.Framework.Graphics
 	        _depthClipEnable = cloneSource._depthClipEnable;
 	    }
 
+		// TODO : remove static method
 		static RasterizerState ()
 		{
-		    CullClockwise = new RasterizerState("RasterizerState.CullClockwise", CullMode.CullClockwiseFace);
-		    CullCounterClockwise = new RasterizerState("RasterizerState.CullCounterClockwise", CullMode.CullCounterClockwiseFace);
-		    CullNone = new RasterizerState("RasterizerState.CullNone", CullMode.None);
+		    CullClockwise = new RasterizerState(null, "RasterizerState.CullClockwise", CullMode.CullClockwiseFace);
+		    CullCounterClockwise = new RasterizerState(null, "RasterizerState.CullCounterClockwise", CullMode.CullCounterClockwiseFace);
+		    CullNone = new RasterizerState(null, "RasterizerState.CullNone", CullMode.None);
 		}
 
 	    internal RasterizerState Clone()

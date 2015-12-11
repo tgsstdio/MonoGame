@@ -21,7 +21,7 @@ namespace Microsoft.Xna.Framework
     {
         private GameComponentCollection _components;
         private GameServiceContainer _services;
-        private ContentManager _content;
+        private IContentManager _content;
         internal GamePlatform Platform;
 
         private SortingFilteringCollection<IDrawable> _drawables =
@@ -56,14 +56,17 @@ namespace Microsoft.Xna.Framework
 
         private bool _suppressDraw;
         
-        public Game()
+		private IContentTypeReaderManager ContentTypeReaderManager;
+		public Game(IContentManager content, IContentTypeReaderManager ctrm)
         {
             _instance = this;
+			ContentTypeReaderManager = ctrm;
 
             LaunchParameters = new LaunchParameters();
             _services = new GameServiceContainer();
             _components = new GameComponentCollection();
-            _content = new ContentManager(_services);
+           // _content = new ContentManager(_services);
+			_content = content;
 
             Platform = GamePlatform.Create(this);
             Platform.Activated += OnActivated;
@@ -248,7 +251,7 @@ namespace Microsoft.Xna.Framework
             get { return _services; }
         }
 
-        public ContentManager Content
+        public IContentManager Content
         {
             get { return _content; }
             set

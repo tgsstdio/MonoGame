@@ -45,7 +45,7 @@ namespace Microsoft.Xna.Framework.Graphics
     /// <summary>
     /// Represents a render target.
     /// </summary>
-    internal interface IRenderTarget
+    public interface IRenderTarget
     {
         /// <summary>
         /// Gets the width of the render target in pixels

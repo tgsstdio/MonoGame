@@ -23,8 +23,10 @@ namespace Microsoft.Xna.Framework.Graphics
         private readonly SamplerState[] _actualSamplers;
         private readonly bool _applyToVertexStage;
 
-		internal SamplerStateCollection(GraphicsDevice device, int maxSamplers, bool applyToVertexStage)
+		private ISamplerStateCollectionPlatform mPlatform;
+		internal SamplerStateCollection(ISamplerStateCollectionPlatform platform, GraphicsDevice device, int maxSamplers, bool applyToVertexStage)
 		{
+			mPlatform = platform;
 		    _graphicsDevice = device;
 
             _samplerStateAnisotropicClamp = SamplerState.AnisotropicClamp.Clone();
@@ -78,7 +80,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 _actualSamplers[index] = newSamplerState;
 
-                PlatformSetSamplerState(index);
+				mPlatform.SetSamplerState(index);
             }
 		}
 
@@ -92,7 +94,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 _actualSamplers[i] = _samplerStateLinearWrap;
             }
 
-            PlatformClear();
+			mPlatform.Clear();
         }
 
         /// <summary>
@@ -100,7 +102,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </summary>
         internal void Dirty()
         {
-            PlatformDirty();
+			mPlatform.Dirty();
         }
 	}
 }

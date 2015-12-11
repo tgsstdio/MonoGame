@@ -5,6 +5,7 @@ using OpenTK.Input;
 using BirdNest.MonoGame.Graphics;
 using BirdNest.MonoGame.FileSystem;
 using BirdNest.MonoGame.Core;
+using BirdNest.MonoGame;
 
 namespace ShadowMapping
 {
@@ -12,10 +13,14 @@ namespace ShadowMapping
 	{
 		private IShaderLoader mShaderLoader;
 		private IFileSystem mFileSystem;
-		public GameWorld (IShaderLoader loader, IFileSystem fs)
+		private IRenderTargetRange mTargetRange;
+		private Func<InstanceIdentifier> mIdGenerator;
+		public GameWorld (IShaderLoader loader, IFileSystem fs, Func<InstanceIdentifier> idGenerator, IRenderTargetRange range)
 		{
 			mShaderLoader = loader;
 			mFileSystem = fs;
+			mTargetRange = range;
+			mIdGenerator = idGenerator;
 		}
 
 		void OnLoadDefault (EventArgs e)
@@ -39,49 +44,7 @@ namespace ShadowMapping
 		{
 			OnLoadDefault (e);
 
-			const float ZNEAR = 1;
-			const float ZFAR = 1000;
-
-			// setup camera
-			var camera = new Vector3(3.5f, 6.5f, 4f);
-			var cameraView = Matrix4.LookAt (camera, Vector3.Zero, Vector3.UnitY);
-			var cameraProj = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(45.0f), (float) this.Width / (float) this.Height, ZNEAR, ZFAR);
-
-			// setup depth buffer
-			// setup frame buffer object 
-			int fbo = GL.GenFramebuffer();
-			GL.BindFramebuffer (FramebufferTarget.Framebuffer, fbo);
-
-			int depthTex = GL.GenTexture ();
-			GL.BindTexture (TextureTarget.Texture2D, depthTex);
-			const int WIDTH = 1024;
-			const int HEIGHT = 1024;
-			const int LEVEL = 0;
-			GL.TexImage2D(TextureTarget.Texture2D, LEVEL, PixelInternalFormat.DepthComponent16, WIDTH, HEIGHT, 0, PixelFormat.DepthComponent, PixelType.Float, IntPtr.Zero);
-			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int) All.Nearest);
-			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int) All.Nearest);
-			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int) All.ClampToEdge);
-			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int) All.ClampToEdge);
-
-			// setup lights
-			var lightPos = new Vector3(4,1,6);
-			var lightView = Matrix4.LookAt (lightPos, Vector3.Zero, Vector3.UnitY);
-			var lightProj = Matrix4.CreateOrthographic(WIDTH, HEIGHT, 0, 1);
-
-
-			GL.FramebufferTexture(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthAttachment, depthTex, LEVEL);
-
-			// FOR DEPTH ONLY
-			GL.DrawBuffer (DrawBufferMode.None);
-
-			var status = GL.CheckFramebufferStatus(FramebufferTarget.Framebuffer);
-			if (status != FramebufferErrorCode.FramebufferComplete)
-			{
-				throw new Exception ("Invalid Framebuffer");
-			}
-			GL.BindFramebuffer (FramebufferTarget.Framebuffer, 0);
-
-			// setup fence
+			var renderer = new SortedRenderer ();
 
 			// setup shaders
 			if (!mFileSystem.Register (new BlockIdentifier{ BlockId = 10001 }))
@@ -91,7 +54,61 @@ namespace ShadowMapping
 
 			var depthShader = mShaderLoader.Load (new AssetIdentifier{ AssetId = 2000 });
 
+			var litShader = mShaderLoader.Load (new AssetIdentifier{ AssetId = 2001 });
+
+			const float ZNEAR = 1;
+			const float ZFAR = 1000;
+
+			// setup camera
+			var camera = new CameraInfo();
+			camera.Eye = new Vector3(3.5f, 6.5f, 4f);
+			camera.Up = Vector3.UnitY;
+			camera.Target = Vector3.Zero;
+			camera.FieldOfView = MathHelper.DegreesToRadians (45.0f);
+			camera.X = (float)this.Width;
+			camera.Y = (float)this.Height;
+			camera.ZNear = ZNEAR;
+			camera.ZFar = ZFAR;
+
+			camera.Update ();
+
+			// setup frame buffer object 
+			var fbo = new FrameBufferObject(mIdGenerator);
+			mTargetRange.Add (fbo);
+
+			const int WIDTH = 1024;
+			const int HEIGHT = 1024;
+			const int LEVEL = 0;
+
+			// setup lights
+			var lamp = new LightInfo ();
+			lamp.Position = new Vector3(4,1,6);
+			lamp.Target = Vector3.Zero;
+			lamp.Up = Vector3.UnitY;
+			lamp.PixelWidth = WIDTH; 
+			lamp.PixelHeight = HEIGHT;
+			lamp.Update ();
+
+			var frame_0 = new Pass (mIdGenerator, fbo, lamp, depthShader);
+			var shadowMap = fbo.GenerateDepthMap ("depth", 0, WIDTH, HEIGHT, LEVEL);
+
+			renderer.Add (frame_0).Outputs (shadowMap);
+			fbo.Validate ();
+
+			var frame_1 = new Pass (mIdGenerator, mTargetRange.Default, camera, litShader);
+			renderer.Add (frame_1).Requires (shadowMap);
+
+			renderer.Sort ();
+
+
+			// setup fence
+
+
 			// setup models
+
+
+
+
 		}
 
 		protected override void OnRenderFrame(FrameEventArgs e)

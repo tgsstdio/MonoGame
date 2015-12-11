@@ -39,11 +39,13 @@ namespace Microsoft.Xna.Framework.Audio
         private static readonly List<SoundEffectInstance> _playingInstances;
         private static readonly List<SoundEffectInstance> _pooledInstances;
 
+		static ISoundEffectInstancePoolPlatform mPlatform; 
         static SoundEffectInstancePool()
         {
+			//mPlatform.MAX_PLAYING_INSTANCES = 0;
             // Reduce garbage generation by allocating enough capacity for
             // the maximum playing instances or at least some reasonable value.
-            var maxInstances = MAX_PLAYING_INSTANCES < 1024 ? MAX_PLAYING_INSTANCES : 1024;
+			var maxInstances = mPlatform.MAX_PLAYING_INSTANCES < 1024 ? mPlatform.MAX_PLAYING_INSTANCES : 1024;
             _playingInstances = new List<SoundEffectInstance>(maxInstances);
             _pooledInstances = new List<SoundEffectInstance>(maxInstances);
         }
@@ -56,7 +58,7 @@ namespace Microsoft.Xna.Framework.Audio
         {
             get
             {
-                return _playingInstances.Count < MAX_PLAYING_INSTANCES;
+				return _playingInstances.Count < mPlatform.MAX_PLAYING_INSTANCES;
             }
         }
 
@@ -111,7 +113,8 @@ namespace Microsoft.Xna.Framework.Audio
             }
             else
             {
-                inst = new SoundEffectInstance();
+				// TODO : remove instance stuff
+				inst = new SoundEffectInstance(null);
                 inst._isPooled = true;
                 inst._isXAct = forXAct;
             }

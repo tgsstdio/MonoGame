@@ -204,8 +204,10 @@ namespace Microsoft.Xna.Framework.Graphics
                 throw new InvalidOperationException("You cannot modify the depth stencil state after it has been bound to the graphics device!");
         }
 
-        public DepthStencilState ()
+		public IDepthStencilStatePlatform Platform { get; private set; }
+		public DepthStencilState (IDepthStencilStatePlatform platform)
 		{
+			Platform = platform;
             DepthBufferEnable = true;
             DepthBufferWriteEnable = true;
 			DepthBufferFunction = CompareFunction.LessEqual;
@@ -224,8 +226,8 @@ namespace Microsoft.Xna.Framework.Graphics
 			ReferenceStencil = 0;
 		}
 
-        private DepthStencilState(string name, bool depthBufferEnable, bool depthBufferWriteEnable)
-            : this()
+		private DepthStencilState(IDepthStencilStatePlatform platform, string name, bool depthBufferEnable, bool depthBufferWriteEnable)
+			: this(platform)
 	    {
 	        Name = name;
             _depthBufferEnable = depthBufferEnable;
@@ -233,8 +235,9 @@ namespace Microsoft.Xna.Framework.Graphics
 	        _defaultStateObject = true;
 	    }
 
-        private DepthStencilState(DepthStencilState cloneSource)
+		private DepthStencilState(DepthStencilState cloneSource)
 	    {
+			Platform = cloneSource.Platform;
 	        Name = cloneSource.Name;
             _depthBufferEnable = cloneSource._depthBufferEnable;
             _depthBufferWriteEnable = cloneSource._depthBufferWriteEnable;
@@ -258,11 +261,12 @@ namespace Microsoft.Xna.Framework.Graphics
         public static readonly DepthStencilState DepthRead;
         public static readonly DepthStencilState None;
 
+		// TODO : remove static functions
 		static DepthStencilState ()
 		{
-		    Default = new DepthStencilState("DepthStencilState.Default", true, true);
-			DepthRead = new DepthStencilState("DepthStencilState.DepthRead", true, false);
-		    None = new DepthStencilState("DepthStencilState.None", false, false);
+		    Default = new DepthStencilState(null, "DepthStencilState.Default", true, true);
+			DepthRead = new DepthStencilState(null, "DepthStencilState.DepthRead", true, false);
+			None = new DepthStencilState(null, "DepthStencilState.None", false, false);
 		}
 
         internal DepthStencilState Clone()

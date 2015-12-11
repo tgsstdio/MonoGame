@@ -50,7 +50,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
 	    private readonly bool _isClone;
 
-        internal Effect(GraphicsDevice graphicsDevice)
+		internal Effect(GraphicsDevice graphicsDevice)
 		{
             if (graphicsDevice == null)
             {
@@ -66,7 +66,13 @@ namespace Microsoft.Xna.Framework.Graphics
             Clone(cloneSource);
 		}
 
-        public Effect (GraphicsDevice graphicsDevice, byte[] effectCode)
+		public Effect (
+			IConstantBufferPlatform bufferPlatform,
+			IShaderPlatform shaderPlatform,
+			IBlendStatePlatform blendPlatform,
+			IDepthStencilStatePlatform depthPlatform,
+			IRasterizerStatePlatform rasterizerPlatform, 
+			GraphicsDevice graphicsDevice, byte[] effectCode)
             : this(graphicsDevice)
 		{
 			// By default we currently cache all unique byte streams
@@ -99,15 +105,15 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 using (var stream = new MemoryStream(effectCode, headerSize, effectCode.Length - headerSize, false))
             	using (var reader = new BinaryReader(stream))
-            {
-                // Create one.
-                cloneSource = new Effect(graphicsDevice);
-                    cloneSource.ReadEffect(reader);
+	            {
+	                // Create one.
+	                cloneSource = new Effect(graphicsDevice);
+					cloneSource.ReadEffect(bufferPlatform, shaderPlatform, blendPlatform, depthPlatform, rasterizerPlatform, reader);
 
-                // Cache the effect for later in its original unmodified state.
-                    graphicsDevice.EffectCache.Add(effectKey, cloneSource);
-                }
-            }
+	                // Cache the effect for later in its original unmodified state.
+	                    graphicsDevice.EffectCache.Add(effectKey, cloneSource);
+	                }
+	            }
 
             // Clone it.
             _isClone = true;
@@ -249,7 +255,13 @@ namespace Microsoft.Xna.Framework.Graphics
 
 
 
-		private void ReadEffect (BinaryReader reader)
+		private void ReadEffect (
+			IConstantBufferPlatform bufferPlatform,
+			IShaderPlatform shaderPlatform,
+			IBlendStatePlatform blendPlatform,
+			IDepthStencilStatePlatform depthPlatform,
+			IRasterizerStatePlatform rasterizerPlatform, 
+			BinaryReader reader)
 		{
 			// TODO: Maybe we should be reading in a string 
 			// table here to save some bytes in the file.
@@ -278,7 +290,8 @@ namespace Microsoft.Xna.Framework.Graphics
 					offsets [i] = (int)reader.ReadUInt16 ();
 				}
 
-                var buffer = new ConstantBuffer(GraphicsDevice,
+				var buffer = new ConstantBuffer(bufferPlatform,
+												GraphicsDevice,
 				                                sizeInBytes,
 				                                parameters,
 				                                offsets,
@@ -290,7 +303,7 @@ namespace Microsoft.Xna.Framework.Graphics
             var shaders = (int)reader.ReadByte();
             _shaders = new Shader[shaders];
             for (var s = 0; s < shaders; s++)
-                _shaders[s] = new Shader(GraphicsDevice, reader);
+				_shaders[s] = new Shader(shaderPlatform, GraphicsDevice, reader);
 
             // Read in the parameters.
             Parameters = ReadParameters(reader);
@@ -304,7 +317,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 var annotations = ReadAnnotations(reader);
 
-                var passes = ReadPasses(reader, this, _shaders);
+				var passes = ReadPasses(blendPlatform, depthPlatform, rasterizerPlatform, reader, this, _shaders);
 
                 techniques[t] = new EffectTechnique(this, name, passes, annotations);
             }
@@ -326,7 +339,11 @@ namespace Microsoft.Xna.Framework.Graphics
             return new EffectAnnotationCollection(annotations);
         }
 
-        private static EffectPassCollection ReadPasses(BinaryReader reader, Effect effect, Shader[] shaders)
+		private static EffectPassCollection ReadPasses(
+			IBlendStatePlatform blendPlatform,
+			IDepthStencilStatePlatform depthPlatform,
+			IRasterizerStatePlatform rasterizerPlatform, 
+			BinaryReader reader, Effect effect, Shader[] shaders)
         {
             var count = (int)reader.ReadByte();
             var passes = new EffectPass[count];
@@ -353,7 +370,7 @@ namespace Microsoft.Xna.Framework.Graphics
 				RasterizerState raster = null;
 				if (reader.ReadBoolean())
 				{
-					blend = new BlendState
+					blend = new BlendState(blendPlatform)
 					{
 						AlphaBlendFunction = (BlendFunction)reader.ReadByte(),
 						AlphaDestinationBlend = (Blend)reader.ReadByte(),
@@ -371,7 +388,7 @@ namespace Microsoft.Xna.Framework.Graphics
 				}
 				if (reader.ReadBoolean())
 				{
-					depth = new DepthStencilState
+					depth = new DepthStencilState(depthPlatform)
 					{
 						CounterClockwiseStencilDepthBufferFail = (StencilOperation)reader.ReadByte(),
 						CounterClockwiseStencilFail = (StencilOperation)reader.ReadByte(),
@@ -393,7 +410,7 @@ namespace Microsoft.Xna.Framework.Graphics
 				}
 				if (reader.ReadBoolean())
 				{
-					raster = new RasterizerState
+					raster = new RasterizerState(rasterizerPlatform)
 					{
 						CullMode = (CullMode)reader.ReadByte(),
 						DepthBias = reader.ReadSingle(),

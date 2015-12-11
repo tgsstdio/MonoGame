@@ -91,6 +91,7 @@
     <Compile Include="RenderTarget\NullRenderTarget.cs" />
     <Compile Include="RenderTarget\RenderTargetRange.cs" />
     <Compile Include="RenderTarget\FrameBufferObject.cs" />
+    <Compile Include="RenderTarget\TextureOutput.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

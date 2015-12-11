@@ -141,7 +141,7 @@ namespace Microsoft.Xna.Framework.Input
 			get {
 				return _x;
 			}
-			internal set {
+			set {
 				_x = value;
 			}
 		}
@@ -153,7 +153,7 @@ namespace Microsoft.Xna.Framework.Input
 			get {
 				return _y;
 			}
-			internal set {
+			set {
 				_y = value;
 			}
 		}
@@ -173,7 +173,7 @@ namespace Microsoft.Xna.Framework.Input
 			get {
 				return _leftButton;
 			}
-			internal set { _leftButton = value; }
+			set { _leftButton = value; }
 		}
 
         /// <summary>
@@ -183,7 +183,7 @@ namespace Microsoft.Xna.Framework.Input
 			get {
 				return _middleButton;
 			}
-			internal set { _middleButton = value; }			
+			set { _middleButton = value; }			
 		}
 
         /// <summary>
@@ -193,7 +193,7 @@ namespace Microsoft.Xna.Framework.Input
 			get {
 				return _rightButton;
 			}
-			internal set { _rightButton = value; }
+			set { _rightButton = value; }
 		}
 
         /// <summary>
@@ -203,7 +203,7 @@ namespace Microsoft.Xna.Framework.Input
 			get {
 				return _scrollWheelValue;
 			}
-			internal set { _scrollWheelValue = value; }
+			set { _scrollWheelValue = value; }
 		}
 
         /// <summary>

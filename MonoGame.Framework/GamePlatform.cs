@@ -12,7 +12,7 @@ using Windows.UI.ViewManagement;
 
 namespace Microsoft.Xna.Framework
 {
-    abstract class GamePlatform : IDisposable
+    public abstract class GamePlatform : IDisposable
     {
         #region Fields
 
@@ -46,7 +46,10 @@ namespace Microsoft.Xna.Framework
             return new MetroGamePlatform(game);
 #elif WEB
             return new WebGamePlatform(game);
+#else
+			throw new NotSupportedException();
 #endif
+
 		}
 
 		protected GamePlatform(Game game)
@@ -83,7 +86,7 @@ namespace Microsoft.Xna.Framework
         public bool IsActive
         {
             get { return _isActive; }
-            internal set
+            set
             {
                 if (_isActive != value)
                 {

@@ -23,48 +23,78 @@ namespace Microsoft.Xna.Framework.Graphics
             return ContentLost != null;
         }
 
-	    public RenderTarget2D(GraphicsDevice graphicsDevice, int width, int height, bool mipMap, SurfaceFormat preferredFormat, DepthFormat preferredDepthFormat, int preferredMultiSampleCount, RenderTargetUsage usage, bool shared, int arraySize)
-	        : base(graphicsDevice, width, height, mipMap, preferredFormat, SurfaceType.RenderTarget, shared, arraySize)
+	    public RenderTarget2D(
+			ITexturePlatform baseTexture,
+			ITexture2DPlatform tex2D,
+			IRenderTarget2DPlatform platform,
+			GraphicsDevice graphicsDevice, int width, int height, bool mipMap, SurfaceFormat preferredFormat, DepthFormat preferredDepthFormat, int preferredMultiSampleCount, RenderTargetUsage usage, bool shared, int arraySize)
+			: base(baseTexture, tex2D, graphicsDevice, width, height, mipMap, preferredFormat, SurfaceType.RenderTarget, shared, arraySize)
 	    {
+			mPlatform = platform;
+
             DepthStencilFormat = preferredDepthFormat;
             MultiSampleCount = preferredMultiSampleCount;
             RenderTargetUsage = usage;
 
-            PlatformConstruct(graphicsDevice, width, height, mipMap, preferredFormat, preferredDepthFormat, preferredMultiSampleCount, usage, shared);
+			mPlatform.Construct(graphicsDevice, width, height, mipMap, preferredFormat, preferredDepthFormat, preferredMultiSampleCount, usage, shared);
 	    }
 
-        public RenderTarget2D (GraphicsDevice graphicsDevice, int width, int height, bool mipMap, SurfaceFormat preferredFormat, DepthFormat preferredDepthFormat, int preferredMultiSampleCount, RenderTargetUsage usage, bool shared)
-			: this(graphicsDevice, width, height, mipMap, preferredFormat, preferredDepthFormat, preferredMultiSampleCount, usage, shared, 1)
+		public RenderTarget2D (
+			ITexturePlatform baseTexture,
+			ITexture2DPlatform tex2D,
+			IRenderTarget2DPlatform platform,
+			GraphicsDevice graphicsDevice,
+			int width, int height, bool mipMap, SurfaceFormat preferredFormat, DepthFormat preferredDepthFormat, int preferredMultiSampleCount, RenderTargetUsage usage, bool shared)
+			: this(baseTexture, tex2D, platform, graphicsDevice, width, height, mipMap, preferredFormat, preferredDepthFormat, preferredMultiSampleCount, usage, shared, 1)
         {
 			
         }
 
-		public RenderTarget2D (GraphicsDevice graphicsDevice, int width, int height, bool mipMap, SurfaceFormat preferredFormat, DepthFormat preferredDepthFormat, int preferredMultiSampleCount, RenderTargetUsage usage)
-			:this (graphicsDevice, width, height, mipMap, preferredFormat, preferredDepthFormat, preferredMultiSampleCount, usage, false)
+		public RenderTarget2D (	
+			ITexturePlatform baseTexture,
+			ITexture2DPlatform tex2D,
+			IRenderTarget2DPlatform platform,
+			GraphicsDevice graphicsDevice, int width, int height, bool mipMap, SurfaceFormat preferredFormat, DepthFormat preferredDepthFormat, int preferredMultiSampleCount, RenderTargetUsage usage)
+			:this (baseTexture, tex2D, platform, graphicsDevice, width, height, mipMap, preferredFormat, preferredDepthFormat, preferredMultiSampleCount, usage, false)
         {}
 
-		public RenderTarget2D(GraphicsDevice graphicsDevice, int width, int height, bool mipMap, SurfaceFormat preferredFormat, DepthFormat preferredDepthFormat)
-			:this (graphicsDevice, width, height, mipMap, preferredFormat, preferredDepthFormat, 0, RenderTargetUsage.DiscardContents) 
+		public RenderTarget2D(
+			ITexturePlatform baseTexture,
+			ITexture2DPlatform tex2D,
+			IRenderTarget2DPlatform platform,
+			GraphicsDevice graphicsDevice, int width, int height, bool mipMap, SurfaceFormat preferredFormat, DepthFormat preferredDepthFormat)
+			:this (baseTexture, tex2D, platform, graphicsDevice, width, height, mipMap, preferredFormat, preferredDepthFormat, 0, RenderTargetUsage.DiscardContents) 
 		{}
 		
-		public RenderTarget2D(GraphicsDevice graphicsDevice, int width, int height)
-			: this(graphicsDevice, width, height, false, SurfaceFormat.Color, DepthFormat.None, 0, RenderTargetUsage.DiscardContents) 
+		public RenderTarget2D(
+			ITexturePlatform baseTexture,
+			ITexture2DPlatform tex2D,
+			IRenderTarget2DPlatform platform,
+			GraphicsDevice graphicsDevice, int width, int height)
+			: this(baseTexture, tex2D, platform, graphicsDevice, width, height, false, SurfaceFormat.Color, DepthFormat.None, 0, RenderTargetUsage.DiscardContents) 
 		{}
+
+		private IRenderTarget2DPlatform mPlatform;
 
         /// <summary>
         /// Allows child class to specify the surface type, eg: a swap chain.
         /// </summary>        
-        protected RenderTarget2D(GraphicsDevice graphicsDevice,
-                        int width,
-                        int height,
-                        bool mipMap,
-                        SurfaceFormat format,
-                        DepthFormat depthFormat,
-                        int preferredMultiSampleCount,
-                        RenderTargetUsage usage,
-                        SurfaceType surfaceType)
-            : base(graphicsDevice, width, height, mipMap, format, surfaceType)
+        protected RenderTarget2D(
+			ITexturePlatform baseTexture,
+			ITexture2DPlatform tex2D,
+			IRenderTarget2DPlatform platform,
+			GraphicsDevice graphicsDevice,
+                int width,
+                int height,
+                bool mipMap,
+                SurfaceFormat format,
+                DepthFormat depthFormat,
+                int preferredMultiSampleCount,
+                RenderTargetUsage usage,
+                SurfaceType surfaceType)
+			: base(baseTexture, tex2D, graphicsDevice, width, height, mipMap, format, surfaceType)
         {
+			mPlatform = platform;
             DepthStencilFormat = depthFormat;
             MultiSampleCount = preferredMultiSampleCount;
             RenderTargetUsage = usage;
@@ -72,7 +102,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         protected internal override void GraphicsDeviceResetting()
         {
-            PlatformGraphicsDeviceResetting();
+			mPlatform.GraphicsDeviceResetting();
             base.GraphicsDeviceResetting();
         }
 	}

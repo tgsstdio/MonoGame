@@ -47,8 +47,15 @@ namespace Microsoft.Xna.Framework
         public static readonly int DefaultBackBufferHeight = 480;
         public static readonly int DefaultBackBufferWidth = 800;
 
-        public GraphicsDeviceManager(Game game)
+		private IGraphicsDevicePlatform mDevicePlatform;
+		private ISamplerStateCollectionPlatform mSamplerStateCollectionPlatform;
+		private ITextureCollectionPlatform mTextureCollectionPlatform;
+		public GraphicsDeviceManager(Game game, IGraphicsDevicePlatform devicePlatform, ISamplerStateCollectionPlatform samplerStateCollectionPlatform, ITextureCollectionPlatform texCollectionPlatform)
         {
+			mDevicePlatform = devicePlatform;
+			mSamplerStateCollectionPlatform = samplerStateCollectionPlatform;
+			mTextureCollectionPlatform = texCollectionPlatform;
+
             if (game == null)
                 throw new ArgumentNullException("The game cannot be null!");
 
@@ -71,7 +78,7 @@ namespace Microsoft.Xna.Framework
             _preferredDepthStencilFormat = DepthFormat.Depth24;
             _synchronizedWithVerticalRetrace = true;
 
-            GraphicsProfile = GraphicsDevice.GetHighestSupportedGraphicsProfile(null);
+			GraphicsProfile = devicePlatform.GetHighestSupportedGraphicsProfile(null);
 
             if (_game.Services.GetService(typeof(IGraphicsDeviceManager)) != null)
                 throw new ArgumentException("Graphics Device Manager Already Present");
@@ -87,7 +94,7 @@ namespace Microsoft.Xna.Framework
 
         public void CreateDevice()
         {
-            Initialize();
+			Initialize();
 
             OnDeviceCreated(EventArgs.Empty);
         }
@@ -382,7 +389,7 @@ namespace Microsoft.Xna.Framework
             }
 
             // Needs to be before ApplyChanges()
-            _graphicsDevice = new GraphicsDevice(GraphicsAdapter.DefaultAdapter, GraphicsProfile, presentationParameters);
+		_graphicsDevice = new GraphicsDevice(mDevicePlatform, mSamplerStateCollectionPlatform, mTextureCollectionPlatform, GraphicsAdapter.DefaultAdapter, GraphicsProfile, presentationParameters);
 
 #if !MONOMAC
             ApplyChanges();

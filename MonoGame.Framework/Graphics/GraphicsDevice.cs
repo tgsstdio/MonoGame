@@ -178,26 +178,42 @@ namespace Microsoft.Xna.Framework.Graphics
             Initialize();
         }
 
-        internal GraphicsDevice ()
+		private IGraphicsDevicePlatform mPlatform;
+		private ISamplerStateCollectionPlatform mSamplerStateCollectionPlatform;
+		private ITextureCollectionPlatform mTextureCollectionPlatform;
+
+		internal GraphicsDevice (IGraphicsDevicePlatform platform, ISamplerStateCollectionPlatform samplerStateCollectionPlatform, ITextureCollectionPlatform texCollectionPlatform)
 		{
+			mPlatform = platform;
+			mSamplerStateCollectionPlatform = samplerStateCollectionPlatform;
+			mTextureCollectionPlatform = texCollectionPlatform;
+
             PresentationParameters = new PresentationParameters();
             PresentationParameters.DepthStencilFormat = DepthFormat.Depth24;
             Setup();
             GraphicsCapabilities = new GraphicsCapabilities(this);
             Initialize();
-        }
+        }	
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GraphicsDevice" /> class.
         /// </summary>
+		/// <param name = "platform"></param>
+		/// <param name = "samplerStateCollectionPlatform"></param>
+		/// <param name = "texCollectionPlatform"></param>
+		/// <param name = "textureCollectionPlatform"></param>
         /// <param name="adapter">The graphics adapter.</param>
         /// <param name="graphicsProfile">The graphics profile.</param>
         /// <param name="presentationParameters">The presentation options.</param>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="presentationParameters"/> is <see langword="null"/>.
         /// </exception>
-        public GraphicsDevice(GraphicsAdapter adapter, GraphicsProfile graphicsProfile, PresentationParameters presentationParameters)
+		public GraphicsDevice(IGraphicsDevicePlatform platform, ISamplerStateCollectionPlatform samplerStateCollectionPlatform, ITextureCollectionPlatform texCollectionPlatform, GraphicsAdapter adapter, GraphicsProfile graphicsProfile, PresentationParameters presentationParameters)
         {
+			mPlatform = platform;
+			mSamplerStateCollectionPlatform = samplerStateCollectionPlatform;
+			mTextureCollectionPlatform = texCollectionPlatform;
+
             Adapter = adapter;
             if (presentationParameters == null)
                 throw new ArgumentNullException("presentationParameters");
@@ -215,13 +231,13 @@ namespace Microsoft.Xna.Framework.Graphics
 			                         DisplayMode.Width, DisplayMode.Height);
 			_viewport.MaxDepth = 1.0f;
 
-            PlatformSetup();
+			mPlatform.Setup();
 
-            VertexTextures = new TextureCollection(this, MaxVertexTextureSlots, true);
-            VertexSamplerStates = new SamplerStateCollection(this, MaxVertexTextureSlots, true);
+            VertexTextures = new TextureCollection(mTextureCollectionPlatform, this, MaxVertexTextureSlots, true);
+			VertexSamplerStates = new SamplerStateCollection(mSamplerStateCollectionPlatform, this, MaxVertexTextureSlots, true);
 
-            Textures = new TextureCollection(this, MaxTextureSlots, false);
-            SamplerStates = new SamplerStateCollection(this, MaxTextureSlots, false);
+			Textures = new TextureCollection(mTextureCollectionPlatform, this, MaxTextureSlots, false);
+			SamplerStates = new SamplerStateCollection(mSamplerStateCollectionPlatform, this, MaxTextureSlots, false);
 
             _blendStateAdditive = BlendState.Additive.Clone();
             _blendStateAlphaBlend = BlendState.AlphaBlend.Clone();
@@ -252,7 +268,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal void Initialize()
         {
-            PlatformInitialize();
+			mPlatform.Initialize();
 
             // Force set the default render states.
             _blendStateDirty = _depthStencilStateDirty = _rasterizerStateDirty = true;
@@ -394,27 +410,27 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal void ApplyState(bool applyShaders)
         {
-            PlatformBeginApplyState();
+			mPlatform.BeginApplyState();
 
             if (_blendStateDirty)
             {
-                _actualBlendState.PlatformApplyState(this);
+                _actualBlendState.Platform.ApplyState(this);
                 _blendStateDirty = false;
             }
 
             if (_depthStencilStateDirty)
             {
-                _actualDepthStencilState.PlatformApplyState(this);
+                _actualDepthStencilState.Platform.ApplyState(this);
                 _depthStencilStateDirty = false;
             }
 
             if (_rasterizerStateDirty)
             {
-                _actualRasterizerState.PlatformApplyState(this);
+                _actualRasterizerState.Platform.ApplyState(this);
                 _rasterizerStateDirty = false;
             }
 
-            PlatformApplyState(applyShaders);
+			mPlatform.ApplyState(applyShaders);
         }
 
         public void Clear(Color color)
@@ -422,7 +438,7 @@ namespace Microsoft.Xna.Framework.Graphics
             var options = ClearOptions.Target;
             options |= ClearOptions.DepthBuffer;
             options |= ClearOptions.Stencil;
-            PlatformClear(options, color.ToVector4(), _viewport.MaxDepth, 0);
+			mPlatform.Clear(options, color.ToVector4(), _viewport.MaxDepth, 0);
 
             unchecked
             {
@@ -432,7 +448,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         public void Clear(ClearOptions options, Color color, float depth, int stencil)
         {
-            PlatformClear(options, color.ToVector4(), depth, stencil);
+			mPlatform.Clear(options, color.ToVector4(), depth, stencil);
 
             unchecked
             {
@@ -442,7 +458,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
 		public void Clear(ClearOptions options, Vector4 color, float depth, int stencil)
 		{
-            PlatformClear(options, color, depth, stencil);
+            mPlatform.Clear(options, color, depth, stencil);
 
             unchecked
             {
@@ -477,7 +493,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     // Clear the effect cache.
                     EffectCache.Clear();
 
-                    PlatformDispose();
+					mPlatform.Dispose();
                 }
 
                 _isDisposed = true;
@@ -503,7 +519,7 @@ namespace Microsoft.Xna.Framework.Graphics
         public void Present()
         {
             _graphicsMetrics = new GraphicsMetrics();
-            PlatformPresent();
+			mPlatform.Present();
         }
 
         /*
@@ -602,7 +618,7 @@ namespace Microsoft.Xna.Framework.Graphics
             set
             {
                 _viewport = value;
-                PlatformSetViewport(ref value);
+				mPlatform.SetViewport(ref value);
             }
         }
 
@@ -617,7 +633,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 //Check if Profile is supported.
                 //TODO: [DirectX] Recreate the Device using the new
                 //      feature level each time the Profile changes.
-                if(value > GetHighestSupportedGraphicsProfile(this))
+				if(value > mPlatform.GetHighestSupportedGraphicsProfile(this))
                     throw new NotSupportedException(String.Format("Could not find a graphics device that supports the {0} profile", value.ToString()));
                 _graphicsProfile = value;
                 GraphicsCapabilities.Initialize(this);
@@ -718,7 +734,7 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             var clearTarget = false;
 
-            PlatformResolveRenderTargets();
+			mPlatform.ResolveRenderTargets();
 
             // Clear the current bindings.
             Array.Clear(_currentRenderTargetBindings, 0, _currentRenderTargetBindings.Length);
@@ -729,7 +745,7 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 _currentRenderTargetCount = 0;
 
-                PlatformApplyDefaultRenderTarget();
+				mPlatform.ApplyDefaultRenderTarget();
                 clearTarget = PresentationParameters.RenderTargetUsage == RenderTargetUsage.DiscardContents;
 
                 renderTargetWidth = PresentationParameters.BackBufferWidth;
@@ -741,7 +757,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 Array.Copy(renderTargets, _currentRenderTargetBindings, renderTargets.Length);
                 _currentRenderTargetCount = renderTargets.Length;
 
-                var renderTarget = PlatformApplyRenderTargets();
+				var renderTarget = mPlatform.ApplyRenderTargets();
 
                 // We clear the render target if asked.
                 clearTarget = renderTarget.RenderTargetUsage == RenderTargetUsage.DiscardContents;
@@ -865,7 +881,7 @@ namespace Microsoft.Xna.Framework.Graphics
             if (primitiveCount <= 0)
                 throw new ArgumentOutOfRangeException("primitiveCount");
 
-            PlatformDrawIndexedPrimitives(primitiveType, baseVertex, startIndex, primitiveCount);
+			mPlatform.DrawIndexedPrimitives(primitiveType, baseVertex, startIndex, primitiveCount);
 
             unchecked
             {
@@ -901,7 +917,7 @@ namespace Microsoft.Xna.Framework.Graphics
             if (vertexDeclaration == null)
                 throw new ArgumentNullException("vertexDeclaration");
 
-            PlatformDrawUserPrimitives<T>(primitiveType, vertexData, vertexOffset, vertexDeclaration, vertexCount);
+			mPlatform.DrawUserPrimitives<T>(primitiveType, vertexData, vertexOffset, vertexDeclaration, vertexCount);
 
             unchecked
             {
@@ -923,7 +939,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
             var vertexCount = GetElementCountArray(primitiveType, primitiveCount);
 
-            PlatformDrawPrimitives(primitiveType, vertexStart, vertexCount);
+			mPlatform.DrawPrimitives(primitiveType, vertexStart, vertexCount);
 
             unchecked
             {
@@ -969,7 +985,7 @@ namespace Microsoft.Xna.Framework.Graphics
             if (vertexDeclaration == null)
                 throw new ArgumentNullException("vertexDeclaration");
 
-            PlatformDrawUserIndexedPrimitives<T>(primitiveType, vertexData, vertexOffset, numVertices, indexData, indexOffset, primitiveCount, vertexDeclaration);
+			mPlatform.DrawUserIndexedPrimitives<T>(primitiveType, vertexData, vertexOffset, numVertices, indexData, indexOffset, primitiveCount, vertexDeclaration);
 
             unchecked
             {
@@ -1015,7 +1031,7 @@ namespace Microsoft.Xna.Framework.Graphics
             if (vertexDeclaration == null)
                 throw new ArgumentNullException("vertexDeclaration");
 
-            PlatformDrawUserIndexedPrimitives<T>(primitiveType, vertexData, vertexOffset, numVertices, indexData, indexOffset, primitiveCount, vertexDeclaration);
+			mPlatform.DrawUserIndexedPrimitives<T>(primitiveType, vertexData, vertexOffset, numVertices, indexData, indexOffset, primitiveCount, vertexDeclaration);
             
             unchecked
             {
@@ -1041,9 +1057,9 @@ namespace Microsoft.Xna.Framework.Graphics
             throw new NotSupportedException();
         }
 
-        internal static GraphicsProfile GetHighestSupportedGraphicsProfile(GraphicsDevice graphicsDevice)
-        {
-            return PlatformGetHighestSupportedGraphicsProfile(graphicsDevice);
-        }
+//		internal GraphicsProfile GetHighestSupportedGraphicsProfile(GraphicsDevice graphicsDevice)
+//        {
+//			return mPlatform.GetHighestSupportedGraphicsProfile(graphicsDevice);
+//        }
     }
 }

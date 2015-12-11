@@ -14,6 +14,10 @@ namespace ShadowMapping
 		[STAThread]
 		public static void Main()
 		{
+
+			ulong MINIMUM = 10000;
+			Func<InstanceIdentifier> identityGen = () => new InstanceIdentifier{ InstanceId = MINIMUM++ };
+
 			using (var container = new Container ())
 			{
 				container.Register<IAssetLocator, AssetLocator> (Reuse.InCurrentScope);
@@ -25,14 +29,18 @@ namespace ShadowMapping
 
 				container.Register<ITexturePageLookup, NullTexturePageLookup> (Reuse.InCurrentScope); // NOT IN USE
 
+				container.Register<IRenderTargetRange, RenderTargetRange>(Reuse.InCurrentScope);
 				container.Register<IAssetManager, AssetManager> (Reuse.InCurrentScope);
 				container.Register<GameWorld> ();
+
+				container.RegisterInstance < Func<InstanceIdentifier> >(identityGen);
 
 				using (var scope = container.OpenScope ())
 				{
 					var fs = container.Resolve<IFileSystem> ();
 					fs.Initialise ("Media");
 
+					using (var range = container.Resolve<IRenderTargetRange>())
 					using (var game = container.Resolve<GameWorld> ())
 					{
 						// Run the game at 60 updates per second

@@ -39,7 +39,6 @@
     <Compile Include="Technique.cs" />
     <Compile Include="DataIterator.cs" />
     <Compile Include="IDataIterator.cs" />
-    <Compile Include="LightInfo.cs" />
     <Compile Include="NestedLoop.cs" />
     <Compile Include="SceneNodeTests.cs" />
     <Compile Include="MeshMarker.cs" />
@@ -53,6 +52,7 @@
     <Compile Include="IPassOptimizerLogger.cs" />
     <Compile Include="IFrameDuplicator.cs" />
     <Compile Include="FrameDuplicator.cs" />
+    <Compile Include="StructKeyDictionaryUnitTests.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

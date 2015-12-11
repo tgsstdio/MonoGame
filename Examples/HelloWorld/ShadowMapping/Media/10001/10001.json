@@ -11,5 +11,14 @@
 			FragmentPath:"DepthMap.frag",
 			VertexPath:"DepthMap.vert",
 		},
+		{
+			Asset:{
+				Identifier:{AssetId:2001},
+				Name:"GLSL Light shader",
+				Version:1,
+			},
+			FragmentPath:"Lit.frag",
+			VertexPath:"Lit.vert",
+		},
 	],
 }

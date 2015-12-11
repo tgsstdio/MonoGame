@@ -29,13 +29,16 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return _depth; }
         }
 
-		public Texture3D(GraphicsDevice graphicsDevice, int width, int height, int depth, bool mipMap, SurfaceFormat format)
-            : this(graphicsDevice, width, height, depth, mipMap, format, false)
+		private ITexture3DPlatform mPlatform;
+		public Texture3D(ITexturePlatform baseTexture, ITexture3DPlatform platform, GraphicsDevice graphicsDevice, int width, int height, int depth, bool mipMap, SurfaceFormat format)
+			: this(baseTexture, platform, graphicsDevice, width, height, depth, mipMap, format, false)
 		{		    
 		}
 
-		protected Texture3D (GraphicsDevice graphicsDevice, int width, int height, int depth, bool mipMap, SurfaceFormat format, bool renderTarget)
+		protected Texture3D (ITexturePlatform baseTexture, ITexture3DPlatform platform, GraphicsDevice graphicsDevice, int width, int height, int depth, bool mipMap, SurfaceFormat format, bool renderTarget)
+			: base(baseTexture)
 		{
+			mPlatform = platform;
 		    if (graphicsDevice == null)
 		    {
 		        throw new ArgumentNullException("graphicsDevice", FrameworkResources.ResourceCreationWhenDeviceIsNull);
@@ -47,7 +50,7 @@ namespace Microsoft.Xna.Framework.Graphics
             this._levelCount = 1;
 		    this._format = format;
 
-            PlatformConstruct(graphicsDevice, width, height, depth, mipMap, format, renderTarget);
+			mPlatform.Construct(graphicsDevice, width, height, depth, mipMap, format, renderTarget);
         }
 
         public void SetData<T>(T[] data) where T : struct
@@ -71,7 +74,7 @@ namespace Microsoft.Xna.Framework.Graphics
             int height = bottom - top;
             int depth = back - front;
 
-            PlatformSetData<T>(level, left, top, right, bottom, front, back, data, startIndex, elementCount, width, height, depth);
+			mPlatform.SetData<T>(level, left, top, right, bottom, front, back, data, startIndex, elementCount, width, height, depth);
 		}
 
         /// <summary>
@@ -101,7 +104,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 || (front < 0 || front >= back))
                 throw new ArgumentException("Neither box size nor box position can be negative");
 
-            PlatformGetData(level, left, top, right, bottom, front, back, data, startIndex, elementCount);
+			mPlatform.GetData(level, left, top, right, bottom, front, back, data, startIndex, elementCount);
         }
 
         /// <summary>

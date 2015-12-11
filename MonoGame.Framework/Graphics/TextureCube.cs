@@ -23,13 +23,17 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 		
-		public TextureCube (GraphicsDevice graphicsDevice, int size, bool mipMap, SurfaceFormat format)
-            : this(graphicsDevice, size, mipMap, format, false)
+		public TextureCube (ITexturePlatform baseTexture, ITextureCubePlatform platform, GraphicsDevice graphicsDevice, int size, bool mipMap, SurfaceFormat format)
+			: this(baseTexture, platform, graphicsDevice, size, mipMap, format, false)
 		{
         }
 
-        internal TextureCube(GraphicsDevice graphicsDevice, int size, bool mipMap, SurfaceFormat format, bool renderTarget)
+		private ITextureCubePlatform mPlatform;
+		internal TextureCube(ITexturePlatform baseTexture, ITextureCubePlatform platform, GraphicsDevice graphicsDevice, int size, bool mipMap, SurfaceFormat format, bool renderTarget)
+			: base(baseTexture)
         {
+			mPlatform = platform;
+
             if (graphicsDevice == null)
             {
                 throw new ArgumentNullException("graphicsDevice", FrameworkResources.ResourceCreationWhenDeviceIsNull);
@@ -39,7 +43,7 @@ namespace Microsoft.Xna.Framework.Graphics
             this._format = format;
             this._levelCount = mipMap ? CalculateMipLevels(size) : 1;
 
-            PlatformConstruct(graphicsDevice, size, mipMap, format, renderTarget);
+			mPlatform.Construct(graphicsDevice, size, mipMap, format, renderTarget);
         }
 
         /// <summary>
@@ -50,7 +54,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <param name="data">The data.</param>
         public void GetData<T>(CubeMapFace cubeMapFace, T[] data) where T : struct
         {
-            PlatformGetData<T>(cubeMapFace, data);
+			mPlatform.GetData<T>(cubeMapFace, data);
         }
 
 		public void SetData<T> (CubeMapFace face, T[] data) where T : struct
@@ -114,7 +118,7 @@ namespace Microsoft.Xna.Framework.Graphics
 #endif
                     }
                 }
-                PlatformSetData<T>(face, level, dataPtr, xOffset, yOffset, width, height);
+				mPlatform.SetData<T>(face, level, dataPtr, xOffset, yOffset, width, height);
             }
             finally
             {

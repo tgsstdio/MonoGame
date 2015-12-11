@@ -15,13 +15,15 @@ namespace Microsoft.Xna.Framework.Graphics
         public int IndexCount { get; private set; }
         public IndexElementSize IndexElementSize { get; private set; }
 
-   		protected IndexBuffer(GraphicsDevice graphicsDevice, Type indexType, int indexCount, BufferUsage usage, bool dynamic)
-            : this(graphicsDevice, SizeForType(graphicsDevice, indexType), indexCount, usage, dynamic)
+		protected IndexBuffer(IIndexBufferPlatform platform, GraphicsDevice graphicsDevice, Type indexType, int indexCount, BufferUsage usage, bool dynamic)
+			: this(platform, graphicsDevice, SizeForType(graphicsDevice, indexType), indexCount, usage, dynamic)
         {
         }
 
-		protected IndexBuffer(GraphicsDevice graphicsDevice, IndexElementSize indexElementSize, int indexCount, BufferUsage usage, bool dynamic)
+		private IIndexBufferPlatform mPlatform;
+		protected IndexBuffer(IIndexBufferPlatform platform, GraphicsDevice graphicsDevice, IndexElementSize indexElementSize, int indexCount, BufferUsage usage, bool dynamic)
         {
+			mPlatform = platform;
 			if (graphicsDevice == null)
             {
                 throw new ArgumentNullException("graphicsDevice", FrameworkResources.ResourceCreationWhenDeviceIsNull);
@@ -33,16 +35,16 @@ namespace Microsoft.Xna.Framework.Graphics
 			
             _isDynamic = dynamic;
 
-            PlatformConstruct(indexElementSize, indexCount);
+			mPlatform.Construct(indexElementSize, indexCount);
 		}
 
-		public IndexBuffer(GraphicsDevice graphicsDevice, IndexElementSize indexElementSize, int indexCount, BufferUsage bufferUsage) :
-			this(graphicsDevice, indexElementSize, indexCount, bufferUsage, false)
+		public IndexBuffer(IIndexBufferPlatform platform, GraphicsDevice graphicsDevice, IndexElementSize indexElementSize, int indexCount, BufferUsage bufferUsage) :
+		this(platform, graphicsDevice, indexElementSize, indexCount, bufferUsage, false)
 		{
 		}
 
-		public IndexBuffer(GraphicsDevice graphicsDevice, Type indexType, int indexCount, BufferUsage usage) :
-			this(graphicsDevice, SizeForType(graphicsDevice, indexType), indexCount, usage, false)
+		public IndexBuffer(IIndexBufferPlatform platform, GraphicsDevice graphicsDevice, Type indexType, int indexCount, BufferUsage usage) :
+		this(platform, graphicsDevice, SizeForType(graphicsDevice, indexType), indexCount, usage, false)
 		{
 		}
 
@@ -72,7 +74,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </summary>
         internal protected override void GraphicsDeviceResetting()
         {
-            PlatformGraphicsDeviceResetting();
+			mPlatform.GraphicsDeviceResetting();
         }
 
         public void GetData<T>(int offsetInBytes, T[] data, int startIndex, int elementCount) where T : struct
@@ -84,7 +86,7 @@ namespace Microsoft.Xna.Framework.Graphics
             if (BufferUsage == BufferUsage.WriteOnly)
                 throw new NotSupportedException("This IndexBuffer was created with a usage type of BufferUsage.WriteOnly. Calling GetData on a resource that was created with BufferUsage.WriteOnly is not supported.");
 
-            PlatformGetData<T>(offsetInBytes, data, startIndex, elementCount);
+			mPlatform.GetData<T>(offsetInBytes, data, startIndex, elementCount);
         }
 
         public void GetData<T>(T[] data, int startIndex, int elementCount) where T : struct
@@ -119,7 +121,7 @@ namespace Microsoft.Xna.Framework.Graphics
             if (data.Length < (startIndex + elementCount))
                 throw new InvalidOperationException("The array specified in the data parameter is not the correct size for the amount of data requested.");
 
-            PlatformSetDataInternal<T>(offsetInBytes, data, startIndex, elementCount, options);
+			mPlatform.SetDataInternal<T>(offsetInBytes, data, startIndex, elementCount, options);
         }
 	}
 }

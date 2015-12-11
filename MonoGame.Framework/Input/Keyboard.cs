@@ -59,7 +59,7 @@ namespace Microsoft.Xna.Framework.Input
 		{
             return new KeyboardState(_keys);
 		}
-		
+
         /// <summary>
         /// Returns the current keyboard state for a given player.
         /// </summary>
@@ -71,7 +71,7 @@ namespace Microsoft.Xna.Framework.Input
             return new KeyboardState(_keys);
 		}
 
-        internal static void SetKeys(List<Keys> keys)
+        public static void SetKeys(List<Keys> keys)
         {
             _keys = keys;
         }

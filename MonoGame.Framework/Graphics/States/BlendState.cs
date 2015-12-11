@@ -183,8 +183,10 @@ namespace Microsoft.Xna.Framework.Graphics
         public static readonly BlendState NonPremultiplied;
         public static readonly BlendState Opaque;
 
-        public BlendState()
+		public IBlendStatePlatform Platform {get; private set;}
+		public BlendState(IBlendStatePlatform platform)
         {
+			Platform = platform;
             _targetBlendState = new TargetBlendState[4];
             _targetBlendState[0] = new TargetBlendState(this);
             _targetBlendState[1] = new TargetBlendState(this);
@@ -196,8 +198,8 @@ namespace Microsoft.Xna.Framework.Graphics
             _independentBlendEnable = false;
         }
 
-        private BlendState(string name, Blend sourceBlend, Blend destinationBlend)
-            : this()
+		private BlendState(IBlendStatePlatform platform, string name, Blend sourceBlend, Blend destinationBlend)
+			: this(platform)
         {
             Name = name;
             ColorSourceBlend = sourceBlend;
@@ -209,6 +211,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private BlendState(BlendState cloneSource)
         {
+			Platform = cloneSource.Platform;
             Name = cloneSource.Name;
 
             _targetBlendState = new TargetBlendState[4];
@@ -224,10 +227,11 @@ namespace Microsoft.Xna.Framework.Graphics
 
         static BlendState()
         {
-            Additive = new BlendState("BlendState.Additive", Blend.SourceAlpha, Blend.One);
-            AlphaBlend = new BlendState("BlendState.AlphaBlend", Blend.One, Blend.InverseSourceAlpha);
-            NonPremultiplied = new BlendState("BlendState.NonPremultiplied", Blend.SourceAlpha, Blend.InverseSourceAlpha);
-            Opaque = new BlendState("BlendState.Opaque", Blend.One, Blend.Zero);
+			// TODO : remove static methods
+            Additive = new BlendState(null, "BlendState.Additive", Blend.SourceAlpha, Blend.One);
+			AlphaBlend = new BlendState(null, "BlendState.AlphaBlend", Blend.One, Blend.InverseSourceAlpha);
+            NonPremultiplied = new BlendState(null, "BlendState.NonPremultiplied", Blend.SourceAlpha, Blend.InverseSourceAlpha);
+            Opaque = new BlendState(null, "BlendState.Opaque", Blend.One, Blend.Zero);
 		}
 
 	    internal BlendState Clone()
