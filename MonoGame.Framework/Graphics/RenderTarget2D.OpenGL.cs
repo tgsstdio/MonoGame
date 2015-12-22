@@ -1,6 +1,7 @@
 // MonoGame - Copyright (C) The MonoGame Team
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
+using Microsoft.Xna.Framework.Graphics;
 
 #if MONOMAC
 using MonoMac.OpenGL;
@@ -12,40 +13,39 @@ using System.Collections.Generic;
 using OpenTK.Graphics.ES20;
 #endif
 
-namespace Microsoft.Xna.Framework.Graphics
+namespace Microsoft.Xna.Framework.DesktopGL.Graphics
 {
-    public partial class RenderTarget2D
+	public class RenderTarget2DPlatform : IRenderTarget2DPlatform
     {
         internal int glColorBuffer;
         internal int glDepthBuffer;
         internal int glStencilBuffer;
 
-        private void PlatformConstruct(GraphicsDevice graphicsDevice, int width, int height, bool mipMap,
+        public void Construct(GraphicsDevice graphicsDevice, int width, int height, bool mipMap,
             SurfaceFormat preferredFormat, DepthFormat preferredDepthFormat, int preferredMultiSampleCount, RenderTargetUsage usage, bool shared)
         {
             Threading.BlockOnUIThread(() =>
             {
-                graphicsDevice.PlatformCreateRenderTarget(this, width, height, mipMap, preferredFormat, preferredDepthFormat, preferredMultiSampleCount, usage);
-            });
-            
+                graphicsDevice.Platform.CreateRenderTarget(this, width, height, mipMap, preferredFormat, preferredDepthFormat, preferredMultiSampleCount, usage);
+            });            
             
         }
 
-        private void PlatformGraphicsDeviceResetting()
+        public void GraphicsDeviceResetting()
         {
         }
 
-        protected override void Dispose(bool disposing)
+		private bool mIsDisposed = false;
+        public void Dispose(bool disposing)
         {
-            if (!IsDisposed)
+            if (!mIsDisposed)
             {
                 Threading.BlockOnUIThread(() =>
                 {
                     this.GraphicsDevice.PlatformDeleteRenderTarget(this);
                 });
+				mIsDisposed = true;				
             }
-
-            base.Dispose(disposing);
         }
     }
 }

@@ -11,5 +11,7 @@ namespace Microsoft.Xna.Framework.Graphics
 		void GraphicsDeviceResetting ();
 
 		void Construct (GraphicsDevice graphicsDevice, int width, int height, bool mipMap, SurfaceFormat preferredFormat, DepthFormat preferredDepthFormat, int preferredMultiSampleCount, RenderTargetUsage usage, bool shared);
+
+		void Dispose (bool disposing);
 	}
 }

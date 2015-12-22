@@ -53,7 +53,11 @@ namespace Microsoft.Xna.Framework.Graphics
 
 		void DrawPrimitives (PrimitiveType primitiveType, int vertexStart, int vertexCount);
 
-		void DrawUserPrimitives<T> (PrimitiveType primitiveType, T[] vertexData, int vertexOffset, VertexDeclaration vertexDeclaration, int vertexCount);
+		void DrawUserPrimitives<T> (
+			PrimitiveType primitiveType,
+			T[] vertexData, int vertexOffset,
+			VertexDeclaration vertexDeclaration,
+			int vertexCount) where T : struct;
 
 		void Clear (ClearOptions options, Vector4 vector4, float maxDepth, int i);
 

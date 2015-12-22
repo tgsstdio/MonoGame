@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using Microsoft.Xna.Framework.Graphics;
 
 #if MONOMAC
 using MonoMac.OpenGL;
@@ -17,7 +18,7 @@ using GetProgramParameterName = OpenTK.Graphics.ES20.ProgramParameter;
 #endif
 #endif
 
-namespace Microsoft.Xna.Framework.Graphics
+namespace Microsoft.Xna.Framework.DesktopGL.Graphics
 {
 
     internal class ShaderProgram
@@ -37,7 +38,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 return _uniformLocations[name];
 
             var location = GL.GetUniformLocation(Program, name);
-            GraphicsExtensions.CheckGLError();
+			DesktopGLGraphicsExtensions.CheckGLError();
             _uniformLocations[name] = location;
             return location;
         }
@@ -72,7 +73,7 @@ namespace Microsoft.Xna.Framework.Graphics
 #else
                     GL.DeleteProgram(pair.Value.Program);
 #endif
-                    GraphicsExtensions.CheckGLError();
+					DesktopGLGraphicsExtensions.CheckGLError();
                 }
             }
             _programCache.Clear();
@@ -100,21 +101,21 @@ namespace Microsoft.Xna.Framework.Graphics
             // as this is only called at draw time when we're in the
             // main drawing thread.
             var program = GL.CreateProgram();
-            GraphicsExtensions.CheckGLError();
+            DesktopGLGraphicsExtensions.CheckGLError();
 
             GL.AttachShader(program, vertexShader.GetShaderHandle());
-            GraphicsExtensions.CheckGLError();
+            DesktopGLGraphicsExtensions.CheckGLError();
 
             GL.AttachShader(program, pixelShader.GetShaderHandle());
-            GraphicsExtensions.CheckGLError();
+            DesktopGLGraphicsExtensions.CheckGLError();
 
             //vertexShader.BindVertexAttributes(program);
 
             GL.LinkProgram(program);
-            GraphicsExtensions.CheckGLError();
+			DesktopGLGraphicsExtensions.CheckGLError();
 
             GL.UseProgram(program);
-            GraphicsExtensions.CheckGLError();
+			DesktopGLGraphicsExtensions.CheckGLError();
 
             vertexShader.GetVertexAttributeLocations(program);
 
@@ -123,7 +124,7 @@ namespace Microsoft.Xna.Framework.Graphics
             var linked = 0;
 
             GL.GetProgram(program, GetProgramParameterName.LinkStatus, out linked);
-            GraphicsExtensions.LogGLError("VertexShaderCache.Link(), GL.GetProgram");
+            DesktopGLGraphicsExtensions.LogGLError("VertexShaderCache.Link(), GL.GetProgram");
             if (linked == 0)
             {
                 var log = GL.GetProgramInfoLog(program);

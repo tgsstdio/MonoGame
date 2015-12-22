@@ -53,7 +53,7 @@ namespace Microsoft.Xna.Framework.Graphics
         private readonly RenderTargetBinding[] _currentRenderTargetBindings = new RenderTargetBinding[4];
         private int _currentRenderTargetCount;
 
-        internal GraphicsCapabilities GraphicsCapabilities { get; private set; }
+        public GraphicsCapabilities GraphicsCapabilities { get; private set; }
 
         public TextureCollection VertexTextures { get; private set; }
 
@@ -182,13 +182,13 @@ namespace Microsoft.Xna.Framework.Graphics
 		private ISamplerStateCollectionPlatform mSamplerStateCollectionPlatform;
 		private ITextureCollectionPlatform mTextureCollectionPlatform;
 
-		internal GraphicsDevice (IGraphicsDevicePlatform platform, ISamplerStateCollectionPlatform samplerStateCollectionPlatform, ITextureCollectionPlatform texCollectionPlatform)
+		public GraphicsDevice (PresentationParameters parameters, IGraphicsDevicePlatform platform, ISamplerStateCollectionPlatform samplerStateCollectionPlatform, ITextureCollectionPlatform texCollectionPlatform)
 		{
 			mPlatform = platform;
 			mSamplerStateCollectionPlatform = samplerStateCollectionPlatform;
 			mTextureCollectionPlatform = texCollectionPlatform;
 
-            PresentationParameters = new PresentationParameters();
+			PresentationParameters = parameters;
             PresentationParameters.DepthStencilFormat = DepthFormat.Depth24;
             Setup();
             GraphicsCapabilities = new GraphicsCapabilities(this);
@@ -239,6 +239,7 @@ namespace Microsoft.Xna.Framework.Graphics
 			Textures = new TextureCollection(mTextureCollectionPlatform, this, MaxTextureSlots, false);
 			SamplerStates = new SamplerStateCollection(mSamplerStateCollectionPlatform, this, MaxTextureSlots, false);
 
+			// TODO : REMOVE STATIC  
             _blendStateAdditive = BlendState.Additive.Clone();
             _blendStateAlphaBlend = BlendState.AlphaBlend.Clone();
             _blendStateNonPremultiplied = BlendState.NonPremultiplied.Clone();

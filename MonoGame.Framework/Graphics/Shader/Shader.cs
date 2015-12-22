@@ -6,7 +6,7 @@ using System.IO;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
-    internal enum SamplerType
+    public enum SamplerType
     {
         Sampler2D = 0,
         SamplerCube = 1,
@@ -17,7 +17,7 @@ namespace Microsoft.Xna.Framework.Graphics
     // TODO: We should convert the sampler info below 
     // into the start of a Shader reflection API.
 
-    internal struct SamplerInfo
+    public struct SamplerInfo
     {
         public SamplerType type;
         public int textureSlot;
@@ -29,12 +29,12 @@ namespace Microsoft.Xna.Framework.Graphics
         public int parameter;
     }
 
-    internal partial class Shader : GraphicsResource
+    public partial class Shader : GraphicsResource
 	{
         /// <summary>
         /// A hash value which can be used to compare shaders.
         /// </summary>
-        internal int HashKey { get; private set; }
+        public int HashKey { get; private set; }
 
         public SamplerInfo[] Samplers { get; private set; }
 
@@ -91,6 +91,13 @@ namespace Microsoft.Xna.Framework.Graphics
             CBuffers = new int[cbufferCount];
             for (var c = 0; c < cbufferCount; c++)
                 CBuffers[c] = reader.ReadByte();
+
+
+			int result;
+			if (mPlatform.GenerateHashKey (shaderBytecode, out result))
+			{
+				HashKey = result;
+			}
 
 			mPlatform.Construct(reader, isVertexShader, shaderBytecode);
         }

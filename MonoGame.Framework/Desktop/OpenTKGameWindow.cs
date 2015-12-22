@@ -67,7 +67,7 @@ namespace Microsoft.Xna.Framework.DesktopGL
         private IntPtr _windowHandle;
         private INativeWindow window;
 
-        protected Game game;
+        protected GameBackbone game;
         private List<Microsoft.Xna.Framework.Input.Keys> keys;
 		//private OpenTK.Graphics.GraphicsContext backgroundContext;
 
@@ -81,7 +81,7 @@ namespace Microsoft.Xna.Framework.DesktopGL
 
         #region Internal Properties
 
-        internal Game Game 
+        internal GameBackbone Game 
         {
             get { return game; }
             set
@@ -170,7 +170,7 @@ namespace Microsoft.Xna.Framework.DesktopGL
         #endregion
 
 		private IMouseListener mMouse;
-		public OpenTKGameWindow(Game game, INativeWindow emptyWindow, IMouseListener mouseListener)
+		public OpenTKGameWindow(GameBackbone game, INativeWindow emptyWindow, IMouseListener mouseListener)
         {
 			Game = game;
 			mMouse = mouseListener;

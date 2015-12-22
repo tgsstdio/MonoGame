@@ -6,7 +6,7 @@ using System.IO;
 
 namespace MonoGame.Utilities
 {
-    internal static class Hash
+    public static class Hash
     {
         /// <summary>
         /// Compute a hash from a byte array.
@@ -15,7 +15,7 @@ namespace MonoGame.Utilities
         /// Modified FNV Hash in C#
         /// http://stackoverflow.com/a/468084
         /// </remarks>
-        internal static int ComputeHash(params byte[] data)
+        public static int ComputeHash(params byte[] data)
         {
             unchecked
             {
@@ -41,7 +41,7 @@ namespace MonoGame.Utilities
         /// Modified FNV Hash in C#
         /// http://stackoverflow.com/a/468084
         /// </remarks>
-        internal static int ComputeHash(Stream stream)
+        public static int ComputeHash(Stream stream)
         {
             System.Diagnostics.Debug.Assert(stream.CanSeek);
 

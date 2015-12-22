@@ -29,8 +29,8 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private DepthFormat depthStencilFormat;
         private SurfaceFormat backBufferFormat;
-        private int backBufferHeight = GraphicsDeviceManager.DefaultBackBufferHeight;
-        private int backBufferWidth = GraphicsDeviceManager.DefaultBackBufferWidth;
+        private int backBufferHeight;
+        private int backBufferWidth;
         private IntPtr deviceWindowHandle;
         private int multiSampleCount;
         private bool disposed;
@@ -41,9 +41,12 @@ namespace Microsoft.Xna.Framework.Graphics
         #endregion Private Fields
 
         #region Constructors
-
-        public PresentationParameters()
+		private IGraphicsDeviceManager mManager;
+		public PresentationParameters(IGraphicsDeviceManager manager)
         {
+			mManager = manager;
+			backBufferHeight = mManager.DefaultBackBufferHeight;
+			backBufferWidth = mManager.DefaultBackBufferWidth;
             Clear();
         }
 
@@ -165,8 +168,8 @@ namespace Microsoft.Xna.Framework.Graphics
 			backBufferWidth = width;
             backBufferHeight = height;
 #else
-            backBufferWidth = GraphicsDeviceManager.DefaultBackBufferWidth;
-            backBufferHeight = GraphicsDeviceManager.DefaultBackBufferHeight;     
+			backBufferWidth = mManager.DefaultBackBufferWidth;
+			backBufferHeight = mManager.DefaultBackBufferHeight;     
 #endif
             deviceWindowHandle = IntPtr.Zero;
 #if IOS
@@ -182,7 +185,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         public PresentationParameters Clone()
         {
-            PresentationParameters clone = new PresentationParameters();
+			PresentationParameters clone = new PresentationParameters(mManager);
             clone.backBufferFormat = this.backBufferFormat;
             clone.backBufferHeight = this.backBufferHeight;
             clone.backBufferWidth = this.backBufferWidth;

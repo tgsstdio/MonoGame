@@ -10,6 +10,8 @@ namespace Microsoft.Xna.Framework.Graphics
 	{
 		void GraphicsDeviceResetting ();
 
+		bool GenerateHashKey (byte[] shaderBytecode, out int hashKey);
+
 		void Construct (BinaryReader reader, bool isVertexShader, byte[] shaderBytecode);
 	}    
 }

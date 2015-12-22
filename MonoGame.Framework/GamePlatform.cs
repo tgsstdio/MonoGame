@@ -26,7 +26,7 @@ namespace Microsoft.Xna.Framework
         #endregion
 
         #region Construction/Destruction
-        public static GamePlatform Create(Game game)
+        public static GamePlatform Create(GameBackbone game)
         {
 #if IOS
             return new iOSGamePlatform(game);
@@ -52,11 +52,10 @@ namespace Microsoft.Xna.Framework
 
 		}
 
-		protected GamePlatform(Game game)
+		protected IGraphicsDeviceManager Graphics;
+		protected GamePlatform(IGraphicsDeviceManager graphics)
         {
-            if (game == null)
-                throw new ArgumentNullException("game");
-            Game = game;
+			Graphics = graphics;
         }
 
         ~GamePlatform()
@@ -73,14 +72,6 @@ namespace Microsoft.Xna.Framework
         /// GameRunBehavior for this platform.
         /// </summary>
         public abstract GameRunBehavior DefaultRunBehavior { get; }
-
-        /// <summary>
-        /// Gets the Game instance that owns this GamePlatform instance.
-        /// </summary>
-        public Game Game
-        {
-            get; private set;
-        }
 
         private bool _isActive;
         public bool IsActive
@@ -187,11 +178,12 @@ namespace Microsoft.Xna.Framework
         public virtual void BeforeInitialize()
         {
             IsActive = true;
-            if (this.Game.GraphicsDevice == null) 
-            {
-                var graphicsDeviceManager = Game.Services.GetService(typeof(IGraphicsDeviceManager)) as IGraphicsDeviceManager;			   
-                graphicsDeviceManager.CreateDevice();
-            }
+			// REMOVED INITIALISED ONLY 
+//			if (Graphics == null) 
+//            {
+//				Graphics= Game.Services.GetService(typeof(IGraphicsDeviceManager)) as IGraphicsDeviceManager;			   
+//				Graphics.CreateDevice();
+//            }
         }
 
         /// <summary>

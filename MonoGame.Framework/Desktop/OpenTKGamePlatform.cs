@@ -43,8 +43,8 @@ software.
 (A) No Trademark License- This license does not grant you rights to use any
 contributors' name, logo, or trademarks.
 
-(B) If you bring a patent claim against any contributor over patents that you
-claim are infringed by the software, your patent license from such contributor
+(mGraphicsu bring a patent claim against any contributor over patents that you
+claim mGraphicsinged by the software, your patent license from such contributor
 to the software ends automatically.
 
 (C) If you distribute any portion of the software, you must retain all
@@ -82,7 +82,7 @@ using OpenTK.Graphics;
 
 namespace Microsoft.Xna.Framework.DesktopGL
 {
-    class OpenTKGamePlatform : GamePlatform
+    class OpenTKGamePlatform : GamePlatform, IOpenTKGamePlatform
     {
         private OpenTKGameWindow _view;
 		private OpenALSoundController soundControllerInstance = null;
@@ -91,9 +91,13 @@ namespace Microsoft.Xna.Framework.DesktopGL
         private Toolkit toolkit;
         private int isExiting; // int, so we can use Interlocked.Increment
         
-		public OpenTKGamePlatform(Game game, OpenTKGameWindow view)
-            : base(game)
+		private GameBackbone mGame;
+		private IGraphicsDeviceManager mGraphics;
+		public OpenTKGamePlatform(GameBackbone game, IGraphicsDeviceManager graphics, OpenTKGameWindow view)
+			: base(graphics)
         {
+			mGame = game;
+			mGraphics = graphics;
             toolkit = Toolkit.Init();
 			_view = view;
             this.Window = _view;
@@ -142,7 +146,7 @@ namespace Microsoft.Xna.Framework.DesktopGL
                     break;
                 }
 
-                Game.Tick();
+				mGame.Tick();
             }
         }
 
@@ -198,7 +202,7 @@ namespace Microsoft.Xna.Framework.DesktopGL
             ResetWindowBounds();
         }
 
-        internal void ResetWindowBounds()
+		public void ResetWindowBounds()
         {
             Rectangle bounds;
 
@@ -211,12 +215,11 @@ namespace Microsoft.Xna.Framework.DesktopGL
             bool wasActive = IsActive;
             IsActive = false;
 
-            var graphicsDeviceManager = (GraphicsDeviceManager)
-                Game.Services.GetService(typeof(IGraphicsDeviceManager));
+			var graphicsDeviceManager = mGraphics;
 
             if (graphicsDeviceManager.IsFullScreen)
             {
-                bounds = new Rectangle(0, 0,graphicsDeviceManager.PreferredBackBufferWidth,graphicsDeviceManager.PreferredBackBufferHeight);
+                bounds = new Rectangle(0, 0, graphicsDeviceManager.PreferredBackBufferWidth,graphicsDeviceManager.PreferredBackBufferHeight);
 
                 if (OpenTK.DisplayDevice.Default.Width != graphicsDeviceManager.PreferredBackBufferWidth ||
                     OpenTK.DisplayDevice.Default.Height != graphicsDeviceManager.PreferredBackBufferHeight)
@@ -239,7 +242,7 @@ namespace Microsoft.Xna.Framework.DesktopGL
             
 
             // Now we set our Presentation Parameters
-            var device = (GraphicsDevice)graphicsDeviceManager.GraphicsDevice;
+            var device = mGame.GraphicsDevice;
             // FIXME: Eliminate the need for null checks by only calling
             //        ResetWindowBounds after the device is ready.  Or,
             //        possibly break this method into smaller methods.
@@ -283,7 +286,7 @@ namespace Microsoft.Xna.Framework.DesktopGL
 
         public override void Present()
         {
-            var device = Game.GraphicsDevice;
+            var device = mGame.GraphicsDevice;
             if (device != null)
                 device.Present();
         }

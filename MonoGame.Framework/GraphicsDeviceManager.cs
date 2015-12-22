@@ -22,9 +22,9 @@ using Android.Views;
 
 namespace Microsoft.Xna.Framework
 {
-    public class GraphicsDeviceManager : IGraphicsDeviceService, IDisposable, IGraphicsDeviceManager
+	public class GraphicsDeviceManager : IGraphicsDeviceService, IGraphicsDeviceManager
     {
-        private Game _game;
+        private GameBackbone _game;
         private GraphicsDevice _graphicsDevice;
         private int _preferredBackBufferHeight;
         private int _preferredBackBufferWidth;
@@ -44,13 +44,24 @@ namespace Microsoft.Xna.Framework
 #if !WINRT || WINDOWS_UAP
         private bool _wantFullScreen = false;
 #endif
-        public static readonly int DefaultBackBufferHeight = 480;
-        public static readonly int DefaultBackBufferWidth = 800;
+		public int DefaultBackBufferHeight
+		{
+			get {
+				return 480;
+			}
+		}
+
+		public int DefaultBackBufferWidth {
+			get {
+				return 800;
+			}
+		}
 
 		private IGraphicsDevicePlatform mDevicePlatform;
 		private ISamplerStateCollectionPlatform mSamplerStateCollectionPlatform;
 		private ITextureCollectionPlatform mTextureCollectionPlatform;
-		public GraphicsDeviceManager(Game game, IGraphicsDevicePlatform devicePlatform, ISamplerStateCollectionPlatform samplerStateCollectionPlatform, ITextureCollectionPlatform texCollectionPlatform)
+
+		public GraphicsDeviceManager(GameBackbone game, IGraphicsDevicePlatform devicePlatform, ISamplerStateCollectionPlatform samplerStateCollectionPlatform, ITextureCollectionPlatform texCollectionPlatform)
         {
 			mDevicePlatform = devicePlatform;
 			mSamplerStateCollectionPlatform = samplerStateCollectionPlatform;
@@ -80,14 +91,14 @@ namespace Microsoft.Xna.Framework
 
 			GraphicsProfile = devicePlatform.GetHighestSupportedGraphicsProfile(null);
 
-            if (_game.Services.GetService(typeof(IGraphicsDeviceManager)) != null)
-                throw new ArgumentException("Graphics Device Manager Already Present");
+//            if (_game.Services.GetService(typeof(IGraphicsDeviceManager)) != null)
+//                throw new ArgumentException("Graphics Device Manager Already Present");
 
-            _game.Services.AddService(typeof(IGraphicsDeviceManager), this);
-            _game.Services.AddService(typeof(IGraphicsDeviceService), this);
+//            _game.Services.AddService(typeof(IGraphicsDeviceManager), this);
+//            _game.Services.AddService(typeof(IGraphicsDeviceService), this);
         }
 
-        ~GraphicsDeviceManager()
+		~GraphicsDeviceManager()
         {
             Dispose(false);
         }
@@ -328,7 +339,7 @@ namespace Microsoft.Xna.Framework
 
         private void Initialize()
         {
-            var presentationParameters = new PresentationParameters();
+            var presentationParameters = new PresentationParameters(this);
             presentationParameters.DepthStencilFormat = DepthFormat.Depth24;
 
 #if (WINDOWS || WINRT) && !DESKTOPGL

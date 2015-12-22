@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{6E03191C-70AE-4B0B-8782-68D377B72A0F}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Microsoft.Xna.Framework</RootNamespace>
+    <AssemblyName>Microsoft.Xna.Framework</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+    <DefineConstants>DESKTOPGL;</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Serialization" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Drawing" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="MonoGame.Framework\Graphics\IGraphicsAdapter.cs" />
+    <Compile Include="MonoGame.Framework\Audio\ISoundEffectInstancePoolPlatform.cs" />
+    <Compile Include="MonoGame.Framework\Content\IContentManager.cs" />
+    <Compile Include="MonoGame.Framework\Content\IContentTypeReaderManager.cs" />
+    <Compile Include="MonoGame.Framework\Media\ISongPlatform.cs" />
+    <Compile Include="MonoGame.Framework\Graphics\IGraphicsDevicePlatform.cs" />
+    <Compile Include="MonoGame.Framework\Graphics\States\IBlendStatePlatform.cs" />
+    <Compile Include="MonoGame.Framework\Graphics\States\IRasterizerStatePlatform.cs" />
+    <Compile Include="MonoGame.Framework\Graphics\Vertices\IVertexBufferPlatform.cs" />
+    <Compile Include="MonoGame.Framework\Graphics\ITexture3DPlatform.cs" />
+    <Compile Include="MonoGame.Framework\Graphics\Vertices\IIndexBufferPlatform.cs" />
+    <Compile Include="MonoGame.Framework\Graphics\Shader\IShaderPlatform.cs" />
+    <Compile Include="MonoGame.Framework\Graphics\Shader\IConstantBufferPlatform.cs" />
+    <Compile Include="MonoGame.Framework\Graphics\ITexturePlatform.cs" />
+    <Compile Include="MonoGame.Framework\Graphics\SurfaceType.cs" />
+    <Compile Include="MonoGame.Framework\Graphics\IRenderTarget2DPlatform.cs" />
+    <Compile Include="MonoGame.Framework\Graphics\ITexture2DPlatform.cs" />
+    <Compile Include="MonoGame.Framework\Graphics\ITextureCubePlatform.cs" />
+    <Compile Include="MonoGame.Framework\Graphics\IRenderTargetCubePlatform.cs" />
+    <Compile Include="MonoGame.Framework\Graphics\ISamplerStateCollectionPlatform.cs" />
+    <Compile Include="MonoGame.Framework\Graphics\ITextureCollectionPlatform.cs" />
+    <Compile Include="MonoGame.Framework\Audio\ISoundEffectInstancePlatform.cs" />
+    <Compile Include="MonoGame.Framework\Input\IMouseListener.cs" />
+    <Compile Include="MonoGame.Framework\SortingFilteringCollection.cs" />
+    <Compile Include="MonoGame.Framework\Game.cs" />
+    <Compile Include="MonoGame.Framework\GameWindow.cs" />
+    <Compile Include="MonoGame.Framework\Rectangle.cs" />
+    <Compile Include="MonoGame.Framework\DisplayOrientation.cs" />
+    <Compile Include="MonoGame.Framework\Input\MouseState.cs" />
+    <Compile Include="MonoGame.Framework\Input\Touch\TouchPanelState.cs" />
+    <Compile Include="MonoGame.Framework\Point.cs" />
+    <Compile Include="MonoGame.Framework\Vector2.cs" />
+    <Compile Include="MonoGame.Framework\Input\ButtonState.cs" />
+    <Compile Include="MonoGame.Framework\Input\Touch\TouchLocation.cs" />
+    <Compile Include="MonoGame.Framework\Input\Touch\GestureSample.cs" />
+    <Compile Include="MonoGame.Framework\Input\Touch\TouchPanelCapabilities.cs" />
+    <Compile Include="MonoGame.Framework\Input\Touch\TouchCollection.cs" />
+    <Compile Include="MonoGame.Framework\Input\Touch\TouchLocationState.cs" />
+    <Compile Include="MonoGame.Framework\Input\Touch\GestureType.cs" />
+    <Compile Include="MonoGame.Framework\Matrix.cs" />
+    <Compile Include="MonoGame.Framework\Quaternion.cs" />
+    <Compile Include="MonoGame.Framework\Vector3.cs" />
+    <Compile Include="MonoGame.Framework\Vector4.cs" />
+    <Compile Include="MonoGame.Framework\Plane.cs" />
+    <Compile Include="MonoGame.Framework\BoundingBox.cs" />
+    <Compile Include="MonoGame.Framework\PlaneIntersectionType.cs" />
+    <Compile Include="MonoGame.Framework\BoundingFrustum.cs" />
+    <Compile Include="MonoGame.Framework\BoundingSphere.cs" />
+    <Compile Include="MonoGame.Framework\ContainmentType.cs" />
+    <Compile Include="MonoGame.Framework\Ray.cs" />
+    <Compile Include="MonoGame.Framework\MathHelper.cs" />
+    <Compile Include="MonoGame.Framework\Input\Touch\TouchPanel.cs" />
+    <Compile Include="MonoGame.Framework\TextInputEventArgs.cs" />
+    <Compile Include="MonoGame.Framework\Input\Keys.cs" />
+    <Compile Include="MonoGame.Framework\GamePlatform.cs" />
+    <Compile Include="MonoGame.Framework\GameTime.cs" />
+    <Compile Include="MonoGame.Framework\IUpdateable.cs" />
+    <Compile Include="MonoGame.Framework\GameComponentCollection.cs" />
+    <Compile Include="MonoGame.Framework\IGameComponent.cs" />
+    <Compile Include="MonoGame.Framework\LaunchParameters.cs" />
+    <Compile Include="MonoGame.Framework\GameServiceContainer.cs" />
+    <Compile Include="MonoGame.Framework\Utilities\ReflectionHelpers.cs" />
+    <Compile Include="MonoGame.Framework\GameComponentCollectionEventArgs.cs" />
+    <Compile Include="MonoGame.Framework\IDrawable.cs" />
+    <Compile Include="MonoGame.Framework\Graphics\IGraphicsDeviceService.cs" />
+    <Compile Include="MonoGame.Framework\Graphics\GraphicsDevice.cs" />
+    <Compile Include="MonoGame.Framework\Graphics\Viewport.cs" />
+    <Compile Include="MonoGame.Framework\IGraphicsDeviceManager.cs" />
+    <Compile Include="MonoGame.Framework\Graphics\Vertices\PrimitiveType.cs" />
+    <Compile Include="MonoGame.Framework\Graphics\Vertices\IVertexType.cs" />
+    <Compile Include="MonoGame.Framework\Graphics\Vertices\VertexDeclaration.cs" />
+    <Compile Include="MonoGame.Framework\Graphics\Vertices\VertexElement.cs" />
+    <Compile Include="MonoGame.Framework\Graphics\Vertices\VertexElementFormat.cs" />
+    <Compile Include="MonoGame.Framework\Graphics\Vertices\VertexElementUsage.cs" />
+    <Compile Include="MonoGame.Framework\Graphics\GraphicsProfile.cs" />
+    <Compile Include="MonoGame.Framework\Graphics\States\BlendState.cs" />
+    <Compile Include="MonoGame.Framework\Graphics\States\DepthStencilState.cs" />
+    <Compile Include="MonoGame.Framework\Graphics\States\RasterizerState.cs" />
+    <Compile Include="MonoGame.Framework\Graphics\States\Blend.cs" />
+    <Compile Include="MonoGame.Framework\Graphics\States\BlendFunction.cs" />
+    <Compile Include="MonoGame.Framework\Graphics\ColorWriteChannels.cs" />
+    <Compile Include="MonoGame.Framework\Graphics\States\TargetBlendState.cs" />
+    <Compile Include="MonoGame.Framework\Graphics\States\StencilOperation.cs" />
+    <Compile Include="MonoGame.Framework\Graphics\States\CullMode.cs" />
+    <Compile Include="MonoGame.Framework\Graphics\States\CompareFunction.cs" />
+    <Compile Include="MonoGame.Framework\GraphicsDeviceManager.cs" />
+    <Compile Include="MonoGame.Framework\Graphics\States\FillMode.cs" />
+    <Compile Include="MonoGame.Framework\Graphics\States\DepthFormat.cs" />
+    <Compile Include="MonoGame.Framework\Graphics\SurfaceFormat.cs" />
+    <Compile Include="MonoGame.Framework\Graphics\GraphicsResource.cs" />
+    <Compile Include="MonoGame.Framework\PreparingDeviceSettingsEventArgs.cs" />
+    <Compile Include="MonoGame.Framework\GraphicsDeviceInformation.cs" />
+    <Compile Include="MonoGame.Framework\Graphics\Vertices\VertexBuffer.cs" />
+    <Compile Include="MonoGame.Framework\Graphics\Vertices\IndexBuffer.cs" />
+    <Compile Include="MonoGame.Framework\Color.cs" />
+    <Compile Include="MonoGame.Framework\Graphics\Shader\Shader.cs" />
+    <Compile Include="MonoGame.Framework\Graphics\Shader\ShaderStage.cs" />
+    <Compile Include="MonoGame.Framework\Graphics\Shader\ConstantBuffer.cs" />
+    <Compile Include="MonoGame.Framework\Graphics\RenderTargetBinding.cs" />
+    <Compile Include="MonoGame.Framework\GameRunBehavior.cs" />
+    <Compile Include="MonoGame.Framework\Graphics\RenderTarget2D.cs" />
+    <Compile Include="MonoGame.Framework\Graphics\RenderTargetCube.cs" />
+    <Compile Include="MonoGame.Framework\Graphics\RenderTargetUsage.cs" />
+    <Compile Include="MonoGame.Framework\Graphics\IRenderTarget.cs" />
+    <Compile Include="MonoGame.Framework\Graphics\Texture2D.cs" />
+    <Compile Include="MonoGame.Framework\Graphics\CubeMapFace.cs" />
+    <Compile Include="MonoGame.Framework\Graphics\Texture.cs" />
+    <Compile Include="MonoGame.Framework\Graphics\Vertices\BufferUsage.cs" />
+    <Compile Include="MonoGame.Framework\Graphics\Vertices\IndexElementSize.cs" />
+    <Compile Include="MonoGame.Framework\Graphics\SetDataOptions.cs" />
+    <Compile Include="MonoGame.Framework\Graphics\SamplerStateCollection.cs" />
+    <Compile Include="MonoGame.Framework\Graphics\TextureCollection.cs" />
+    <Compile Include="MonoGame.Framework\Graphics\GraphicsCapabilities.cs" />
+    <Compile Include="MonoGame.Framework\Graphics\States\SamplerState.cs" />
+    <Compile Include="MonoGame.Framework\Graphics\States\TextureAddressMode.cs" />
+    <Compile Include="MonoGame.Framework\Graphics\States\TextureFilter.cs" />
+    <Compile Include="MonoGame.Framework\Graphics\GraphicsAdapter.cs" />
+    <Compile Include="MonoGame.Framework\Graphics\PresentationParameters.cs" />
+    <Compile Include="MonoGame.Framework\Graphics\DisplayMode.cs" />
+    <Compile Include="MonoGame.Framework\Graphics\DisplayModeCollection.cs" />
+    <Compile Include="MonoGame.Framework\Graphics\ClearOptions.cs" />
+    <Compile Include="MonoGame.Framework\Graphics\GraphicsMetrics.cs" />
+    <Compile Include="MonoGame.Framework\Graphics\PresentInterval.cs" />
+    <Compile Include="MonoGame.Framework\Graphics\Effect\EffectParameter.cs" />
+    <Compile Include="MonoGame.Framework\Graphics\Effect\EffectParameterCollection.cs" />
+    <Compile Include="MonoGame.Framework\Graphics\Effect\EffectAnnotationCollection.cs" />
+    <Compile Include="MonoGame.Framework\Graphics\Effect\EffectParameterClass.cs" />
+    <Compile Include="MonoGame.Framework\Graphics\Effect\EffectParameterType.cs" />
+    <Compile Include="MonoGame.Framework\Graphics\Effect\EffectAnnotation.cs" />
+    <Compile Include="MonoGame.Framework\Graphics\Effect\Effect.cs" />
+    <Compile Include="MonoGame.Framework\Graphics\ResourceCreatedEventArgs.cs" />
+    <Compile Include="MonoGame.Framework\Graphics\ResourceDestroyedEventArgs.cs" />
+    <Compile Include="MonoGame.Framework\Graphics\Texture3D.cs" />
+    <Compile Include="MonoGame.Framework\Graphics\TextureCube.cs" />
+    <Compile Include="MonoGame.Framework\Graphics\Effect\EffectPass.cs" />
+    <Compile Include="MonoGame.Framework\Graphics\Effect\EffectPassCollection.cs" />
+    <Compile Include="MonoGame.Framework\Graphics\Effect\EffectTechnique.cs" />
+    <Compile Include="MonoGame.Framework\Graphics\Effect\EffectTechniqueCollection.cs" />
+    <Compile Include="MonoGame.Framework\Graphics\GraphicsDeviceStatus.cs" />
+    <Compile Include="MonoGame.Framework\Graphics\Shader\ConstantBufferCollection.cs" />
+    <Compile Include="MonoGame.Framework\Utilities\Hash.cs" />
+    <Compile Include="MonoGame.Framework\Media\Song.cs" />
+    <Compile Include="MonoGame.Framework\Media\Album.cs" />
+    <Compile Include="MonoGame.Framework\Media\Artist.cs" />
+    <Compile Include="MonoGame.Framework\Media\Genre.cs" />
+    <Compile Include="MonoGame.Framework\Media\SongCollection.cs" />
+    <Compile Include="MonoGame.Framework\Media\AlbumCollection.cs" />
+    <Compile Include="MonoGame.Framework\Input\Mouse.cs" />
+    <Compile Include="MonoGame.Framework\TitleContainer.cs" />
+    <Compile Include="MonoGame.Framework\FrameworkResources.cs" />
+    <Compile Include="MonoGame.Framework\Utilities\FileHelpers.cs" />
+    <Compile Include="MonoGame.Framework\Graphics\States\IDepthStencilStatePlatform.cs" />
+    <Compile Include="MonoGame.Framework\Graphics\Vertices\VertexDeclarationCache.cs" />
+    <Compile Include="MonoGame.Framework\Audio\AudioChannels.cs" />
+    <Compile Include="MonoGame.Framework\Audio\AudioEmitter.cs" />
+    <Compile Include="MonoGame.Framework\Audio\AudioListener.cs" />
+    <Compile Include="MonoGame.Framework\Audio\ISoundEffectPlatform.cs" />
+    <Compile Include="MonoGame.Framework\Audio\SoundEffect.cs" />
+    <Compile Include="MonoGame.Framework\Audio\SoundEffectInstance.cs" />
+    <Compile Include="MonoGame.Framework\Audio\SoundState.cs" />
+    <Compile Include="MonoGame.Framework\Audio\SoundEffectInstancePool.cs" />
+    <Compile Include="MonoGame.Framework\Audio\InstancePlayLimitException.cs" />
+    <Compile Include="MonoGame.Framework\Input\Keyboard.cs" />
+    <Compile Include="MonoGame.Framework\Input\KeyboardState.cs" />
+    <Compile Include="MonoGame.Framework\PlayerIndex.cs" />
+    <Compile Include="MonoGame.Framework\Input\KeyState.cs" />
+    <Compile Include="MonoGame.Framework\Utilities\AssemblyHelper.cs" />
+    <Compile Include="MonoGame.Framework\Audio\NoAudioHardwareException.cs" />
+    <Compile Include="MonoGame.Framework\Utilities\CurrentPlatform.cs" />
+    <Compile Include="MonoGame.Framework\Input\Touch\TouchQueue.cs" />
+    <Compile Include="MonoGame.Framework\Graphics\GraphicsExtensions.cs" />
+    <Compile Include="MonoGame.Framework\Graphics\IGraphicsCapabilities.cs" />
+    <Compile Include="MonoGame.Framework\GameBackbone.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+</Project>
