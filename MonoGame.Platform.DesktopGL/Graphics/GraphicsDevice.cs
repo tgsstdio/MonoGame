@@ -5,11 +5,16 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework;
 
 
-namespace Microsoft.Xna.Framework.Graphics
+namespace MonoGame.Platform.DesktopGL.Graphics
 {
-	public partial class GraphicsDevice : IGraphicsDevice, IDisposable
+	using Rectangle = Microsoft.Xna.Framework.Rectangle;
+	using Color = Microsoft.Xna.Framework.Color;
+
+    public partial class GraphicsDevice : IGraphicsDevice, IDisposable
     {
         private Viewport _viewport;
         private GraphicsProfile _graphicsProfile;
@@ -182,7 +187,11 @@ namespace Microsoft.Xna.Framework.Graphics
 		private ISamplerStateCollectionPlatform mSamplerStateCollectionPlatform;
 		private ITextureCollectionPlatform mTextureCollectionPlatform;
 
-		public GraphicsDevice (PresentationParameters parameters, IGraphicsDevicePlatform platform, ISamplerStateCollectionPlatform samplerStateCollectionPlatform, ITextureCollectionPlatform texCollectionPlatform)
+		public GraphicsDevice (
+			PresentationParameters parameters,
+			IGraphicsDevicePlatform platform,
+			ISamplerStateCollectionPlatform samplerStateCollectionPlatform,
+			ITextureCollectionPlatform texCollectionPlatform)
 		{
 			mPlatform = platform;
 			mSamplerStateCollectionPlatform = samplerStateCollectionPlatform;
@@ -195,29 +204,9 @@ namespace Microsoft.Xna.Framework.Graphics
             Initialize();
         }	
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="GraphicsDevice" /> class.
-        /// </summary>
-		/// <param name = "platform"></param>
-		/// <param name = "samplerStateCollectionPlatform"></param>
-		/// <param name = "texCollectionPlatform"></param>
-		/// <param name = "textureCollectionPlatform"></param>
-        /// <param name="adapter">The graphics adapter.</param>
-        /// <param name="graphicsProfile">The graphics profile.</param>
-        /// <param name="presentationParameters">The presentation options.</param>
-        /// <exception cref="ArgumentNullException">
-        /// <paramref name="presentationParameters"/> is <see langword="null"/>.
-        /// </exception>
-		public GraphicsDevice(IGraphicsDevicePlatform platform, ISamplerStateCollectionPlatform samplerStateCollectionPlatform, ITextureCollectionPlatform texCollectionPlatform, GraphicsAdapter adapter, GraphicsProfile graphicsProfile, PresentationParameters presentationParameters)
-        {
-			mPlatform = platform;
-			mSamplerStateCollectionPlatform = samplerStateCollectionPlatform;
-			mTextureCollectionPlatform = texCollectionPlatform;
-
+		public void CreateDevice(GraphicsAdapter adapter, GraphicsProfile graphicsProfile)
+		{
             Adapter = adapter;
-            if (presentationParameters == null)
-                throw new ArgumentNullException("presentationParameters");
-            PresentationParameters = presentationParameters;
             Setup();
             GraphicsCapabilities = new GraphicsCapabilities(this);
             GraphicsProfile = graphicsProfile;

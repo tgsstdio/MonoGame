@@ -20,9 +20,9 @@ using TexCoordPointerType = OpenTK.Graphics.ES20.All;
 #endif
 #endif
 
-namespace Microsoft.Xna.Framework.DesktopGL.Graphics
+namespace MonoGame.Platform.DesktopGL.Graphics
 {
-	static class DesktopGLGraphicsExtensions
+	static class GraphicsExtensions
 	{
 		#if OPENGL
 		public static All OpenGL11(CullMode cull)
@@ -764,7 +764,7 @@ namespace Microsoft.Xna.Framework.DesktopGL.Graphics
 		{
 			var prevTexture = 0;
 			GL.GetInteger(GetPName.TextureBinding2D, out prevTexture);
-			DesktopGLGraphicsExtensions.LogGLError("GraphicsExtensions.GetBoundTexture2D() GL.GetInteger");
+			GraphicsExtensions.LogGLError("GraphicsExtensions.GetBoundTexture2D() GL.GetInteger");
 			return prevTexture;
 		}
 
@@ -788,7 +788,7 @@ namespace Microsoft.Xna.Framework.DesktopGL.Graphics
 		{
 			try
 			{
-				DesktopGLGraphicsExtensions.CheckGLError();
+				GraphicsExtensions.CheckGLError();
 			}
 			catch (MonoGameGLException ex)
 			{

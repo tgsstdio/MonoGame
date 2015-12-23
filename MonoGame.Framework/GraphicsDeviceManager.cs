@@ -25,7 +25,7 @@ namespace Microsoft.Xna.Framework
 	public class GraphicsDeviceManager : IGraphicsDeviceService, IGraphicsDeviceManager
     {
         private GameBackbone _game;
-        private GraphicsDevice _graphicsDevice;
+		private IGraphicsDevice _graphicsDevice;
         private int _preferredBackBufferHeight;
         private int _preferredBackBufferWidth;
         private SurfaceFormat _preferredBackBufferFormat;
@@ -44,28 +44,24 @@ namespace Microsoft.Xna.Framework
 #if !WINRT || WINDOWS_UAP
         private bool _wantFullScreen = false;
 #endif
-		public int DefaultBackBufferHeight
-		{
-			get {
-				return 480;
-			}
-		}
-
-		public int DefaultBackBufferWidth {
-			get {
-				return 800;
-			}
-		}
 
 		private IGraphicsDevicePlatform mDevicePlatform;
 		private ISamplerStateCollectionPlatform mSamplerStateCollectionPlatform;
 		private ITextureCollectionPlatform mTextureCollectionPlatform;
+		private PresentationParameters mPresentationParameters;
 
-		public GraphicsDeviceManager(GameBackbone game, IGraphicsDevicePlatform devicePlatform, ISamplerStateCollectionPlatform samplerStateCollectionPlatform, ITextureCollectionPlatform texCollectionPlatform)
+		public GraphicsDeviceManager(
+			GameBackbone game,
+			IGraphicsDevice graphicsDevice,
+			IGraphicsDevicePlatform devicePlatform,
+			ITextureCollectionPlatform texCollectionPlatform,
+			PresentationParameters preferences
+			)
         {
+			_graphicsDevice = graphicsDevice;
 			mDevicePlatform = devicePlatform;
-			mSamplerStateCollectionPlatform = samplerStateCollectionPlatform;
 			mTextureCollectionPlatform = texCollectionPlatform;
+			mPresentationParameters = preferences;
 
             if (game == null)
                 throw new ArgumentNullException("The game cannot be null!");
@@ -339,8 +335,7 @@ namespace Microsoft.Xna.Framework
 
         private void Initialize()
         {
-            var presentationParameters = new PresentationParameters(this);
-            presentationParameters.DepthStencilFormat = DepthFormat.Depth24;
+            mPresentationParameters.DepthStencilFormat = DepthFormat.Depth24;
 
 #if (WINDOWS || WINRT) && !DESKTOPGL
             _game.Window.SetSupportedOrientations(_supportedOrientations);
@@ -381,7 +376,7 @@ namespace Microsoft.Xna.Framework
             presentationParameters.IsFullScreen = _wantFullScreen;
 #else
             // Set "full screen"  as default
-            presentationParameters.IsFullScreen = true;
+            mPresentationParameters.IsFullScreen = true;
 #endif // MONOMAC
 
 #endif // WINDOWS || WINRT
@@ -392,16 +387,16 @@ namespace Microsoft.Xna.Framework
                 GraphicsDeviceInformation gdi = new GraphicsDeviceInformation();
                 gdi.GraphicsProfile = GraphicsProfile; // Microsoft defaults this to Reach.
                 gdi.Adapter = GraphicsAdapter.DefaultAdapter;
-                gdi.PresentationParameters = presentationParameters;
+                gdi.PresentationParameters = mPresentationParameters;
                 PreparingDeviceSettingsEventArgs pe = new PreparingDeviceSettingsEventArgs(gdi);
                 PreparingDeviceSettings(this, pe);
-                presentationParameters = pe.GraphicsDeviceInformation.PresentationParameters;
+                mPresentationParameters = pe.GraphicsDeviceInformation.PresentationParameters;
                 GraphicsProfile = pe.GraphicsDeviceInformation.GraphicsProfile;
             }
 
             // Needs to be before ApplyChanges()
-		_graphicsDevice = new GraphicsDevice(mDevicePlatform, mSamplerStateCollectionPlatform, mTextureCollectionPlatform, GraphicsAdapter.DefaultAdapter, GraphicsProfile, presentationParameters);
-
+		//_graphicsDevice = new GraphicsDevice(mDevicePlatform, mSamplerStateCollectionPlatform, mTextureCollectionPlatform, GraphicsAdapter.DefaultAdapter, GraphicsProfile, mPresentationParameters);
+		_graphicsDevice.CreateDevice(GraphicsAdapter.DefaultAdapter, GraphicsProfile);
 #if !MONOMAC
             ApplyChanges();
 #endif
@@ -438,7 +433,7 @@ namespace Microsoft.Xna.Framework
 
 		public GraphicsProfile GraphicsProfile { get; set; }
 
-        public GraphicsDevice GraphicsDevice
+        public IGraphicsDevice GraphicsDevice
         {
             get
             {

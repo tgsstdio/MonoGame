@@ -41,12 +41,12 @@ namespace Microsoft.Xna.Framework.Graphics
         #endregion Private Fields
 
         #region Constructors
-		private IGraphicsDeviceManager mManager;
-		public PresentationParameters(IGraphicsDeviceManager manager)
+		private IBackBufferPreferences mPreferences;
+		public PresentationParameters(IBackBufferPreferences preferences)
         {
-			mManager = manager;
-			backBufferHeight = mManager.DefaultBackBufferHeight;
-			backBufferWidth = mManager.DefaultBackBufferWidth;
+			mPreferences = preferences;
+			backBufferHeight = mPreferences.DefaultBackBufferHeight;
+			backBufferWidth = mPreferences.DefaultBackBufferWidth;
             Clear();
         }
 
@@ -168,8 +168,8 @@ namespace Microsoft.Xna.Framework.Graphics
 			backBufferWidth = width;
             backBufferHeight = height;
 #else
-			backBufferWidth = mManager.DefaultBackBufferWidth;
-			backBufferHeight = mManager.DefaultBackBufferHeight;     
+			backBufferWidth = mPreferences.DefaultBackBufferWidth;
+			backBufferHeight = mPreferences.DefaultBackBufferHeight;     
 #endif
             deviceWindowHandle = IntPtr.Zero;
 #if IOS
@@ -185,7 +185,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         public PresentationParameters Clone()
         {
-			PresentationParameters clone = new PresentationParameters(mManager);
+			PresentationParameters clone = new PresentationParameters(mPreferences);
             clone.backBufferFormat = this.backBufferFormat;
             clone.backBufferHeight = this.backBufferHeight;
             clone.backBufferWidth = this.backBufferWidth;

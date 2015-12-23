@@ -4,7 +4,7 @@
 
 namespace Microsoft.Xna.Framework.Graphics
 {
-    internal sealed class ConstantBufferCollection
+    public sealed class ConstantBufferCollection
     {
         private readonly ConstantBuffer[] _buffers;
 
@@ -13,7 +13,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private int _valid;
 
-        internal ConstantBufferCollection(ShaderStage stage, int maxBuffers)
+        public ConstantBufferCollection(ShaderStage stage, int maxBuffers)
         {
             _stage = stage;
             _buffers = new ConstantBuffer[maxBuffers];
@@ -41,7 +41,7 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        internal void Clear()
+        public void Clear()
         {
             for (var i = 0; i < _buffers.Length; i++)
                 _buffers[i] = null;

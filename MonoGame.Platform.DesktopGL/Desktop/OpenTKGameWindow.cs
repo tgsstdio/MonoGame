@@ -36,8 +36,7 @@ or conditions. You may have additional consumer rights under your local laws whi
 permitted under your local laws, the contributors exclude the implied warranties of merchantability, fitness for a particular
 purpose and non-infringement.
 */
-using MonoGame.Utilities;
-using Microsoft.Xna.Framework.DesktopGL.Input;
+using MonoGame.Platform.DesktopGL.Input;
 
 
 #endregion License
@@ -52,13 +51,16 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using OpenTK;
 using OpenTK.Graphics;
-
+using MonoGame.Utilities;
+using Microsoft.Xna.Framework;
 
 #endregion Using Statements
 
-namespace Microsoft.Xna.Framework.DesktopGL
+namespace MonoGame.Platform.DesktopGL
 {
-    class OpenTKGameWindow : GameWindow, IDisposable
+	using Rectangle = Microsoft.Xna.Framework.Rectangle;
+
+    class OpenTKGameWindow : Microsoft.Xna.Framework.GameWindow, IDisposable
     {
         private bool _isResizable;
         private bool _isBorderless;
@@ -103,7 +105,7 @@ namespace Microsoft.Xna.Framework.DesktopGL
 
         public override string ScreenDeviceName { get { return window.Title; } }
 
-        public override Rectangle ClientBounds { get { return clientBounds; } }
+        public override Microsoft.Xna.Framework.Rectangle ClientBounds { get { return clientBounds; } }
 
         // TODO: this is buggy on linux - report to opentk team
         public override bool AllowUserResizing

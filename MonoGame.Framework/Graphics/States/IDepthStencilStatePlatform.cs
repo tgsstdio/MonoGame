@@ -8,7 +8,7 @@ namespace Microsoft.Xna.Framework.Graphics
 {
 	public interface IDepthStencilStatePlatform
 	{
-		void ApplyState (GraphicsDevice graphicsDevice);
+		void ApplyState (IGraphicsDevice graphicsDevice);
 	}
 }
 

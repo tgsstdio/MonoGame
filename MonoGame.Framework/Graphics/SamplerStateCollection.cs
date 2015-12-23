@@ -10,7 +10,7 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     public sealed partial class SamplerStateCollection
 	{
-        private readonly GraphicsDevice _graphicsDevice;
+        private readonly IGraphicsDevice _graphicsDevice;
 
         private readonly SamplerState _samplerStateAnisotropicClamp;
         private readonly SamplerState _samplerStateAnisotropicWrap;
@@ -24,7 +24,7 @@ namespace Microsoft.Xna.Framework.Graphics
         private readonly bool _applyToVertexStage;
 
 		private ISamplerStateCollectionPlatform mPlatform;
-		internal SamplerStateCollection(ISamplerStateCollectionPlatform platform, GraphicsDevice device, int maxSamplers, bool applyToVertexStage)
+		internal SamplerStateCollection(ISamplerStateCollectionPlatform platform, IGraphicsDevice device, int maxSamplers, bool applyToVertexStage)
 		{
 			mPlatform = platform;
 		    _graphicsDevice = device;

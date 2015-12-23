@@ -18,7 +18,7 @@ using GetProgramParameterName = OpenTK.Graphics.ES20.ProgramParameter;
 #endif
 #endif
 
-namespace Microsoft.Xna.Framework.DesktopGL.Graphics
+namespace MonoGame.Platform.DesktopGL.Graphics
 {
 
     internal class ShaderProgram
@@ -38,7 +38,7 @@ namespace Microsoft.Xna.Framework.DesktopGL.Graphics
                 return _uniformLocations[name];
 
             var location = GL.GetUniformLocation(Program, name);
-			DesktopGLGraphicsExtensions.CheckGLError();
+			GraphicsExtensions.CheckGLError();
             _uniformLocations[name] = location;
             return location;
         }
@@ -73,7 +73,7 @@ namespace Microsoft.Xna.Framework.DesktopGL.Graphics
 #else
                     GL.DeleteProgram(pair.Value.Program);
 #endif
-					DesktopGLGraphicsExtensions.CheckGLError();
+					GraphicsExtensions.CheckGLError();
                 }
             }
             _programCache.Clear();
@@ -101,21 +101,21 @@ namespace Microsoft.Xna.Framework.DesktopGL.Graphics
             // as this is only called at draw time when we're in the
             // main drawing thread.
             var program = GL.CreateProgram();
-            DesktopGLGraphicsExtensions.CheckGLError();
+            GraphicsExtensions.CheckGLError();
 
             GL.AttachShader(program, vertexShader.GetShaderHandle());
-            DesktopGLGraphicsExtensions.CheckGLError();
+            GraphicsExtensions.CheckGLError();
 
             GL.AttachShader(program, pixelShader.GetShaderHandle());
-            DesktopGLGraphicsExtensions.CheckGLError();
+            GraphicsExtensions.CheckGLError();
 
             //vertexShader.BindVertexAttributes(program);
 
             GL.LinkProgram(program);
-			DesktopGLGraphicsExtensions.CheckGLError();
+			GraphicsExtensions.CheckGLError();
 
             GL.UseProgram(program);
-			DesktopGLGraphicsExtensions.CheckGLError();
+			GraphicsExtensions.CheckGLError();
 
             vertexShader.GetVertexAttributeLocations(program);
 
@@ -124,7 +124,7 @@ namespace Microsoft.Xna.Framework.DesktopGL.Graphics
             var linked = 0;
 
             GL.GetProgram(program, GetProgramParameterName.LinkStatus, out linked);
-            DesktopGLGraphicsExtensions.LogGLError("VertexShaderCache.Link(), GL.GetProgram");
+            GraphicsExtensions.LogGLError("VertexShaderCache.Link(), GL.GetProgram");
             if (linked == 0)
             {
                 var log = GL.GetProgramInfoLog(program);

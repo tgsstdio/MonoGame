@@ -50,7 +50,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
 	    private readonly bool _isClone;
 
-		internal Effect(GraphicsDevice graphicsDevice)
+		internal Effect(IGraphicsDevice graphicsDevice)
 		{
             if (graphicsDevice == null)
             {
@@ -72,7 +72,7 @@ namespace Microsoft.Xna.Framework.Graphics
 			IBlendStatePlatform blendPlatform,
 			IDepthStencilStatePlatform depthPlatform,
 			IRasterizerStatePlatform rasterizerPlatform, 
-			GraphicsDevice graphicsDevice, byte[] effectCode)
+			IGraphicsDevice graphicsDevice, byte[] effectCode)
             : this(graphicsDevice)
 		{
 			// By default we currently cache all unique byte streams

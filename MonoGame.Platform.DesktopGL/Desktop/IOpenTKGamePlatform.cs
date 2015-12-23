@@ -66,7 +66,7 @@ non-infringement.
 */
 #endregion License
 
-namespace Microsoft.Xna.Framework.DesktopGL
+namespace MonoGame.Platform.DesktopGL
 {
 	public interface IOpenTKGamePlatform
 	{

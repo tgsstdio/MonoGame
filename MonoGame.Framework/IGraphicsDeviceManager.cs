@@ -11,12 +11,10 @@ namespace Microsoft.Xna.Framework
         bool BeginDraw();
         void CreateDevice();
         void EndDraw();
-		int DefaultBackBufferHeight { get; }
-		int DefaultBackBufferWidth { get;}
 		bool IsFullScreen { get; set; }
 		int PreferredBackBufferHeight { get; set; }
-		int PreferredBackBufferWidth { get; set; }
-		GraphicsDevice GraphicsDevice { get; }
+		int PreferredBackBufferWidth { get; set; }	
+		IGraphicsDevice GraphicsDevice { get; }
 	}
 }
 

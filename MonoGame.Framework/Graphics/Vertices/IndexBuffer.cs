@@ -15,13 +15,13 @@ namespace Microsoft.Xna.Framework.Graphics
         public int IndexCount { get; private set; }
         public IndexElementSize IndexElementSize { get; private set; }
 
-		protected IndexBuffer(IIndexBufferPlatform platform, GraphicsDevice graphicsDevice, Type indexType, int indexCount, BufferUsage usage, bool dynamic)
+		protected IndexBuffer(IIndexBufferPlatform platform, IGraphicsDevice graphicsDevice, Type indexType, int indexCount, BufferUsage usage, bool dynamic)
 			: this(platform, graphicsDevice, SizeForType(graphicsDevice, indexType), indexCount, usage, dynamic)
         {
         }
 
 		private IIndexBufferPlatform mPlatform;
-		protected IndexBuffer(IIndexBufferPlatform platform, GraphicsDevice graphicsDevice, IndexElementSize indexElementSize, int indexCount, BufferUsage usage, bool dynamic)
+		protected IndexBuffer(IIndexBufferPlatform platform, IGraphicsDevice graphicsDevice, IndexElementSize indexElementSize, int indexCount, BufferUsage usage, bool dynamic)
         {
 			mPlatform = platform;
 			if (graphicsDevice == null)
@@ -38,12 +38,12 @@ namespace Microsoft.Xna.Framework.Graphics
 			mPlatform.Construct(indexElementSize, indexCount);
 		}
 
-		public IndexBuffer(IIndexBufferPlatform platform, GraphicsDevice graphicsDevice, IndexElementSize indexElementSize, int indexCount, BufferUsage bufferUsage) :
+		public IndexBuffer(IIndexBufferPlatform platform, IGraphicsDevice graphicsDevice, IndexElementSize indexElementSize, int indexCount, BufferUsage bufferUsage) :
 		this(platform, graphicsDevice, indexElementSize, indexCount, bufferUsage, false)
 		{
 		}
 
-		public IndexBuffer(IIndexBufferPlatform platform, GraphicsDevice graphicsDevice, Type indexType, int indexCount, BufferUsage usage) :
+		public IndexBuffer(IIndexBufferPlatform platform, IGraphicsDevice graphicsDevice, Type indexType, int indexCount, BufferUsage usage) :
 		this(platform, graphicsDevice, SizeForType(graphicsDevice, indexType), indexCount, usage, false)
 		{
 		}
@@ -54,7 +54,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <param name="graphicsDevice">The graphics device.</param>
         /// <param name="type">The type to use for the index buffer</param>
         /// <returns>The IndexElementSize enum value that matches the type</returns>
-        static IndexElementSize SizeForType(GraphicsDevice graphicsDevice, Type type)
+        static IndexElementSize SizeForType(IGraphicsDevice graphicsDevice, Type type)
         {
             switch (Marshal.SizeOf(type))
             {

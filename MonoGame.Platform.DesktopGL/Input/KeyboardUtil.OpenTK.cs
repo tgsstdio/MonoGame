@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Input;
 
-namespace Microsoft.Xna.Framework.DesktopGL.Input
+namespace MonoGame.Platform.DesktopGL.Input
 {
     internal static class KeyboardUtil
     {

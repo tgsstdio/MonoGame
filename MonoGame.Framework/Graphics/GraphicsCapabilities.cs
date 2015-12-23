@@ -23,9 +23,9 @@ namespace Microsoft.Xna.Framework.Graphics
     /// </summary>
 	public class GraphicsCapabilities : IGraphicsCapabilities
     {
-        public GraphicsCapabilities(GraphicsDevice graphicsDevice)
+		public GraphicsCapabilities(IGraphicsCapabilitiesLookup extensions)
         {
-            Initialize(graphicsDevice);
+			Initialize(extensions);
         }
         /// <summary>
         /// Whether the device fully supports non power-of-two textures, including
@@ -69,24 +69,24 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </summary>
 		public bool SupportsAtitc { get; private set; }
 
-#if OPENGL
+//#if OPENGL
         /// <summary>
         /// True, if GL_ARB_framebuffer_object is supported; false otherwise.
         /// </summary>
-        internal bool SupportsFramebufferObjectARB { get; private set; }
+        public bool SupportsFramebufferObjectARB { get; private set; }
 
         /// <summary>
         /// True, if GL_EXT_framebuffer_object is supported; false otherwise.
         /// </summary>
-        internal bool SupportsFramebufferObjectEXT { get; private set; }
+		public bool SupportsFramebufferObjectEXT { get; private set; }
 
         /// <summary>
         /// Gets the max texture anisotropy. This value typically lies
         /// between 0 and 16, where 0 means anisotropic filtering is not
         /// supported.
         /// </summary>
-        internal int MaxTextureAnisotropy { get; private set; }
-#endif
+		public int MaxTextureAnisotropy { get; private set; }
+//#endif
 
 		public bool SupportsTextureMaxLevel { get; private set; }
 
@@ -103,14 +103,15 @@ namespace Microsoft.Xna.Framework.Graphics
 
 		public bool SupportsVertexTextures { get; private set; }
 
-        internal void Initialize(GraphicsDevice device)
+		internal void Initialize(IGraphicsCapabilitiesLookup extensions)
         {
-			SupportsNonPowerOfTwo = GetNonPowerOfTwo(device);
+			SupportsNonPowerOfTwo = extensions.SupportsNonPowerOfTwo();
 
 #if OPENGL
             SupportsTextureFilterAnisotropic = device._extensions.Contains("GL_EXT_texture_filter_anisotropic");
 #else
-            SupportsTextureFilterAnisotropic = true;
+			//  SupportsTextureFilterAnisotropic = true;
+			SupportsTextureFilterAnisotropic = extensions.SupportsTextureFilterAnisotropic();
 #endif
 #if GLES
 			SupportsDepth24 = device._extensions.Contains("GL_OES_depth24");
@@ -118,10 +119,15 @@ namespace Microsoft.Xna.Framework.Graphics
 			SupportsDepthNonLinear = device._extensions.Contains("GL_NV_depth_nonlinear");
             SupportsTextureMaxLevel = device._extensions.Contains("GL_APPLE_texture_max_level");
 #else
-            SupportsDepth24 = true;
-			SupportsPackedDepthStencil = true;
-			SupportsDepthNonLinear = false;
-            SupportsTextureMaxLevel = true;
+//            SupportsDepth24 = true;
+//			SupportsPackedDepthStencil = true;
+//			SupportsDepthNonLinear = false;
+//            SupportsTextureMaxLevel = true;
+
+			SupportsDepth24 = extensions.SupportsDepth24();
+			SupportsPackedDepthStencil = extensions.SupportsPackedDepthStencil();
+			SupportsDepthNonLinear = extensions.SupportsDepthNonLinear();
+			SupportsTextureMaxLevel = extensions.SupportsTextureMaxLevel();
 #endif
 
             // Texture compression
@@ -139,6 +145,11 @@ namespace Microsoft.Xna.Framework.Graphics
             SupportsAtitc = device._extensions.Contains("GL_ATI_texture_compression_atitc") ||
                 device._extensions.Contains("GL_AMD_compressed_ATC_texture");
 #endif
+			SupportsS3tc = extensions.SupportsS3tc ();
+			SupportsDxt1 = SupportsS3tc || extensions.SupportsDxt1();
+			SupportsPvrtc = extensions.SupportsPvrtc();
+			SupportsEtc1 = extensions.SupportsEtc1 ();
+			SupportsAtitc = extensions.SupportsAtitc ();
 
             // OpenGL framebuffer objects
 #if OPENGL
@@ -150,6 +161,9 @@ namespace Microsoft.Xna.Framework.Graphics
             SupportsFramebufferObjectEXT = device._extensions.Contains("GL_EXT_framebuffer_object");
 #endif
 #endif
+			SupportsFramebufferObjectARB = extensions.SupportsFramebufferObjectARB ();
+			SupportsFramebufferObjectEXT = extensions.SupportsFramebufferObjectEXT ();
+
 
             // Anisotropic filtering
 #if OPENGL
@@ -161,6 +175,7 @@ namespace Microsoft.Xna.Framework.Graphics
             }
             MaxTextureAnisotropy = anisotropy;
 #endif
+			MaxTextureAnisotropy = extensions.GetMaxTextureAnisotropy();
 
             // sRGB
 #if DIRECTX
@@ -172,6 +187,7 @@ namespace Microsoft.Xna.Framework.Graphics
             SupportsSRgb = device._extensions.Contains("GL_EXT_texture_sRGB") && device._extensions.Contains("GL_EXT_framebuffer_sRGB");
 #endif
 #endif
+			SupportsSRgb = extensions.SupportsSRgb();
 
 #if DIRECTX
             SupportsTextureArrays = device.GraphicsProfile == GraphicsProfile.HiDef;
@@ -180,38 +196,42 @@ namespace Microsoft.Xna.Framework.Graphics
             // once we can author shaders that use texture arrays.
             SupportsTextureArrays = false;
 #endif
+			SupportsTextureArrays = extensions.SupportsTextureArrays();
 
 #if DIRECTX
             SupportsDepthClamp = device.GraphicsProfile == GraphicsProfile.HiDef;
 #elif OPENGL
             SupportsDepthClamp = device._extensions.Contains("GL_ARB_depth_clamp");
 #endif
+			SupportsTextureArrays = extensions.SupportsDepthClamp();
 
 #if DIRECTX
             SupportsVertexTextures = device.GraphicsProfile == GraphicsProfile.HiDef;
 #elif OPENGL
             SupportsVertexTextures = false; // For now, until we implement vertex textures in OpenGL.
 #endif
+
+			SupportsVertexTextures = extensions.SupportsVertexTextures ();
         }
 
-        bool GetNonPowerOfTwo(GraphicsDevice device)
-        {
-#if OPENGL
-#if GLES
-            return device._extensions.Contains("GL_OES_texture_npot") ||
-                   device._extensions.Contains("GL_ARB_texture_non_power_of_two") ||
-                   device._extensions.Contains("GL_IMG_texture_npot") ||
-                   device._extensions.Contains("GL_NV_texture_npot_2D_mipmap");
-#else
-            // Unfortunately non PoT texture support is patchy even on desktop systems and we can't
-            // rely on the fact that GL2.0+ supposedly supports npot in the core.
-            // Reference: http://aras-p.info/blog/2012/10/17/non-power-of-two-textures/
-            return device._maxTextureSize >= 8192;
-#endif
-
-#else
-            return device.GraphicsProfile == GraphicsProfile.HiDef;
-#endif
-        }
+//        bool GetNonPowerOfTwo(IGraphicsDevice device)
+//        {
+//#if OPENGL
+//#if GLES
+//            return device._extensions.Contains("GL_OES_texture_npot") ||
+//                   device._extensions.Contains("GL_ARB_texture_non_power_of_two") ||
+//                   device._extensions.Contains("GL_IMG_texture_npot") ||
+//                   device._extensions.Contains("GL_NV_texture_npot_2D_mipmap");
+//#else
+//            // Unfortunately non PoT texture support is patchy even on desktop systems and we can't
+//            // rely on the fact that GL2.0+ supposedly supports npot in the core.
+//            // Reference: http://aras-p.info/blog/2012/10/17/non-power-of-two-textures/
+//            return device._maxTextureSize >= 8192;
+//#endif
+//
+//#else
+//            return device.GraphicsProfile == GraphicsProfile.HiDef;
+//#endif
+//        }
     }
 }

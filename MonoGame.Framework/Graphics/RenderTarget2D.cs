@@ -27,7 +27,7 @@ namespace Microsoft.Xna.Framework.Graphics
 			ITexturePlatform baseTexture,
 			ITexture2DPlatform tex2D,
 			IRenderTarget2DPlatform platform,
-			GraphicsDevice graphicsDevice, int width, int height, bool mipMap, SurfaceFormat preferredFormat, DepthFormat preferredDepthFormat, int preferredMultiSampleCount, RenderTargetUsage usage, bool shared, int arraySize)
+			IGraphicsDevice graphicsDevice, int width, int height, bool mipMap, SurfaceFormat preferredFormat, DepthFormat preferredDepthFormat, int preferredMultiSampleCount, RenderTargetUsage usage, bool shared, int arraySize)
 			: base(baseTexture, tex2D, graphicsDevice, width, height, mipMap, preferredFormat, SurfaceType.RenderTarget, shared, arraySize)
 	    {
 			mPlatform = platform;
@@ -43,7 +43,7 @@ namespace Microsoft.Xna.Framework.Graphics
 			ITexturePlatform baseTexture,
 			ITexture2DPlatform tex2D,
 			IRenderTarget2DPlatform platform,
-			GraphicsDevice graphicsDevice,
+			IGraphicsDevice graphicsDevice,
 			int width, int height, bool mipMap, SurfaceFormat preferredFormat, DepthFormat preferredDepthFormat, int preferredMultiSampleCount, RenderTargetUsage usage, bool shared)
 			: this(baseTexture, tex2D, platform, graphicsDevice, width, height, mipMap, preferredFormat, preferredDepthFormat, preferredMultiSampleCount, usage, shared, 1)
         {
@@ -54,7 +54,7 @@ namespace Microsoft.Xna.Framework.Graphics
 			ITexturePlatform baseTexture,
 			ITexture2DPlatform tex2D,
 			IRenderTarget2DPlatform platform,
-			GraphicsDevice graphicsDevice, int width, int height, bool mipMap, SurfaceFormat preferredFormat, DepthFormat preferredDepthFormat, int preferredMultiSampleCount, RenderTargetUsage usage)
+			IGraphicsDevice graphicsDevice, int width, int height, bool mipMap, SurfaceFormat preferredFormat, DepthFormat preferredDepthFormat, int preferredMultiSampleCount, RenderTargetUsage usage)
 			:this (baseTexture, tex2D, platform, graphicsDevice, width, height, mipMap, preferredFormat, preferredDepthFormat, preferredMultiSampleCount, usage, false)
         {}
 
@@ -62,7 +62,7 @@ namespace Microsoft.Xna.Framework.Graphics
 			ITexturePlatform baseTexture,
 			ITexture2DPlatform tex2D,
 			IRenderTarget2DPlatform platform,
-			GraphicsDevice graphicsDevice, int width, int height, bool mipMap, SurfaceFormat preferredFormat, DepthFormat preferredDepthFormat)
+			IGraphicsDevice graphicsDevice, int width, int height, bool mipMap, SurfaceFormat preferredFormat, DepthFormat preferredDepthFormat)
 			:this (baseTexture, tex2D, platform, graphicsDevice, width, height, mipMap, preferredFormat, preferredDepthFormat, 0, RenderTargetUsage.DiscardContents) 
 		{}
 		
@@ -70,7 +70,7 @@ namespace Microsoft.Xna.Framework.Graphics
 			ITexturePlatform baseTexture,
 			ITexture2DPlatform tex2D,
 			IRenderTarget2DPlatform platform,
-			GraphicsDevice graphicsDevice, int width, int height)
+			IGraphicsDevice graphicsDevice, int width, int height)
 			: this(baseTexture, tex2D, platform, graphicsDevice, width, height, false, SurfaceFormat.Color, DepthFormat.None, 0, RenderTargetUsage.DiscardContents) 
 		{}
 
@@ -83,7 +83,7 @@ namespace Microsoft.Xna.Framework.Graphics
 			ITexturePlatform baseTexture,
 			ITexture2DPlatform tex2D,
 			IRenderTarget2DPlatform platform,
-			GraphicsDevice graphicsDevice,
+			IGraphicsDevice graphicsDevice,
                 int width,
                 int height,
                 bool mipMap,

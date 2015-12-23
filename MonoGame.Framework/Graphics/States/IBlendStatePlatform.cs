@@ -8,7 +8,7 @@ namespace Microsoft.Xna.Framework.Graphics
 {
 	public interface IBlendStatePlatform
 	{
-		void ApplyState(GraphicsDevice device);
+		void ApplyState(IGraphicsDevice device);
 	}
 }
 

@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework;
 
 #if MONOMAC
 using MonoMac.OpenGL;
@@ -31,7 +32,7 @@ using GLPrimitiveType = OpenTK.Graphics.ES20.BeginMode;
 #endif
 
 
-namespace Microsoft.Xna.Framework.DesktopGL.Graphics
+namespace MonoGame.Platform.DesktopGL.Graphics
 {
 	public class DesktopGLGraphicsDevicePlatform : IGraphicsDevicePlatform
 	{
@@ -93,13 +94,13 @@ namespace Microsoft.Xna.Framework.DesktopGL.Graphics
 				{
 					_enabledVertexAttributes.Add(x);
 					GL.EnableVertexAttribArray(x);
-					DesktopGLGraphicsExtensions.CheckGLError();
+					GraphicsExtensions.CheckGLError();
 				}
 				else if (!attrs[x] && _enabledVertexAttributes.Contains(x))
 				{
 					_enabledVertexAttributes.Remove(x);
 					GL.DisableVertexAttribArray(x);
-					DesktopGLGraphicsExtensions.CheckGLError();
+					GraphicsExtensions.CheckGLError();
 				}
 			}
 		}
@@ -181,13 +182,13 @@ namespace Microsoft.Xna.Framework.DesktopGL.Graphics
 			MaxTextureSlots = 16;
 
 			GL.GetInteger(GetPName.MaxTextureImageUnits, out MaxTextureSlots);
-			DesktopGLGraphicsExtensions.CheckGLError();
+			GraphicsExtensions.CheckGLError();
 
 			GL.GetInteger(GetPName.MaxVertexAttribs, out MaxVertexAttributes);
-			DesktopGLGraphicsExtensions.CheckGLError();
+			GraphicsExtensions.CheckGLError();
 
 			GL.GetInteger(GetPName.MaxTextureSize, out _maxTextureSize);
-			DesktopGLGraphicsExtensions.CheckGLError();
+			GraphicsExtensions.CheckGLError();
 
 			#if !GLES
 			// Initialize draw buffer attachment array
@@ -205,7 +206,7 @@ namespace Microsoft.Xna.Framework.DesktopGL.Graphics
 			// Setup extensions.
 			List<string> extensions = new List<string>();
 			var extstring = GL.GetString(StringName.Extensions);
-			DesktopGLGraphicsExtensions.CheckGLError();
+			GraphicsExtensions.CheckGLError();
 			if (!string.IsNullOrEmpty(extstring))
 			{
 				extensions.AddRange(extstring.Split(' '));
@@ -305,7 +306,7 @@ namespace Microsoft.Xna.Framework.DesktopGL.Graphics
 				if (color != _lastClearColor)
 				{
 					GL.ClearColor(color.X, color.Y, color.Z, color.W);
-					DesktopGLGraphicsExtensions.CheckGLError();
+					GraphicsExtensions.CheckGLError();
 					_lastClearColor = color;
 				}
 				bufferMask = bufferMask | ClearBufferMask.ColorBufferBit;
@@ -315,7 +316,7 @@ namespace Microsoft.Xna.Framework.DesktopGL.Graphics
 				if (stencil != _lastClearStencil)
 				{
 					GL.ClearStencil(stencil);
-					DesktopGLGraphicsExtensions.CheckGLError();
+					GraphicsExtensions.CheckGLError();
 					_lastClearStencil = stencil;
 				}
 				bufferMask = bufferMask | ClearBufferMask.StencilBufferBit;
@@ -330,7 +331,7 @@ namespace Microsoft.Xna.Framework.DesktopGL.Graphics
 					#else
 					GL.ClearDepth((double)depth);
 					#endif
-					DesktopGLGraphicsExtensions.CheckGLError();
+					GraphicsExtensions.CheckGLError();
 					_lastClearDepth = depth;
 				}
 				bufferMask = bufferMask | ClearBufferMask.DepthBufferBit;
@@ -338,7 +339,7 @@ namespace Microsoft.Xna.Framework.DesktopGL.Graphics
 
 
 			GL.Clear(bufferMask);
-			DesktopGLGraphicsExtensions.CheckGLError();
+			GraphicsExtensions.CheckGLError();
 
 			// Restore the previous render state.
 			ScissorRectangle = prevScissorRect;
@@ -394,7 +395,7 @@ namespace Microsoft.Xna.Framework.DesktopGL.Graphics
 			#if DESKTOPGL || ANGLE
 			Context.SwapBuffers();
 			#endif
-			DesktopGLGraphicsExtensions.CheckGLError();
+			GraphicsExtensions.CheckGLError();
 
 			// Dispose of any GL resources that were disposed in another thread
 			lock (disposeActionsLock)
@@ -414,13 +415,13 @@ namespace Microsoft.Xna.Framework.DesktopGL.Graphics
 				GL.Viewport(value.X, value.Y, value.Width, value.Height);
 			else
 				GL.Viewport(value.X, PresentationParameters.BackBufferHeight - value.Y - value.Height, value.Width, value.Height);
-			DesktopGLGraphicsExtensions.LogGLError("GraphicsDevice.Viewport_set() GL.Viewport");
+			GraphicsExtensions.LogGLError("GraphicsDevice.Viewport_set() GL.Viewport");
 			#if GLES
 			GL.DepthRange(value.MinDepth, value.MaxDepth);
 			#else
 			GL.DepthRange((double)value.MinDepth, (double)value.MaxDepth);
 			#endif
-			DesktopGLGraphicsExtensions.LogGLError("GraphicsDevice.Viewport_set() GL.DepthRange");
+			GraphicsExtensions.LogGLError("GraphicsDevice.Viewport_set() GL.DepthRange");
 
 			// In OpenGL we have to re-apply the special "posFixup"
 			// vertex shader uniform if the viewport changes.
@@ -659,7 +660,7 @@ namespace Microsoft.Xna.Framework.DesktopGL.Graphics
 				}
 				// The only fragment operations which affect the resolve are the pixel ownership test, the scissor test, and dithering.
 				GL.Disable(EnableCap.ScissorTest);
-				DesktopGLGraphicsExtensions.CheckGLError();
+				GraphicsExtensions.CheckGLError();
 				var glFramebuffer = this.glFramebuffers[this._currentRenderTargetBindings];
 				this.framebufferHelper.BindReadFramebuffer(glFramebuffer);
 				for (var i = 0; i < this._currentRenderTargetCount; ++i)
@@ -679,7 +680,7 @@ namespace Microsoft.Xna.Framework.DesktopGL.Graphics
 				if (renderTarget.LevelCount > 1)
 				{
 					GL.BindTexture((TextureTarget)renderTarget.glTarget, renderTarget.glTexture);
-					DesktopGLGraphicsExtensions.CheckGLError();
+					GraphicsExtensions.CheckGLError();
 					this.framebufferHelper.GenerateMipmap((int)renderTarget.glTarget);
 				}
 			}
@@ -760,7 +761,7 @@ namespace Microsoft.Xna.Framework.DesktopGL.Graphics
 			if (_shaderProgram != shaderProgram)
 			{
 				GL.UseProgram(shaderProgram.Program);
-				DesktopGLGraphicsExtensions.CheckGLError();
+				GraphicsExtensions.CheckGLError();
 				_shaderProgram = shaderProgram;
 			}
 
@@ -808,7 +809,7 @@ namespace Microsoft.Xna.Framework.DesktopGL.Graphics
 			}
 
 			GL.Uniform4(posFixupLoc, 1, _posFixup);
-			DesktopGLGraphicsExtensions.CheckGLError();
+			GraphicsExtensions.CheckGLError();
 		}
 
 		public void BeginApplyState()
@@ -824,7 +825,7 @@ namespace Microsoft.Xna.Framework.DesktopGL.Graphics
 				if (!IsRenderTargetBound)
 					scissorRect.Y = _viewport.Height - scissorRect.Y - scissorRect.Height;
 				GL.Scissor(scissorRect.X, scissorRect.Y, scissorRect.Width, scissorRect.Height);
-				DesktopGLGraphicsExtensions.CheckGLError();
+				GraphicsExtensions.CheckGLError();
 				_scissorRectangleDirty = false;
 			}
 
@@ -837,7 +838,7 @@ namespace Microsoft.Xna.Framework.DesktopGL.Graphics
 				if (_indexBuffer != null)
 				{
 					GL.BindBuffer(BufferTarget.ElementArrayBuffer, _indexBuffer.ibo);
-					DesktopGLGraphicsExtensions.CheckGLError();
+					GraphicsExtensions.CheckGLError();
 				}
 				_indexBufferDirty = false;
 			}
@@ -847,7 +848,7 @@ namespace Microsoft.Xna.Framework.DesktopGL.Graphics
 				if (_vertexBuffer != null)
 				{
 					GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBuffer.vbo);
-					DesktopGLGraphicsExtensions.CheckGLError();
+					GraphicsExtensions.CheckGLError();
 				}
 			}
 
@@ -905,7 +906,7 @@ namespace Microsoft.Xna.Framework.DesktopGL.Graphics
 				indexElementCount,
 				indexElementType,
 				indexOffsetInBytes);
-			DesktopGLGraphicsExtensions.CheckGLError();
+			GraphicsExtensions.CheckGLError();
 		}
 
 		public void DrawUserPrimitives<T>(
@@ -918,9 +919,9 @@ namespace Microsoft.Xna.Framework.DesktopGL.Graphics
 
 			// Unbind current VBOs.
 			GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
-			DesktopGLGraphicsExtensions.CheckGLError();
+			GraphicsExtensions.CheckGLError();
 			GL.BindBuffer(BufferTarget.ElementArrayBuffer, 0);
-			DesktopGLGraphicsExtensions.CheckGLError();
+			GraphicsExtensions.CheckGLError();
 			_vertexBufferDirty = _indexBufferDirty = true;
 
 			// Pin the buffers.
@@ -934,7 +935,7 @@ namespace Microsoft.Xna.Framework.DesktopGL.Graphics
 			GL.DrawArrays(PrimitiveTypeGL(primitiveType),
 				vertexOffset,
 				vertexCount);
-			DesktopGLGraphicsExtensions.CheckGLError();
+			GraphicsExtensions.CheckGLError();
 
 			// Release the handles.
 			vbHandle.Free();
@@ -949,7 +950,7 @@ namespace Microsoft.Xna.Framework.DesktopGL.Graphics
 			GL.DrawArrays(PrimitiveTypeGL(primitiveType),
 				vertexStart,
 				vertexCount);
-			DesktopGLGraphicsExtensions.CheckGLError();
+			GraphicsExtensions.CheckGLError();
 		}
 
 		public void DrawUserIndexedPrimitives<T>(Microsoft.Xna.Framework.Graphics.PrimitiveType primitiveType,
@@ -962,9 +963,9 @@ namespace Microsoft.Xna.Framework.DesktopGL.Graphics
 
 			// Unbind current VBOs.
 			GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
-			DesktopGLGraphicsExtensions.CheckGLError();
+			GraphicsExtensions.CheckGLError();
 			GL.BindBuffer(BufferTarget.ElementArrayBuffer, 0);
-			DesktopGLGraphicsExtensions.CheckGLError();
+			GraphicsExtensions.CheckGLError();
 			_vertexBufferDirty = _indexBufferDirty = true;
 
 			// Pin the buffers.
@@ -982,7 +983,7 @@ namespace Microsoft.Xna.Framework.DesktopGL.Graphics
 				GetElementCountArray(primitiveType, primitiveCount),
 				DrawElementsType.UnsignedShort,
 				(IntPtr)(ibHandle.AddrOfPinnedObject().ToInt64() + (indexOffset * sizeof(short))));
-			DesktopGLGraphicsExtensions.CheckGLError();
+			GraphicsExtensions.CheckGLError();
 
 			// Release the handles.
 			ibHandle.Free();
@@ -1000,9 +1001,9 @@ namespace Microsoft.Xna.Framework.DesktopGL.Graphics
 
 			// Unbind current VBOs.
 			GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
-			DesktopGLGraphicsExtensions.CheckGLError();
+			GraphicsExtensions.CheckGLError();
 			GL.BindBuffer(BufferTarget.ElementArrayBuffer, 0);
-			DesktopGLGraphicsExtensions.CheckGLError();
+			GraphicsExtensions.CheckGLError();
 			_vertexBufferDirty = _indexBufferDirty = true;
 
 			// Pin the buffers.
@@ -1020,7 +1021,7 @@ namespace Microsoft.Xna.Framework.DesktopGL.Graphics
 				GetElementCountArray(primitiveType, primitiveCount),
 				DrawElementsType.UnsignedInt,
 				(IntPtr)(ibHandle.AddrOfPinnedObject().ToInt64() + (indexOffset * sizeof(int))));
-			DesktopGLGraphicsExtensions.CheckGLError();
+			GraphicsExtensions.CheckGLError();
 
 			// Release the handles.
 			ibHandle.Free();

@@ -23,7 +23,7 @@ using OpenTK.Graphics.ES20;
 using System.Security;
 #endif
 
-namespace Microsoft.Xna.Framework.DesktopGL.Graphics
+namespace MonoGame.Platform.DesktopGL.Graphics
 {
 	internal class FramebufferHelper
 	{
@@ -51,19 +51,19 @@ namespace Microsoft.Xna.Framework.DesktopGL.Graphics
 		internal virtual void GenRenderbuffer(out int renderbuffer)
 		{
 			GL.GenRenderbuffers(1, out renderbuffer);
-			DesktopGLGraphicsExtensions.CheckGLError();
+			GraphicsExtensions.CheckGLError();
 		}
 
 		internal virtual void BindRenderbuffer(int renderbuffer)
 		{
 			GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, renderbuffer);
-			DesktopGLGraphicsExtensions.CheckGLError();
+			GraphicsExtensions.CheckGLError();
 		}
 
 		internal virtual void DeleteRenderbuffer(int renderbuffer)
 		{
 			GL.DeleteRenderbuffers(1, ref renderbuffer);
-			DesktopGLGraphicsExtensions.CheckGLError();
+			GraphicsExtensions.CheckGLError();
 		}
 
 		internal virtual void RenderbufferStorageMultisample(int samples, int internalFormat, int width, int height)
@@ -73,25 +73,25 @@ namespace Microsoft.Xna.Framework.DesktopGL.Graphics
 			#else
 			GLRenderbufferStorageMultisampleExt(All.Renderbuffer, samples, (All)internalFormat, width, height);
 			#endif
-			DesktopGLGraphicsExtensions.CheckGLError();
+			GraphicsExtensions.CheckGLError();
 		}
 
 		internal virtual void GenFramebuffer(out int framebuffer)
 		{
 			GL.GenFramebuffers(1, out framebuffer);
-			DesktopGLGraphicsExtensions.CheckGLError();
+			GraphicsExtensions.CheckGLError();
 		}
 
 		internal virtual void BindFramebuffer(int framebuffer)
 		{
 			GL.BindFramebuffer(FramebufferTarget.Framebuffer, framebuffer);
-			DesktopGLGraphicsExtensions.CheckGLError();
+			GraphicsExtensions.CheckGLError();
 		}
 
 		internal virtual void BindReadFramebuffer(int readFramebuffer)
 		{
 			GL.BindFramebuffer(FramebufferTarget.ReadFramebuffer, readFramebuffer);
-			DesktopGLGraphicsExtensions.CheckGLError();
+			GraphicsExtensions.CheckGLError();
 		}
 
 		internal virtual void InvalidateDrawFramebuffer()
@@ -107,19 +107,19 @@ namespace Microsoft.Xna.Framework.DesktopGL.Graphics
 		internal virtual void DeleteFramebuffer(int framebuffer)
 		{
 			GL.DeleteFramebuffers(1, ref framebuffer);
-			DesktopGLGraphicsExtensions.CheckGLError();
+			GraphicsExtensions.CheckGLError();
 		}
 
 		internal virtual void FramebufferTexture2D(int attachement, int target, int texture, int level = 0, int samples = 0)
 		{
 			GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, (FramebufferAttachment)attachement, (TextureTarget)target, texture, level);
-			DesktopGLGraphicsExtensions.CheckGLError();
+			GraphicsExtensions.CheckGLError();
 		}
 
 		internal virtual void FramebufferRenderbuffer(int attachement, int renderbuffer, int level = 0)
 		{
 			GL.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, (FramebufferAttachment)attachement, RenderbufferTarget.Renderbuffer, renderbuffer);
-			DesktopGLGraphicsExtensions.CheckGLError();
+			GraphicsExtensions.CheckGLError();
 		}
 
 		internal virtual void GenerateMipmap(int target)
@@ -129,7 +129,7 @@ namespace Microsoft.Xna.Framework.DesktopGL.Graphics
 			#else
 			GLGenerateMipmapExt((GenerateMipmapTarget)target);
 			#endif
-			DesktopGLGraphicsExtensions.CheckGLError();
+			GraphicsExtensions.CheckGLError();
 
 		}
 
@@ -137,15 +137,15 @@ namespace Microsoft.Xna.Framework.DesktopGL.Graphics
 		{
 
 			GL.ReadBuffer(ReadBufferMode.ColorAttachment0 + iColorAttachment);
-			DesktopGLGraphicsExtensions.CheckGLError();
+			GraphicsExtensions.CheckGLError();
 			GL.DrawBuffer(DrawBufferMode.ColorAttachment0 + iColorAttachment);
-			DesktopGLGraphicsExtensions.CheckGLError();
+			GraphicsExtensions.CheckGLError();
 			#if !MONOMAC
 			GL.BlitFramebuffer(0, 0, width, height, 0, 0, width, height, ClearBufferMask.ColorBufferBit, BlitFramebufferFilter.Nearest);
 			#else
 			GLBlitFramebufferExt(0, 0, width, height, 0, 0, width, height, ClearBufferMask.ColorBufferBit, BlitFramebufferFilter.Nearest);
 			#endif
-			DesktopGLGraphicsExtensions.CheckGLError();
+			GraphicsExtensions.CheckGLError();
 
 		}
 

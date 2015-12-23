@@ -8,13 +8,13 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     public sealed partial class TextureCollection
     {
-        private readonly GraphicsDevice _graphicsDevice;
+        private readonly IGraphicsDevice _graphicsDevice;
         private readonly Texture[] _textures;
         private readonly bool _applyToVertexStage;
         private int _dirty;
 
 		private ITextureCollectionPlatform mPlatform;
-        internal TextureCollection(ITextureCollectionPlatform platform, GraphicsDevice graphicsDevice, int maxTextures, bool applyToVertexStage)
+        internal TextureCollection(ITextureCollectionPlatform platform, IGraphicsDevice graphicsDevice, int maxTextures, bool applyToVertexStage)
         {
 			mPlatform = platform;
             _graphicsDevice = graphicsDevice;
@@ -60,7 +60,7 @@ namespace Microsoft.Xna.Framework.Graphics
             _dirty = int.MaxValue;
         }
 
-        internal void SetTextures(GraphicsDevice device)
+        internal void SetTextures(IGraphicsDevice device)
         {
             if (_applyToVertexStage && !device.GraphicsCapabilities.SupportsVertexTextures)
                 return;

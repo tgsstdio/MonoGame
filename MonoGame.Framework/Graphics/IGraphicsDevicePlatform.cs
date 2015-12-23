@@ -9,7 +9,7 @@ namespace Microsoft.Xna.Framework.Graphics
 {
 	public interface IGraphicsDevicePlatform : IDisposable
 	{
-		GraphicsProfile GetHighestSupportedGraphicsProfile (GraphicsDevice graphicsDevice);
+		GraphicsProfile GetHighestSupportedGraphicsProfile (IGraphicsDevice graphicsDevice);
 
 		void SetViewport (ref Viewport value);
 

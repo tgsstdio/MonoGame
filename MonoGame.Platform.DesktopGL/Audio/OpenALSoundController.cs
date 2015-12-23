@@ -4,6 +4,7 @@ using System.Linq;
 using System.IO;
 using System.Runtime.InteropServices;
 using MonoGame.Utilities;
+using MonoGame.Platform.DesktopGL.Utilities;
 
 #if MONOMAC
 using MonoMac.OpenAL;

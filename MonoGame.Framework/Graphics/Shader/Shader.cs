@@ -43,7 +43,7 @@ namespace Microsoft.Xna.Framework.Graphics
         public ShaderStage Stage { get; private set; }
 
 		private IShaderPlatform mPlatform;
-        internal Shader(IShaderPlatform platform, GraphicsDevice device, BinaryReader reader)
+        internal Shader(IShaderPlatform platform, IGraphicsDevice device, BinaryReader reader)
         {
 			mPlatform = platform;
             GraphicsDevice = device;

@@ -50,7 +50,7 @@ namespace Microsoft.Xna.Framework.Graphics
         // The GraphicsDevice property should only be accessed in Dispose(bool) if the disposing
         // parameter is true. If disposing is false, the GraphicsDevice may or may not be
         // disposed yet.
-        GraphicsDevice graphicsDevice;
+        IGraphicsDevice graphicsDevice;
 
         private WeakReference _selfReference;
 
@@ -108,7 +108,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 // Remove from the global list of graphics resources
                 if (graphicsDevice != null)
-                    graphicsDevice.RemoveResourceReference(_selfReference);
+					graphicsDevice.WeakReferences.RemoveResourceReference(_selfReference);
 
                 _selfReference = null;
                 graphicsDevice = null;
@@ -118,7 +118,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
 		public event EventHandler<EventArgs> Disposing;
 		
-		public GraphicsDevice GraphicsDevice
+		public IGraphicsDevice GraphicsDevice
 		{
 			get
 			{
@@ -136,14 +136,14 @@ namespace Microsoft.Xna.Framework.Graphics
                 // during their lifetime. But only one GraphicsDevice should retain ownership.
                 if (graphicsDevice != null)
                 {
-                    graphicsDevice.RemoveResourceReference(_selfReference);
+					graphicsDevice.WeakReferences.RemoveResourceReference(_selfReference);
                     _selfReference = null;
                 }
 
                 graphicsDevice = value;
 
                 _selfReference = new WeakReference(this);
-                graphicsDevice.AddResourceReference(_selfReference);
+				graphicsDevice.WeakReferences.AddResourceReference(_selfReference);
             }
 		}
 		

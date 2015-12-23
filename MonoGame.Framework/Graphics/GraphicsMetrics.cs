@@ -9,14 +9,14 @@ namespace Microsoft.Xna.Framework.Graphics
     /// </summary>
     public struct GraphicsMetrics
     {
-        internal ulong _clearCount;
-        internal ulong _drawCount;
-        internal ulong _pixelShaderCount;
-        internal ulong _primitiveCount;
-        internal ulong _spriteCount;
-        internal ulong _targetCount;
-        internal ulong _textureCount;
-        internal ulong _vertexShaderCount;
+		public ulong _clearCount;
+		public ulong _drawCount;
+		public ulong _pixelShaderCount;
+		public ulong _primitiveCount;
+		public ulong _spriteCount;
+		public ulong _targetCount;
+		public ulong _textureCount;
+		public ulong _vertexShaderCount;
 
         /// <summary>
         /// Number of times Clear was called.

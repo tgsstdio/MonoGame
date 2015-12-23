@@ -6,7 +6,7 @@ namespace Microsoft.Xna.Framework.Graphics
 {
 	public interface ITextureCollectionPlatform
 	{
-		void SetTextures (GraphicsDevice device);
+		void SetTextures (IGraphicsDevice device);
 
 		void Clear ();
 

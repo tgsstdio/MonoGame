@@ -8,6 +8,6 @@ namespace Microsoft.Xna.Framework.Graphics
 {
 	public interface IRasterizerStatePlatform
 	{
-		void ApplyState (GraphicsDevice graphicsDevice);
+		void ApplyState (IGraphicsDevice graphicsDevice);
 	}
 }

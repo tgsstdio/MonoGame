@@ -187,7 +187,7 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        internal void BindToGraphicsDevice(GraphicsDevice device)
+        internal void BindToGraphicsDevice(IGraphicsDevice device)
         {
             if (_defaultStateObject)
                 throw new InvalidOperationException("You cannot bind a default state object.");

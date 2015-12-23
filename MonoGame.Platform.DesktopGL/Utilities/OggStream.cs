@@ -17,7 +17,7 @@ using OpenTK.Audio.OpenAL;
 
 using Microsoft.Xna.Framework.Audio;
 
-namespace MonoGame.Utilities
+namespace MonoGame.Platform.DesktopGL.Utilities
 {
     internal static class ALHelper
     {

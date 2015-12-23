@@ -23,13 +23,13 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 		
-		public TextureCube (ITexturePlatform baseTexture, ITextureCubePlatform platform, GraphicsDevice graphicsDevice, int size, bool mipMap, SurfaceFormat format)
+		public TextureCube (ITexturePlatform baseTexture, ITextureCubePlatform platform, IGraphicsDevice graphicsDevice, int size, bool mipMap, SurfaceFormat format)
 			: this(baseTexture, platform, graphicsDevice, size, mipMap, format, false)
 		{
         }
 
 		private ITextureCubePlatform mPlatform;
-		internal TextureCube(ITexturePlatform baseTexture, ITextureCubePlatform platform, GraphicsDevice graphicsDevice, int size, bool mipMap, SurfaceFormat format, bool renderTarget)
+		internal TextureCube(ITexturePlatform baseTexture, ITextureCubePlatform platform, IGraphicsDevice graphicsDevice, int size, bool mipMap, SurfaceFormat format, bool renderTarget)
 			: base(baseTexture)
         {
 			mPlatform = platform;

@@ -100,7 +100,6 @@
     <Compile Include="MonoGame.Framework\GameComponentCollectionEventArgs.cs" />
     <Compile Include="MonoGame.Framework\IDrawable.cs" />
     <Compile Include="MonoGame.Framework\Graphics\IGraphicsDeviceService.cs" />
-    <Compile Include="MonoGame.Framework\Graphics\GraphicsDevice.cs" />
     <Compile Include="MonoGame.Framework\Graphics\Viewport.cs" />
     <Compile Include="MonoGame.Framework\IGraphicsDeviceManager.cs" />
     <Compile Include="MonoGame.Framework\Graphics\Vertices\PrimitiveType.cs" />
@@ -208,6 +207,11 @@
     <Compile Include="MonoGame.Framework\Graphics\GraphicsExtensions.cs" />
     <Compile Include="MonoGame.Framework\Graphics\IGraphicsCapabilities.cs" />
     <Compile Include="MonoGame.Framework\GameBackbone.cs" />
+    <Compile Include="MonoGame.Framework\IBackBufferPreferences.cs" />
+    <Compile Include="MonoGame.Framework\IGraphicsDevice.cs" />
+    <Compile Include="MonoGame.Framework\Graphics\IGraphicsCapabilitiesLookup.cs" />
+    <Compile Include="MonoGame.Framework\IWeakReferenceCollection.cs" />
+    <Compile Include="MonoGame.Framework\WeakReferenceCollection.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

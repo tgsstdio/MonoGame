@@ -16,7 +16,7 @@ namespace Microsoft.Xna.Framework.Graphics
 		public BufferUsage BufferUsage { get; private set; }
 
 		private IVertexBufferPlatform mPlatform;
-		protected VertexBuffer(IVertexBufferPlatform platform, GraphicsDevice graphicsDevice, VertexDeclaration vertexDeclaration, int vertexCount, BufferUsage bufferUsage, bool dynamic)
+		protected VertexBuffer(IVertexBufferPlatform platform, IGraphicsDevice graphicsDevice, VertexDeclaration vertexDeclaration, int vertexCount, BufferUsage bufferUsage, bool dynamic)
 		{
 			mPlatform = platform;
 		    if (graphicsDevice == null)
@@ -37,12 +37,12 @@ namespace Microsoft.Xna.Framework.Graphics
 			mPlatform.Construct();
 		}
 
-		public VertexBuffer(IVertexBufferPlatform platform, GraphicsDevice graphicsDevice, VertexDeclaration vertexDeclaration, int vertexCount, BufferUsage bufferUsage) :
+		public VertexBuffer(IVertexBufferPlatform platform, IGraphicsDevice graphicsDevice, VertexDeclaration vertexDeclaration, int vertexCount, BufferUsage bufferUsage) :
 			this(platform, graphicsDevice, vertexDeclaration, vertexCount, bufferUsage, false)
         {
         }
 		
-		public VertexBuffer(IVertexBufferPlatform platform, GraphicsDevice graphicsDevice, Type type, int vertexCount, BufferUsage bufferUsage) :
+		public VertexBuffer(IVertexBufferPlatform platform, IGraphicsDevice graphicsDevice, Type type, int vertexCount, BufferUsage bufferUsage) :
 			this(platform,graphicsDevice, VertexDeclaration.FromType(type), vertexCount, bufferUsage, false)
 		{
         }

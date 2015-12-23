@@ -7,7 +7,7 @@ namespace Microsoft.Xna.Framework.Graphics
 {
 	public interface ITexture2DPlatform
 	{
-		Texture2D FromStream(GraphicsDevice graphicsDevice, Stream stream);
+		Texture2D FromStream(IGraphicsDevice graphicsDevice, Stream stream);
 
 		void SaveAsPng (Stream stream, int width, int height);
 

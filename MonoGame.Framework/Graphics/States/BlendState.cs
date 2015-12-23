@@ -18,7 +18,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
 	    private bool _independentBlendEnable;
 
-        internal void BindToGraphicsDevice(GraphicsDevice device)
+        internal void BindToGraphicsDevice(IGraphicsDevice device)
         {
             if (_defaultStateObject)
                 throw new InvalidOperationException("You cannot bind a default state object.");

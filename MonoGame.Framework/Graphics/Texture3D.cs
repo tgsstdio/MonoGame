@@ -30,12 +30,12 @@ namespace Microsoft.Xna.Framework.Graphics
         }
 
 		private ITexture3DPlatform mPlatform;
-		public Texture3D(ITexturePlatform baseTexture, ITexture3DPlatform platform, GraphicsDevice graphicsDevice, int width, int height, int depth, bool mipMap, SurfaceFormat format)
+		public Texture3D(ITexturePlatform baseTexture, ITexture3DPlatform platform, IGraphicsDevice graphicsDevice, int width, int height, int depth, bool mipMap, SurfaceFormat format)
 			: this(baseTexture, platform, graphicsDevice, width, height, depth, mipMap, format, false)
 		{		    
 		}
 
-		protected Texture3D (ITexturePlatform baseTexture, ITexture3DPlatform platform, GraphicsDevice graphicsDevice, int width, int height, int depth, bool mipMap, SurfaceFormat format, bool renderTarget)
+		protected Texture3D (ITexturePlatform baseTexture, ITexture3DPlatform platform, IGraphicsDevice graphicsDevice, int width, int height, int depth, bool mipMap, SurfaceFormat format, bool renderTarget)
 			: base(baseTexture)
 		{
 			mPlatform = platform;

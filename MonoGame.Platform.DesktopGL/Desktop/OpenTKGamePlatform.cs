@@ -64,6 +64,9 @@ change. To the extent permitted under your local laws, the contributors exclude
 the implied warranties of merchantability, fitness for a particular purpose and
 non-infringement.
 */
+using Microsoft.Xna.Framework;
+
+
 #endregion License
 
 using System;
@@ -80,7 +83,7 @@ using Microsoft.Xna.Framework.Input;
 using OpenTK;
 using OpenTK.Graphics;
 
-namespace Microsoft.Xna.Framework.DesktopGL
+namespace MonoGame.Platform.DesktopGL
 {
     class OpenTKGamePlatform : GamePlatform, IOpenTKGamePlatform
     {

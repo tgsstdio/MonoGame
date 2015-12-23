@@ -6,6 +6,8 @@ using System;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input.Touch;
 using Microsoft.Xna.Framework.DesktopGL.Graphics;
+using MonoGame.Platform.DesktopGL;
+using Microsoft.Xna.Framework;
 
 #if MONOMAC
 using MonoMac.OpenGL;
@@ -21,7 +23,7 @@ using Windows.UI.Xaml.Controls;
 using Android.Views;
 #endif
 
-namespace Microsoft.Xna.Framework.DesktopGL
+namespace MonoGame.Platform.DesktopGL.Graphics
 {
 	public class DesktopGLGraphicsDeviceManager : IGraphicsDeviceService, IGraphicsDeviceManager
 	{
@@ -63,7 +65,12 @@ namespace Microsoft.Xna.Framework.DesktopGL
 		private ISamplerStateCollectionPlatform mSamplerStateCollectionPlatform;
 		private ITextureCollectionPlatform mTextureCollectionPlatform;
 
-		public DesktopGLGraphicsDeviceManager(GameBackbone backBone, IOpenTKGamePlatform gamePlatform, IGraphicsDevicePlatform devicePlatform, ISamplerStateCollectionPlatform samplerStateCollectionPlatform, ITextureCollectionPlatform texCollectionPlatform)
+		public DesktopGLGraphicsDeviceManager(
+			GameBackbone backBone,
+			IOpenTKGamePlatform gamePlatform,
+			IGraphicsDevicePlatform devicePlatform,
+			ISamplerStateCollectionPlatform samplerStateCollectionPlatform,
+			ITextureCollectionPlatform texCollectionPlatform)
 		{
 			mGamePlatform = gamePlatform;
 			mDevicePlatform = devicePlatform;

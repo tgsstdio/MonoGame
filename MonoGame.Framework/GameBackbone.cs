@@ -261,7 +261,7 @@ namespace Microsoft.Xna.Framework
             }
         }
 
-        public GraphicsDevice GraphicsDevice
+        public IGraphicsDevice GraphicsDevice
         {
             get
             {
