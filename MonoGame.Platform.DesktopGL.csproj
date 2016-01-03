@@ -53,20 +53,15 @@
     <Compile Include="MonoGame.Platform.DesktopGL\Audio\OALSoundBuffer.cs" />
     <Compile Include="MonoGame.Platform.DesktopGL\Utilities\OggStream.cs" />
     <Compile Include="MonoGame.Platform.DesktopGL\Graphics\Shader\ShaderProgramCache.cs" />
-    <Compile Include="MonoGame.Platform.DesktopGL\Graphics\RenderTarget2D.OpenGL.cs" />
     <Compile Include="MonoGame.Platform.DesktopGL\DefaultBackBufferPreferences.cs" />
     <Compile Include="MonoGame.Platform.DesktopGL\Graphics\GraphicsDevice.OpenGL.cs" />
     <Compile Include="MonoGame.Platform.DesktopGL\Graphics\GraphicsDevice.cs" />
     <Compile Include="MonoGame.Platform.DesktopGL\Graphics\GraphicsExtensions.cs" />
     <Compile Include="MonoGame.Platform.DesktopGL\Graphics\DesktopGraphicsDevice.cs" />
+    <Compile Include="MonoGame.Platform.DesktopGL\Graphics\RenderTarget2DPlatform.cs" />
+    <Compile Include="MonoGame.Platform.DesktopGL\DesktopGLThreadingContext.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <ItemGroup>
-    <ProjectReference Include="Microsoft.Xna.Framework.csproj">
-      <Project>{6E03191C-70AE-4B0B-8782-68D377B72A0F}</Project>
-      <Name>Microsoft.Xna.Framework</Name>
-    </ProjectReference>
-  </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>

@@ -212,6 +212,9 @@
     <Compile Include="MonoGame.Framework\Graphics\IGraphicsCapabilitiesLookup.cs" />
     <Compile Include="MonoGame.Framework\IWeakReferenceCollection.cs" />
     <Compile Include="MonoGame.Framework\WeakReferenceCollection.cs" />
+    <Compile Include="MonoGame.Framework\Graphics\Effect\IEffectCache.cs" />
+    <Compile Include="MonoGame.Framework\Graphics\Effect\EffectCache.cs" />
+    <Compile Include="MonoGame.Framework\IThreadingContext.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

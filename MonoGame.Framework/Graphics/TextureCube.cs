@@ -23,27 +23,31 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 		
-		public TextureCube (ITexturePlatform baseTexture, ITextureCubePlatform platform, IGraphicsDevice graphicsDevice, int size, bool mipMap, SurfaceFormat format)
-			: this(baseTexture, platform, graphicsDevice, size, mipMap, format, false)
+		public TextureCube (
+			ITexturePlatform baseTexture,
+			ITextureCubePlatform platform,
+			IWeakReferenceCollection owner,
+			int size, bool mipMap, SurfaceFormat format)
+			: this(baseTexture, platform, owner, size, mipMap, format, false)
 		{
         }
 
 		private ITextureCubePlatform mPlatform;
-		internal TextureCube(ITexturePlatform baseTexture, ITextureCubePlatform platform, IGraphicsDevice graphicsDevice, int size, bool mipMap, SurfaceFormat format, bool renderTarget)
+		internal TextureCube(ITexturePlatform baseTexture, ITextureCubePlatform platform, IWeakReferenceCollection owner, int size, bool mipMap, SurfaceFormat format, bool renderTarget)
 			: base(baseTexture)
         {
 			mPlatform = platform;
 
-            if (graphicsDevice == null)
+            if (owner == null)
             {
-                throw new ArgumentNullException("graphicsDevice", FrameworkResources.ResourceCreationWhenDeviceIsNull);
+                throw new ArgumentNullException("owner", FrameworkResources.ResourceCreationWhenDeviceIsNull);
             }
-            this.GraphicsDevice = graphicsDevice;
+            this.Owner = owner;
 			this.size = size;
             this._format = format;
             this._levelCount = mipMap ? CalculateMipLevels(size) : 1;
 
-			mPlatform.Construct(graphicsDevice, size, mipMap, format, renderTarget);
+			mPlatform.Construct(owner, size, mipMap, format, renderTarget);
         }
 
         /// <summary>

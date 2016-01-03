@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace StrawHat
+namespace MonoGame.Graphics
 {
 	public interface IRenderer
 	{

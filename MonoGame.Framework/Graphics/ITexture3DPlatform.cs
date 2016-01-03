@@ -11,7 +11,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
 		void SetData<T> (int level, int left, int top, int right, int bottom, int front, int back, T[] data, int startIndex, int elementCount, int width, int height, int depth);
 
-		void Construct (IGraphicsDevice graphicsDevice, int width, int height, int depth, bool mipMap, SurfaceFormat format, bool renderTarget);
+		void Construct (IWeakReferenceCollection owner, int width, int height, int depth, bool mipMap, SurfaceFormat format, bool renderTarget);
 		
 	}
 }

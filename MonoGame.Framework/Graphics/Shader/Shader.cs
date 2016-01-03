@@ -43,10 +43,10 @@ namespace Microsoft.Xna.Framework.Graphics
         public ShaderStage Stage { get; private set; }
 
 		private IShaderPlatform mPlatform;
-        internal Shader(IShaderPlatform platform, IGraphicsDevice device, BinaryReader reader)
+		internal Shader(IShaderPlatform platform, IWeakReferenceCollection owner, BinaryReader reader)
         {
 			mPlatform = platform;
-            GraphicsDevice = device;
+            Owner = owner;
 
             var isVertexShader = reader.ReadBoolean();
             Stage = isVertexShader ? ShaderStage.Vertex : ShaderStage.Pixel;

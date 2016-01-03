@@ -904,7 +904,7 @@ namespace MonoGame.Platform.DesktopGL.Graphics
             var vbHandle = GCHandle.Alloc(vertexData, GCHandleType.Pinned);
 
             // Setup the vertex declaration to point at the VB data.
-            vertexDeclaration.GraphicsDevice = this;
+            vertexDeclaration.Owner = this;
             vertexDeclaration.Apply(_vertexShader, vbHandle.AddrOfPinnedObject());
 
             //Draw
@@ -947,7 +947,7 @@ namespace MonoGame.Platform.DesktopGL.Graphics
             var vertexAddr = (IntPtr)(vbHandle.AddrOfPinnedObject().ToInt64() + vertexDeclaration.VertexStride * vertexOffset);
 
             // Setup the vertex declaration to point at the VB data.
-            vertexDeclaration.GraphicsDevice = this;
+            vertexDeclaration.Owner = this;
             vertexDeclaration.Apply(_vertexShader, vertexAddr);
 
             //Draw
@@ -980,7 +980,7 @@ namespace MonoGame.Platform.DesktopGL.Graphics
             var vertexAddr = (IntPtr)(vbHandle.AddrOfPinnedObject().ToInt64() + vertexDeclaration.VertexStride * vertexOffset);
 
             // Setup the vertex declaration to point at the VB data.
-            vertexDeclaration.GraphicsDevice = this;
+            vertexDeclaration.Owner = this;
             vertexDeclaration.Apply(_vertexShader, vertexAddr);
 
             //Draw

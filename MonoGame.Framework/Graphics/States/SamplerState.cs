@@ -127,20 +127,20 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        internal void BindToGraphicsDevice(IGraphicsDevice device)
-        {
-            if (_defaultStateObject)
-                throw new InvalidOperationException("You cannot bind a default state object.");
-            if (GraphicsDevice != null && GraphicsDevice != device)
-                throw new InvalidOperationException("This sampler state is already bound to a different graphics device.");
-            GraphicsDevice = device;
-        }
+//        internal void BindToGraphicsDevice(IGraphicsDevice device)
+//        {
+//            if (_defaultStateObject)
+//                throw new InvalidOperationException("You cannot bind a default state object.");
+//            if (Owner != null && Owner != device)
+//                throw new InvalidOperationException("This sampler state is already bound to a different graphics device.");
+//            Owner = device;
+//        }
 
         internal void ThrowIfBound()
         {
             if (_defaultStateObject)
                 throw new InvalidOperationException("You cannot modify a default sampler state object.");
-            if (GraphicsDevice != null)
+            if (Owner != null)
                 throw new InvalidOperationException("You cannot modify the sampler state after it has been bound to the graphics device!");
         }
 

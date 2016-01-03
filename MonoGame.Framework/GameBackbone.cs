@@ -632,7 +632,7 @@ namespace Microsoft.Xna.Framework
 			                            GraphicsDevice.PresentationParameters.BackBufferWidth,
 			                            GraphicsDevice.PresentationParameters.BackBufferHeight);
 
-            GraphicsDevice.Viewport = viewport;
+           // TODO : GraphicsDevice.Viewport = viewport;
 			Platform.EndScreenDeviceChange(string.Empty, viewport.Width, viewport.Height);
         }
 

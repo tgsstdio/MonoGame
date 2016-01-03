@@ -27,8 +27,10 @@ namespace Microsoft.Xna.Framework.Graphics
 			ITexturePlatform baseTexture,
 			ITexture2DPlatform tex2D,
 			IRenderTarget2DPlatform platform,
-			IGraphicsDevice graphicsDevice, int width, int height, bool mipMap, SurfaceFormat preferredFormat, DepthFormat preferredDepthFormat, int preferredMultiSampleCount, RenderTargetUsage usage, bool shared, int arraySize)
-			: base(baseTexture, tex2D, graphicsDevice, width, height, mipMap, preferredFormat, SurfaceType.RenderTarget, shared, arraySize)
+			IWeakReferenceCollection owner,
+			GraphicsCapabilities capabilities,
+			int width, int height, bool mipMap, SurfaceFormat preferredFormat, DepthFormat preferredDepthFormat, int preferredMultiSampleCount, RenderTargetUsage usage, bool shared, int arraySize)
+			: base(baseTexture, tex2D, owner, capabilities, width, height, mipMap, preferredFormat, SurfaceType.RenderTarget, shared, arraySize)
 	    {
 			mPlatform = platform;
 
@@ -36,16 +38,17 @@ namespace Microsoft.Xna.Framework.Graphics
             MultiSampleCount = preferredMultiSampleCount;
             RenderTargetUsage = usage;
 
-			mPlatform.Construct(graphicsDevice, width, height, mipMap, preferredFormat, preferredDepthFormat, preferredMultiSampleCount, usage, shared);
+			mPlatform.Construct(owner, width, height, mipMap, preferredFormat, preferredDepthFormat, preferredMultiSampleCount, usage, shared);
 	    }
 
 		public RenderTarget2D (
 			ITexturePlatform baseTexture,
 			ITexture2DPlatform tex2D,
 			IRenderTarget2DPlatform platform,
-			IGraphicsDevice graphicsDevice,
+			IWeakReferenceCollection owner,
+			GraphicsCapabilities capabilities,
 			int width, int height, bool mipMap, SurfaceFormat preferredFormat, DepthFormat preferredDepthFormat, int preferredMultiSampleCount, RenderTargetUsage usage, bool shared)
-			: this(baseTexture, tex2D, platform, graphicsDevice, width, height, mipMap, preferredFormat, preferredDepthFormat, preferredMultiSampleCount, usage, shared, 1)
+			: this(baseTexture, tex2D, platform, owner, capabilities, width, height, mipMap, preferredFormat, preferredDepthFormat, preferredMultiSampleCount, usage, shared, 1)
         {
 			
         }
@@ -54,24 +57,30 @@ namespace Microsoft.Xna.Framework.Graphics
 			ITexturePlatform baseTexture,
 			ITexture2DPlatform tex2D,
 			IRenderTarget2DPlatform platform,
-			IGraphicsDevice graphicsDevice, int width, int height, bool mipMap, SurfaceFormat preferredFormat, DepthFormat preferredDepthFormat, int preferredMultiSampleCount, RenderTargetUsage usage)
-			:this (baseTexture, tex2D, platform, graphicsDevice, width, height, mipMap, preferredFormat, preferredDepthFormat, preferredMultiSampleCount, usage, false)
+			IWeakReferenceCollection owner,
+			GraphicsCapabilities capabilities,
+			int width, int height, bool mipMap, SurfaceFormat preferredFormat, DepthFormat preferredDepthFormat, int preferredMultiSampleCount, RenderTargetUsage usage)
+			:this (baseTexture, tex2D, platform, owner, capabilities, width, height, mipMap, preferredFormat, preferredDepthFormat, preferredMultiSampleCount, usage, false)
         {}
 
 		public RenderTarget2D(
 			ITexturePlatform baseTexture,
 			ITexture2DPlatform tex2D,
 			IRenderTarget2DPlatform platform,
-			IGraphicsDevice graphicsDevice, int width, int height, bool mipMap, SurfaceFormat preferredFormat, DepthFormat preferredDepthFormat)
-			:this (baseTexture, tex2D, platform, graphicsDevice, width, height, mipMap, preferredFormat, preferredDepthFormat, 0, RenderTargetUsage.DiscardContents) 
+			IWeakReferenceCollection owner,
+			GraphicsCapabilities capabilities,
+			int width, int height, bool mipMap, SurfaceFormat preferredFormat, DepthFormat preferredDepthFormat)
+			:this (baseTexture, tex2D, platform, owner, capabilities, width, height, mipMap, preferredFormat, preferredDepthFormat, 0, RenderTargetUsage.DiscardContents) 
 		{}
 		
 		public RenderTarget2D(
 			ITexturePlatform baseTexture,
 			ITexture2DPlatform tex2D,
 			IRenderTarget2DPlatform platform,
-			IGraphicsDevice graphicsDevice, int width, int height)
-			: this(baseTexture, tex2D, platform, graphicsDevice, width, height, false, SurfaceFormat.Color, DepthFormat.None, 0, RenderTargetUsage.DiscardContents) 
+			IWeakReferenceCollection owner,
+			GraphicsCapabilities capabilities,
+			int width, int height)
+			: this(baseTexture, tex2D, platform, owner, capabilities, width, height, false, SurfaceFormat.Color, DepthFormat.None, 0, RenderTargetUsage.DiscardContents) 
 		{}
 
 		private IRenderTarget2DPlatform mPlatform;
@@ -83,16 +92,17 @@ namespace Microsoft.Xna.Framework.Graphics
 			ITexturePlatform baseTexture,
 			ITexture2DPlatform tex2D,
 			IRenderTarget2DPlatform platform,
-			IGraphicsDevice graphicsDevice,
-                int width,
-                int height,
-                bool mipMap,
-                SurfaceFormat format,
-                DepthFormat depthFormat,
-                int preferredMultiSampleCount,
-                RenderTargetUsage usage,
-                SurfaceType surfaceType)
-			: base(baseTexture, tex2D, graphicsDevice, width, height, mipMap, format, surfaceType)
+			IWeakReferenceCollection owner,
+			GraphicsCapabilities capabilities,
+            int width,
+            int height,
+            bool mipMap,
+            SurfaceFormat format,
+            DepthFormat depthFormat,
+            int preferredMultiSampleCount,
+            RenderTargetUsage usage,
+            SurfaceType surfaceType)
+			: base(baseTexture, tex2D, owner, capabilities, width, height, mipMap, format, surfaceType)
         {
 			mPlatform = platform;
             DepthStencilFormat = depthFormat;

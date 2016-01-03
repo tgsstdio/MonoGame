@@ -30,27 +30,27 @@ namespace Microsoft.Xna.Framework.Graphics
         }
 
 		private ITexture3DPlatform mPlatform;
-		public Texture3D(ITexturePlatform baseTexture, ITexture3DPlatform platform, IGraphicsDevice graphicsDevice, int width, int height, int depth, bool mipMap, SurfaceFormat format)
-			: this(baseTexture, platform, graphicsDevice, width, height, depth, mipMap, format, false)
+		public Texture3D(ITexturePlatform baseTexture, ITexture3DPlatform platform, IWeakReferenceCollection owner, int width, int height, int depth, bool mipMap, SurfaceFormat format)
+			: this(baseTexture, platform, owner, width, height, depth, mipMap, format, false)
 		{		    
 		}
 
-		protected Texture3D (ITexturePlatform baseTexture, ITexture3DPlatform platform, IGraphicsDevice graphicsDevice, int width, int height, int depth, bool mipMap, SurfaceFormat format, bool renderTarget)
+		protected Texture3D (ITexturePlatform baseTexture, ITexture3DPlatform platform, IWeakReferenceCollection owner, int width, int height, int depth, bool mipMap, SurfaceFormat format, bool renderTarget)
 			: base(baseTexture)
 		{
 			mPlatform = platform;
-		    if (graphicsDevice == null)
+			if (owner == null)
 		    {
-		        throw new ArgumentNullException("graphicsDevice", FrameworkResources.ResourceCreationWhenDeviceIsNull);
+				throw new ArgumentNullException("owner", FrameworkResources.ResourceCreationWhenDeviceIsNull);
 		    }
-		    this.GraphicsDevice = graphicsDevice;
+			this.Owner = owner;
             this._width = width;
             this._height = height;
             this._depth = depth;
             this._levelCount = 1;
 		    this._format = format;
 
-			mPlatform.Construct(graphicsDevice, width, height, depth, mipMap, format, renderTarget);
+			mPlatform.Construct(Owner, width, height, depth, mipMap, format, renderTarget);
         }
 
         public void SetData<T>(T[] data) where T : struct

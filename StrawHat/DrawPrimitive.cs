@@ -1,11 +1,11 @@
 ﻿using System;
 
-namespace StrawHat
+namespace MonoGame.Graphics
 {
 	public enum DrawPrimitive : byte
 	{
-		Triangles = 0,
-		Quads,
+		Triangles = 3,
+		Quads = 4,
 	}
 }
 

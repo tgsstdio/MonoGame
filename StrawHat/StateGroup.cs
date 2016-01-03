@@ -1,23 +1,28 @@
-﻿using System;
-
-namespace StrawHat
+﻿
+namespace MonoGame.Graphics
 {
 	public class StateGroup
 	{
-		public ShaderTechnique Technique { get; set;}
-		public ShaderProgram Program {get;set;}
-		public byte? PassNumber {get;set;}
-		public int? ShaderOptions { get; set;}
-		public int? UniformsIndex { get; set;}
-		public InputLayout MeshLayout { get; set;}
-		public int? MeshIndex {get;set;}
-		public BlendState? BlendValues {get;set;}
+		public byte? SlotIndex { get; set; }
+		public byte? TargetIndex {get;set;}
+		public byte? Techinque { get; set; }
+		public byte? Pass {get;set;}
+		public byte? ProgramIndex { get; set;}
+		public ushort? ShaderOptions { get; set; }
+		public byte? UniformsIndex { get; set;}
+		public byte? ResourceListIndex { get; set; }
+		public uint? ResourceItemIndex { get; set; }
+
+		public uint? MeshIndex { get; set; }
+		public ushort? BufferMask { get; set; }
+
+		public DrawCommand? Command {get;set;}
 		public RasterizerState? RasterizerValues {get;set;}
 		public DepthStencilState? DepthStencilValues {get;set;}
-		public ConstantBuffer[] Buffers { get; set;}
-		public ResourceList[] Resources {get;set;}
-		public Sampler[] Samplers {get;set;}
-		public ImageTarget[] Targets {get;set;}
+		public BlendState? BlendValues { get; set;}
+
+		public DrawItemBitFlags? Flags {get;set;}
+		public ClearState ClearValues { get; set; }
 	}
 }
 

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace StrawHat
+namespace MonoGame.Graphics
 {
 	[Flags]
 	public enum VertexLayout :byte

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace StrawHat
+namespace MonoGame.Graphics
 {
 	/// <summary>
 	///  Graphics implementation of index and vertex buffer object

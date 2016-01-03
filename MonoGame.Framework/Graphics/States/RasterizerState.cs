@@ -88,20 +88,20 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        internal void BindToGraphicsDevice(IGraphicsDevice device)
+		internal void BindToOwner(IWeakReferenceCollection owner)
         {
             if (_defaultStateObject)
                 throw new InvalidOperationException("You cannot bind a default state object.");
-            if (GraphicsDevice != null && GraphicsDevice != device)
+			if (Owner != null && Owner != owner)
                 throw new InvalidOperationException("This rasterizer state is already bound to a different graphics device.");
-            GraphicsDevice = device;
+			Owner = owner;
         }
 
         internal void ThrowIfBound()
         {
             if (_defaultStateObject)
                 throw new InvalidOperationException("You cannot modify a default rasterizer state object.");
-            if (GraphicsDevice != null)
+            if (Owner != null)
                 throw new InvalidOperationException("You cannot modify the rasterizer state after it has been bound to the graphics device!");
         }
 

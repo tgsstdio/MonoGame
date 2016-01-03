@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace StrawHat
+﻿namespace MonoGame.Graphics
 {
 	public class MeshMarker
 	{

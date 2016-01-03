@@ -11,7 +11,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
 		void GetData<T> (CubeMapFace cubeMapFace, T[] data);
 
-		void Construct (IGraphicsDevice graphicsDevice, int size, bool mipMap, SurfaceFormat format, bool renderTarget);
+		void Construct (IWeakReferenceCollection owner, int size, bool mipMap, SurfaceFormat format, bool renderTarget);
 	}
 }
 

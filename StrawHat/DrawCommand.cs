@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 
-namespace StrawHat
+namespace MonoGame.Graphics
 {
+	[StructLayout(LayoutKind.Sequential)]
 	public struct DrawCommand
 	{
 		public DrawPrimitive Primitive {get;set;}

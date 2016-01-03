@@ -50,30 +50,33 @@ namespace Microsoft.Xna.Framework.Graphics
 
 	    private readonly bool _isClone;
 
-		internal Effect(IGraphicsDevice graphicsDevice)
+		internal Effect(IWeakReferenceCollection owner)
 		{
-            if (graphicsDevice == null)
+            if (owner == null)
             {
                 throw new ArgumentNullException("graphicsDevice", FrameworkResources.ResourceCreationWhenDeviceIsNull);
             }
-            this.GraphicsDevice = graphicsDevice;
+            this.Owner = owner;
 		}
 			
 		protected Effect(Effect cloneSource)
-            : this(cloneSource.GraphicsDevice)
+            : this(cloneSource.Owner)
 		{
             _isClone = true;
             Clone(cloneSource);
 		}
 
 		public Effect (
+			IWeakReferenceCollection owner,
 			IConstantBufferPlatform bufferPlatform,
 			IShaderPlatform shaderPlatform,
 			IBlendStatePlatform blendPlatform,
 			IDepthStencilStatePlatform depthPlatform,
 			IRasterizerStatePlatform rasterizerPlatform, 
-			IGraphicsDevice graphicsDevice, byte[] effectCode)
-            : this(graphicsDevice)
+			IEffectCache cache,
+			IWeakReferenceCollection collection,
+			byte[] effectCode)
+			: this(collection)
 		{
 			// By default we currently cache all unique byte streams
 			// and use cloning to populate the effect with parameters,
@@ -101,17 +104,17 @@ namespace Microsoft.Xna.Framework.Graphics
             // First look for it in the cache.
             //
             Effect cloneSource;
-            if (!graphicsDevice.EffectCache.TryGetValue(effectKey, out cloneSource))
+			if (!cache.TryGetValue(effectKey, out cloneSource))
             {
                 using (var stream = new MemoryStream(effectCode, headerSize, effectCode.Length - headerSize, false))
             	using (var reader = new BinaryReader(stream))
 	            {
 	                // Create one.
-	                cloneSource = new Effect(graphicsDevice);
+					cloneSource = new Effect(owner);
 					cloneSource.ReadEffect(bufferPlatform, shaderPlatform, blendPlatform, depthPlatform, rasterizerPlatform, reader);
 
 	                // Cache the effect for later in its original unmodified state.
-	                    graphicsDevice.EffectCache.Add(effectKey, cloneSource);
+						cache.Add(effectKey, cloneSource);
 	                }
 	            }
 
@@ -291,7 +294,7 @@ namespace Microsoft.Xna.Framework.Graphics
 				}
 
 				var buffer = new ConstantBuffer(bufferPlatform,
-												GraphicsDevice,
+												Owner,
 				                                sizeInBytes,
 				                                parameters,
 				                                offsets,
@@ -303,7 +306,7 @@ namespace Microsoft.Xna.Framework.Graphics
             var shaders = (int)reader.ReadByte();
             _shaders = new Shader[shaders];
             for (var s = 0; s < shaders; s++)
-				_shaders[s] = new Shader(shaderPlatform, GraphicsDevice, reader);
+				_shaders[s] = new Shader(shaderPlatform, Owner, reader);
 
             // Read in the parameters.
             Parameters = ReadParameters(reader);

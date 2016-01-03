@@ -15,20 +15,20 @@ namespace Microsoft.Xna.Framework.Graphics
         public int IndexCount { get; private set; }
         public IndexElementSize IndexElementSize { get; private set; }
 
-		protected IndexBuffer(IIndexBufferPlatform platform, IGraphicsDevice graphicsDevice, Type indexType, int indexCount, BufferUsage usage, bool dynamic)
-			: this(platform, graphicsDevice, SizeForType(graphicsDevice, indexType), indexCount, usage, dynamic)
+		protected IndexBuffer(IIndexBufferPlatform platform, IWeakReferenceCollection owner, GraphicsProfile profile, Type indexType, int indexCount, BufferUsage usage, bool dynamic)
+			: this(platform, owner, SizeForType(profile, indexType), indexCount, usage, dynamic)
         {
         }
 
 		private IIndexBufferPlatform mPlatform;
-		protected IndexBuffer(IIndexBufferPlatform platform, IGraphicsDevice graphicsDevice, IndexElementSize indexElementSize, int indexCount, BufferUsage usage, bool dynamic)
+		protected IndexBuffer(IIndexBufferPlatform platform, IWeakReferenceCollection owner, IndexElementSize indexElementSize, int indexCount, BufferUsage usage, bool dynamic)
         {
 			mPlatform = platform;
-			if (graphicsDevice == null)
+			if (owner == null)
             {
-                throw new ArgumentNullException("graphicsDevice", FrameworkResources.ResourceCreationWhenDeviceIsNull);
+                throw new ArgumentNullException("owner", FrameworkResources.ResourceCreationWhenDeviceIsNull);
             }
-			this.GraphicsDevice = graphicsDevice;
+			this.Owner = owner;
 			this.IndexElementSize = indexElementSize;	
             this.IndexCount = indexCount;
             this.BufferUsage = usage;
@@ -38,30 +38,30 @@ namespace Microsoft.Xna.Framework.Graphics
 			mPlatform.Construct(indexElementSize, indexCount);
 		}
 
-		public IndexBuffer(IIndexBufferPlatform platform, IGraphicsDevice graphicsDevice, IndexElementSize indexElementSize, int indexCount, BufferUsage bufferUsage) :
-		this(platform, graphicsDevice, indexElementSize, indexCount, bufferUsage, false)
+		public IndexBuffer(IIndexBufferPlatform platform, IWeakReferenceCollection owner, IndexElementSize indexElementSize, int indexCount, BufferUsage bufferUsage) :
+		this(platform, owner, indexElementSize, indexCount, bufferUsage, false)
 		{
 		}
 
-		public IndexBuffer(IIndexBufferPlatform platform, IGraphicsDevice graphicsDevice, Type indexType, int indexCount, BufferUsage usage) :
-		this(platform, graphicsDevice, SizeForType(graphicsDevice, indexType), indexCount, usage, false)
+		public IndexBuffer(IIndexBufferPlatform platform, IWeakReferenceCollection owner, GraphicsProfile profile, Type indexType, int indexCount, BufferUsage usage) :
+		this(platform, owner, SizeForType(profile, indexType), indexCount, usage, false)
 		{
 		}
 
         /// <summary>
         /// Gets the relevant IndexElementSize enum value for the given type.
         /// </summary>
-        /// <param name="graphicsDevice">The graphics device.</param>
+		/// <param name="profile">The graphics device profile.</param>
         /// <param name="type">The type to use for the index buffer</param>
         /// <returns>The IndexElementSize enum value that matches the type</returns>
-        static IndexElementSize SizeForType(IGraphicsDevice graphicsDevice, Type type)
+		static IndexElementSize SizeForType(GraphicsProfile profile, Type type)
         {
             switch (Marshal.SizeOf(type))
             {
                 case 2:
                     return IndexElementSize.SixteenBits;
                 case 4:
-                    if (graphicsDevice.GraphicsProfile == GraphicsProfile.Reach)
+					if (profile == GraphicsProfile.Reach)
                         throw new NotSupportedException("The profile does not support an elementSize of IndexElementSize.ThirtyTwoBits; use IndexElementSize.SixteenBits or a type that has a size of two bytes.");
                     return IndexElementSize.ThirtyTwoBits;
                 default:

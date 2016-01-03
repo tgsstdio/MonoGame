@@ -16,34 +16,34 @@ namespace Microsoft.Xna.Framework.Graphics
 		public BufferUsage BufferUsage { get; private set; }
 
 		private IVertexBufferPlatform mPlatform;
-		protected VertexBuffer(IVertexBufferPlatform platform, IGraphicsDevice graphicsDevice, VertexDeclaration vertexDeclaration, int vertexCount, BufferUsage bufferUsage, bool dynamic)
+		protected VertexBuffer(IVertexBufferPlatform platform, IWeakReferenceCollection owner, VertexDeclaration vertexDeclaration, int vertexCount, BufferUsage bufferUsage, bool dynamic)
 		{
 			mPlatform = platform;
-		    if (graphicsDevice == null)
+			if (owner == null)
 		    {
 		        throw new ArgumentNullException("graphicsDevice", FrameworkResources.ResourceCreationWhenDeviceIsNull);
 		    }
-		    this.GraphicsDevice = graphicsDevice;
+			this.Owner = owner;
             this.VertexDeclaration = vertexDeclaration;
             this.VertexCount = vertexCount;
             this.BufferUsage = bufferUsage;
 
             // Make sure the graphics device is assigned in the vertex declaration.
-            if (vertexDeclaration.GraphicsDevice != graphicsDevice)
-                vertexDeclaration.GraphicsDevice = graphicsDevice;
+			if (vertexDeclaration.Owner != owner)
+				vertexDeclaration.Owner = owner;
 
             _isDynamic = dynamic;
 
 			mPlatform.Construct();
 		}
 
-		public VertexBuffer(IVertexBufferPlatform platform, IGraphicsDevice graphicsDevice, VertexDeclaration vertexDeclaration, int vertexCount, BufferUsage bufferUsage) :
-			this(platform, graphicsDevice, vertexDeclaration, vertexCount, bufferUsage, false)
+		public VertexBuffer(IVertexBufferPlatform platform, IWeakReferenceCollection owner, VertexDeclaration vertexDeclaration, int vertexCount, BufferUsage bufferUsage) :
+			this(platform, owner, vertexDeclaration, vertexCount, bufferUsage, false)
         {
         }
 		
-		public VertexBuffer(IVertexBufferPlatform platform, IGraphicsDevice graphicsDevice, Type type, int vertexCount, BufferUsage bufferUsage) :
-			this(platform,graphicsDevice, VertexDeclaration.FromType(type), vertexCount, bufferUsage, false)
+		public VertexBuffer(IVertexBufferPlatform platform, IWeakReferenceCollection owner, Type type, int vertexCount, BufferUsage bufferUsage) :
+			this(platform,owner, VertexDeclaration.FromType(type), vertexCount, bufferUsage, false)
 		{
         }
 

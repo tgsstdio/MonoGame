@@ -1,12 +1,12 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProjectGuid>{52C293E3-DCC5-43BE-A94F-DBE0CF44E25E}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>StrawHat</RootNamespace>
-    <AssemblyName>StrawHat</AssemblyName>
+    <RootNamespace>MonoGame.Graphics</RootNamespace>
+    <AssemblyName>MonoGame.Graphics.StatelessRenderer</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
@@ -36,10 +36,8 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StateGroup.cs" />
-    <Compile Include="StateGroupWriter.cs" />
     <Compile Include="DrawItem.cs" />
     <Compile Include="RenderPass.cs" />
-    <Compile Include="IStateGroupWriter.cs" />
     <Compile Include="DrawCommand.cs" />
     <Compile Include="DrawItemCompiler.cs" />
     <Compile Include="IDrawItemCompiler.cs" />
@@ -53,22 +51,30 @@
     <Compile Include="MeshCache.cs" />
     <Compile Include="Mesh.cs" />
     <Compile Include="SyncObject.cs" />
-    <Compile Include="ShaderTechnique.cs" />
-    <Compile Include="ShaderVariant.cs" />
     <Compile Include="BlendState.cs" />
     <Compile Include="CompareFunction.cs" />
     <Compile Include="DepthStencilState.cs" />
     <Compile Include="StencilOperation.cs" />
-    <Compile Include="DepthStencilBitFlags.cs" />
     <Compile Include="BlendFunction.cs" />
     <Compile Include="Blend.cs" />
-    <Compile Include="BlendStateBitFlags.cs" />
     <Compile Include="RasterizerState.cs" />
-    <Compile Include="RasterizerStateBitFlags.cs" />
-    <Compile Include="ResourceList.cs" />
     <Compile Include="Sampler.cs" />
     <Compile Include="ImageTarget.cs" />
     <Compile Include="ConstantBuffer.cs" />
+    <Compile Include="EffectPass.cs" />
+    <Compile Include="Effect.cs" />
+    <Compile Include="EffectShaderVariant.cs" />
+    <Compile Include="GPUResourceList.cs" />
+    <Compile Include="IResourceList.cs" />
+    <Compile Include="DrawItemBitFlags.cs" />
+    <Compile Include="ClearState.cs" />
+    <Compile Include="DrawState.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <ProjectReference Include="..\BirdNest.MonoGame\BirdNest.MonoGame.csproj">
+      <Project>{A978C860-F0DB-4B9F-88AA-E0F002F0312B}</Project>
+      <Name>BirdNest.MonoGame</Name>
+    </ProjectReference>
+  </ItemGroup>
 </Project>

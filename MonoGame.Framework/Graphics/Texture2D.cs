@@ -22,39 +22,68 @@ namespace Microsoft.Xna.Framework.Graphics
         }
 
 		private ITexture2DPlatform mTex2DPlatform;
-		public Texture2D(ITexturePlatform platform, ITexture2DPlatform tex2DPlatform, IGraphicsDevice graphicsDevice, int width, int height)
-			: this(platform, tex2DPlatform, graphicsDevice, width, height, false, SurfaceFormat.Color, SurfaceType.Texture, false, 1)
+		public Texture2D(
+			ITexturePlatform platform,
+			ITexture2DPlatform tex2DPlatform,
+			IWeakReferenceCollection owner,
+			GraphicsCapabilities capability,
+			int width, int height)
+			: this(platform, tex2DPlatform, owner, capability, width, height, false, SurfaceFormat.Color, SurfaceType.Texture, false, 1)
         {
         }
 
-		public Texture2D(ITexturePlatform platform, ITexture2DPlatform tex2DPlatform, IGraphicsDevice graphicsDevice, int width, int height, bool mipmap, SurfaceFormat format)
-			: this(platform, tex2DPlatform, graphicsDevice, width, height, mipmap, format, SurfaceType.Texture, false, 1)
+		public Texture2D(
+			ITexturePlatform platform,
+			ITexture2DPlatform tex2DPlatform,
+			IWeakReferenceCollection owner,
+			GraphicsCapabilities capabilities,
+			int width, int height, bool mipmap, SurfaceFormat format)
+			: this(platform, tex2DPlatform, owner, capabilities, width, height, mipmap, format, SurfaceType.Texture, false, 1)
         {
         }
 
-		public Texture2D(ITexturePlatform platform, ITexture2DPlatform tex2DPlatform, IGraphicsDevice graphicsDevice, int width, int height, bool mipmap, SurfaceFormat format, int arraySize)
-			: this(platform, tex2DPlatform, graphicsDevice, width, height, mipmap, format, SurfaceType.Texture, false, arraySize)
+		public Texture2D(
+			ITexturePlatform platform,
+			ITexture2DPlatform tex2DPlatform,
+			IWeakReferenceCollection owner,
+			GraphicsCapabilities capabilities,
+			int width, int height, bool mipmap, SurfaceFormat format, int arraySize)
+			: this(platform, tex2DPlatform, owner, capabilities , width, height, mipmap, format, SurfaceType.Texture, false, arraySize)
         {
             
         }
 
-		internal Texture2D(ITexturePlatform platform, ITexture2DPlatform tex2DPlatform, IGraphicsDevice graphicsDevice, int width, int height, bool mipmap, SurfaceFormat format, SurfaceType type)
-			: this(platform, tex2DPlatform, graphicsDevice, width, height, mipmap, format, type, false, 1)
+		internal Texture2D(
+			ITexturePlatform platform,
+			ITexture2DPlatform tex2DPlatform,
+			IWeakReferenceCollection owner,
+			GraphicsCapabilities capabilities,
+			int width, int height, bool mipmap, SurfaceFormat format, SurfaceType type)
+			: this(platform, tex2DPlatform, owner,capabilities, width, height, mipmap, format, type, false, 1)
         {
         }
 
-		protected Texture2D(ITexturePlatform platform, ITexture2DPlatform tex2DPlatform, IGraphicsDevice graphicsDevice, int width, int height, bool mipmap, SurfaceFormat format, SurfaceType type, bool shared, int arraySize)
+		private GraphicsCapabilities mCapabilities;
+		protected Texture2D(
+			ITexturePlatform platform,
+			ITexture2DPlatform tex2DPlatform,
+			IWeakReferenceCollection owner,
+			GraphicsCapabilities capability,
+			int width, int height, bool mipmap,
+			SurfaceFormat format, SurfaceType type, bool shared, int arraySize)
 			: base(platform)
 		{
 			mTex2DPlatform = tex2DPlatform;
-            if (graphicsDevice == null)
+            if (owner == null)
             {
-                throw new ArgumentNullException("graphicsDevice", FrameworkResources.ResourceCreationWhenDeviceIsNull);
+				throw new ArgumentNullException("owner", FrameworkResources.ResourceCreationWhenDeviceIsNull);
             }
-            if (arraySize > 1 && ! graphicsDevice.GraphicsCapabilities.SupportsTextureArrays)
+			mCapabilities = capability;
+
+			if (arraySize > 1 && ! mCapabilities.SupportsTextureArrays)
                 throw new ArgumentException("Texture arrays are not supported on this graphics device", "arraySize");
 
-            this.GraphicsDevice = graphicsDevice;
+            this.Owner = owner;
             this.width = width;
             this.height = height;
             this._format = format;
@@ -89,7 +118,7 @@ namespace Microsoft.Xna.Framework.Graphics
             if (data == null)
                 throw new ArgumentNullException("data");
 
-            if (arraySlice > 0 && !GraphicsDevice.GraphicsCapabilities.SupportsTextureArrays)
+			if (arraySlice > 0 && !mCapabilities.SupportsTextureArrays)
                 throw new ArgumentException("Texture arrays are not supported on this graphics device", "arraySlice");
 
 			mTex2DPlatform.SetData<T>(level, arraySlice, rect, data, startIndex, elementCount);
@@ -116,7 +145,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 throw new ArgumentException("data cannot be null");
             if (data.Length < startIndex + elementCount)
                 throw new ArgumentException("The data passed has a length of " + data.Length + " but " + elementCount + " pixels have been requested.");
-            if (arraySlice > 0 && !GraphicsDevice.GraphicsCapabilities.SupportsTextureArrays)
+			if (arraySlice > 0 && !mCapabilities.SupportsTextureArrays)
                 throw new ArgumentException("Texture arrays are not supported on this graphics device", "arraySlice");
 
 			mTex2DPlatform.GetData<T>(level, arraySlice, rect, data, startIndex, elementCount);

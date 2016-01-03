@@ -2,6 +2,7 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework;
 
 #if MONOMAC
 using MonoMac.OpenGL;
@@ -13,7 +14,7 @@ using System.Collections.Generic;
 using OpenTK.Graphics.ES20;
 #endif
 
-namespace Microsoft.Xna.Framework.DesktopGL.Graphics
+namespace MonoGame.Platform.DesktopGL.Graphics
 {
 	public class RenderTarget2DPlatform : IRenderTarget2DPlatform
     {
@@ -21,12 +22,21 @@ namespace Microsoft.Xna.Framework.DesktopGL.Graphics
         internal int glDepthBuffer;
         internal int glStencilBuffer;
 
-        public void Construct(GraphicsDevice graphicsDevice, int width, int height, bool mipMap,
+		private readonly IThreadingContext mThreadContext;
+		private readonly IGraphicsDevice mDevice;
+		public RenderTarget2DPlatform (IThreadingContext instance, IGraphicsDevice device)
+		{
+			mThreadContext = instance;
+			mDevice = device;
+		}
+
+
+        public void Construct(IGraphicsDevice graphicsDevice, int width, int height, bool mipMap,
             SurfaceFormat preferredFormat, DepthFormat preferredDepthFormat, int preferredMultiSampleCount, RenderTargetUsage usage, bool shared)
         {
-            Threading.BlockOnUIThread(() =>
+			mThreadContext.BlockOnUIThread(() =>
             {
-                graphicsDevice.Platform.CreateRenderTarget(this, width, height, mipMap, preferredFormat, preferredDepthFormat, preferredMultiSampleCount, usage);
+				mDevice.PlatformCreateRenderTarget(this, width, height, mipMap, preferredFormat, preferredDepthFormat, preferredMultiSampleCount, usage);
             });            
             
         }
@@ -40,7 +50,7 @@ namespace Microsoft.Xna.Framework.DesktopGL.Graphics
         {
             if (!mIsDisposed)
             {
-                Threading.BlockOnUIThread(() =>
+				mThreadContext.BlockOnUIThread(() =>
                 {
                     this.GraphicsDevice.PlatformDeleteRenderTarget(this);
                 });

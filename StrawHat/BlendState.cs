@@ -1,10 +1,11 @@
-﻿using System;
+﻿using System.Runtime.InteropServices;
 
-namespace StrawHat
+namespace MonoGame.Graphics
 {
+	[StructLayout(LayoutKind.Sequential)]
 	public struct BlendState
 	{
-		public BlendStateBitFlags Flags {get;set;}
+		//	public BlendStateBitFlags Flags {get;set;}
 		public BlendFunction ColorBlendFunction {get;set;}
 		public BlendFunction AlphaBlendFunction {get;set;}
 

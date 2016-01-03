@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace StrawHat
+namespace MonoGame.Graphics
 {
 	class MainClass
 	{

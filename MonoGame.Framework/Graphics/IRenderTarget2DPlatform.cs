@@ -10,7 +10,7 @@ namespace Microsoft.Xna.Framework.Graphics
 	{
 		void GraphicsDeviceResetting ();
 
-		void Construct (IGraphicsDevice graphicsDevice, int width, int height, bool mipMap, SurfaceFormat preferredFormat, DepthFormat preferredDepthFormat, int preferredMultiSampleCount, RenderTargetUsage usage, bool shared);
+		void Construct (IWeakReferenceCollection owner, int width, int height, bool mipMap, SurfaceFormat preferredFormat, DepthFormat preferredDepthFormat, int preferredMultiSampleCount, RenderTargetUsage usage, bool shared);
 
 		void Dispose (bool disposing);
 	}

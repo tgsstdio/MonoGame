@@ -50,7 +50,7 @@ namespace Microsoft.Xna.Framework.Graphics
         // The GraphicsDevice property should only be accessed in Dispose(bool) if the disposing
         // parameter is true. If disposing is false, the GraphicsDevice may or may not be
         // disposed yet.
-        IGraphicsDevice graphicsDevice;
+		IWeakReferenceCollection mOwner;
 
         private WeakReference _selfReference;
 
@@ -107,43 +107,43 @@ namespace Microsoft.Xna.Framework.Graphics
                     Disposing(this, EventArgs.Empty);
 
                 // Remove from the global list of graphics resources
-                if (graphicsDevice != null)
-					graphicsDevice.WeakReferences.RemoveResourceReference(_selfReference);
+                if (mOwner != null)
+					mOwner.RemoveResourceReference(_selfReference);
 
                 _selfReference = null;
-                graphicsDevice = null;
+                mOwner = null;
                 disposed = true;
             }
         }
 
 		public event EventHandler<EventArgs> Disposing;
 		
-		public IGraphicsDevice GraphicsDevice
+		public IWeakReferenceCollection Owner
 		{
 			get
 			{
-				return graphicsDevice;
+				return mOwner;
 			}
 
             internal set
             {
                 Debug.Assert(value != null);
 
-                if (graphicsDevice == value)
+                if (mOwner == value)
                     return;
 
                 // VertexDeclaration objects can be bound to multiple GraphicsDevice objects
                 // during their lifetime. But only one GraphicsDevice should retain ownership.
-                if (graphicsDevice != null)
+                if (mOwner != null)
                 {
-					graphicsDevice.WeakReferences.RemoveResourceReference(_selfReference);
+					mOwner.RemoveResourceReference(_selfReference);
                     _selfReference = null;
                 }
 
-                graphicsDevice = value;
+                mOwner = value;
 
                 _selfReference = new WeakReference(this);
-				graphicsDevice.WeakReferences.AddResourceReference(_selfReference);
+				mOwner.AddResourceReference(_selfReference);
             }
 		}
 		

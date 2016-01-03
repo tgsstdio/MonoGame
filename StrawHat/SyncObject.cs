@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace StrawHat
+namespace MonoGame.Graphics
 {
 	/// <summary>
 	/// Graphic implementation of sync object.

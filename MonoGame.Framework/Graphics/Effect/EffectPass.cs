@@ -74,7 +74,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 return;
             }
 
-            var device = _effect.GraphicsDevice;
+            var device = _effect.Owner;
 
 #if OPENGL || DIRECTX
 
@@ -113,12 +113,12 @@ namespace Microsoft.Xna.Framework.Graphics
 #endif
 
             // Set the render states if we have some.
-            if (_rasterizerState != null)
-                device.RasterizerState = _rasterizerState;
-            if (_blendState != null)
-                device.BlendState = _blendState;
-            if (_depthStencilState != null)
-                device.DepthStencilState = _depthStencilState;
+//            if (_rasterizerState != null)
+//                device.RasterizerState = _rasterizerState;
+//            if (_blendState != null)
+//                device.BlendState = _blendState;
+//            if (_depthStencilState != null)
+//                device.DepthStencilState = _depthStencilState;
         }
 
         private void SetShaderSamplers(Shader shader, TextureCollection textures, SamplerStateCollection samplerStates)

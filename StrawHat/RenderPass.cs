@@ -1,11 +1,11 @@
 ﻿using System;
 
-namespace StrawHat
+namespace MonoGame.Graphics
 {
 	public class RenderPass
 	{
 		public int PassNumber { get; set;}
-		public ShaderVariant[] Variants {get;set;}
+		public EffectShaderVariant[] Variants {get;set;}
 	}
 }
 

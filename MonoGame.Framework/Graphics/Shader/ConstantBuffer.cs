@@ -27,7 +27,7 @@ namespace Microsoft.Xna.Framework.Graphics
         public ConstantBuffer(ConstantBuffer cloneSource)
         {
 			Platform = cloneSource.Platform;
-            GraphicsDevice = cloneSource.GraphicsDevice;
+            Owner = cloneSource.Owner;
 
             // Share the immutable types.
             _name = cloneSource._name;
@@ -42,14 +42,14 @@ namespace Microsoft.Xna.Framework.Graphics
 		private IConstantBufferPlatform Platform;
 		public ConstantBuffer(
 			IConstantBufferPlatform platform,
-			IGraphicsDevice device,
+			IWeakReferenceCollection owner,
           	int sizeInBytes,
           	int[] parameterIndexes,
           	int[] parameterOffsets,
 			string name)
         {
 			Platform = platform;
-            GraphicsDevice = device;
+            Owner = owner;
 
             _buffer = new byte[sizeInBytes];
 
