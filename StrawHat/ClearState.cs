@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace MonoGame.Graphics
+﻿namespace MonoGame.Graphics
 {
 	public class ClearState
 	{

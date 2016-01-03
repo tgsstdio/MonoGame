@@ -3,10 +3,10 @@
 namespace MonoGame.Graphics
 {
 	[StructLayout(LayoutKind.Sequential)]
-	public struct DrawCommand
+	public struct ResourceListKey
 	{
-		public DrawPrimitive Primitive {get;set;}
-		public uint Count { get; set;}
+		public byte ListIndex { get; set; }
+		public uint ItemIndex { get; set; }		
 	}
 }
 

@@ -60,7 +60,6 @@
     <Compile Include="RasterizerState.cs" />
     <Compile Include="Sampler.cs" />
     <Compile Include="ImageTarget.cs" />
-    <Compile Include="ConstantBuffer.cs" />
     <Compile Include="EffectPass.cs" />
     <Compile Include="Effect.cs" />
     <Compile Include="EffectShaderVariant.cs" />
@@ -69,6 +68,12 @@
     <Compile Include="DrawItemBitFlags.cs" />
     <Compile Include="ClearState.cs" />
     <Compile Include="DrawState.cs" />
+    <Compile Include="IEffectCache.cs" />
+    <Compile Include="IEffectVariantCollection.cs" />
+    <Compile Include="EffectVariantDictionary.cs" />
+    <Compile Include="EffectVariantArray.cs" />
+    <Compile Include="PremutationSelector.cs" />
+    <Compile Include="ResourceListKey.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

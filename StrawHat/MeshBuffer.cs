@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace MonoGame.Graphics
+﻿namespace MonoGame.Graphics
 {
 	/// <summary>
 	///  Graphics implementation of index and vertex buffer object

@@ -1,11 +1,15 @@
-﻿using System;
-
-namespace MonoGame.Graphics
+﻿namespace MonoGame.Graphics
 {
 	public class EffectPass
 	{
-		public byte PassNumber { get; set;}
-		public EffectShaderVariant[] Variants {get;set;}
+		public byte Pass { get; set;}
+		public IEffectVariantCollection Variants {get; private set;}
+
+		public EffectPass (byte pass, IEffectVariantCollection shaders)
+		{
+			Pass = pass;
+			Variants = shaders;
+		}
 	}
 }
 

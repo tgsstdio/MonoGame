@@ -5,8 +5,10 @@ namespace MonoGame.Graphics
 	{
 		public byte? SlotIndex { get; set; }
 		public byte? TargetIndex {get;set;}
-		public byte? Techinque { get; set; }
+
+		public byte? EffectIndex { get; set; }
 		public byte? Pass {get;set;}
+
 		public byte? ProgramIndex { get; set;}
 		public ushort? ShaderOptions { get; set; }
 		public byte? UniformsIndex { get; set;}
@@ -22,7 +24,6 @@ namespace MonoGame.Graphics
 		public BlendState? BlendValues { get; set;}
 
 		public DrawItemBitFlags? Flags {get;set;}
-		public ClearState ClearValues { get; set; }
 	}
 }
 
