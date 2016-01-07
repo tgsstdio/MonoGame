@@ -29,6 +29,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="OpenTK">
+      <HintPath>..\packages\OpenTK.1.1.1589.5942\lib\NET40\OpenTK.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -39,6 +42,10 @@
     <Compile Include="BufferCollection.cs" />
     <Compile Include="ConstantBuffer.cs" />
     <Compile Include="Renderer.cs" />
+    <Compile Include="IBlendCapabilities.cs" />
+    <Compile Include="FullBlendingCapabilities.cs" />
+    <Compile Include="IDepthStencilCapabilities.cs" />
+    <Compile Include="FullDepthStencilCapabilities.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -46,5 +53,8 @@
       <Project>{52C293E3-DCC5-43BE-A94F-DBE0CF44E25E}</Project>
       <Name>MonoGame.Graphics</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>

@@ -5,7 +5,7 @@ namespace MonoGame.Graphics
 	[StructLayout(LayoutKind.Sequential)]
 	public struct DepthStencilState
 	{
-		public CompareFunction DepthCompareFunction { get; set; }
+		public CompareFunction DepthBufferFunction { get; set; }
 		public CompareFunction StencilCompareFunction { get; set; }
 		public StencilOperation StencilTestPassed { get; set; }
 		public StencilOperation StencilTestFailed {get;set;}
