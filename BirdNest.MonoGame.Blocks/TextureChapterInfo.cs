@@ -1,4 +1,4 @@
-﻿namespace BirdNest.MonoGame.Blocks
+﻿namespace MonoGame.Content.Blocks
 {
 	public class TextureChapterInfo
 	{

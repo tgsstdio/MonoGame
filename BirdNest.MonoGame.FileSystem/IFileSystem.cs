@@ -1,7 +1,6 @@
 ﻿using System.IO;
-using BirdNest.MonoGame.Core;
 
-namespace BirdNest.MonoGame.FileSystem
+namespace MonoGame.Content
 {
 	public interface IFileSystem
 	{

@@ -1,6 +1,6 @@
 ﻿using NUnit.Framework;
-using BirdNest.MonoGame.Core;
 using BirdNest.MonoGame.Graphics;
+using MonoGame.Content;
 
 namespace BirdNest.Rendering.UnitTests
 {
@@ -20,7 +20,7 @@ namespace BirdNest.Rendering.UnitTests
 			};
 			s1.ObjectModel.Asset = new AssetInfo{
 				Identifier = EXPECTED_MODEL_ID,
-				AssetType= AssetType.Mesh, 
+				AssetType= AssetType.Model, 
 				Block = EXPECTED_BLOCK,
 				Name = "BLOCK 13",
 				Version = 0,
@@ -86,7 +86,7 @@ namespace BirdNest.Rendering.UnitTests
 			};
 			s1.ObjectModel.Asset = new AssetInfo{
 				Identifier = EXPECTED_MODEL_ID,
-				AssetType= AssetType.Mesh, 
+				AssetType= AssetType.Model, 
 				Block = EXPECTED_BLOCK,
 				Name = "BLOCK 13",
 				Version = 0,

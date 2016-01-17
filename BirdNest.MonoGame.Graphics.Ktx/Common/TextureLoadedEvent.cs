@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace BirdNest.MonoGame.Graphics.Ktx
+namespace MonoGame.Textures.Ktx
 {
 	public class TextureLoadedEvent
 	{

@@ -2,7 +2,7 @@
 using OpenTK.Graphics.OpenGL;
 using System.Diagnostics;
 
-namespace BirdNest.MonoGame.Graphics.Ktx
+namespace MonoGame.Textures.Ktx.DesktopGL
 {
 	/// <summary>
 	/// ETC unpacker.
@@ -10,15 +10,16 @@ namespace BirdNest.MonoGame.Graphics.Ktx
 	/// </summary>
 	public class ETCUnpacker : IETCUnpacker
 	{
-		public GLContextCapabilities Profile { get; private set; }
-		public ETCUnpacker ()
+		public IGLContextCapabilities Profile { get; private set; }
+		public ETCUnpacker (IGLContextCapabilities profile)
 		{
-			Profile = new GLContextCapabilities ();
+			Profile = profile;
 		}
 
-		public bool IsRequired (KTXLoadInstructions instructions, ErrorCode error)
+		public bool IsRequired (KTXLoadInstructions instructions, int glError)
 		{
 			const int GL_COMPRESSED_R11_EAC = 0x9270;
+			var error = (ErrorCode)glError;
 
 			return (error == ErrorCode.InvalidEnum || error == ErrorCode.InvalidValue)				
 				&& instructions.IsCompressed && instructions.TextureDimensions == 2

@@ -1,8 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.IO;
-using BirdNest.MonoGame.Core;
 
-namespace BirdNest.MonoGame.Blocks.JsonNET
+namespace MonoGame.Content.Blocks.JsonNET
 {
 	public class JsonNETSerializer : IBlockFileSerializer
 	{

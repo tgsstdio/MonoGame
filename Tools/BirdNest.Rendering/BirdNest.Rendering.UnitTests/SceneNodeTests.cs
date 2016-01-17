@@ -1,7 +1,7 @@
 ﻿using System;
 using NUnit.Framework;
-using BirdNest.MonoGame.Core;
 using BirdNest.MonoGame.Graphics;
+using MonoGame.Content;
 
 namespace BirdNest.Rendering.UnitTests
 {
@@ -12,7 +12,7 @@ namespace BirdNest.Rendering.UnitTests
 		{
 			var model = new ObjectModelInfo ();
 			model.Asset = new AssetInfo ();
-			model.Asset.AssetType = AssetType.Mesh;
+			model.Asset.AssetType = AssetType.Model;
 			model.Asset.Block = new BlockIdentifier {
 				BlockId = blockId
 			};

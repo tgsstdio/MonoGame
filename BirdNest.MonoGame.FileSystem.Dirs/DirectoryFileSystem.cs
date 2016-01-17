@@ -1,8 +1,8 @@
 ﻿using System.IO;
 using System.Collections.Generic;
-using BirdNest.MonoGame.Core;
+using MonoGame.Content.Blocks;
 
-namespace BirdNest.MonoGame.FileSystem.Dirs
+namespace MonoGame.Content.Dirs
 {
 	public class DirectoryFileSystem : IFileSystem
 	{

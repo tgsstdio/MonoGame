@@ -60,17 +60,17 @@
       <Project>{E3FE7233-1F10-4A28-A1F0-EDA3600B144F}</Project>
       <Name>BirdNest.Rendering</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\BirdNest.MonoGame.Blocks\BirdNest.MonoGame.Blocks.csproj">
+    <ProjectReference Include="..\..\..\BirdNest.MonoGame.Blocks\MonoGame.Content.Blocks.csproj">
       <Project>{F218D143-486C-4018-8DAD-B970088EA505}</Project>
-      <Name>BirdNest.MonoGame.Blocks</Name>
+      <Name>MonoGame.Content.Blocks</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\BirdNest.MonoGame.Core\BirdNest.MonoGame.Core.csproj">
-      <Project>{AB25A0BE-77B4-4940-B59B-43E938A89C44}</Project>
-      <Name>BirdNest.MonoGame.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\BirdNest.MonoGame.Graphics\BirdNest.MonoGame.Graphics.csproj">
+    <ProjectReference Include="..\..\..\BirdNest.MonoGame.Graphics\MonoGame.Content.Graphics.csproj">
       <Project>{2F0797E0-AA35-4C38-9CE0-0055A3E41C64}</Project>
-      <Name>BirdNest.MonoGame.Graphics</Name>
+      <Name>MonoGame.Content.Graphics</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\BirdNest.MonoGame.FileSystem\MonoGame.Content.csproj">
+      <Project>{E44E47ED-2203-4E45-85A9-C755B10AC044}</Project>
+      <Name>MonoGame.Content</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -1,4 +1,4 @@
-﻿using BirdNest.MonoGame.Core;
+﻿using MonoGame.Content;
 
 namespace BirdNest.MonoGame.Graphics
 {

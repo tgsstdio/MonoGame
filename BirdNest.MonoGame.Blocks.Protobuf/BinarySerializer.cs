@@ -1,10 +1,9 @@
 ﻿using System.IO;
 using ProtoBuf;
 using ProtoBuf.Meta;
-using BirdNest.MonoGame.Blocks;
-using BirdNest.MonoGame.Core;
+using MonoGame.Content.Blocks;
 
-namespace BirdNest.MonoGame.Blocks.Protobuf
+namespace MonoGame.Content.Blocks.Protobuf
 {
 	public class BinarySerializer : IBlockFileSerializer
 	{

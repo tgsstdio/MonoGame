@@ -3,9 +3,8 @@ using System;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Input;
 using BirdNest.MonoGame.Graphics;
-using BirdNest.MonoGame.FileSystem;
-using BirdNest.MonoGame.Core;
 using BirdNest.MonoGame;
+using MonoGame.Content;
 
 namespace ShadowMapping
 {

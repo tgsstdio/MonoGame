@@ -41,48 +41,48 @@
     <Compile Include="GameWorld.cs" />
     <Compile Include="CameraInfo.cs" />
     <Compile Include="CameraData.cs" />
-    <Compile Include="DryIoc\Container.cs" />
-    <Compile Include="DryIoc\FactoryCompiler.cs" />
-    <Compile Include="DryIoc\InternalsVisibleToDryIocFactoryCompilerDynamicAssembly.cs" />
     <Compile Include="SortedRenderer.cs" />
     <Compile Include="Pass.cs" />
     <Compile Include="LightInfo.cs" />
     <Compile Include="IPivot.cs" />
     <Compile Include="ISortedRenderer.cs" />
     <Compile Include="ISortedPassHelper.cs" />
+    <Compile Include="DryIoc\AsyncExecutionFlowScopeContext.cs" />
+    <Compile Include="DryIoc\Container.cs" />
+    <Compile Include="DryIoc\FactoryCompiler.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\BirdNest.MonoGame.Graphics\BirdNest.MonoGame.Graphics.csproj">
-      <Project>{2F0797E0-AA35-4C38-9CE0-0055A3E41C64}</Project>
-      <Name>BirdNest.MonoGame.Graphics</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\BirdNest.MonoGame.FileSystem.Dirs\BirdNest.MonoGame.FileSystem.Dirs.csproj">
-      <Project>{9D3DE491-E6D0-4D12-9A2D-D31B23D7D71D}</Project>
-      <Name>BirdNest.MonoGame.FileSystem.Dirs</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\BirdNest.MonoGame.FileSystem\BirdNest.MonoGame.FileSystem.csproj">
-      <Project>{E44E47ED-2203-4E45-85A9-C755B10AC044}</Project>
-      <Name>BirdNest.MonoGame.FileSystem</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\BirdNest.MonoGame.Blocks\BirdNest.MonoGame.Blocks.csproj">
-      <Project>{F218D143-486C-4018-8DAD-B970088EA505}</Project>
-      <Name>BirdNest.MonoGame.Blocks</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\BirdNest.MonoGame\BirdNest.MonoGame.csproj">
       <Project>{A978C860-F0DB-4B9F-88AA-E0F002F0312B}</Project>
       <Name>BirdNest.MonoGame</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\BirdNest.MonoGame.Blocks.JsonNET\BirdNest.MonoGame.Blocks.JsonNET.csproj">
-      <Project>{ACBEAF7B-1403-40F6-9767-378B8E824443}</Project>
-      <Name>BirdNest.MonoGame.Blocks.JsonNET</Name>
+    <ProjectReference Include="..\..\..\BirdNest.MonoGame.FileSystem\MonoGame.Content.csproj">
+      <Project>{E44E47ED-2203-4E45-85A9-C755B10AC044}</Project>
+      <Name>MonoGame.Content</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\BirdNest.MonoGame.Core\BirdNest.MonoGame.Core.csproj">
-      <Project>{AB25A0BE-77B4-4940-B59B-43E938A89C44}</Project>
-      <Name>BirdNest.MonoGame.Core</Name>
+    <ProjectReference Include="..\..\..\BirdNest.MonoGame.FileSystem.Dirs\MonoGame.Content.Dirs.csproj">
+      <Project>{9D3DE491-E6D0-4D12-9A2D-D31B23D7D71D}</Project>
+      <Name>MonoGame.Content.Dirs</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\BirdNest.MonoGame.Blocks\MonoGame.Content.Blocks.csproj">
+      <Project>{F218D143-486C-4018-8DAD-B970088EA505}</Project>
+      <Name>MonoGame.Content.Blocks</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\BirdNest.MonoGame.Blocks.JsonNET\MonoGame.Content.Blocks.JsonNET.csproj">
+      <Project>{ACBEAF7B-1403-40F6-9767-378B8E824443}</Project>
+      <Name>MonoGame.Content.Blocks.JsonNET</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\BirdNest.MonoGame.Graphics\MonoGame.Content.Graphics.csproj">
+      <Project>{2F0797E0-AA35-4C38-9CE0-0055A3E41C64}</Project>
+      <Name>MonoGame.Content.Graphics</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\MonoGame.Textures\MonoGame.Textures.csproj">
+      <Project>{99F73D50-EDBB-4918-B99C-B785E9563795}</Project>
+      <Name>MonoGame.Textures</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

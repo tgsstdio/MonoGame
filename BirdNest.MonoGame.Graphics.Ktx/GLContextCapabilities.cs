@@ -1,16 +1,16 @@
 ﻿using OpenTK.Graphics.OpenGL;
 
-namespace BirdNest.MonoGame.Graphics.Ktx
+namespace MonoGame.Textures.Ktx.DesktopGL
 {
-	public class GLContextCapabilities
+	public class GLContextCapabilities : IGLContextCapabilities
 	{
 		public int MajorVersion;
 		public int MinorVersion;
 		public int ContextProfile;
 		public bool SupportsSwizzle;
-		public bool SupportsSRGB;
-		public GLSizedFormats SizedFormats;
-		public GLR16Formats R16Formats;
+		public bool SupportsSRGB {get; private set;}
+		public GLSizedFormats SizedFormats { get; private set; }
+		public GLR16Formats R16Formats { get; private set; }
 
 		public bool HasExtension(string ex)
 		{

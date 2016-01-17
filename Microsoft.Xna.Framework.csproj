@@ -215,6 +215,7 @@
     <Compile Include="MonoGame.Framework\Graphics\Effect\IEffectCache.cs" />
     <Compile Include="MonoGame.Framework\Graphics\Effect\EffectCache.cs" />
     <Compile Include="MonoGame.Framework\IThreadingContext.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

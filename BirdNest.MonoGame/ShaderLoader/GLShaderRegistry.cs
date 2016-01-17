@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using BirdNest.MonoGame.Graphics;
 using OpenTK.Graphics.OpenGL;
-using BirdNest.MonoGame.Core;
-using BirdNest.MonoGame.Blocks;
+using MonoGame.Content.Blocks;
+using MonoGame.Content;
 
 namespace BirdNest.MonoGame
 {

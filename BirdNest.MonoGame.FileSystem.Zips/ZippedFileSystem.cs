@@ -1,9 +1,9 @@
 ﻿using System.IO;
 using System.Collections.Generic;
-using BirdNest.MonoGame.Core;
 using System.IO.Compression;
+using MonoGame.Content.Blocks;
 
-namespace BirdNest.MonoGame.FileSystem.Zips
+namespace MonoGame.Content.Zips
 {
 	public class ZippedFileSystem : IFileSystem
 	{

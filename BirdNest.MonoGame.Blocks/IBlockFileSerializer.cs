@@ -1,8 +1,7 @@
 using System.IO;
 using System.Threading.Tasks;
-using BirdNest.MonoGame.Core;
 
-namespace BirdNest.MonoGame.Blocks
+namespace MonoGame.Content.Blocks
 {
 	public interface IBlockFileSerializer
 	{

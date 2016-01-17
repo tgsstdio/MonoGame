@@ -6,111 +6,28 @@ namespace MonoGame.Graphics.AZDO
 	public class Renderer
 	{
 		private IBlendCapabilities mBlend;
-		private IDepthStencilCapabilities mDepthStencil;
-		public Renderer (IBlendCapabilities blend, IDepthStencilCapabilities depth)
+		private IStencilCapabilities mStencil;
+		private IRasterizerCapabilities mRaster;
+		private IDepthCapabilities mDepth;
+		private readonly IShaderProgramCache mCache;
+		public Renderer (IBlendCapabilities blend, IStencilCapabilities stencil, IRasterizerCapabilities raster, IDepthCapabilities depth, IShaderProgramCache cache)
 		{
+			mCache = cache;
 			mBlend = blend;
-			mDepthStencil = depth;
+			mStencil = stencil;
+			mRaster = raster;
+			mDepth =  depth;
 			SetDefault ();
 		}
 
-		public class Marker
-		{
-
-		}
-
-		public class Resource
-		{
-
-		}
-
-		Mesh FindMesh ()
-		{
-			throw new NotImplementedException ();
-		}
-
-		public class Effect
-		{
-			public EffectPass[] Passes { get; set; }
-		}
-
-		public class MeshEffect
-		{
-			public int PassNumber { get; set;}
-			public Effect Technique { get; set;}
-			public Mesh Part { get; set; }
-			public int Options { get; set; }
-		}
-
-		public void RegisterModelNode(MeshEffect[] nodes)
-		{
-			foreach (var entry in nodes)
-			{
-				var pass = entry.Technique.Passes [entry.PassNumber];
-				RegisterMesh (entry.Part, pass, entry.Options);
-			}
-		}
-
-		public class MeshMarkerCollection
-		{
-			public void Add(object item)
-			{
-
-			}
-
-			public bool Exists(Mesh m, out Marker found)
-			{
-				throw new NotImplementedException ();
-			}
-		}
-
-		public class Buffer
-		{
-
-		}
-
-		public class Criteria
-		{
-
-		}
-
-		public MeshMarkerCollection markers;
-		public IConstantBufferCollection buffers;
-
-		public void RegisterMesh(Mesh mesh, EffectPass pass, int options)
-		{
-			var vertexFormat = mesh.VertexFormat;
-
-			Marker found;
-			if (markers.Exists (mesh, out found))
-			{
-
-			}
-			else
-			{
-
-			}
-
-			var programId = pass.Match (vertexFormat, options);
-
-			var id = mesh.GetBlockId();
-
-			var candidates = buffers.Filter (mesh, pass, options);
-			if (candidates.Length == 0)
-			{
-				buffers.Add (null);
-			}
-
-		}
-
+		public IConstantBufferCollection mBuffers;
 
 		public DrawItem mPreviousItem;
-		private DrawItemBitFlags mPreviousColorMask;
 
-		private void ApplyBlendValues (DrawItem from, DrawItem proposedState)
+		private void ApplyBlendChanges (DrawItem previous, DrawItem next)
 		{
-			var pastBlend = from.BlendValues;
-			var nextBlend = proposedState.BlendValues;
+			var pastBlend = previous.BlendValues;
+			var nextBlend = next.BlendValues;
 
 			var blendEnabled = !(nextBlend.ColorSourceBlend == Blend.One && 
 				nextBlend.ColorDestinationBlend == Blend.Zero &&
@@ -138,90 +55,320 @@ namespace MonoGame.Graphics.AZDO
 				| DrawItemBitFlags.GreenColorWriteChannel
 				| DrawItemBitFlags.BlueColorWriteChannel
 				| DrawItemBitFlags.AlphaColorWriteChannel; 
-			
-			var colorWriteMask = writeMask & proposedState.Flags;
 
-			if ( (mPreviousColorMask & colorWriteMask) == 0)
+			var pastColourMask = writeMask & previous.Flags;
+			var nextColourMask = writeMask & next.Flags;
+
+			if (pastColourMask != nextColourMask)
 			{
-				mBlend.SetColorMask (colorWriteMask);
+				mBlend.SetColorMask (nextColourMask);
 			}
 		}
 
-		private void ApplyDepthStencilValues (DrawItem previous, DrawItem next)
+		private void ApplyStencilChanges (DrawItem previous, DrawItem next)
 		{
-			var enabled = (next.Flags & DrawItemBitFlags.DepthBufferEnabled) != 0;
+			var pastStencil = previous.StencilValues;
+			var nextStencil = next.StencilValues;
 
-			if (mDepthStencil.IsDepthBufferEnabled != enabled)
+			if (pastStencil.StencilWriteMask != nextStencil.StencilWriteMask)
 			{
-				if (!mDepthStencil.IsDepthBufferEnabled)
+				mStencil.SetStencilWriteMask (nextStencil.StencilWriteMask);
+			}
+
+			var newStencilEnabled = (next.Flags & DrawItemBitFlags.StencilEnabled);
+			if (mStencil.IsStencilBufferEnabled != (newStencilEnabled != 0))
+			{
+				if (mStencil.IsStencilBufferEnabled)
 				{
-					mDepthStencil.DisableDepthBuffer ();
+					mStencil.DisableStencilBuffer ();
 				}
 				else
 				{
-					// enable Depth Buffer
-					mDepthStencil.EnableDepthBuffer ();
+					mStencil.EnableStencilBuffer ();
 				}
 			}
 
-			var pastDepth = previous.DepthStencilValues;
-			var nextDepth = next.DepthStencilValues;
+			// TODO : Stencil operations
+			// set function
+			bool pastTwoSided = (previous.Flags & DrawItemBitFlags.TwoSidedStencilMode) > 0;
+			bool nextTwoSided = (previous.Flags & DrawItemBitFlags.TwoSidedStencilMode) > 0;
 
-			if (pastDepth.DepthBufferFunction != nextDepth.DepthBufferFunction)
+			if (nextTwoSided)
 			{
-				mDepthStencil.SetDepthBufferFunc (nextDepth.DepthBufferFunction);
+				if (nextTwoSided != pastTwoSided ||
+					nextStencil.StencilFunction != pastStencil.StencilFunction ||
+					nextStencil.ReferenceStencil != pastStencil.ReferenceStencil ||
+					nextStencil.StencilMask != pastStencil.StencilMask)
+				{
+					mStencil.SetFrontFaceCullStencilFunction (
+						nextStencil.StencilFunction,
+						nextStencil.ReferenceStencil,
+						nextStencil.StencilMask);
+				}
+
+				if (nextTwoSided != pastTwoSided ||
+					nextStencil.CounterClockwiseStencilFunction != pastStencil.CounterClockwiseStencilFunction ||
+					nextStencil.ReferenceStencil != pastStencil.ReferenceStencil ||
+					nextStencil.StencilMask != pastStencil.StencilMask)
+				{
+					mStencil.SetBackFaceCullStencilFunction (
+						nextStencil.CounterClockwiseStencilFunction,
+						nextStencil.ReferenceStencil,
+						nextStencil.StencilMask);
+				}
+
+				if (nextTwoSided != pastTwoSided ||
+					nextStencil.StencilFail != pastStencil.StencilFail ||
+					nextStencil.StencilDepthBufferFail != pastStencil.StencilDepthBufferFail ||
+					nextStencil.StencilPass != pastStencil.StencilPass)
+				{
+					mStencil.SetFrontFaceStencilOperation(			
+						nextStencil.StencilFail,
+						nextStencil.StencilDepthBufferFail,
+						nextStencil.StencilPass);
+				}
+
+				if (nextTwoSided != pastTwoSided ||
+					nextStencil.CounterClockwiseStencilFail != pastStencil.CounterClockwiseStencilFail ||
+					nextStencil.CounterClockwiseStencilDepthBufferFail != pastStencil.CounterClockwiseStencilDepthBufferFail ||
+					nextStencil.CounterClockwiseStencilPass != pastStencil.CounterClockwiseStencilPass)
+				{
+					mStencil.SetBackFaceStencilOperation(			
+						nextStencil.CounterClockwiseStencilFail,
+						nextStencil.CounterClockwiseStencilDepthBufferFail,
+						nextStencil.CounterClockwiseStencilPass);
+				}
+			}
+			else
+			{
+				if (nextTwoSided != pastTwoSided ||
+					nextStencil.StencilFunction != pastStencil.StencilFunction ||
+					nextStencil.ReferenceStencil != pastStencil.ReferenceStencil ||
+					nextStencil.StencilMask != pastStencil.StencilMask)
+				{
+					mStencil.SetStencilFunction (
+						nextStencil.StencilFunction,
+						nextStencil.ReferenceStencil,
+						nextStencil.StencilMask);
+				}
+
+				if (nextTwoSided != pastTwoSided ||
+					nextStencil.StencilFail != pastStencil.StencilFail ||
+					nextStencil.StencilDepthBufferFail != pastStencil.StencilDepthBufferFail ||
+					nextStencil.StencilPass != pastStencil.StencilPass)
+				{
+					mStencil.SetStencilOperation (
+						nextStencil.StencilFail,
+						nextStencil.StencilDepthBufferFail,
+						nextStencil.StencilPass);
+				}
+			}
+		}
+
+		private static bool ChangesFoundInDepth(DrawItem previous, DrawItem next)
+		{
+			var mask = DrawItemBitFlags.DepthBufferEnabled
+			           | DrawItemBitFlags.DepthBufferWriteEnabled;
+
+			var pastFlags = mask & previous.Flags;
+			var nextFlags = mask & next.Flags;
+
+			return (pastFlags != nextFlags);
+		}
+
+		private static bool ChangesFoundInStencil (DrawItem previous, DrawItem next)
+		{
+			var mask = DrawItemBitFlags.StencilEnabled
+			           | DrawItemBitFlags.TwoSidedStencilMode;
+
+			var pastFlags = mask & previous.Flags;
+			var nextFlags = mask & next.Flags;
+
+			return (pastFlags != nextFlags) || (!(previous.StencilValues.Equals(next.StencilValues)));
+		}
+
+		private static bool ChangesFoundInBlend(DrawItem previous, DrawItem next)
+		{
+			var mask = DrawItemBitFlags.RedColorWriteChannel
+				| DrawItemBitFlags.GreenColorWriteChannel
+				| DrawItemBitFlags.BlueColorWriteChannel
+				| DrawItemBitFlags.AlphaColorWriteChannel;
+
+					var pastFlags = mask & previous.Flags;
+					var nextFlags = mask & next.Flags;
+
+			return (pastFlags != nextFlags) || (!(previous.BlendValues.Equals (next.BlendValues)));
+		}
+
+		public void SetDefault()
+		{			
+			mBlend.Initialise ();
+			mStencil.Initialise ();
+			mRaster.Initialise ();
+			mDepth.Initialise ();
+		}
+
+		private static bool ChangesFoundInRasterization(DrawItem previous, DrawItem next)
+		{
+			var mask = DrawItemBitFlags.CullBackFaces
+				| DrawItemBitFlags.CullFrontFaces
+				| DrawItemBitFlags.CullingEnabled
+				| DrawItemBitFlags.ScissorTestEnabled
+				| DrawItemBitFlags.UseCounterClockwiseWindings;
+
+			var pastFlags = mask & previous.Flags;
+			var nextFlags = mask & next.Flags;
+
+			return (pastFlags != nextFlags) || !(previous.RasterizerValues.Equals (next.RasterizerValues));
+		}
+
+		private void ApplyRasterizationChanges(DrawItem previous, DrawItem next)
+		{
+			var mask = DrawItemBitFlags.CullingEnabled;
+			if ((previous.Flags & mask) != (next.Flags & mask))
+			{
+				if (mRaster.CullingEnabled)
+				{
+					mRaster.DisableCulling ();
+				}
+				else
+				{
+					mRaster.EnableCulling ();
+				}
+			}
+
+			// culling facing face
+			mask = DrawItemBitFlags.CullFrontFaces | DrawItemBitFlags.CullBackFaces;
+			if ((previous.Flags & mask) != (next.Flags & mask))
+			{
+				mRaster.SetCullingMode (
+					(next.Flags & DrawItemBitFlags.CullFrontFaces) > 0 
+					, (next.Flags & DrawItemBitFlags.CullBackFaces) > 0 );
+			}
+
+			mask = DrawItemBitFlags.ScissorTestEnabled;
+			if ((previous.Flags & mask) != (next.Flags & mask))
+			{
+				if (mRaster.ScissorTestEnabled)
+				{
+					mRaster.DisableScissorTest ();
+				}
+				else
+				{
+					mRaster.EnableScissorTest ();
+				}
+			}
+
+			mask = DrawItemBitFlags.UseCounterClockwiseWindings;
+			var nextMaskValue = (next.Flags & mask);
+			if ((previous.Flags & mask) != nextMaskValue)
+			{
+				mRaster.SetUsingCounterClockwiseWindings(nextMaskValue > 0);
+			}
+
+
+			var nextState = next.RasterizerValues;
+			if (Math.Abs (previous.RasterizerValues.DepthBias - nextState.DepthBias) >= float.Epsilon
+				|| Math.Abs (previous.RasterizerValues.SlopeScaleDepthBias - nextState.SlopeScaleDepthBias) >= float.Epsilon)
+			{
+				if (	nextState.DepthBias > 0.0f
+					|| 	nextState.DepthBias < 0.0f
+					|| nextState.SlopeScaleDepthBias < 0.0f
+					|| nextState.SlopeScaleDepthBias > 0.0f
+					)
+				{   
+					mRaster.EnablePolygonOffset (nextState.SlopeScaleDepthBias, nextState.DepthBias);
+				} else
+				{
+					mRaster.DisablePolygonOffset ();		
+				}
+			}
+		}
+
+		private void ApplyDepthChanges (DrawItem previous, DrawItem next)
+		{
+			var enabled = (next.Flags & DrawItemBitFlags.DepthBufferEnabled) != 0;
+
+			if (mDepth.IsDepthBufferEnabled != enabled)
+			{
+				if (mDepth.IsDepthBufferEnabled)
+				{
+					mDepth.DisableDepthBuffer ();
+				}
+				else
+				{
+					mDepth.EnableDepthBuffer ();
+				}
 			}
 
 			var oldDepthWrite = (previous.Flags & DrawItemBitFlags.DepthBufferWriteEnabled);
 			var newDepthWrite = (next.Flags & DrawItemBitFlags.DepthBufferWriteEnabled);
 
-			if ((oldDepthWrite & newDepthWrite) == 0)
+			var pastDepth = previous.DepthValues;
+			var nextDepth = next.DepthValues;
+
+			if ((oldDepthWrite & newDepthWrite) != oldDepthWrite)
 			{
-				mDepthStencil.SetDepthMask(newDepthWrite != 0);
+				mDepth.SetDepthMask (newDepthWrite != 0);
 			}
 
-			var newStencilEnabled = (next.Flags & DrawItemBitFlags.StencilEnabled);
-
-			if (mDepthStencil.IsStencilBufferEnabled != ( newStencilEnabled != 0))
+			if (pastDepth.DepthBufferFunction != nextDepth.DepthBufferFunction)
 			{
-				if (!mDepthStencil.IsStencilBufferEnabled)
-				{
-					mDepthStencil.DisableStencilBuffer ();
-				}
-				else
-				{
-					mDepthStencil.EnableStencilBuffer ();
-				}
+				mDepth.SetDepthBufferFunc (nextDepth.DepthBufferFunction);
 			}
-
-			if (pastDepth.StencilWriteMask != nextDepth.StencilWriteMask)
-			{
-				mDepthStencil.SetStencilWriteMask (nextDepth.StencilWriteMask);
-			}
-		}
-
-		public void SetDefault()
-		{
-			mBlend.Initialise ();
-			mDepthStencil.Initialise ();
 		}
 
 		public void Render(DrawItem[] items)
 		{
-			var currentState = mPreviousItem;
-			foreach (var proposedState in items)
+			var pastState = mPreviousItem;
+			foreach (var nextState in items)
 			{
-				if (!(proposedState.BlendValues.Equals(currentState.BlendValues)))
+				if (ChangesFoundInBlend (pastState, nextState))
 				{
-					ApplyBlendValues (currentState, proposedState);
+					ApplyBlendChanges (pastState, nextState);
 				}
 
-				if (!(proposedState.DepthStencilValues.Equals(currentState.DepthStencilValues)))
+				if (ChangesFoundInDepth (pastState, nextState))
 				{
-					ApplyDepthStencilValues (currentState, proposedState);
+					ApplyDepthChanges(pastState, nextState);
 				}
 
-				currentState = proposedState;
+				if (ChangesFoundInStencil (pastState, nextState))
+				{
+					ApplyStencilChanges (pastState, nextState);
+				}
+
+				if (ChangesFoundInRasterization(pastState, nextState))
+				{
+					ApplyRasterizationChanges (pastState, nextState);
+				}
+
+				// TODO : bind constant buffers
+				// TODO : bind program
+				// TODO : bind uniforms
+				// TODO : bind render target
+				// TODO : bind vbo
+
+				pastState = nextState;
+			}
+		}
+
+		public void CheckProgram(DrawItem nextState)
+		{
+			if (mCache.ProgramIndex != nextState.ProgramIndex)
+			{
+				mCache.SetProgram (nextState.ProgramIndex);
+			}
+
+			var currentProgram = mCache.GetActiveProgram ();
+			if (currentProgram.GetBufferMask () != nextState.BufferMask)
+			{
+				currentProgram.Bind (mBuffers);
+			}
+
+			if (currentProgram.GetUniformIndex () != nextState.UniformsIndex)
+			{
+				currentProgram.SetUniformIndex (nextState.UniformsIndex);
 			}
 		}
 	}

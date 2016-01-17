@@ -35,26 +35,46 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="IBufferCollection.cs" />
     <Compile Include="Mesh.cs" />
-    <Compile Include="EffectPass.cs" />
-    <Compile Include="EffectVariant.cs" />
-    <Compile Include="BufferCollection.cs" />
-    <Compile Include="ConstantBuffer.cs" />
     <Compile Include="Renderer.cs" />
     <Compile Include="IBlendCapabilities.cs" />
     <Compile Include="FullBlendingCapabilities.cs" />
-    <Compile Include="IDepthStencilCapabilities.cs" />
-    <Compile Include="FullDepthStencilCapabilities.cs" />
+    <Compile Include="IRasterizerCapabilities.cs" />
+    <Compile Include="FullRasterizerCapabilities.cs" />
+    <Compile Include="FullStencilCapabilities.cs" />
+    <Compile Include="IStencilCapabilities.cs" />
+    <Compile Include="IDepthCapabilities.cs" />
+    <Compile Include="FullDepthCapabilities.cs" />
+    <Compile Include="ShaderStorageBufferBinder.cs" />
+    <Compile Include="ConstantBufferCollection.cs" />
+    <Compile Include="FullShaderStorageBuffer.cs" />
+    <Compile Include="IShaderStorageBuffer.cs" />
+    <Compile Include="IShaderProgram.cs" />
+    <Compile Include="FullShaderProgram.cs" />
+    <Compile Include="IShaderProgramCache.cs" />
+    <Compile Include="Composer.cs" />
+    <Compile Include="ObjectModelSceneNode.cs" />
+    <Compile Include="DrawItemOffset.cs" />
+    <Compile Include="RenderList.cs" />
+    <Compile Include="IRenderList.cs" />
+    <Compile Include="IMeshMarkerRegistry.cs" />
+    <Compile Include="MeshMarkerRegistry.cs" />
+    <Compile Include="IMeshBufferCache.cs" />
+    <Compile Include="IVertexBufferObject.cs" />
+    <Compile Include="FullVertexBufferObject.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <ProjectReference Include="..\StrawHat\MonoGame.Graphics.csproj">
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MonoGame.Graphics\MonoGame.Graphics.csproj">
       <Project>{52C293E3-DCC5-43BE-A94F-DBE0CF44E25E}</Project>
       <Name>MonoGame.Graphics</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
+    <ProjectReference Include="..\BirdNest.MonoGame.FileSystem\MonoGame.Content.csproj">
+      <Project>{E44E47ED-2203-4E45-85A9-C755B10AC044}</Project>
+      <Name>MonoGame.Content</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>

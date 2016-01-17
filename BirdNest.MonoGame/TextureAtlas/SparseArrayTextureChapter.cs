@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using BirdNest.MonoGame.Blocks;
-using BirdNest.MonoGame.Graphics;
+using MonoGame.Content.Blocks;
+using MonoGame.Textures;
 
 namespace BirdNest.MonoGame
 {

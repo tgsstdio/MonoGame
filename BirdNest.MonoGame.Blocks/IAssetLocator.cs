@@ -1,7 +1,6 @@
 using System.IO;
-using BirdNest.MonoGame.Blocks;
 
-namespace BirdNest.MonoGame
+namespace MonoGame.Content.Blocks
 {
 	public interface IAssetLocator
 	{
