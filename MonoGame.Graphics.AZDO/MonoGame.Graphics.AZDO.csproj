@@ -72,7 +72,7 @@
       <Project>{52C293E3-DCC5-43BE-A94F-DBE0CF44E25E}</Project>
       <Name>MonoGame.Graphics</Name>
     </ProjectReference>
-    <ProjectReference Include="..\BirdNest.MonoGame.FileSystem\MonoGame.Content.csproj">
+    <ProjectReference Include="..\MonoGame.Content\MonoGame.Content.csproj">
       <Project>{E44E47ED-2203-4E45-85A9-C755B10AC044}</Project>
       <Name>MonoGame.Content</Name>
     </ProjectReference>

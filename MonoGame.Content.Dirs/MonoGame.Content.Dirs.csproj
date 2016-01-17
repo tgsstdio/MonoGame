@@ -3,13 +3,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <ProjectGuid>{2F0797E0-AA35-4C38-9CE0-0055A3E41C64}</ProjectGuid>
+    <ProjectGuid>{9D3DE491-E6D0-4D12-9A2D-D31B23D7D71D}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>BirdNest.MonoGame.Graphics</RootNamespace>
-    <AssemblyName>BirdNest.MonoGame.Graphics</AssemblyName>
-    <TargetFrameworkProfile>Profile344</TargetFrameworkProfile>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <RootNamespace>MonoGame.Content.Dirs</RootNamespace>
+    <AssemblyName>BirdNest.MonoGame.FileSystem.Dirs</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -30,23 +28,21 @@
     <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="IShaderLoader.cs" />
-    <Compile Include="IShaderInfoLookup.cs" />
-    <Compile Include="ShaderProgram.cs" />
-    <Compile Include="IRenderTargetRange.cs" />
-    <Compile Include="IRenderTarget.cs" />
-    <Compile Include="InstanceIdentifier.cs" />
+    <Reference Include="System" />
   </ItemGroup>
-  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>
-    <ProjectReference Include="..\BirdNest.MonoGame.Blocks\MonoGame.Content.Blocks.csproj">
-      <Project>{F218D143-486C-4018-8DAD-B970088EA505}</Project>
-      <Name>MonoGame.Content.Blocks</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\BirdNest.MonoGame.FileSystem\MonoGame.Content.csproj">
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="DirectoryFileSystem.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <ProjectReference Include="..\MonoGame.Content\MonoGame.Content.csproj">
       <Project>{E44E47ED-2203-4E45-85A9-C755B10AC044}</Project>
       <Name>MonoGame.Content</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MonoGame.Content.Blocks\MonoGame.Content.Blocks.csproj">
+      <Project>{F218D143-486C-4018-8DAD-B970088EA505}</Project>
+      <Name>MonoGame.Content.Blocks</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>

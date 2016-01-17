@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using MonoGame.Graphics;
 
-namespace MonoGame.Graphics
+namespace DrawItemStructSize
 {
 	class MainClass
 	{
