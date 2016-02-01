@@ -62,6 +62,7 @@
     <Compile Include="IMeshBufferCache.cs" />
     <Compile Include="IVertexBufferObject.cs" />
     <Compile Include="FullVertexBufferObject.cs" />
+    <Compile Include="FullSyncObject.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

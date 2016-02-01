@@ -9,13 +9,13 @@ namespace MonoGame.Graphics
 		public byte? TargetIndex {get;set;}
 
 		public byte? EffectIndex { get; set; }
-		public int? Pass {get;set;}
+		public System.Int32? Pass {get;set;}
 
-		public byte? ProgramIndex { get; set;}
+		//public byte? ProgramIndex { get; set;}
 		public ushort? ShaderOptions { get; set; }
 		public byte? UniformsIndex { get; set;}
-		public byte? ResourceListIndex { get; set; }
-		public uint? ResourceItemIndex { get; set; }
+		public uint? MarkerIndex { get; set; }
+		public uint? ResourceIndex { get; set; }
 
 		public uint? MeshOffset { get; set; }
 		public ushort? BufferMask { get; set; }

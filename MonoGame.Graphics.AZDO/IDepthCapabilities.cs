@@ -11,7 +11,9 @@ namespace MonoGame.Graphics.AZDO
 		void DisableDepthBuffer();
 
 		void SetDepthBufferFunc(CompareFunction func);
-		void SetDepthMask (bool isMaskOn);		
+		void SetDepthMask (bool isMaskOn);
+
+		void SetClipControl(bool usingLowerLeftCorner, bool zeroToOneRange);
 	}
 }
 

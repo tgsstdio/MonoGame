@@ -1,6 +1,6 @@
 using System;
 
-namespace BirdNest.MonoGame.Graphics
+namespace MonoGame.Shaders
 {
 	public interface IRenderTarget : IDisposable
 	{

@@ -1,5 +1,5 @@
 using System;
-using BirdNest.MonoGame.Graphics;
+using MonoGame.Shaders;
 
 namespace ShadowMapping
 {

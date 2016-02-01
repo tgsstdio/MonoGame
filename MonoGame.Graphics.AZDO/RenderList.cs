@@ -1,29 +1,33 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace MonoGame.Graphics.AZDO
 {
 	public class RenderList : IRenderList
 	{
 		#region IRenderList implementation
-		private readonly List<DrawItem> mItems;
-		public RenderList ()
-		{
-			mItems = new List<DrawItem> ();
-		}
 
-		public bool Push (DrawItem[] items, out DrawItemOffset output)
+		public DrawItemOffset[] Push (DrawItemCompilerOutput[] items)
 		{
-			output = new DrawItemOffset{Offset = mItems.Count, Count = items.Length};
+			var result = new List<DrawItemOffset>();
+
 			foreach (var i in items)
-			{
-				mItems.Add (i);
+			{			
+				var dest = i.Variant.Destination;
+				// TODO : possibly derive destination for variant instead
+				if (dest != null)
+				{
+					var collection = dest.Items;
+					var output = new DrawItemOffset{ RenderPassID = dest.InstanceID,  Offset = collection.Count };
+					collection.Add (i.Item);
+					result.Add (output);
+				}
+				else
+				{
+					throw new InvalidOperationException ("Variant expected here");
+				}
 			}
-			return true;
-		}
-
-		public DrawItem[] ToArray ()
-		{
-			return mItems.ToArray ();
+			return result.ToArray();
 		}
 
 		#endregion

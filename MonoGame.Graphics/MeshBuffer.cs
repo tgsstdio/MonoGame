@@ -15,8 +15,13 @@
 		public int VBO { get; set;}
 		public int IndexObject {get;set;}
 		public int VertexObject {get;set;}
-		public SyncObject Fence {get;set;}
+		public ISyncObject[] Fences {get;set;}
 		public float Factor {get;set;}
+
+		public void UpdateAll (int index)
+		{
+			throw new System.NotImplementedException ();
+		}
 	}
 }
 

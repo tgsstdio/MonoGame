@@ -1,4 +1,4 @@
-﻿namespace BirdNest.MonoGame.Graphics
+﻿namespace MonoGame.Shaders
 {
 	public struct InstanceIdentifier
 	{

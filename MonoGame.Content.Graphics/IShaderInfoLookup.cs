@@ -1,7 +1,7 @@
 ﻿using MonoGame.Content;
 using MonoGame.Content.Blocks;
 
-namespace BirdNest.MonoGame.Graphics
+namespace MonoGame.Shaders
 {
 	public interface IShaderInfoLookup
 	{

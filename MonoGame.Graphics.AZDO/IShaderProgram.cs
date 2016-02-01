@@ -8,8 +8,10 @@ namespace MonoGame.Graphics.AZDO
 		void Unuse();
 		void SetUniformIndex(byte index);
 		byte GetUniformIndex();
-		void Bind (IConstantBufferCollection buffers);
+		void BindMask (IConstantBufferCollection buffers);
 		ushort GetBufferMask();
+		uint GetBindingSet ();
+		void BindSet (uint setIndex);
 	}
 }
 

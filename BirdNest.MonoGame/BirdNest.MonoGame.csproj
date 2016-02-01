@@ -66,14 +66,6 @@
     <Compile Include="TextureAtlas\TextureHandle.cs" />
     <Compile Include="TextureAtlas\TextureHandleReference.cs" />
     <Compile Include="TextureAtlas\SparseTextureAtlas.cs" />
-    <Compile Include="ShaderLoader\ShaderInfoLookup.cs" />
-    <Compile Include="ShaderLoader\GLShaderRegistry.cs" />
-    <Compile Include="ShaderLoader\IShaderRegistry.cs" />
-    <Compile Include="ShaderLoader\GLSLTextShaderManager.cs" />
-    <Compile Include="ShaderLoader\GLSLBinaryShaderLoader.cs" />
-    <Compile Include="ShaderLoader\GLSLTextShaderLoader.cs" />
-    <Compile Include="ShaderLoader\GLSLBinaryProgramWriter.cs" />
-    <Compile Include="ShaderLoader\IBinaryShaderProgramWriter.cs" />
     <Compile Include="ShaderStorageBuffer.cs" />
     <Compile Include="ShaderStorageBufferBinder.cs" />
     <Compile Include="DrawElementsIndirectCommand.cs" />
@@ -84,8 +76,6 @@
     <Compile Include="RenderUnit.cs" />
     <Compile Include="IDrawElementsCommandFilter.cs" />
     <Compile Include="DefaultDrawElementsCommandFilter.cs" />
-    <Compile Include="ShaderProgramGroup.cs" />
-    <Compile Include="ShaderProgramRoot.cs" />
     <Compile Include="DrawState.cs" />
     <Compile Include="RenderTarget\NullRenderTarget.cs" />
     <Compile Include="RenderTarget\RenderTargetRange.cs" />
@@ -106,13 +96,13 @@
       <Project>{E44E47ED-2203-4E45-85A9-C755B10AC044}</Project>
       <Name>MonoGame.Content</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MonoGame.Content.Graphics\MonoGame.Content.Graphics.csproj">
-      <Project>{2F0797E0-AA35-4C38-9CE0-0055A3E41C64}</Project>
-      <Name>MonoGame.Content.Graphics</Name>
-    </ProjectReference>
     <ProjectReference Include="..\MonoGame.Content.Blocks\MonoGame.Content.Blocks.csproj">
       <Project>{F218D143-486C-4018-8DAD-B970088EA505}</Project>
       <Name>MonoGame.Content.Blocks</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MonoGame.Content.Graphics\MonoGame.Shaders.csproj">
+      <Project>{2F0797E0-AA35-4C38-9CE0-0055A3E41C64}</Project>
+      <Name>MonoGame.Shaders</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -1,8 +1,7 @@
 using System;
-using BirdNest.MonoGame.Graphics;
 using MonoGame.Content;
 
-namespace BirdNest.MonoGame
+namespace MonoGame.Shaders
 {
 	public interface IShaderRegistry : IDisposable
 	{

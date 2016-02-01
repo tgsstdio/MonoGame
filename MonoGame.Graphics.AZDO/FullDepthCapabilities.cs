@@ -1,5 +1,5 @@
 ﻿using System;
-using OpenTK.Graphics.OpenGL;
+using OpenTK.Graphics.ES30;
 
 namespace MonoGame.Graphics.AZDO
 {
@@ -11,7 +11,7 @@ namespace MonoGame.Graphics.AZDO
 		{
 			EnableDepthBuffer ();
 			SetDepthBufferFunc (CompareFunction.Less);
-			GL.DepthMask(true);
+			SetDepthMask(true);
 		}
 
 		private bool mIsDepthBufferEnabled;
@@ -67,6 +67,10 @@ namespace MonoGame.Graphics.AZDO
 			GL.DepthMask(isMaskOn);
 		}
 
+		public void SetClipControl(bool usingLowerLeftCorner, bool zeroToOneRange)
+		{
+			
+		}
 		#endregion
 	}
 }

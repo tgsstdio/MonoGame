@@ -12,8 +12,12 @@ namespace MonoGame.Graphics.AZDO
 
 		public abstract void SetUniformIndex (byte index);
 		public abstract byte GetUniformIndex ();
-		public abstract void Bind (IConstantBufferCollection buffers);
+		public abstract void BindMask (IConstantBufferCollection buffers);
 		public abstract ushort GetBufferMask ();
+
+		public abstract uint GetBindingSet ();
+		public abstract void BindSet (uint setIndex);
+
 		public void Use ()
 		{
 			//GL.UseProgram (mProgram.ProgramID);

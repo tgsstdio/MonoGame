@@ -1,6 +1,6 @@
 ﻿using MonoGame.Content;
 
-namespace BirdNest.MonoGame.Graphics
+namespace MonoGame.Shaders
 {
 	public class ShaderProgram
 	{

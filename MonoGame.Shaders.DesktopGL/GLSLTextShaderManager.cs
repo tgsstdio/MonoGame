@@ -4,9 +4,9 @@ using System.Text;
 using System.IO;
 using System.Threading.Tasks;
 
-namespace BirdNest.MonoGame
+namespace MonoGame.Shaders.GLSL.DesktopGL
 {
-	internal class GLSLTextShaderManager
+	public class GLSLTextShaderManager
 	{
 		private static int CompileShader(ShaderType type, string fileContents, string shaderPrefix)
 		{			

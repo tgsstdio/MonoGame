@@ -1,7 +1,4 @@
-using System;
-using BirdNest.MonoGame.Graphics;
-
-namespace BirdNest.MonoGame
+namespace MonoGame.Shaders
 {
 	public interface IBinaryShaderProgramWriter
 	{

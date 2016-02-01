@@ -49,17 +49,11 @@ namespace MonoGame.Graphics.AZDO
 			}
 
 			// add draw items to the draw item buffer
-
-			var offsets = new List<DrawItemOffset> ();
+			var offsets = new List<DrawItemOffset>();
 			foreach (var v in lookup.Values)
 			{
 				var items = mCompiler.Compile (v.ToArray ());
-
-				DrawItemOffset output;
-				if (!mDestination.Push (items, out output))
-				{
-					throw new InvalidOperationException ();
-				}
+				offsets.AddRange(mDestination.Push (items));
 			}
 			node.Offsets = offsets.ToArray ();
 		}

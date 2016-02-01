@@ -1,7 +1,7 @@
 ﻿using System.IO;
-using BirdNest.MonoGame.Graphics;
 using MonoGame.Content.Blocks;
 using MonoGame.Textures;
+using MonoGame.Shaders;
 
 namespace BirdNest.MonoGame
 {

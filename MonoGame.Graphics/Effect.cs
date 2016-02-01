@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace MonoGame.Graphics
+﻿namespace MonoGame.Graphics
 {
 	public class Effect
 	{
@@ -9,6 +7,7 @@ namespace MonoGame.Graphics
 		/// </summary>
 		/// <value>The index of the techinque.</value>
 		public byte TechinqueIndex {get;set;}
+
 		public EffectPass[] Passes {get;set;}
 	}
 }

@@ -1,12 +1,13 @@
 ﻿using System;
 using DryIoc;
 using BirdNest.MonoGame;
-using BirdNest.MonoGame.Graphics;
 using MonoGame.Content.Blocks;
 using MonoGame.Content.Blocks.JsonNET;
 using MonoGame.Content;
 using MonoGame.Content.Dirs;
 using MonoGame.Textures;
+using MonoGame.Shaders;
+using MonoGame.Shaders.GLSL.DesktopGL;
 
 namespace ShadowMapping
 {

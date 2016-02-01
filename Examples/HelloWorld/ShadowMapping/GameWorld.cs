@@ -2,9 +2,9 @@
 using System;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Input;
-using BirdNest.MonoGame.Graphics;
 using BirdNest.MonoGame;
 using MonoGame.Content;
+using MonoGame.Shaders;
 
 namespace ShadowMapping
 {

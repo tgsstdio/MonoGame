@@ -1,6 +1,6 @@
 ﻿using NUnit.Framework;
-using BirdNest.MonoGame.Graphics;
 using MonoGame.Content;
+using MonoGame.Shaders;
 
 namespace BirdNest.Rendering.UnitTests
 {

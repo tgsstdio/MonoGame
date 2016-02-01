@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using BirdNest.MonoGame.Graphics;
+using MonoGame.Shaders;
 
 namespace BirdNest.MonoGame
 {

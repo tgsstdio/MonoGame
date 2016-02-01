@@ -1,10 +1,9 @@
-﻿using BirdNest.MonoGame.Graphics;
-using System.IO;
+﻿using System.IO;
 using OpenTK.Graphics.OpenGL;
 using MonoGame.Content;
 using MonoGame.Content.Blocks;
 
-namespace BirdNest.MonoGame
+namespace MonoGame.Shaders.GLSL.DesktopGL
 {
 	public class GLBinaryShaderLoader : IShaderLoader
 	{

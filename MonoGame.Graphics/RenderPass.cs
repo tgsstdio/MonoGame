@@ -1,12 +1,16 @@
-﻿namespace MonoGame.Graphics
+﻿using System.Collections.Generic;
+
+namespace MonoGame.Graphics
 {
 	public class RenderPass
 	{
 		public uint InstanceID {get;set;}
-		public SyncObject[] Requirements { get; set; }
-		public DrawItem[] Items {get;set;}
+		public byte Effect {get;set;}
+		public int Pass { get; set; }
+		public ISyncObject[] Requirements { get; set; }
+		public IList<DrawItem> Items {get;set;}
 		public ImageTarget[] Outputs {get;set;}
-		public SyncObject Fence {get;set;}
+		public ISyncObject Fence {get;set;}
 	}
 }
 

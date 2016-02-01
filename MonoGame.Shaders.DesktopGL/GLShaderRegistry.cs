@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using BirdNest.MonoGame.Graphics;
-using OpenTK.Graphics.OpenGL;
-using MonoGame.Content.Blocks;
 using MonoGame.Content;
+using MonoGame.Content.Blocks;
+using OpenTK.Graphics.OpenGL;
 
-namespace BirdNest.MonoGame
+namespace MonoGame.Shaders.GLSL.DesktopGL
 {
 	public class GLShaderRegistry : IShaderRegistry
 	{

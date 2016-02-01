@@ -7,7 +7,7 @@ namespace MonoGame.Graphics
 	{
 		#region IDrawItemCompiler implementation
 
-		private IEffectCache mEffects;
+		private readonly IEffectCache mEffects;
 		public DrawItemCompiler(IEffectCache effects)
 		{
 			mEffects = effects;
@@ -19,84 +19,114 @@ namespace MonoGame.Graphics
 			for (int i = 0; i < stack.Length; ++i)
 			{
 				var src = stack [i];
-				if (!dest.State.HasValue && src.State.HasValue)
+				if (src != null)
 				{
-					dest.State = src.State;
-				}
+					if (!dest.State.HasValue && src.State.HasValue)
+					{
+						dest.State = src.State;
+					}
 
-				if (!dest.SlotIndex.HasValue && src.SlotIndex.HasValue)
-				{
-					dest.SlotIndex = src.SlotIndex;
-				}
-				if (!dest.TargetIndex.HasValue && src.TargetIndex.HasValue)
-				{
-					dest.TargetIndex = src.TargetIndex;
-				}
-				if (!dest.EffectIndex.HasValue && src.EffectIndex.HasValue)
-				{
-					dest.EffectIndex = src.EffectIndex;
-				}
-				if (!dest.Pass.HasValue && src.Pass.HasValue)
-				{
-					dest.Pass = src.Pass;
-				}
-				if (!dest.ProgramIndex.HasValue && src.ProgramIndex.HasValue)
-				{
-					dest.ProgramIndex = src.ProgramIndex;
-				}
-				if (!dest.ShaderOptions.HasValue && src.ShaderOptions.HasValue)
-				{
-					dest.ShaderOptions = src.ShaderOptions;
-				}
-				if (!dest.UniformsIndex.HasValue && src.UniformsIndex.HasValue)
-				{
-					dest.UniformsIndex = src.UniformsIndex;
-				}
-				if (!dest.ResourceListIndex.HasValue && src.ResourceListIndex.HasValue)
-				{
-					dest.ResourceListIndex = src.ResourceListIndex;
-				}
-				if (!dest.ResourceItemIndex.HasValue && src.ResourceItemIndex.HasValue)
-				{
-					dest.ResourceItemIndex = src.ResourceItemIndex;
-				}
-				if (!dest.MeshOffset.HasValue && src.MeshOffset.HasValue)
-				{
-					dest.MeshOffset = src.MeshOffset;
-				}
-				if (!dest.BufferMask.HasValue && src.BufferMask.HasValue)
-				{
-					dest.BufferMask = src.BufferMask;
-				}
-				if (!dest.Command.HasValue && src.Command.HasValue)
-				{
-					dest.Command = src.Command;
-				}
-				if (!dest.RasterizerValues.HasValue && src.RasterizerValues.HasValue)
-				{
-					dest.RasterizerValues = src.RasterizerValues;
-				}
-				if (!dest.StencilValues.HasValue && src.StencilValues.HasValue)
-				{
-					dest.StencilValues = src.StencilValues;
-				}
-				if (!dest.BlendValues.HasValue && src.BlendValues.HasValue)
-				{
-					dest.BlendValues = src.BlendValues;
-				}
-				if (!dest.Flags.HasValue && src.Flags.HasValue)
-				{
-					dest.Flags = src.Flags;
+					if (!dest.SlotIndex.HasValue && src.SlotIndex.HasValue)
+					{
+						dest.SlotIndex = src.SlotIndex;
+					}
+					if (!dest.TargetIndex.HasValue && src.TargetIndex.HasValue)
+					{
+						dest.TargetIndex = src.TargetIndex;
+					}
+					if (!dest.EffectIndex.HasValue && src.EffectIndex.HasValue)
+					{
+						dest.EffectIndex = src.EffectIndex;
+					}
+					if (!dest.Pass.HasValue && src.Pass.HasValue)
+					{
+						dest.Pass = src.Pass;
+					}
+//					if (!dest.ProgramIndex.HasValue && src.ProgramIndex.HasValue)
+//					{
+//						dest.ProgramIndex = src.ProgramIndex;
+//					}
+					if (!dest.ShaderOptions.HasValue && src.ShaderOptions.HasValue)
+					{
+						dest.ShaderOptions = src.ShaderOptions;
+					}
+					if (!dest.UniformsIndex.HasValue && src.UniformsIndex.HasValue)
+					{
+						dest.UniformsIndex = src.UniformsIndex;
+					}
+					if (!dest.MarkerIndex.HasValue && src.MarkerIndex.HasValue)
+					{
+						dest.MarkerIndex = src.MarkerIndex;
+					}
+					if (!dest.ResourceIndex.HasValue && src.ResourceIndex.HasValue)
+					{
+						dest.ResourceIndex = src.ResourceIndex;
+					}
+					if (!dest.MeshOffset.HasValue && src.MeshOffset.HasValue)
+					{
+						dest.MeshOffset = src.MeshOffset;
+					}
+					if (!dest.BufferMask.HasValue && src.BufferMask.HasValue)
+					{
+						dest.BufferMask = src.BufferMask;
+					}
+					if (!dest.Command.HasValue && src.Command.HasValue)
+					{
+						dest.Command = src.Command;
+					}
+					if (!dest.RasterizerValues.HasValue && src.RasterizerValues.HasValue)
+					{
+						dest.RasterizerValues = src.RasterizerValues;
+					}
+					if (!dest.StencilValues.HasValue && src.StencilValues.HasValue)
+					{
+						dest.StencilValues = src.StencilValues;
+					}
+					if (!dest.BlendValues.HasValue && src.BlendValues.HasValue)
+					{
+						dest.BlendValues = src.BlendValues;
+					}
+					if (!dest.Flags.HasValue && src.Flags.HasValue)
+					{
+						dest.Flags = src.Flags;
+					}
 				}
 			}
 			return dest;
 		}
 
-		private byte DeriveProgramIndex(StateGroup dest)
+		int GetBitPosition (int value)
 		{
-			if (!dest.EffectIndex.HasValue && !dest.ProgramIndex.HasValue)
+			bool found = false;
+			int i = 0;
+
+			while (i < 32)
 			{
-				throw new InvalidOperationException("Neither effect or specific program have been specified.");
+				int mask = (1 << i);
+
+				if ((value & mask) == mask)
+				{
+					found = true;
+					break;
+				}
+
+				++i;
+			}
+
+			if (found)
+				return i;
+			else
+				throw new InvalidOperationException ("Bit value not found");
+				
+		}
+
+		private DrawItemCompilerOutput DeriveProgramIndex(StateGroup dest)
+		{
+			var output = new DrawItemCompilerOutput ();
+
+			if (!dest.EffectIndex.HasValue)
+			{
+				throw new InvalidOperationException("No effect have been specified.");
 			}
 
 			if (dest.EffectIndex.HasValue)
@@ -112,13 +142,9 @@ namespace MonoGame.Graphics
 					throw new ArgumentNullException(paramName : "Pass", message : "Pass must be specified with EffectIndex");
 				}
 
-				// for all passes
-				if (dest.Pass.Value != ~0 && dest.Pass.Value >= technique.Passes.Length)
-				{
-					throw new ArgumentOutOfRangeException(paramName : "Pass", message : "Pass out of existing range");
-				}
+				int passIndex = GetBitPosition (dest.Pass.Value);
+				EffectPass expectedPass = technique.Passes [passIndex];
 
-				EffectPass expectedPass = technique.Passes [dest.Pass.Value];
 				if (!dest.ShaderOptions.HasValue)
 				{
 					throw new ArgumentNullException(paramName : "ShaderOptions", message : "Value in DrawItem not supplied");
@@ -133,41 +159,47 @@ namespace MonoGame.Graphics
 					throw new ArgumentException(paramName : "ShaderOptions", message : "Variant not found for effect");
 				}
 
-				return variant.Program.ProgramIndex;
+				output.Pass = expectedPass;
+				output.Variant = variant;
 			}
-			else
-			{
-				return dest.ProgramIndex.Value;
-			}
+
+			var item = new DrawItem ();
+
+			output.Item = item;
+			return output;
 		}
 
-		private DrawItem ExtractItem(StateGroup item)
+		private DrawItemCompilerOutput ExtractItem(StateGroup group)
 		{
-			var dest = new DrawItem ();
-			dest.State = item.State.Value;
-			dest.SlotIndex = item.SlotIndex.Value;
-			dest.TargetIndex = item.TargetIndex.Value;
+			var output = DeriveProgramIndex (group);
+			var result = new DrawItem ();
+			result.ProgramIndex = output.Variant.Program.ProgramIndex;
 
-			dest.ProgramIndex = DeriveProgramIndex (item);
-			dest.UniformsIndex = item.UniformsIndex.Value;
+			result.State = group.State.Value;
+			result.SlotIndex = group.SlotIndex.Value;
+			result.TargetIndex = group.TargetIndex.Value;
+
+
+			result.UniformsIndex = group.UniformsIndex.Value;
 
 			//dest.Pair = new ResourceListKey{ ListIndex = item.ResourceListIndex.Value, ItemIndex = item.ResourceItemIndex.Value };
-			dest.ResourceListIndex = item.ResourceListIndex.Value;			
-			dest.ResourceItemIndex = item.ResourceItemIndex.Value;
-			dest.MeshIndex = item.MeshOffset.Value;
-			dest.BufferMask = item.BufferMask.Value;
+		
+			result.ResourceIndex = group.ResourceIndex.Value;
+			result.BindingSet = group.MeshOffset.Value;
+			result.MarkerIndex = group.MarkerIndex.Value;	
+			result.BufferMask = group.BufferMask.Value;
 
 //			dest.Command = item.Command.Value;
-			dest.DrawCount = item.Command.Value.Count;
-			dest.Primitive = item.Command.Value.Primitive;
+		//	dest.DrawCount = item.Command.Value.Count;
+			result.Primitive = group.Command.Value.Primitive;
 
 
-			dest.RasterizerValues = item.RasterizerValues.Value;
+			result.RasterizerValues = group.RasterizerValues.Value;
 			//dest.DepthBias = item.RasterizerValues.Value.DepthBias;
 		//	dest.SlopeScaleDepthBias = item.RasterizerValues.Value.SlopeScaleDepthBias;
 
 
-			dest.StencilValues = item.StencilValues.Value;
+			result.StencilValues = group.StencilValues.Value;
 //			dest.DepthCompareFunction = item.DepthStencilValues.Value.DepthCompareFunction;
 //			dest.StencilAndDepthTestFailed = item.DepthStencilValues.Value.StencilAndDepthTestFailed;
 //			dest.StencilTestPassed = item.DepthStencilValues.Value.StencilTestPassed; 
@@ -176,11 +208,13 @@ namespace MonoGame.Graphics
 //			dest.StencilMask = item.DepthStencilValues.Value.StencilMask;
 //			dest.StencilWriteMask = item.DepthStencilValues.Value.StencilWriteMask;		
 //
-			dest.BlendValues = item.BlendValues.Value;
-			dest.DepthValues = item.DepthValues.Value;
+			result.BlendValues = group.BlendValues.Value;
+			result.DepthValues = group.DepthValues.Value;
 
-			dest.Flags = item.Flags.Value;
-			return dest;
+			result.Flags = group.Flags.Value;
+			output.Item = result;
+
+			return output;
 		}
 
 		public void Validate(StateGroup dest)
@@ -203,11 +237,11 @@ namespace MonoGame.Graphics
 			{
 				throw new ArgumentNullException(paramName : "UniformsIndex", message : "Value in DrawItem not supplied");
 			}
-			if (!dest.ResourceListIndex.HasValue)
+			if (!dest.MarkerIndex.HasValue)
 			{
 				throw new ArgumentNullException(paramName : "ResourceListIndex", message : "Value in DrawItem not supplied");
 			}
-			if (!dest.ResourceItemIndex.HasValue)
+			if (!dest.ResourceIndex.HasValue)
 			{
 				throw new ArgumentNullException(paramName : "ResourceItemIndex", message : "Value in DrawItem not supplied");
 			}
@@ -245,14 +279,14 @@ namespace MonoGame.Graphics
 			}
 		}
 
-		public DrawItem[] Compile (StateGroup[] stack)
+		public DrawItemCompilerOutput[] Compile (StateGroup[] stack)
 		{
 			var summary = CollateValues (stack);
 			Validate (summary);
 			// all ones
 
 			var output = new List<StateGroup> ();
-			if (summary.EffectIndex.HasValue && summary.Pass.HasValue && summary.Pass == ~0)
+			if (summary.EffectIndex.HasValue && summary.Pass.HasValue)
 			{
 				Effect technique;
 				if (!mEffects.TryGetValue (summary.EffectIndex.Value, out technique))
@@ -262,8 +296,12 @@ namespace MonoGame.Graphics
 
 				foreach (var p in technique.Passes)
 				{
-					var alternative = CollateValues (new StateGroup[] { new StateGroup{Pass=p.Pass}, summary});
-					output.Add (alternative);
+					if ((p.Pass & summary.Pass) == p.Pass)
+					{
+						var alternative = CollateValues (new [] { new StateGroup{Pass=p.Pass}, p.PassGroup, summary});
+						Validate (alternative);
+						output.Add (alternative);
+					}
 				}
 			}
 			else
@@ -271,7 +309,7 @@ namespace MonoGame.Graphics
 				output.Add (summary);
 			}
 
-			var result = new List<DrawItem> ();
+			var result = new List<DrawItemCompilerOutput> ();
 			foreach (var item in output)
 			{
 				result.Add (ExtractItem (item));

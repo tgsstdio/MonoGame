@@ -1,9 +1,8 @@
-﻿using BirdNest.MonoGame.Graphics;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using MonoGame.Content.Blocks;
 using MonoGame.Content;
 
-namespace BirdNest.MonoGame
+namespace MonoGame.Shaders
 {
 	public class ShaderInfoLookup : IShaderInfoLookup
 	{

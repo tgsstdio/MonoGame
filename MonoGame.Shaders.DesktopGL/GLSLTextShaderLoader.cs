@@ -1,8 +1,7 @@
-﻿using BirdNest.MonoGame.Graphics;
-using MonoGame.Content;
+﻿using MonoGame.Content;
 using MonoGame.Content.Blocks;
 
-namespace BirdNest.MonoGame
+namespace MonoGame.Shaders.GLSL.DesktopGL
 {
 	public class GLSLTextShaderLoader : IShaderLoader
 	{

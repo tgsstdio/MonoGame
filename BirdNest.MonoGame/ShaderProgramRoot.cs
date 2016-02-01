@@ -1,6 +1,6 @@
 ﻿using System;
-using BirdNest.MonoGame.Graphics;
 using OpenTK.Graphics.OpenGL;
+using MonoGame.Graphics;
 
 namespace BirdNest.MonoGame
 {

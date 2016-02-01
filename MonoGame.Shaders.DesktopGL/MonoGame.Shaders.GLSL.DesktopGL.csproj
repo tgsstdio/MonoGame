@@ -3,13 +3,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <ProjectGuid>{2F0797E0-AA35-4C38-9CE0-0055A3E41C64}</ProjectGuid>
+    <ProjectGuid>{493A4D32-B054-47D5-8C2D-E79BFA01206B}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>BirdNest.MonoGame.Graphics</RootNamespace>
-    <AssemblyName>BirdNest.MonoGame.Graphics</AssemblyName>
-    <TargetFrameworkProfile>Profile344</TargetFrameworkProfile>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <RootNamespace>MonoGame.Shaders.GLSL.DesktopGL</RootNamespace>
+    <AssemblyName>MonoGame.Shaders.DesktopGL</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -30,16 +28,25 @@
     <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="IShaderLoader.cs" />
-    <Compile Include="IShaderInfoLookup.cs" />
-    <Compile Include="ShaderProgram.cs" />
-    <Compile Include="IRenderTargetRange.cs" />
-    <Compile Include="IRenderTarget.cs" />
-    <Compile Include="InstanceIdentifier.cs" />
+    <Reference Include="System" />
+    <Reference Include="OpenTK">
+      <HintPath>..\packages\OpenTK.1.1.1589.5942\lib\NET40\OpenTK.dll</HintPath>
+    </Reference>
   </ItemGroup>
-  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="GLShaderRegistry.cs" />
+    <Compile Include="GLSLBinaryProgramWriter.cs" />
+    <Compile Include="GLSLBinaryShaderLoader.cs" />
+    <Compile Include="GLSLTextShaderLoader.cs" />
+    <Compile Include="GLSLTextShaderManager.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <ProjectReference Include="..\MonoGame.Content.Graphics\MonoGame.Shaders.csproj">
+      <Project>{2F0797E0-AA35-4C38-9CE0-0055A3E41C64}</Project>
+      <Name>MonoGame.Shaders</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MonoGame.Content\MonoGame.Content.csproj">
       <Project>{E44E47ED-2203-4E45-85A9-C755B10AC044}</Project>
       <Name>MonoGame.Content</Name>
@@ -48,5 +55,8 @@
       <Project>{F218D143-486C-4018-8DAD-B970088EA505}</Project>
       <Name>MonoGame.Content.Blocks</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>

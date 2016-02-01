@@ -1,5 +1,5 @@
-﻿using BirdNest.MonoGame.Graphics;
-using MonoGame.Content;
+﻿using MonoGame.Content;
+using MonoGame.Shaders;
 
 namespace BirdNest.Rendering
 {

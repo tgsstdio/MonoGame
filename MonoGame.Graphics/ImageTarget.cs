@@ -4,7 +4,7 @@ namespace MonoGame.Graphics
 	{
 		public byte TargetIndex { get; set; }
 		public RenderPass Origin { get; set; }
-		public SyncObject Fence { get; set; }
+		public ISyncObject Fence { get; set; }
 	}
 }
 

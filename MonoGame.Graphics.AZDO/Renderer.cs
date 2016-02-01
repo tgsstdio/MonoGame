@@ -323,6 +323,10 @@ namespace MonoGame.Graphics.AZDO
 			var pastState = mPreviousItem;
 			foreach (var nextState in items)
 			{
+				// TODO : bind render target
+
+				CheckProgram (nextState);
+
 				if (ChangesFoundInBlend (pastState, nextState))
 				{
 					ApplyBlendChanges (pastState, nextState);
@@ -343,32 +347,33 @@ namespace MonoGame.Graphics.AZDO
 					ApplyRasterizationChanges (pastState, nextState);
 				}
 
-				// TODO : bind constant buffers
-				// TODO : bind program
-				// TODO : bind uniforms
-				// TODO : bind render target
-				// TODO : bind vbo
-
 				pastState = nextState;
 			}
 		}
 
 		public void CheckProgram(DrawItem nextState)
 		{
+			// bind program
 			if (mCache.ProgramIndex != nextState.ProgramIndex)
 			{
 				mCache.SetProgram (nextState.ProgramIndex);
 			}
 
 			var currentProgram = mCache.GetActiveProgram ();
+			// bind constant buffers
 			if (currentProgram.GetBufferMask () != nextState.BufferMask)
 			{
-				currentProgram.Bind (mBuffers);
+				currentProgram.BindMask (mBuffers);
 			}
-
+			// bind uniforms
 			if (currentProgram.GetUniformIndex () != nextState.UniformsIndex)
 			{
 				currentProgram.SetUniformIndex (nextState.UniformsIndex);
+			}
+
+			if (currentProgram.GetBindingSet () != nextState.BindingSet)
+			{
+				currentProgram.BindSet (nextState.BindingSet);
 			}
 		}
 	}
