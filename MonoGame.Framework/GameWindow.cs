@@ -8,7 +8,7 @@ using System;
 using System.ComponentModel;
 
 namespace Microsoft.Xna.Framework {
-	public abstract class GameWindow {
+	public abstract class GameWindow : IDisposable {
 		#region Properties
 
 		[DefaultValue(false)]
@@ -163,5 +163,45 @@ namespace Microsoft.Xna.Framework {
             return window;
         }
 #endif
+
+		#region IDisposable implementation
+
+		/// <summary>
+		/// Performs application-defined tasks associated with freeing,
+		/// releasing, or resetting unmanaged resources.
+		/// </summary>
+
+		~GameWindow()
+		{
+			Dispose(false);
+		}
+
+		public void Dispose()
+		{
+			Dispose(true);
+			GC.SuppressFinalize(this);
+		}
+
+		private bool mDisposed = false;
+		protected virtual void Dispose(bool disposing)
+		{
+			if (mDisposed)
+				return;
+
+			ReleaseUnmanagedResources ();
+			if (disposing)
+			{
+				ReleaseManagedResources ();
+			}
+
+			mDisposed = true;
+		}
+
+		protected abstract void ReleaseUnmanagedResources();
+
+		protected abstract void ReleaseManagedResources ();
+
+		#endregion
+
     }
 }

@@ -41,28 +41,35 @@
     <Compile Include="MonoGame.Platform.DesktopGL\Properties\AssemblyInfo.cs" />
     <Compile Include="MonoGame.Platform.DesktopGL\Input\DesktopGLMouseListener.cs" />
     <Compile Include="MonoGame.Platform.DesktopGL\DesktopGLGraphicsDeviceManager.cs" />
-    <Compile Include="MonoGame.Platform.DesktopGL\Desktop\IOpenTKGamePlatform.cs" />
     <Compile Include="MonoGame.Platform.DesktopGL\Graphics\FrameBufferHelper.cs" />
     <Compile Include="MonoGame.Platform.DesktopGL\Graphics\Shader\DesktopGLShaderPlatform.cs" />
-    <Compile Include="MonoGame.Platform.DesktopGL\Graphics\IGLSpecificGraphicsCapabilities.cs" />
-    <Compile Include="MonoGame.Platform.DesktopGL\Graphics\GLSpecificGraphicsCapabilities.cs" />
     <Compile Include="MonoGame.Platform.DesktopGL\Desktop\OpenTKGameWindow.cs" />
     <Compile Include="MonoGame.Platform.DesktopGL\Input\KeyboardUtil.OpenTK.cs" />
     <Compile Include="MonoGame.Platform.DesktopGL\Desktop\OpenTKGamePlatform.cs" />
     <Compile Include="MonoGame.Platform.DesktopGL\Audio\OpenALSoundController.cs" />
     <Compile Include="MonoGame.Platform.DesktopGL\Audio\OALSoundBuffer.cs" />
     <Compile Include="MonoGame.Platform.DesktopGL\Utilities\OggStream.cs" />
-    <Compile Include="MonoGame.Platform.DesktopGL\Graphics\Shader\ShaderProgramCache.cs" />
     <Compile Include="MonoGame.Platform.DesktopGL\DefaultBackBufferPreferences.cs" />
-    <Compile Include="MonoGame.Platform.DesktopGL\Graphics\GraphicsDevice.OpenGL.cs" />
-    <Compile Include="MonoGame.Platform.DesktopGL\Graphics\GraphicsDevice.cs" />
     <Compile Include="MonoGame.Platform.DesktopGL\Graphics\GraphicsExtensions.cs" />
     <Compile Include="MonoGame.Platform.DesktopGL\Graphics\DesktopGraphicsDevice.cs" />
-    <Compile Include="MonoGame.Platform.DesktopGL\Graphics\RenderTarget2DPlatform.cs" />
     <Compile Include="MonoGame.Platform.DesktopGL\DesktopGLThreadingContext.cs" />
+    <Compile Include="MonoGame.Platform.DesktopGL\FullGLSpecificExtensionLookup.cs" />
+    <Compile Include="MonoGame.Platform.DesktopGL\Es20GLSpecificExtensionLookup.cs" />
+    <Compile Include="MonoGame.Platform.DesktopGL\Desktop\DesktopGLWindowResetter.cs" />
+    <Compile Include="MonoGame.Platform.DesktopGL\DesktopGLExitStrategy.cs" />
+    <Compile Include="MonoGame.Platform.DesktopGL\IWindowExitStrategy.cs" />
+    <Compile Include="MonoGame.Platform.DesktopGL\Desktop\BaseOpenTKGameWindow.cs" />
+    <Compile Include="MonoGame.Platform.DesktopGL\DesktopGLGraphicsDeviceQuery.cs" />
+    <Compile Include="MonoGame.Platform.DesktopGL\Desktop\IOpenTKWindowResetter.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="Microsoft.Xna.Framework.csproj">
+      <Project>{6E03191C-70AE-4B0B-8782-68D377B72A0F}</Project>
+      <Name>Microsoft.Xna.Framework</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>

@@ -26,36 +26,38 @@ namespace Microsoft.Xna.Framework
         #endregion
 
         #region Construction/Destruction
-        public static GamePlatform Create(GameBackbone game)
-        {
-#if IOS
-            return new iOSGamePlatform(game);
-#elif MONOMAC
-            return new MacGamePlatform(game);
-#elif DESKTOPGL || ANGLE
-            return new OpenTKGamePlatform(game);
-#elif ANDROID
-            return new AndroidGamePlatform(game);
-#elif WINDOWS && DIRECTX
-            return new MonoGame.Framework.WinFormsGamePlatform(game);
-#elif WINDOWS_PHONE
-            return new MonoGame.Framework.WindowsPhone.WindowsPhoneGamePlatform(game);
-#elif WINDOWS_UAP
-            return new UAPGamePlatform(game);
-#elif WINRT
-            return new MetroGamePlatform(game);
-#elif WEB
-            return new WebGamePlatform(game);
-#else
-			throw new NotSupportedException();
-#endif
-
-		}
+//        public static GamePlatform Create(GameBackbone game)
+//        {
+//#if IOS
+//            return new iOSGamePlatform(game);
+//#elif MONOMAC
+//            return new MacGamePlatform(game);
+//#elif DESKTOPGL || ANGLE
+//            return new OpenTKGamePlatform(game);
+//#elif ANDROID
+//            return new AndroidGamePlatform(game);
+//#elif WINDOWS && DIRECTX
+//            return new MonoGame.Framework.WinFormsGamePlatform(game);
+//#elif WINDOWS_PHONE
+//            return new MonoGame.Framework.WindowsPhone.WindowsPhoneGamePlatform(game);
+//#elif WINDOWS_UAP
+//            return new UAPGamePlatform(game);
+//#elif WINRT
+//            return new MetroGamePlatform(game);
+//#elif WEB
+//            return new WebGamePlatform(game);
+//#else
+//			throw new NotSupportedException();
+//#endif
+//
+//		}
 
 		protected IGraphicsDeviceManager Graphics;
-		protected GamePlatform(IGraphicsDeviceManager graphics)
+		protected IPlatformActivator Activator;
+		protected GamePlatform(IGraphicsDeviceManager graphics, IPlatformActivator activator)
         {
 			Graphics = graphics;
+			Activator = activator;
         }
 
         ~GamePlatform()
@@ -73,19 +75,14 @@ namespace Microsoft.Xna.Framework
         /// </summary>
         public abstract GameRunBehavior DefaultRunBehavior { get; }
 
-        private bool _isActive;
-        public bool IsActive
-        {
-            get { return _isActive; }
-            set
-            {
-                if (_isActive != value)
-                {
-                    _isActive = value;
-                    Raise(_isActive ? Activated : Deactivated, EventArgs.Empty);
-                }
-            }
-        }
+//        public bool IsActive
+//        {
+//			get { return Activator.IsActive; }
+//            set
+//            {
+//				Activator.IsActive = value;
+//            }
+//        }
 
         private bool _isMouseVisible;
         public bool IsMouseVisible
@@ -141,8 +138,8 @@ namespace Microsoft.Xna.Framework
         #region Events
 
         public event EventHandler<EventArgs> AsyncRunLoopEnded;
-        public event EventHandler<EventArgs> Activated;
-        public event EventHandler<EventArgs> Deactivated;
+      //  public event EventHandler<EventArgs> Activated;
+      //  public event EventHandler<EventArgs> Deactivated;
 
 #if WINDOWS_STOREAPP && !WINDOWS_PHONE81
         public event EventHandler<ViewStateChangedEventArgs> ViewStateChanged;
@@ -177,7 +174,7 @@ namespace Microsoft.Xna.Framework
         /// </summary>
         public virtual void BeforeInitialize()
         {
-            IsActive = true;
+            Activator.IsActive = true;
 			// REMOVED INITIALISED ONLY 
 //			if (Graphics == null) 
 //            {
@@ -206,7 +203,7 @@ namespace Microsoft.Xna.Framework
         /// When implemented in a derived, starts the run loop and blocks
         /// until it has ended.
         /// </summary>
-        public abstract void RunLoop();
+		public abstract void RunLoop(Action doTick);
 
         /// <summary>
         /// When implemented in a derived, starts the run loop and returns

@@ -216,6 +216,12 @@
     <Compile Include="MonoGame.Framework\Graphics\Effect\EffectCache.cs" />
     <Compile Include="MonoGame.Framework\IThreadingContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="MonoGame.Framework\IGameBackbone.cs" />
+    <Compile Include="MonoGame.Framework\PlatformActivator.cs" />
+    <Compile Include="MonoGame.Framework\IPlatformActivator.cs" />
+    <Compile Include="MonoGame.Framework\DrawSupressor.cs" />
+    <Compile Include="MonoGame.Framework\IDrawSuppressor.cs" />
+    <Compile Include="MonoGame.Framework\IGraphicsDeviceQuery.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

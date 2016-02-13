@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using Microsoft.Xna.Framework;
 
 #if MONOMAC
 using MonoMac;
@@ -42,7 +43,7 @@ namespace MonoGame.Platform.DesktopGL.Graphics
 		internal extern static void GLGenerateMipmapExt(GenerateMipmapTarget target);
 		#endif
 
-		internal FramebufferHelper(GraphicsDevice graphicsDevice)
+		internal FramebufferHelper(IGraphicsDevice graphicsDevice)
 		{
 			this.SupportsBlitFramebuffer = true;
 			this.SupportsInvalidateFramebuffer = false;

@@ -9,7 +9,7 @@ namespace NewFences
 			set;
 		}
 
-		public RenderPass[] Passes {
+		public IRenderPass[] Passes {
 			get;
 			set;
 		}

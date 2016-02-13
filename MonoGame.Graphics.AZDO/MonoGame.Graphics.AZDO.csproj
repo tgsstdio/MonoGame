@@ -30,8 +30,10 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="OpenTK">
-      <HintPath>..\packages\OpenTK.1.1.1589.5942\lib\NET40\OpenTK.dll</HintPath>
+      <HintPath>..\packages\OpenTK.1.1.2225.0\lib\net20\OpenTK.dll</HintPath>
     </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -66,9 +68,6 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\MonoGame.Graphics\MonoGame.Graphics.csproj">
       <Project>{52C293E3-DCC5-43BE-A94F-DBE0CF44E25E}</Project>
       <Name>MonoGame.Graphics</Name>
@@ -77,5 +76,9 @@
       <Project>{E44E47ED-2203-4E45-85A9-C755B10AC044}</Project>
       <Name>MonoGame.Content</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="OpenTK.dll.config" />
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>

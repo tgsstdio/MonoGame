@@ -68,7 +68,7 @@ non-infringement.
 
 namespace MonoGame.Platform.DesktopGL
 {
-	public interface IOpenTKGamePlatform
+	public interface IOpenTKWindowResetter
 	{
 		void ResetWindowBounds();
 	}

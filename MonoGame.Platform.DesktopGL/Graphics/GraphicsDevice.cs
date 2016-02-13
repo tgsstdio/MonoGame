@@ -58,7 +58,7 @@ namespace MonoGame.Platform.DesktopGL.Graphics
         private readonly RenderTargetBinding[] _currentRenderTargetBindings = new RenderTargetBinding[4];
         private int _currentRenderTargetCount;
 
-        public GraphicsCapabilities GraphicsCapabilities { get; private set; }
+        public IGraphicsCapabilities GraphicsCapabilities { get; private set; }
 
         public TextureCollection VertexTextures { get; private set; }
 
@@ -112,7 +112,7 @@ namespace MonoGame.Platform.DesktopGL.Graphics
         // Use WeakReference for the global resources list as we do not know when a resource
         // may be disposed and collected. We do not want to prevent a resource from being
         // collected by holding a strong reference to it in this list.
-        private readonly List<WeakReference> _resources = new List<WeakReference>();
+        //private readonly List<WeakReference> _resources = new List<WeakReference>();
 
 		// TODO Graphics Device events need implementing
 		public event EventHandler<EventArgs> DeviceLost;

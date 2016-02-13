@@ -60,7 +60,7 @@ namespace MonoGame.Platform.DesktopGL
 {
 	using Rectangle = Microsoft.Xna.Framework.Rectangle;
 
-    class OpenTKGameWindow : Microsoft.Xna.Framework.GameWindow, IDisposable
+	public class OpenTKGameWindow : BaseOpenTKGameWindow
     {
         private bool _isResizable;
         private bool _isBorderless;
@@ -69,31 +69,18 @@ namespace MonoGame.Platform.DesktopGL
         private IntPtr _windowHandle;
         private INativeWindow window;
 
-        protected GameBackbone game;
+		protected PresentationParameters PresentationParameters;
         private List<Microsoft.Xna.Framework.Input.Keys> keys;
 		//private OpenTK.Graphics.GraphicsContext backgroundContext;
 
         // we need this variables to make changes beetween threads
         private WindowState windowState;
-        private Rectangle clientBounds;
+		private Rectangle mClientBounds;
         private Rectangle targetBounds;
         private bool updateClientBounds;
         private int updateborder = 0;
-        bool disposed;
 
         #region Internal Properties
-
-        internal GameBackbone Game 
-        {
-            get { return game; }
-            set
-            {
-                if (game != value)
-                {
-                    game = value;                   
-                }
-            }
-        }
 
         internal INativeWindow Window { get { return window; } }
 
@@ -105,7 +92,7 @@ namespace MonoGame.Platform.DesktopGL
 
         public override string ScreenDeviceName { get { return window.Title; } }
 
-        public override Microsoft.Xna.Framework.Rectangle ClientBounds { get { return clientBounds; } }
+        public override Microsoft.Xna.Framework.Rectangle ClientBounds { get { return mClientBounds; } }
 
         // TODO: this is buggy on linux - report to opentk team
         public override bool AllowUserResizing
@@ -172,16 +159,13 @@ namespace MonoGame.Platform.DesktopGL
         #endregion
 
 		private IMouseListener mMouse;
-		public OpenTKGameWindow(GameBackbone game, INativeWindow emptyWindow, IMouseListener mouseListener)
+		private IDrawSuppressor mSuppressor;
+		public OpenTKGameWindow(PresentationParameters parameters, INativeWindow emptyWindow, IDrawSuppressor suppressor, IMouseListener mouseListener)
         {
-			Game = game;
+			mSuppressor = suppressor;
+			PresentationParameters = parameters;
 			mMouse = mouseListener;
 			Initialize(emptyWindow);
-        }
-
-        ~OpenTKGameWindow()
-        {
-            Dispose(false);
         }
 
         #region Restricted Methods
@@ -192,7 +176,7 @@ namespace MonoGame.Platform.DesktopGL
 
         private void OpenTkGameWindow_Closing(object sender, CancelEventArgs e)
         {
-            Game.Exit();
+			mSuppressor.Cleanup ();
         }
 
         private void Keyboard_KeyUp(object sender, OpenTK.Input.KeyboardKeyEventArgs e)
@@ -217,8 +201,8 @@ namespace MonoGame.Platform.DesktopGL
         private void OnResize(object sender, EventArgs e)
         {
             // Ignore resize events until intialization is complete
-            if (Game == null)
-                return;
+//            if (Backbone == null)
+//                return;
 
             var winWidth = window.ClientRectangle.Width;
             var winHeight = window.ClientRectangle.Height;
@@ -233,17 +217,18 @@ namespace MonoGame.Platform.DesktopGL
             if (updateClientBounds)
                 return;
             
-            Game.GraphicsDevice.PresentationParameters.BackBufferWidth = winWidth;
-            Game.GraphicsDevice.PresentationParameters.BackBufferHeight = winHeight;
+			PresentationParameters.BackBufferWidth = winWidth;
+			PresentationParameters.BackBufferHeight = winHeight;
 
-            Game.GraphicsDevice.Viewport = new Viewport(0, 0, winWidth, winHeight);
+			// TODO : resize viewport
+            // Game.GraphicsDevice.Viewport = new Viewport(0, 0, winWidth, winHeight);
 
-            clientBounds = winRect;
+            mClientBounds = winRect;
 
             OnClientSizeChanged();
         }
 
-        internal void ProcessEvents()
+		public override void ProcessEvents()
         {
             UpdateBorder();
             Window.ProcessEvents();
@@ -362,7 +347,7 @@ namespace MonoGame.Platform.DesktopGL
             }
 
             updateClientBounds = false;
-            clientBounds = new Rectangle(window.ClientRectangle.X, window.ClientRectangle.Y,
+            mClientBounds = new Rectangle(window.ClientRectangle.X, window.ClientRectangle.Y,
                                          window.ClientRectangle.Width, window.ClientRectangle.Height);
             windowState = window.WindowState;            
 
@@ -390,7 +375,7 @@ namespace MonoGame.Platform.DesktopGL
             window.Title = title;            
         }
 
-        internal void ToggleFullScreen()
+		public override void ToggleFullScreen()
         {
             if (windowState == WindowState.Fullscreen)
                 windowState = WindowState.Normal;
@@ -399,9 +384,9 @@ namespace MonoGame.Platform.DesktopGL
             updateClientBounds = true;
         }
 
-        internal void ChangeClientBounds(Rectangle clientBounds)
+        public override void ChangeClientBounds(Rectangle clientBounds)
         {
-            if (this.clientBounds != clientBounds)
+            if (this.mClientBounds != clientBounds)
             {
                 updateClientBounds = true;
                 targetBounds = clientBounds;
@@ -412,27 +397,15 @@ namespace MonoGame.Platform.DesktopGL
 
         #region Public Methods
 
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
+		protected override void ReleaseManagedResources()
+		{
+			window.Dispose();
+		}
 
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!disposed)
-            {
-                if (disposing)
-                {
-                    // Dispose/release managed objects
-                    window.Dispose();
-                }
-                // The window handle no longer exists
-                _windowHandle = IntPtr.Zero;
-
-                disposed = true;
-            }
-        }
+		protected override void ReleaseUnmanagedResources()
+		{
+			_windowHandle = IntPtr.Zero;
+		}
 
         public override void BeginScreenDeviceChange(bool willBeFullScreen)
         {
@@ -443,7 +416,21 @@ namespace MonoGame.Platform.DesktopGL
 
         }
 
-        public void SetMouseVisible(bool visible)
+		#endregion
+
+		#region implemented abstract members of IOpenTKGameWindow
+
+		public override void SetWindowVisible (bool visible)
+		{
+			Window.Visible = visible;
+		}
+
+		public override bool IsWindowFocused ()
+		{
+			return Window.Focused;
+		}
+
+		public override void SetMouseVisible(bool visible)
         {
             window.Cursor = visible ? MouseCursor.Default : MouseCursor.Empty;
         }

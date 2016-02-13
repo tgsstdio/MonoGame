@@ -1,14 +1,20 @@
 using System;
+using MonoGame.Graphics;
 
 namespace NewFences
 {
-	public class RenderPassGroup
+	public class RenderPassGroup : IRenderPassGroup
 	{
 		public void RenderAll (int index)
 		{
 			throw new NotImplementedException ();
 		}
 
-		public MeshBuffer Buffer { get; set;}
+		public IMeshBuffer Buffer { get; set;}
+
+		public IRenderPass Pass {
+			get;
+			set;
+		}
 	}
 }

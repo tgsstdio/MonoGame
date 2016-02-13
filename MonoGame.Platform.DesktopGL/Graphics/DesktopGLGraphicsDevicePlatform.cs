@@ -36,7 +36,7 @@ namespace MonoGame.Platform.DesktopGL.Graphics
 {
 	public class DesktopGLGraphicsDevicePlatform : IGraphicsDevicePlatform
 	{
-		public GraphicsProfile GetHighestSupportedGraphicsProfile (GraphicsDevice graphicsDevice)
+		public GraphicsProfile GetHighestSupportedGraphicsProfile (IGraphicsDevice graphicsDevice)
 		{
 			throw new NotImplementedException ();
 		}

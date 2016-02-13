@@ -9,7 +9,7 @@ namespace NewFences.UnitTests
 		public void UpdateTestNoBuffers ()
 		{
 			var indexer = new MockFenceIndexer ();
-			IBufferUpdater r = new MeshBufferUpdater (indexer);
+			IMeshBufferUpdater r = new MeshBufferUpdater (indexer);
 			r.Buffers = null;
 			r.Update ();
 		}

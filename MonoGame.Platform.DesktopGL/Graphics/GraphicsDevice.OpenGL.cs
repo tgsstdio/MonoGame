@@ -40,6 +40,12 @@ namespace MonoGame.Platform.DesktopGL.Graphics
 
     public partial class GraphicsDevice
     {
+		public Microsoft.Xna.Framework.IWeakReferenceCollection WeakReferences {
+			get {
+				throw new NotImplementedException ();
+			}
+		}
+
 #if DESKTOPGL || ANGLE
         internal IGraphicsContext Context { get; private set; }
 #endif

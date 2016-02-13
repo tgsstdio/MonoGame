@@ -70,37 +70,31 @@ using Microsoft.Xna.Framework;
 #endregion License
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input.Touch;
-using Microsoft.Xna.Framework.Input;
 
 using OpenTK;
-using OpenTK.Graphics;
 
 namespace MonoGame.Platform.DesktopGL
 {
-    class OpenTKGamePlatform : GamePlatform, IOpenTKGamePlatform
+    public class OpenTKGamePlatform : GamePlatform
     {
-        private OpenTKGameWindow _view;
+        private BaseOpenTKGameWindow _view;
 		private OpenALSoundController soundControllerInstance = null;
         // stored the current screen state, so we can check if it has changed.
-        private bool isCurrentlyFullScreen = false;
         private Toolkit toolkit;
         private int isExiting; // int, so we can use Interlocked.Increment
         
-		private GameBackbone mGame;
+		//private IGameBackbone mBackbone;
 		private IGraphicsDeviceManager mGraphics;
-		public OpenTKGamePlatform(GameBackbone game, IGraphicsDeviceManager graphics, OpenTKGameWindow view)
-			: base(graphics)
+		private IOpenTKWindowResetter mWindowReset;
+		public OpenTKGamePlatform(IPlatformActivator activator, IGraphicsDeviceManager graphics, BaseOpenTKGameWindow view, IOpenTKWindowResetter resetter)
+			: base(graphics, activator)
         {
-			mGame = game;
 			mGraphics = graphics;
+			mWindowReset = resetter;
             toolkit = Toolkit.Init();
 			_view = view;
             this.Window = _view;
@@ -126,9 +120,9 @@ namespace MonoGame.Platform.DesktopGL
             _view.SetMouseVisible(IsMouseVisible);
         }
 
-        public override void RunLoop()
+		public override void RunLoop(Action doTick)
         {
-            ResetWindowBounds();
+			ResetWindowBounds();
             while (true)
             {
                 _view.ProcessEvents();
@@ -149,7 +143,8 @@ namespace MonoGame.Platform.DesktopGL
                     break;
                 }
 
-				mGame.Tick();
+				//mBackbone.Tick();
+				doTick();
             }
         }
 
@@ -176,13 +171,14 @@ namespace MonoGame.Platform.DesktopGL
 
         public override void BeforeInitialize()
         {
-            _view.Window.Visible = true;
+            //_view.Window.Visible = true;
+			_view.SetWindowVisible (true);
             base.BeforeInitialize();
         }
 
         public override bool BeforeUpdate(GameTime gameTime)
         {
-            IsActive = _view.Window.Focused;
+			Activator.IsActive = _view.IsWindowFocused();
 
             // Update our OpenAL sound buffer pools
             if (soundControllerInstance != null)
@@ -197,80 +193,21 @@ namespace MonoGame.Platform.DesktopGL
 
         public override void EnterFullScreen()
         {
-            ResetWindowBounds();
+			ResetWindowBounds();
         }
 
         public override void ExitFullScreen()
         {
-            ResetWindowBounds();
+			ResetWindowBounds();
         }
 
-		public void ResetWindowBounds()
-        {
-            Rectangle bounds;
-
-            bounds = Window.ClientBounds;
-
-            //Changing window style forces a redraw. Some games
-            //have fail-logic and toggle fullscreen in their draw function,
-            //so temporarily become inactive so it won't execute.
-
-            bool wasActive = IsActive;
-            IsActive = false;
-
-			var graphicsDeviceManager = mGraphics;
-
-            if (graphicsDeviceManager.IsFullScreen)
-            {
-                bounds = new Rectangle(0, 0, graphicsDeviceManager.PreferredBackBufferWidth,graphicsDeviceManager.PreferredBackBufferHeight);
-
-                if (OpenTK.DisplayDevice.Default.Width != graphicsDeviceManager.PreferredBackBufferWidth ||
-                    OpenTK.DisplayDevice.Default.Height != graphicsDeviceManager.PreferredBackBufferHeight)
-                {
-                    OpenTK.DisplayDevice.Default.ChangeResolution(graphicsDeviceManager.PreferredBackBufferWidth,
-                            graphicsDeviceManager.PreferredBackBufferHeight,
-                            OpenTK.DisplayDevice.Default.BitsPerPixel,
-                            OpenTK.DisplayDevice.Default.RefreshRate);
-                }
-            }
-            else
-            {
-                
-                // switch back to the normal screen resolution
-                OpenTK.DisplayDevice.Default.RestoreResolution();
-                // now update the bounds 
-                bounds.Width = graphicsDeviceManager.PreferredBackBufferWidth;
-                bounds.Height = graphicsDeviceManager.PreferredBackBufferHeight;
-            }
-            
-
-            // Now we set our Presentation Parameters
-            var device = mGame.GraphicsDevice;
-            // FIXME: Eliminate the need for null checks by only calling
-            //        ResetWindowBounds after the device is ready.  Or,
-            //        possibly break this method into smaller methods.
-            if (device != null)
-            {
-                PresentationParameters parms = device.PresentationParameters;
-                parms.BackBufferHeight = (int)bounds.Height;
-                parms.BackBufferWidth = (int)bounds.Width;
-            }
-
-            if (graphicsDeviceManager.IsFullScreen != isCurrentlyFullScreen)
-            {                
-                _view.ToggleFullScreen();
-            }
-
-            // we only change window bounds if we are not fullscreen
-            // or if fullscreen mode was just entered
-            if (!graphicsDeviceManager.IsFullScreen || (graphicsDeviceManager.IsFullScreen != isCurrentlyFullScreen))
-                _view.ChangeClientBounds(bounds);
-
-            // store the current fullscreen state
-            isCurrentlyFullScreen = graphicsDeviceManager.IsFullScreen;
-
-            IsActive = wasActive;
-        }
+		private void ResetWindowBounds()
+		{
+			bool wasActive = Activator.IsActive;
+			Activator.IsActive = false;
+			mWindowReset.ResetWindowBounds();
+			Activator.IsActive = wasActive;
+		}
 
         public override void EndScreenDeviceChange(string screenDeviceName, int clientWidth, int clientHeight)
         {
@@ -289,7 +226,7 @@ namespace MonoGame.Platform.DesktopGL
 
         public override void Present()
         {
-            var device = mGame.GraphicsDevice;
+			var device = Graphics.GraphicsDevice;
             if (device != null)
                 device.Present();
         }
@@ -313,6 +250,5 @@ namespace MonoGame.Platform.DesktopGL
 
 			base.Dispose(disposing);
         }
-			
     }
 }

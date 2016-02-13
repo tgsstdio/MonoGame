@@ -2,14 +2,14 @@ using MonoGame.Graphics;
 
 namespace NewFences
 {
-	public class RenderPass
+	public class RenderPass : IRenderPass
 	{
 		public int Id {
 			get;
 			set;
 		}
 
-		public RenderPassGroup[] Groups {
+		public IRenderPassGroup[] Groups {
 			get;
 			set;
 		}

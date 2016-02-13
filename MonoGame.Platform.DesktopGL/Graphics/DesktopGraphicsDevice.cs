@@ -7,6 +7,29 @@ namespace MonoGame.Platform.DesktopGL
 	{
 		#region IGraphicsDevice implementation
 
+		public void CreateDevice (Microsoft.Xna.Framework.Graphics.GraphicsAdapter adapter, Microsoft.Xna.Framework.Graphics.GraphicsProfile graphicsProfile)
+		{
+			throw new NotImplementedException ();
+		}
+
+		public IWeakReferenceCollection WeakReferences {
+			get {
+				throw new NotImplementedException ();
+			}
+		}
+
+		public Microsoft.Xna.Framework.Graphics.GraphicsProfile GraphicsProfile {
+			get {
+				throw new NotImplementedException ();
+			}
+		}
+
+		public Microsoft.Xna.Framework.Graphics.IGraphicsCapabilities GraphicsCapabilities {
+			get {
+				throw new NotImplementedException ();
+			}
+		}
+
 		public void Present ()
 		{
 			throw new NotImplementedException ();

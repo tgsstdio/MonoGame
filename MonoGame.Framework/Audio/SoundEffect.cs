@@ -19,7 +19,7 @@ namespace Microsoft.Xna.Framework.Audio
 
 		public static void PlatformShutdown ()
 		{
-			throw new NotImplementedException ();
+			// TODO : No idea what to do
 		}
 
         private string _name;

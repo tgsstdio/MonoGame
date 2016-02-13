@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework;
 
 #if OPENGL
 #if MONOMAC
@@ -529,7 +530,7 @@ namespace MonoGame.Platform.DesktopGL.Graphics
 
 
 		internal static void GetGLFormat (this SurfaceFormat format,
-			GraphicsDevice graphicsDevice,
+			IGraphicsDevice graphicsDevice,
 			out PixelInternalFormat glInternalFormat,
 			out PixelFormat glFormat,
 			out PixelType glType)

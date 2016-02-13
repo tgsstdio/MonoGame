@@ -21,6 +21,8 @@ namespace Microsoft.Xna.Framework.Graphics
 {
 	public interface IGraphicsCapabilitiesLookup
 	{
+		void Initialise();
+
 		bool SupportsNonPowerOfTwo ();
 
 		bool SupportsTextureMaxLevel ();

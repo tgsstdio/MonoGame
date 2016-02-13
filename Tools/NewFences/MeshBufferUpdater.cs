@@ -1,6 +1,8 @@
-﻿namespace NewFences
+﻿using MonoGame.Graphics;
+
+namespace NewFences
 {
-	public class MeshBufferUpdater : IBufferUpdater
+	public class MeshBufferUpdater : IMeshBufferUpdater
 	{
 		private readonly IFenceIndexVariable mIndexer;
 		public MeshBufferUpdater(IFenceIndexVariable indexer)
@@ -8,7 +10,7 @@
 			mIndexer = indexer;
 		}
 
-		public MeshBuffer[] Buffers { get; set; }
+		public IMeshBuffer[] Buffers { get; set; }
 		#region IMeshBufferUpdater implementation
 		public void Update()
 		{

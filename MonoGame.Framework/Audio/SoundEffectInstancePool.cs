@@ -92,35 +92,35 @@ namespace Microsoft.Xna.Framework.Audio
         /// SoundEffectInstance if the pool is empty.
         /// </summary>
         /// <returns>The SoundEffectInstance.</returns>
-        internal static SoundEffectInstance GetInstance(bool forXAct)
-        {
-            SoundEffectInstance inst = null;
-            var count = _pooledInstances.Count;
-            if (count > 0)
-            {
-                // Grab the item at the end of the list so the remove doesn't copy all
-                // the list items down one slot.
-                inst = _pooledInstances[count - 1];
-                _pooledInstances.RemoveAt(count - 1);
-
-                // Reset used instance to the "default" state.
-                inst._isPooled = true;
-                inst._isXAct = forXAct;
-                inst.Volume = 1.0f;
-                inst.Pan = 0.0f;
-                inst.Pitch = 0.0f;
-                inst.IsLooped = false;
-            }
-            else
-            {
-				// TODO : remove instance stuff
-				inst = new SoundEffectInstance(null);
-                inst._isPooled = true;
-                inst._isXAct = forXAct;
-            }
-
-            return inst;
-        }
+//        internal static SoundEffectInstance GetInstance(bool forXAct)
+//        {
+//            SoundEffectInstance inst = null;
+//            var count = _pooledInstances.Count;
+//            if (count > 0)
+//            {
+//                // Grab the item at the end of the list so the remove doesn't copy all
+//                // the list items down one slot.
+//                inst = _pooledInstances[count - 1];
+//                _pooledInstances.RemoveAt(count - 1);
+//
+//                // Reset used instance to the "default" state.
+//                inst._isPooled = true;
+//                inst._isXAct = forXAct;
+//                inst.Volume = 1.0f;
+//                inst.Pan = 0.0f;
+//                inst.Pitch = 0.0f;
+//                inst.IsLooped = false;
+//            }
+//            else
+//            {
+//				// TODO : remove instance stuff
+//				inst = new SoundEffectInstance(null);
+//                inst._isPooled = true;
+//                inst._isXAct = forXAct;
+//            }
+//
+//            return inst;
+//        }
 
         /// <summary>
         /// Iterates the list of playing instances, returning them to the pool if they

@@ -2,6 +2,7 @@
 
 using System;
 using System.IO;
+using MonoGame.Platform.DesktopGL.Graphics;
 
 #if MONOMAC
 using MonoMac.OpenGL;
@@ -11,7 +12,7 @@ using OpenTK.Graphics.OpenGL;
 using OpenTK.Graphics.ES20;
 #endif
 
-namespace Microsoft.Xna.Framework.DesktopGL.Graphics
+namespace MonoGame.Platform.DesktopGL.Graphics
 {
 	public class DesktopGLShaderPlatform : IShaderPlatform
 	{
@@ -24,7 +25,7 @@ namespace Microsoft.Xna.Framework.DesktopGL.Graphics
 				if (GL.IsShader(_shaderHandle))
 				{
 					GL.DeleteShader(_shaderHandle);
-					DesktopGLGraphicsExtensions.CheckGLError();
+					GraphicsExtensions.CheckGLError();
 				}
 				_shaderHandle = -1;
 			}

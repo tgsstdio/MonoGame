@@ -1,6 +1,9 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 
 using System;
+using Microsoft.Xna.Framework;
+
+
 #if OPENGL
 #if MONOMAC
 using MonoMac.OpenGL;
@@ -11,11 +14,11 @@ using OpenTK.Graphics.OpenGL;
 #endif
 #endif
 
-namespace Microsoft.Xna.Framework.DesktopGL.Graphics
+namespace MonoGame.Platform.DesktopGL.Graphics
 {
 	public class GLSpecificGraphicsCapabilities
 	{
-		public GLSpecificGraphicsCapabilities (GraphicsDevice device)
+		public GLSpecificGraphicsCapabilities (IGraphicsDevice device)
 		{
 			var SupportsTextureFilterAnisotropic = device._extensions.Contains("GL_EXT_texture_filter_anisotropic");
 
@@ -34,7 +37,7 @@ namespace Microsoft.Xna.Framework.DesktopGL.Graphics
 			if (SupportsTextureFilterAnisotropic)
 			{
 				GL.GetInteger((GetPName)All.MaxTextureMaxAnisotropyExt, out anisotropy);
-				DesktopGLGraphicsExtensions.CheckGLError();
+				GraphicsExtensions.CheckGLError();
 			}
 			MaxTextureAnisotropy = anisotropy;
 			#endif
