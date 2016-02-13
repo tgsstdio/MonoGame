@@ -18,7 +18,6 @@ namespace BirdNest.Rendering.UnitTests
 		}
 
 		[TestCase]
-		[ExpectedException(typeof(ArgumentException))]
 		public void DuplicateSameKey ()
 		{
 			const uint FIRST_KEY = 13;
@@ -27,7 +26,7 @@ namespace BirdNest.Rendering.UnitTests
 			
 			var dict = new Dictionary<SomeKey, int> ();
 			dict.Add (temp, 0);
-			dict.Add (temp, 1);
+			Assert.Throws (typeof(ArgumentException), () => dict.Add (temp, 1));
 		}
 
 		[TestCase]

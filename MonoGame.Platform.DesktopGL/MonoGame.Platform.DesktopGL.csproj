@@ -48,8 +48,6 @@
     <Compile Include="Desktop\OpenTKGameWindow.cs" />
     <Compile Include="Input\KeyboardUtil.OpenTK.cs" />
     <Compile Include="Desktop\OpenTKGamePlatform.cs" />
-    <Compile Include="Audio\OpenALSoundController.cs" />
-    <Compile Include="Audio\OALSoundBuffer.cs" />
     <Compile Include="DefaultBackBufferPreferences.cs" />
     <Compile Include="Graphics\GraphicsExtensions.cs" />
     <Compile Include="Graphics\DesktopGraphicsDevice.cs" />
@@ -67,6 +65,7 @@
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <Folder Include="Utilities\" />
+    <Folder Include="Audio\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -76,6 +75,10 @@
     <ProjectReference Include="..\MonoGame.Framework\Microsoft.Xna.Framework.csproj">
       <Project>{6E03191C-70AE-4B0B-8782-68D377B72A0F}</Project>
       <Name>Microsoft.Xna.Framework</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MonoGame.Audio.OpenAL\MonoGame.Audio.OpenAL.csproj">
+      <Project>{C06188B4-0C78-42CB-B868-336EB7B6B3DF}</Project>
+      <Name>MonoGame.Audio.OpenAL</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>

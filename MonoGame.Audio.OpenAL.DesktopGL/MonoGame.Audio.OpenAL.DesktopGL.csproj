@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{D68E983C-FA4D-418A-8353-43C4CDE75B23}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>MonoGame.Audio.OpenAL.DesktopGL</RootNamespace>
+    <AssemblyName>MonoGame.Audio.OpenAL.DesktopGL</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>full</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="OpenTK">
+      <HintPath>..\packages\OpenTK.1.1.2225.0\lib\net20\OpenTK.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="DesktopGLALSoundBuffer.cs" />
+    <Compile Include="DesktopGLOALSoundController.cs" />
+    <Compile Include="DesktopGLOALSourcesArray.cs" />
+    <Compile Include="DesktopGLOpenALSoundContext.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <None Include="OpenTK.dll.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MonoGame.Audio.OpenAL\MonoGame.Audio.OpenAL.csproj">
+      <Project>{C06188B4-0C78-42CB-B868-336EB7B6B3DF}</Project>
+      <Name>MonoGame.Audio.OpenAL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MonoGame.Framework\Microsoft.Xna.Framework.csproj">
+      <Project>{6E03191C-70AE-4B0B-8782-68D377B72A0F}</Project>
+      <Name>Microsoft.Xna.Framework</Name>
+    </ProjectReference>
+  </ItemGroup>
+</Project>

@@ -3,27 +3,22 @@
 // file 'LICENSE.txt', which is part of this source code package.
 
 using System;
-using Microsoft.Xna.Framework.Audio;
-
-#if MONOMAC
-using MonoMac.OpenAL;
-#else
 using OpenTK.Audio.OpenAL;
-#endif
+using Microsoft.Xna.Framework.Audio;
+using MonoGame.Audio.OpenAL;
 
-namespace Monogame.Platform.DesktopGL.Audio
+namespace MonoGame.Audio.OpenAL.DesktopGL
 {
-	internal class OALSoundBuffer : IDisposable
+	public class DesktopGLALSoundBuffer : IOALSoundBuffer
 	{
 		int openALDataBuffer;
 		ALFormat openALFormat;
 		int dataSize;
 		int sampleRate;
 		private int _sourceId;
-        bool _isDisposed;
         internal int _pauseCount;
 
-		public OALSoundBuffer ()
+		public DesktopGLALSoundBuffer ()
 		{
             try
             {
@@ -41,7 +36,7 @@ namespace Monogame.Platform.DesktopGL.Audio
             }
 		}
 
-        ~OALSoundBuffer()
+        ~DesktopGLALSoundBuffer()
         {
             Dispose(false);
         }
@@ -112,6 +107,7 @@ namespace Monogame.Platform.DesktopGL.Audio
             GC.SuppressFinalize(this);
 		}
 
+		private bool _isDisposed = false;
         protected virtual void Dispose(bool disposing)
         {
             if (!_isDisposed)

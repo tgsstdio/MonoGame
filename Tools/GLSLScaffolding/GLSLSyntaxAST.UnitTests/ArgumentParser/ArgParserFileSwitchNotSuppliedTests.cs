@@ -8,27 +8,27 @@ namespace GLSLSyntaxAST.UnitTests
 	public class ArgParserFileSwitchNotSuppliedTests
 	{
 		[TestCase]
-		[ExpectedException(typeof(ArgumentParser.FileSwitchNotSuppliedException))]
 		public void NoArguments()
 		{
 			var parser = new ArgumentParser ();
-			parser.Parse (new string[]{ });
+			var args = new string[]{ };
+			Assert.Throws (typeof(ArgumentParser.FileSwitchNotSuppliedException), () => parser.Parse (args));
 		}
 
 		[TestCase]
-		[ExpectedException(typeof(ArgumentParser.FileSwitchNotSuppliedException))]
 		public void AssemblySwitchOnly()
 		{
 			var parser = new ArgumentParser ();
-			parser.Parse (new string[]{ "-a", "Sample.dll"});
+			var args = new string[]{ "-a", "Sample.dll"};
+			Assert.Throws (typeof(ArgumentParser.FileSwitchNotSuppliedException), () => parser.Parse (args));
 		}
 
 		[TestCase]
-		[ExpectedException(typeof(ArgumentParser.FileSwitchNotSuppliedException))]
 		public void CodeSwitchOnly()
 		{
 			var parser = new ArgumentParser ();
-			parser.Parse (new string[]{ "-c", "Sample.dll"});
+			var args = new string[]{ "-c", "Sample.dll"};
+			Assert.Throws (typeof(ArgumentParser.FileSwitchNotSuppliedException), () => parser.Parse (args));
 		}
 	}
 }

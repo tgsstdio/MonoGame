@@ -65,16 +65,13 @@ the implied warranties of merchantability, fitness for a particular purpose and
 non-infringement.
 */
 using Microsoft.Xna.Framework;
-using Monogame.Platform.DesktopGL.Audio;
-
+using MonoGame.Audio.OpenAL;
 
 #endregion License
 
 using System;
 using System.Threading;
 
-using Microsoft.Xna.Framework.Audio;
-using Microsoft.Xna.Framework.Graphics;
 
 using OpenTK;
 
@@ -83,7 +80,7 @@ namespace MonoGame.Platform.DesktopGL
     public class OpenTKGamePlatform : GamePlatform
     {
         private BaseOpenTKGameWindow _view;
-		private OpenALSoundController soundControllerInstance = null;
+		private IOpenALSoundController soundControllerInstance = null;
         // stored the current screen state, so we can check if it has changed.
         private Toolkit toolkit;
         private int isExiting; // int, so we can use Interlocked.Increment
@@ -91,7 +88,7 @@ namespace MonoGame.Platform.DesktopGL
 		//private IGameBackbone mBackbone;
 		private IGraphicsDeviceManager mGraphics;
 		private IOpenTKWindowResetter mWindowReset;
-		public OpenTKGamePlatform(IPlatformActivator activator, IGraphicsDeviceManager graphics, BaseOpenTKGameWindow view, IOpenTKWindowResetter resetter)
+		public OpenTKGamePlatform(IPlatformActivator activator, IGraphicsDeviceManager graphics, BaseOpenTKGameWindow view, IOpenTKWindowResetter resetter, IOpenALSoundController soundController)
 			: base(graphics, activator)
         {
 			mGraphics = graphics;
@@ -101,14 +98,14 @@ namespace MonoGame.Platform.DesktopGL
             this.Window = _view;
 
 			// Setup our OpenALSoundController to handle our SoundBuffer pools
-            try
-            {
-                soundControllerInstance = OpenALSoundController.GetInstance;
-            }
-            catch (DllNotFoundException ex)
-            {
-                throw (new NoAudioHardwareException("Failed to init OpenALSoundController", ex));
-            }
+//            try
+//            {
+				soundControllerInstance = soundController;
+//            }
+//            catch (DllNotFoundException ex)
+//            {
+//                throw (new NoAudioHardwareException("Failed to init OpenALSoundController", ex));
+//            }
         }
 
         public override GameRunBehavior DefaultRunBehavior
