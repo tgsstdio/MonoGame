@@ -2,14 +2,14 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
-
 namespace Microsoft.Xna.Framework.Audio
 {
-	public interface ISoundEffectInstancePoolPlatform
+	public interface ISoundEffectInstancePool
 	{
-		int MAX_PLAYING_INSTANCES {
-			get;
-		}
+		SoundEffectInstance GetInstance (bool forXAct);
+		bool SoundsAvailable { get; }
+		void Remove (SoundEffectInstance inst);
+		void Update ();	
+		void UpdateMasterVolume();
 	}
-
 }

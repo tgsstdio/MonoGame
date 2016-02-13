@@ -7,9 +7,9 @@ namespace MonoGame.Platform.DesktopGL
 	public class DesktopGLGraphicsDeviceQuery : IGraphicsDeviceQuery
 	{
 		private readonly IBackBufferPreferences mBackbuffer;
-		private readonly PresentationParameters mPresentation;
+		private readonly IPresentationParameters mPresentation;
 
-		public DesktopGLGraphicsDeviceQuery (IBackBufferPreferences backbuffer, PresentationParameters presentation)
+		public DesktopGLGraphicsDeviceQuery (IBackBufferPreferences backbuffer, IPresentationParameters presentation)
 		{
 			mBackbuffer = backbuffer;
 			mPresentation = presentation;

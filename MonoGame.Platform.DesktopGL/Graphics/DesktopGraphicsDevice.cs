@@ -40,7 +40,7 @@ namespace MonoGame.Platform.DesktopGL
 			throw new NotImplementedException ();
 		}
 
-		public Microsoft.Xna.Framework.Graphics.PresentationParameters PresentationParameters {
+		public Microsoft.Xna.Framework.Graphics.IPresentationParameters PresentationParameters {
 			get {
 				throw new NotImplementedException ();
 			}

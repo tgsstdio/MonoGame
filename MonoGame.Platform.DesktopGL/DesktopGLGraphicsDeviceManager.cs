@@ -70,7 +70,7 @@ namespace MonoGame.Platform.DesktopGL.Graphics
 			IGraphicsDevicePlatform devicePlatform,
 			ISamplerStateCollectionPlatform samplerStateCollectionPlatform,
 			ITextureCollectionPlatform texCollectionPlatform,
-			PresentationParameters presentationParams)
+			IPresentationParameters presentationParams)
 		{
 			mWindowReset = windowReset;
 			mDevicePlatform = devicePlatform;
@@ -347,7 +347,7 @@ namespace MonoGame.Platform.DesktopGL.Graphics
 			#endif
 			}
 
-		private PresentationParameters mPresentationParameters;
+		private IPresentationParameters mPresentationParameters;
 		private void Initialize()
 		{
 

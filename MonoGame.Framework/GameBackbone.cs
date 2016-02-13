@@ -49,13 +49,23 @@ namespace Microsoft.Xna.Framework
         
 		private IContentTypeReaderManager ContentTypeReaderManager;
 		private IPlatformActivator mPlatformActivator;
-		private PresentationParameters mPresentationParameters;
+		private IPresentationParameters mPresentationParameters;
 		private IDrawSuppressor mSuppressor;
-		public GameBackbone(Game vg, GamePlatform platform, IContentManager content, IContentTypeReaderManager ctrm, IPlatformActivator activator, PresentationParameters parameters, IDrawSuppressor suppression)
+		private ISoundEffectInstancePool mPool;
+		public GameBackbone(
+			Game vg,
+			GamePlatform platform,
+			IContentManager content,
+			IContentTypeReaderManager ctrm,
+			IPlatformActivator activator,
+			IPresentationParameters presentation,
+			IDrawSuppressor suppression,
+			ISoundEffectInstancePool pool)
         {
 			mSuppressor = suppression;
 			mPlatformActivator = activator;
-			mPresentationParameters = parameters;
+			mPresentationParameters = presentation;
+			mPool = pool;
 			_instance = vg;
 			ContentTypeReaderManager = ctrm;
 
@@ -664,7 +674,7 @@ namespace Microsoft.Xna.Framework
                 // Once per frame, we need to check currently 
                 // playing sounds to see if they've stopped,
                 // and return them back to the pool if so.
-                SoundEffectInstancePool.Update();
+				mPool.Update();
 
 				Instance.Update(gameTime);
 

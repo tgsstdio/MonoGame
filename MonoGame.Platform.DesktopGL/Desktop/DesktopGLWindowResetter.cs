@@ -1,28 +1,27 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGame.Platform.DesktopGL
 {
 	public class DesktopGLWindowResetter : IOpenTKWindowResetter
 	{
-		private readonly BaseOpenTKGameWindow Window;
+		private readonly BaseOpenTKGameWindow mWindow;
 		private readonly IGraphicsDeviceQuery mDeviceQuery;
-		private readonly PresentationParameters mPresentation;
+		private readonly IPresentationParameters mPresentation;
 		private bool isCurrentlyFullScreen = false;
 
-		public DesktopGLWindowResetter (BaseOpenTKGameWindow view, IGraphicsDeviceQuery query, PresentationParameters parameters)
+		public DesktopGLWindowResetter (BaseOpenTKGameWindow window, IGraphicsDeviceQuery deviceQuery, IPresentationParameters presentation)
 		{
-			Window = view;
-			mDeviceQuery = query;
-			mPresentation = parameters;
+			mWindow = window;
+			mDeviceQuery = deviceQuery;
+			mPresentation = presentation;
 		}
 
 		public void ResetWindowBounds()
 		{
 			Rectangle bounds;
 
-			bounds = Window.ClientBounds;
+			bounds = mWindow.ClientBounds;
 
 			//Changing window style forces a redraw. Some games
 			//have fail-logic and toggle fullscreen in their draw function,
@@ -64,13 +63,13 @@ namespace MonoGame.Platform.DesktopGL
 
 			if (mDeviceQuery.IsFullScreen != isCurrentlyFullScreen)
 			{                
-				Window.ToggleFullScreen();
+				mWindow.ToggleFullScreen();
 			}
 
 			// we only change window bounds if we are not fullscreen
 			// or if fullscreen mode was just entered
 			if (!mDeviceQuery.IsFullScreen || (mDeviceQuery.IsFullScreen != isCurrentlyFullScreen))
-				Window.ChangeClientBounds(bounds);
+				mWindow.ChangeClientBounds(bounds);
 
 			// store the current fullscreen state
 			isCurrentlyFullScreen = mDeviceQuery.IsFullScreen;

@@ -29,7 +29,7 @@ namespace Microsoft.Xna.Framework
         /// <summary>
         /// The settings that define how graphics will be presented to the display.
         /// </summary>
-        public PresentationParameters PresentationParameters { get; set; }
+        public IPresentationParameters PresentationParameters { get; set; }
     }
 }
 

@@ -41,7 +41,7 @@ namespace HelloCube
 					container.Register<IGraphicsDevicePlatform, FullDesktopGLGraphicsDevicePlatform>(Reuse.Singleton);
 
 					container.Register<IBackBufferPreferences, DefaultBackBufferPreferences>(Reuse.Singleton);
-					container.Register<PresentationParameters>(Reuse.Singleton);
+					container.Register<IPresentationParameters, PresentationParameters>(Reuse.Singleton);
 
 					// RUNTIME
 					container.Register<IDrawSuppressor, DrawSupressor>();

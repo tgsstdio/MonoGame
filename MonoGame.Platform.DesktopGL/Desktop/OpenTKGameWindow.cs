@@ -69,7 +69,7 @@ namespace MonoGame.Platform.DesktopGL
         private IntPtr _windowHandle;
         private INativeWindow window;
 
-		protected PresentationParameters PresentationParameters;
+		protected IPresentationParameters PresentationParameters;
         private List<Microsoft.Xna.Framework.Input.Keys> keys;
 		//private OpenTK.Graphics.GraphicsContext backgroundContext;
 
@@ -160,7 +160,7 @@ namespace MonoGame.Platform.DesktopGL
 
 		private IMouseListener mMouse;
 		private IDrawSuppressor mSuppressor;
-		public OpenTKGameWindow(PresentationParameters parameters, INativeWindow emptyWindow, IDrawSuppressor suppressor, IMouseListener mouseListener)
+		public OpenTKGameWindow(IPresentationParameters parameters, INativeWindow emptyWindow, IDrawSuppressor suppressor, IMouseListener mouseListener)
         {
 			mSuppressor = suppressor;
 			PresentationParameters = parameters;

@@ -222,6 +222,12 @@
     <Compile Include="MonoGame.Framework\DrawSupressor.cs" />
     <Compile Include="MonoGame.Framework\IDrawSuppressor.cs" />
     <Compile Include="MonoGame.Framework\IGraphicsDeviceQuery.cs" />
+    <Compile Include="MonoGame.Framework\Audio\ISoundEffectInstancePool.cs" />
+    <Compile Include="MonoGame.Framework\Audio\ISoundPlayer.cs" />
+    <Compile Include="MonoGame.Framework\Audio\SoundPlayer.cs" />
+    <Compile Include="MonoGame.Framework\Audio\ISoundEnvironment.cs" />
+    <Compile Include="MonoGame.Framework\Audio\SoundEnvironment.cs" />
+    <Compile Include="MonoGame.Framework\Graphics\IPresentationParameters.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

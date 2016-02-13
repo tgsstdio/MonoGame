@@ -48,14 +48,14 @@ namespace Microsoft.Xna.Framework
 		private IGraphicsDevicePlatform mDevicePlatform;
 		private ISamplerStateCollectionPlatform mSamplerStateCollectionPlatform;
 		private ITextureCollectionPlatform mTextureCollectionPlatform;
-		private PresentationParameters mPresentationParameters;
+		private IPresentationParameters mPresentationParameters;
 
 		public GraphicsDeviceManager(
 			GameBackbone game,
 			IGraphicsDevice graphicsDevice,
 			IGraphicsDevicePlatform devicePlatform,
 			ITextureCollectionPlatform texCollectionPlatform,
-			PresentationParameters preferences
+			IPresentationParameters preferences
 			)
         {
 			_graphicsDevice = graphicsDevice;

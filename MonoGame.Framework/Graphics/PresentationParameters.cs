@@ -17,7 +17,7 @@ using Microsoft.Xna.Framework.Input.Touch;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
-    public class PresentationParameters : IDisposable
+    public class PresentationParameters : IPresentationParameters
     {
         #region Constants
 
@@ -41,18 +41,13 @@ namespace Microsoft.Xna.Framework.Graphics
         #endregion Private Fields
 
         #region Constructors
-		private IBackBufferPreferences mPreferences;
+		private readonly IBackBufferPreferences mPreferences;
 		public PresentationParameters(IBackBufferPreferences preferences)
         {
 			mPreferences = preferences;
 			backBufferHeight = mPreferences.DefaultBackBufferHeight;
 			backBufferWidth = mPreferences.DefaultBackBufferWidth;
             Clear();
-        }
-
-        ~PresentationParameters()
-        {
-            Dispose(false);
         }
 
         #endregion Constructors
@@ -146,7 +141,6 @@ namespace Microsoft.Xna.Framework.Graphics
 
         #endregion Properties
 
-
         #region Methods
 
         public void Clear()
@@ -183,7 +177,7 @@ namespace Microsoft.Xna.Framework.Graphics
             DisplayOrientation = Microsoft.Xna.Framework.DisplayOrientation.Default;
         }
 
-        public PresentationParameters Clone()
+        public IPresentationParameters Clone()
         {
 			PresentationParameters clone = new PresentationParameters(mPreferences);
             clone.backBufferFormat = this.backBufferFormat;
@@ -199,24 +193,24 @@ namespace Microsoft.Xna.Framework.Graphics
             return clone;
         }
 
-        public void Dispose()
-        {
-            this.Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!disposed)
-            {
-                disposed = true;
-                if (disposing)
-                {
-                    // Dispose managed resources
-                }
-                // Dispose unmanaged resources
-            }
-        }
+//        public void Dispose()
+//        {
+//            this.Dispose(true);
+//            GC.SuppressFinalize(this);
+//        }
+//
+//        protected virtual void Dispose(bool disposing)
+//        {
+//            if (!disposed)
+//            {
+//                disposed = true;
+//                if (disposing)
+//                {
+//                    // Dispose managed resources
+//                }
+//                // Dispose unmanaged resources
+//            }
+//        }
 
         #endregion Methods
 

@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace Microsoft.Xna.Framework.Audio
 {
-    internal static class SoundEffectInstancePool
+	internal class SoundEffectInstancePool : ISoundEffectInstancePool
     {
 
 #if WINDOWS || (WINRT && !WINDOWS_PHONE) || DESKTOPGL || WEB || ANGLE
@@ -36,16 +36,21 @@ namespace Microsoft.Xna.Framework.Audio
 
 #endif
 
-        private static readonly List<SoundEffectInstance> _playingInstances;
-        private static readonly List<SoundEffectInstance> _pooledInstances;
+        private readonly List<SoundEffectInstance> _playingInstances;
+        private readonly List<SoundEffectInstance> _pooledInstances;
 
-		static ISoundEffectInstancePoolPlatform mPlatform; 
-        static SoundEffectInstancePool()
+		private ISoundEffectInstancePlatform mInstPlatform;
+		private ISoundEffectInstancePoolPlatform mPoolPlatform;
+		private ISoundEnvironment mEnvironment;
+		public SoundEffectInstancePool(ISoundEffectInstancePoolPlatform platform, ISoundEffectInstancePlatform instPlatform, ISoundEnvironment environment)
         {
 			//mPlatform.MAX_PLAYING_INSTANCES = 0;
             // Reduce garbage generation by allocating enough capacity for
             // the maximum playing instances or at least some reasonable value.
-			var maxInstances = mPlatform.MAX_PLAYING_INSTANCES < 1024 ? mPlatform.MAX_PLAYING_INSTANCES : 1024;
+			mPoolPlatform = platform;
+			mInstPlatform = instPlatform;
+			mEnvironment = environment;
+			var maxInstances = mPoolPlatform.MAX_PLAYING_INSTANCES < 1024 ? mPoolPlatform.MAX_PLAYING_INSTANCES : 1024;
             _playingInstances = new List<SoundEffectInstance>(maxInstances);
             _pooledInstances = new List<SoundEffectInstance>(maxInstances);
         }
@@ -54,11 +59,11 @@ namespace Microsoft.Xna.Framework.Audio
         /// Gets a value indicating whether the platform has capacity for more sounds to be played at this time.
         /// </summary>
         /// <value><c>true</c> if more sounds can be played; otherwise, <c>false</c>.</value>
-        internal static bool SoundsAvailable
+        public bool SoundsAvailable
         {
             get
             {
-				return _playingInstances.Count < mPlatform.MAX_PLAYING_INSTANCES;
+				return _playingInstances.Count < mPoolPlatform.MAX_PLAYING_INSTANCES;
             }
         }
 
@@ -67,7 +72,7 @@ namespace Microsoft.Xna.Framework.Audio
         /// list of playing instances.
         /// </summary>
         /// <param name="inst">The SoundEffectInstance</param>
-        internal static void Add(SoundEffectInstance inst)
+        internal void Add(SoundEffectInstance inst)
         {
             if (inst._isPooled)
             {
@@ -82,7 +87,7 @@ namespace Microsoft.Xna.Framework.Audio
         /// Adds the SoundEffectInstance to the list of playing instances.
         /// </summary>
         /// <param name="inst">The SoundEffectInstance to add to the playing list.</param>
-        internal static void Remove(SoundEffectInstance inst)
+        public void Remove(SoundEffectInstance inst)
         {
             _playingInstances.Add(inst);
         }
@@ -92,41 +97,41 @@ namespace Microsoft.Xna.Framework.Audio
         /// SoundEffectInstance if the pool is empty.
         /// </summary>
         /// <returns>The SoundEffectInstance.</returns>
-//        internal static SoundEffectInstance GetInstance(bool forXAct)
-//        {
-//            SoundEffectInstance inst = null;
-//            var count = _pooledInstances.Count;
-//            if (count > 0)
-//            {
-//                // Grab the item at the end of the list so the remove doesn't copy all
-//                // the list items down one slot.
-//                inst = _pooledInstances[count - 1];
-//                _pooledInstances.RemoveAt(count - 1);
-//
-//                // Reset used instance to the "default" state.
-//                inst._isPooled = true;
-//                inst._isXAct = forXAct;
-//                inst.Volume = 1.0f;
-//                inst.Pan = 0.0f;
-//                inst.Pitch = 0.0f;
-//                inst.IsLooped = false;
-//            }
-//            else
-//            {
-//				// TODO : remove instance stuff
-//				inst = new SoundEffectInstance(null);
-//                inst._isPooled = true;
-//                inst._isXAct = forXAct;
-//            }
-//
-//            return inst;
-//        }
+        public SoundEffectInstance GetInstance(bool forXAct)
+        {
+            SoundEffectInstance inst = null;
+            var count = _pooledInstances.Count;
+            if (count > 0)
+            {
+                // Grab the item at the end of the list so the remove doesn't copy all
+                // the list items down one slot.
+                inst = _pooledInstances[count - 1];
+                _pooledInstances.RemoveAt(count - 1);
+
+                // Reset used instance to the "default" state.
+                inst._isPooled = true;
+                inst._isXAct = forXAct;
+                inst.Volume = 1.0f;
+                inst.Pan = 0.0f;
+                inst.Pitch = 0.0f;
+                inst.IsLooped = false;
+            }
+            else
+            {
+				// TODO : remove instance stuff
+				inst = new SoundEffectInstance(mInstPlatform, this, mEnvironment);
+                inst._isPooled = true;
+                inst._isXAct = forXAct;
+            }
+
+            return inst;
+        }
 
         /// <summary>
         /// Iterates the list of playing instances, returning them to the pool if they
         /// have stopped playing.
         /// </summary>
-        internal static void Update()
+        public void Update()
         {
 #if OPENAL
             OpenALSoundController.GetInstance.Update();
@@ -157,7 +162,7 @@ namespace Microsoft.Xna.Framework.Audio
             }
         }
 
-        internal static void UpdateMasterVolume()
+        public void UpdateMasterVolume()
         {
             foreach (var inst in _playingInstances)
             {

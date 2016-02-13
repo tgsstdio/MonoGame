@@ -4,7 +4,7 @@ namespace Microsoft.Xna.Framework
 {
 	public interface IGraphicsDevice
 	{
-		PresentationParameters PresentationParameters { get; }
+		IPresentationParameters PresentationParameters { get; }
 		IWeakReferenceCollection WeakReferences { get; }
 		GraphicsProfile GraphicsProfile { get; }
 		IGraphicsCapabilities GraphicsCapabilities {get;}

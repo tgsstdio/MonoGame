@@ -23,7 +23,7 @@ namespace HelloCube
 			throw new NotImplementedException ();
 		}
 
-		public PresentationParameters PresentationParameters {
+		public IPresentationParameters PresentationParameters {
 			get {
 				throw new NotImplementedException ();
 			}
