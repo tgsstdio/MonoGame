@@ -32,8 +32,10 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="OpenTK">
-      <HintPath>..\..\packages\OpenTK.1.1.1589.5942\lib\NET40\OpenTK.dll</HintPath>
+      <HintPath>..\..\packages\OpenTK.1.1.2225.0\lib\net20\OpenTK.dll</HintPath>
     </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />
@@ -52,16 +54,17 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <ProjectReference Include="..\..\Microsoft.Xna.Framework.csproj">
+    <None Include="packages.config" />
+    <None Include="OpenTK.dll.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\MonoGame.Framework\Microsoft.Xna.Framework.csproj">
       <Project>{6E03191C-70AE-4B0B-8782-68D377B72A0F}</Project>
       <Name>Microsoft.Xna.Framework</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\MonoGame.Platform.DesktopGL.csproj">
+    <ProjectReference Include="..\..\MonoGame.Platform.DesktopGL\MonoGame.Platform.DesktopGL.csproj">
       <Project>{B512C831-4562-447E-9F99-C66F86B1279F}</Project>
       <Name>MonoGame.Platform.DesktopGL</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
   </ItemGroup>
 </Project>

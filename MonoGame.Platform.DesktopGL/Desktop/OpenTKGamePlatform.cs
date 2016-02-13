@@ -65,6 +65,7 @@ the implied warranties of merchantability, fitness for a particular purpose and
 non-infringement.
 */
 using Microsoft.Xna.Framework;
+using Monogame.Platform.DesktopGL.Audio;
 
 
 #endregion License

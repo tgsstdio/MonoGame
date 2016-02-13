@@ -5,6 +5,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using MonoGame.Utilities;
 using MonoGame.Platform.DesktopGL.Utilities;
+using Microsoft.Xna.Framework.Audio;
 
 #if MONOMAC
 using MonoMac.OpenAL;
@@ -25,7 +26,7 @@ using Android.Media;
 using AudioToolbox;
 #endif
 
-namespace Microsoft.Xna.Framework.Audio
+namespace Monogame.Platform.DesktopGL.Audio
 {
 	internal sealed class OpenALSoundController : IDisposable
     {

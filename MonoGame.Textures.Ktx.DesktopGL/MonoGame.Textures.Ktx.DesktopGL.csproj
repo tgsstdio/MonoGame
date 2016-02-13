@@ -30,8 +30,10 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="OpenTK">
-      <HintPath>..\packages\OpenTK.1.1.1589.5942\lib\NET40\OpenTK.dll</HintPath>
+      <HintPath>..\packages\OpenTK.1.1.2225.0\lib\net20\OpenTK.dll</HintPath>
     </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -45,9 +47,6 @@
     <Folder Include="Common\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\MonoGame.Textures.Ktx\MonoGame.Textures.Ktx.csproj">
       <Project>{6C74B420-5DE6-43ED-AB99-18AE19342284}</Project>
       <Name>MonoGame.Textures.Ktx</Name>
@@ -56,5 +55,9 @@
       <Project>{99F73D50-EDBB-4918-B99C-B785E9563795}</Project>
       <Name>MonoGame.Textures</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="OpenTK.dll.config" />
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>

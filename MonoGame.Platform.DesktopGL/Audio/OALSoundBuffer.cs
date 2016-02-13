@@ -3,6 +3,7 @@
 // file 'LICENSE.txt', which is part of this source code package.
 
 using System;
+using Microsoft.Xna.Framework.Audio;
 
 #if MONOMAC
 using MonoMac.OpenAL;
@@ -10,7 +11,7 @@ using MonoMac.OpenAL;
 using OpenTK.Audio.OpenAL;
 #endif
 
-namespace Microsoft.Xna.Framework.Audio
+namespace Monogame.Platform.DesktopGL.Audio
 {
 	internal class OALSoundBuffer : IDisposable
 	{

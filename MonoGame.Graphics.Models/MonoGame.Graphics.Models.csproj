@@ -42,10 +42,6 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <ProjectReference Include="..\Microsoft.Xna.Framework.csproj">
-      <Project>{6E03191C-70AE-4B0B-8782-68D377B72A0F}</Project>
-      <Name>Microsoft.Xna.Framework</Name>
-    </ProjectReference>
     <ProjectReference Include="..\MonoGame.Graphics\MonoGame.Graphics.csproj">
       <Project>{52C293E3-DCC5-43BE-A94F-DBE0CF44E25E}</Project>
       <Name>MonoGame.Graphics</Name>
@@ -53,6 +49,10 @@
     <ProjectReference Include="..\MonoGame.Content\MonoGame.Content.csproj">
       <Project>{E44E47ED-2203-4E45-85A9-C755B10AC044}</Project>
       <Name>MonoGame.Content</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MonoGame.Framework\Microsoft.Xna.Framework.csproj">
+      <Project>{6E03191C-70AE-4B0B-8782-68D377B72A0F}</Project>
+      <Name>Microsoft.Xna.Framework</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>
