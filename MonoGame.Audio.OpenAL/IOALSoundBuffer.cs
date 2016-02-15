@@ -14,6 +14,7 @@ namespace MonoGame.Audio.OpenAL
 		void Resume ();
 		int SourceId { get; set; }
 		void RecycleSoundBuffer();
+		void BindDataBuffer (byte[] data, OALAudioFormat format, int size, int rate);
 
 		#region Events
 		event EventHandler<EventArgs> Reserved;

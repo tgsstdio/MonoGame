@@ -52,9 +52,22 @@ namespace MonoGame.Audio.OpenAL.DesktopGL
 			set;
 		}
 
-        public void BindDataBuffer(byte[] dataBuffer, ALFormat format, int size, int sampleRate)
+		public void BindDataBuffer(byte[] dataBuffer, OALAudioFormat format, int size, int sampleRate)
         {
-            openALFormat = format;
+			ALFormat internalFormat;
+			switch (format)
+			{
+			case OALAudioFormat.Mono16Bit:
+				internalFormat = ALFormat.Mono16;
+				break;
+			case OALAudioFormat.Stereo16Bit:
+				internalFormat = ALFormat.Stereo16;
+				break;
+			default:
+				throw new NotSupportedException ();
+			}
+
+			openALFormat = internalFormat;
             dataSize = size;
             this.sampleRate = sampleRate;
             AL.BufferData(openALDataBuffer, openALFormat, dataBuffer, dataSize, this.sampleRate);
@@ -65,7 +78,7 @@ namespace MonoGame.Audio.OpenAL.DesktopGL
             ALError alError = AL.GetError();
             if (alError != ALError.NoError)
             {
-                Console.WriteLine("Failed to get buffer bits: {0}, format={1}, size={2}, sampleRate={3}", AL.GetErrorString(alError), format, size, sampleRate);
+				Console.WriteLine("Failed to get buffer bits: {0}, format={1}, size={2}, sampleRate={3}", AL.GetErrorString(alError), openALFormat, size, sampleRate);
                 Duration = -1;
             }
             else
@@ -75,7 +88,7 @@ namespace MonoGame.Audio.OpenAL.DesktopGL
                 alError = AL.GetError();
                 if (alError != ALError.NoError)
                 {
-                    Console.WriteLine("Failed to get buffer bits: {0}, format={1}, size={2}, sampleRate={3}", AL.GetErrorString(alError), format, size, sampleRate);
+					Console.WriteLine("Failed to get buffer bits: {0}, format={1}, size={2}, sampleRate={3}", AL.GetErrorString(alError), openALFormat, size, sampleRate);
                     Duration = -1;
                 }
                 else

@@ -17,10 +17,10 @@ namespace Microsoft.Xna.Framework.Audio
     {
         #region Internal Audio Data
 
-		public static void PlatformShutdown ()
-		{
-			// TODO : No idea what to do
-		}
+//		public static void PlatformShutdown ()
+//		{
+//			// TODO : No idea what to do
+//		}
 
         private string _name;
         
@@ -92,7 +92,7 @@ namespace Microsoft.Xna.Framework.Audio
 //        public SoundEffectInstance CreateInstance()
 //        {
 //            var inst = new SoundEffectInstance();
-//            PlatformSetupInstance(inst);
+//            Platform.SetupInstance(inst);
 //
 //            inst._isPooled = false;
 //            inst._effect = this;

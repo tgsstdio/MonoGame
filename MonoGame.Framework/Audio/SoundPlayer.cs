@@ -4,11 +4,13 @@ namespace Microsoft.Xna.Framework.Audio
 {
 	public class SoundPlayer : ISoundPlayer
 	{
+		private readonly ISoundEffectPlatform mEffectPlatform;
 		private readonly ISoundEffectInstancePool mPool;
-		private readonly ISoundEffectInstancePlatform mInstPlatform;
-		public SoundPlayer (ISoundEffectInstancePlatform instPlatform, ISoundEffectInstancePool pool)
+		private readonly ISoundEffectInstancePlatform mEffectInstance;
+		public SoundPlayer (ISoundEffectPlatform effect, ISoundEffectInstancePlatform effectInstance, ISoundEffectInstancePool pool)
 		{
-			mInstPlatform = instPlatform;
+			mEffectPlatform = effect;
+			mEffectInstance = effectInstance;
 			mPool = pool;
 		}
 
@@ -34,6 +36,7 @@ namespace Microsoft.Xna.Framework.Audio
 
 		/// <summary>Gets an internal SoundEffectInstance and plays it with the specified volume, pitch, and panning.</summary>
 		/// <returns>True if a SoundEffectInstance was successfully created and played, false if not.</returns>
+		/// <param name = "effect"></param>
 		/// <param name="volume">Volume, ranging from 0.0 (silence) to 1.0 (full volume). Volume during playback is scaled by SoundEffect.MasterVolume.</param>
 		/// <param name="pitch">Pitch adjustment, ranging from -1.0 (down an octave) to 0.0 (no change) to 1.0 (up an octave).</param>
 		/// <param name="pan">Panning, ranging from -1.0 (left speaker) to 0.0 (centered), 1.0 (right speaker).</param>
@@ -60,14 +63,14 @@ namespace Microsoft.Xna.Framework.Audio
 		/// <summary>
 		/// Returns a sound effect instance from the pool or null if none are available.
 		/// </summary>
-		internal SoundEffectInstance GetPooledInstance(bool forXAct, SoundEffect effect)
+		internal ISoundEffectInstance GetPooledInstance(bool forXAct, SoundEffect effect)
 		{
 			if (!mPool.SoundsAvailable)
 				return null;
 
 			var inst = mPool.GetInstance(forXAct);
-			inst._effect = effect;
-			mInstPlatform.SetupInstance(inst);
+			inst.Effect = effect;
+			mEffectPlatform.SetupInstance(inst);
 
 			return inst;
 		}

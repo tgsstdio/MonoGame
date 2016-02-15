@@ -10,7 +10,7 @@ namespace Microsoft.Xna.Framework.Audio
 		void Dispose (bool disposing);
 
 		void LoadAudioStream (Stream s);
-		void SetupInstance (SoundEffectInstance inst);
+		void SetupInstance (ISoundEffectInstance inst);
 		void Initialize (byte[] buffer, int sampleRate, AudioChannels channels);
 		void Initialize (byte[] buffer, int offset, int count, int sampleRate, AudioChannels channels, int loopStart, int loopLength);
 	}

@@ -6,33 +6,31 @@ namespace Microsoft.Xna.Framework.Audio
 {
 	public interface ISoundEffectInstancePlatform
 	{
-		void Dispose (bool disposing);
+		void PlatformDispose (bool disposing);
 
-		void Stop (bool b);
+		void PlatformStop (bool b);
 
-		void Resume ();
+		void PlatformResume ();
 
-		void Play ();
+		void PlatformPlay ();
 
-		void Pause ();
+		void PlatformPause ();
 
-		void Apply3D (AudioListener listener, AudioEmitter emitter);
+		void PlatformApply3D (AudioListener listener, AudioEmitter emitter);
 
-		void Initialize (byte[] buffer, int sampleRate, int channels);
+		void PlatformInitialize (byte[] buffer, int sampleRate, int channels);
 
-		SoundState GetState ();
+		SoundState PlatformGetState ();
 
-		void SetVolume (float value);
+		void PlatformSetVolume (float value);
 
-		void SetPitch (float value);
+		void PlatformSetPitch (float value);
 
-		void SetPan (float value);
+		void PlatformSetPan (float value);
 
-		bool GetIsLooped ();
+		bool PlatformGetIsLooped ();
 
-		void SetIsLooped (bool value);
-
-		void SetupInstance (SoundEffectInstance inst);
+		void PlatformSetIsLooped (bool value);
 	}
 
 }

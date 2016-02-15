@@ -10,6 +10,8 @@ namespace Microsoft.Xna.Framework.Audio
 		int MAX_PLAYING_INSTANCES {
 			get;
 		}
+
+		void BeforeUpdate();
 	}
 
 }

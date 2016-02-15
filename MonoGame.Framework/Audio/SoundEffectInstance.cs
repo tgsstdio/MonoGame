@@ -10,36 +10,54 @@ namespace Microsoft.Xna.Framework.Audio
     /// <remarks>
     /// <para>SoundEffectInstances are created through SoundEffect.CreateInstance() and used internally by SoundEffect.Play()</para>
     /// </remarks>
-    public partial class SoundEffectInstance : IDisposable
+    public abstract class SoundEffectInstance : ISoundEffectInstance
     {
-        private bool _isDisposed = false;
-        internal bool _isPooled = true;
-        internal bool _isXAct;
-        internal SoundEffect _effect;
-        private float _pan;
-        private float _volume;
-        private float _pitch;
+		internal bool _isPooled = true;
+
+		public bool IsPooled 
+		{
+			get {
+				return _isPooled;
+			}
+			set {
+				_isPooled = value;
+			}
+		}
+
+		public bool IsXAct {
+			get;
+			set;
+		}
+
+		public SoundEffect Effect {
+			get;
+			set;
+		}
+
+        protected float mPan;
+		protected float mVolume;
+		protected float mPitch;
 
         /// <summary>Enables or Disables whether the SoundEffectInstance should repeat after playback.</summary>
         /// <remarks>This value has no effect on an already playing sound.</remarks>
         public bool IsLooped
         { 
-			get { return mInstPlatform.GetIsLooped(); }
-			set { mInstPlatform.SetIsLooped(value); }
+			get { return PlatformGetIsLooped(); }
+			set { PlatformSetIsLooped(value); }
         }
 
         /// <summary>Gets or sets the pan, or speaker balance..</summary>
         /// <value>Pan value ranging from -1.0 (left speaker) to 0.0 (centered), 1.0 (right speaker). Values outside of this range will throw an exception.</value>
         public float Pan
         {
-            get { return _pan; } 
+            get { return mPan; } 
             set
             {
                 if (value < -1.0f || value > 1.0f)
                     throw new ArgumentOutOfRangeException();
 
-                _pan = value;
-				mInstPlatform.SetPan(value);
+                mPan = value;
+				PlatformSetPan(value);
             }
         }
 
@@ -47,14 +65,14 @@ namespace Microsoft.Xna.Framework.Audio
         /// <value>Pitch adjustment, ranging from -1.0 (down an octave) to 0.0 (no change) to 1.0 (up an octave). Values outside of this range will throw an Exception.</value>
         public float Pitch
         {
-            get { return _pitch; }
+            get { return mPitch; }
             set
             {
                 if (value < -1.0f || value > 1.0f)
                     throw new ArgumentOutOfRangeException();
 
-                _pitch = value;
-				mInstPlatform.SetPitch(value);
+                mPitch = value;
+				PlatformSetPitch(value);
             }
         }
 
@@ -65,47 +83,43 @@ namespace Microsoft.Xna.Framework.Audio
         /// </remarks>
         public float Volume
         {
-            get { return _volume; }
+            get { return mVolume; }
             set
             {
                 // XAct sound effects don't have volume limits.
-                if (!_isXAct && (value < 0.0f || value > 1.0f))
+                if (!IsXAct && (value < 0.0f || value > 1.0f))
                     throw new ArgumentOutOfRangeException();
 
-                _volume = value;
+                mVolume = value;
 
                 // XAct sound effects are not tied to the SoundEffect master volume.
-                if (_isXAct)
-					mInstPlatform.SetVolume(value);
+                if (IsXAct)
+					PlatformSetVolume(value);
                 else
-					mInstPlatform.SetVolume(value * mEnvironment.MasterVolume);
+					PlatformSetVolume(value * mEnvironment.MasterVolume);
             }
         }
 
         /// <summary>Gets the SoundEffectInstance's current playback state.</summary>
-		public SoundState State { get { return mInstPlatform.GetState(); } }
+		public SoundState State { get { return PlatformGetState(); } }
 
-        /// <summary>Indicates whether the object is disposed.</summary>
-        public bool IsDisposed { get { return _isDisposed; } }
-
-		private ISoundEffectInstancePlatform mInstPlatform;
+		//private readonly ISoundEffectInstancePlatform mInstPlatform;
 		private ISoundEffectInstancePool mPool;
 		private ISoundEnvironment mEnvironment;
-		internal SoundEffectInstance(ISoundEffectInstancePlatform platform, ISoundEffectInstancePool pool, ISoundEnvironment environment)
+		protected SoundEffectInstance(ISoundEffectInstancePool pool, ISoundEnvironment environment)
         {
 			mPool = pool;
-			mInstPlatform = platform;
 			mEnvironment = environment;
-            _pan = 0.0f;
-            _volume = 1.0f;
-            _pitch = 0.0f;            
+            mPan = 0.0f;
+            mVolume = 1.0f;
+            mPitch = 0.0f;            
         }
-
-		internal SoundEffectInstance(ISoundEffectInstancePlatform platform, ISoundEffectInstancePool pool, ISoundEnvironment environment, byte[] buffer, int sampleRate, int channels)
-			: this(platform, pool, environment)
-        {
-			mInstPlatform.Initialize(buffer, sampleRate, channels);
-        }
+//
+//		internal SoundEffectInstance(ISoundEffectInstancePlatform platform, ISoundEffectInstancePool pool, ISoundEnvironment environment, byte[] buffer, int sampleRate, int channels)
+//			: this(platform, pool, environment)
+//        {
+//			mInstPlInitialize(buffer, sampleRate, channels);
+//        }
 
         /// <summary>
         /// Releases unmanaged resources and performs other cleanup operations before the
@@ -121,7 +135,7 @@ namespace Microsoft.Xna.Framework.Audio
         /// <param name="emitter">Data about the source of emission.</param>
         public void Apply3D(AudioListener listener, AudioEmitter emitter)
         {
-			mInstPlatform.Apply3D(listener, emitter);
+			PlatformApply3D(listener, emitter);
         }
 
         /// <summary>Applies 3D positioning to the SoundEffectInstance using multiple listeners.</summary>
@@ -130,14 +144,14 @@ namespace Microsoft.Xna.Framework.Audio
         public void Apply3D(AudioListener[] listeners, AudioEmitter emitter)
         {
             foreach (var l in listeners)
-				mInstPlatform.Apply3D(l, emitter);
+				PlatformApply3D(l, emitter);
         }
 
         /// <summary>Pauses playback of a SoundEffectInstance.</summary>
         /// <remarks>Paused instances can be resumed with SoundEffectInstance.Play() or SoundEffectInstance.Resume().</remarks>
         public void Pause()
         {
-			mInstPlatform.Pause();
+			PlatformPause();
         }
 
         /// <summary>Plays or resumes a SoundEffectInstance.</summary>
@@ -159,23 +173,23 @@ namespace Microsoft.Xna.Framework.Audio
             
             // For non-XAct sounds we need to be sure the latest
             // master volume level is applied before playback.
-            if (!_isXAct)
-				mInstPlatform.SetVolume(_volume * mEnvironment.MasterVolume);
+            if (!IsXAct)
+				PlatformSetVolume(mVolume * mEnvironment.MasterVolume);
 
-			mInstPlatform.Play();
+			PlatformPlay();
         }
 
         /// <summary>Resumes playback for a SoundEffectInstance.</summary>
         /// <remarks>Only has effect on a SoundEffectInstance in a paused state.</remarks>
         public void Resume()
         {
-			mInstPlatform.Resume();
+			PlatformResume();
         }
 
         /// <summary>Immediately stops playing a SoundEffectInstance.</summary>
         public void Stop()
         {
-			mInstPlatform.Stop(true);
+			PlatformStop(true);
         }
 
         /// <summary>Stops playing a SoundEffectInstance, either immediately or as authored.</summary>
@@ -183,7 +197,7 @@ namespace Microsoft.Xna.Framework.Audio
         /// <remarks>Stopping a sound with the immediate argument set to false will allow it to play any release phases, such as fade, before coming to a stop.</remarks>
         public void Stop(bool immediate)
         {
-			mInstPlatform.Stop(immediate);
+			PlatformStop(immediate);
         }
 
         /// <summary>Releases the resources held by this <see cref="Microsoft.Xna.Framework.Audio.SoundEffectInstance"/>.</summary>
@@ -192,6 +206,11 @@ namespace Microsoft.Xna.Framework.Audio
             Dispose(true);
             GC.SuppressFinalize(this);
         }
+
+		private bool _isDisposed = false;
+
+		/// <summary>Indicates whether the object is disposed.</summary>
+		public bool IsDisposed { get { return _isDisposed; } }
 
         /// <summary>
         /// Releases the resources held by this <see cref="Microsoft.Xna.Framework.Audio.SoundEffectInstance"/>.
@@ -206,9 +225,23 @@ namespace Microsoft.Xna.Framework.Audio
         {
             if (!_isDisposed)
             {
-				mInstPlatform.Dispose(disposing);
+				PlatformDispose(disposing);
                 _isDisposed = true;
             }
         }
+
+		protected abstract void PlatformDispose (bool disposing);
+		protected abstract void PlatformStop (bool immediate);
+		protected abstract void PlatformResume ();
+		protected abstract void PlatformPlay ();
+		protected abstract void PlatformPause ();
+		protected abstract void PlatformApply3D (AudioListener listener, AudioEmitter emitter);
+		protected abstract void PlatformInitialize (byte[] buffer, int sampleRate, int channels);
+		protected abstract SoundState PlatformGetState ();
+		protected abstract void PlatformSetVolume (float value);
+		protected abstract void PlatformSetPitch (float value);
+		protected abstract void PlatformSetPan (float value);
+		protected abstract bool PlatformGetIsLooped ();
+		protected abstract void PlatformSetIsLooped (bool value);
     }
 }

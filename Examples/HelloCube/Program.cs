@@ -1,13 +1,16 @@
-﻿using DryIoc;
+﻿using System;
+using DryIoc;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
-using MonoGame.Platform.DesktopGL;
-using System;
-using MonoGame.Platform.DesktopGL.Graphics;
 using Microsoft.Xna.Framework.Graphics;
-using OpenTK;
 using Microsoft.Xna.Framework.Input;
+using MonoGame.Audio.OpenAL;
+using MonoGame.Audio.OpenAL.DesktopGL;
+using MonoGame.Platform.DesktopGL;
+using MonoGame.Platform.DesktopGL.Graphics;
 using MonoGame.Platform.DesktopGL.Input;
+using OpenTK;
+using Microsoft.Xna.Framework.Audio;
 
 namespace HelloCube
 {
@@ -24,13 +27,28 @@ namespace HelloCube
 
 					// DESKTOPGL SPECIFIC
 					container.Register<BaseOpenTKGameWindow, OpenTKGameWindow>(Reuse.Singleton);
+					container.RegisterMapping<Microsoft.Xna.Framework.GameWindow, BaseOpenTKGameWindow>();
+
 					container.Register<GamePlatform, OpenTKGamePlatform>(Reuse.Singleton);
 					container.Register<IGraphicsDeviceManager, DesktopGLGraphicsDeviceManager>(Reuse.Singleton);
 					container.Register<IPlatformActivator, PlatformActivator>(Reuse.Singleton);
+
+					// WINDOW EXIT
+					container.Register<IDrawSuppressor, DrawSupressor>(Reuse.Singleton);
 					container.Register<IWindowExitStrategy, DesktopGLExitStrategy>(Reuse.Singleton);
+
 					container.Register<IOpenTKWindowResetter, DesktopGLWindowResetter>(Reuse.Singleton);
 					container.Register<IMouseListener, DesktopGLMouseListener>(Reuse.Singleton);
 					container.Register<IGraphicsDeviceQuery, DesktopGLGraphicsDeviceQuery>(Reuse.Singleton);
+
+						// AUDIO
+					container.Register<IOpenALSoundController, DesktopGLOALSoundController>(Reuse.Singleton);
+					container.Register<IOpenALSoundContext, DesktopGLOpenALSoundContext>(Reuse.Singleton);
+					container.Register<IOALSourceArray, DesktopGLOALSourcesArray>(Reuse.Singleton);
+					container.Register<ISoundEffectInstancePoolPlatform, DesktopGLSoundEffectInstancePoolPlatform>(Reuse.Singleton);
+					container.Register<ISoundEffectInstancePool, SoundEffectInstancePool>(Reuse.Singleton);
+					// TODO : fix this
+					container.Register<ISoundEffectInstanceFactory, NullSoundEffectInstanceFactory>(Reuse.Singleton);
 
 					// MOCK 
 					container.Register<IGraphicsDevice, NullGraphicsDevice> (Reuse.Singleton);
@@ -44,22 +62,26 @@ namespace HelloCube
 					container.Register<IPresentationParameters, PresentationParameters>(Reuse.Singleton);
 
 					// RUNTIME
-					container.Register<IDrawSuppressor, DrawSupressor>();
 					container.Register<IGameBackbone, GameBackbone> (Reuse.Singleton);
 					using (var scope = container.OpenScope ())
 					{
 						using (var window = new NativeWindow())
 						{
 							container.RegisterInstance<INativeWindow>(window);
-							using (var view = container.Resolve<BaseOpenTKGameWindow>())
-							{
-								container.RegisterInstance<Microsoft.Xna.Framework.GameWindow>(view);
-								using (var backbone = container.Resolve<IGameBackbone> ())
-								{
-									var exitStrategy = container.Resolve<IWindowExitStrategy>();
-									exitStrategy.Initialise();
 
-									backbone.Run ();
+							using (var audioContext = container.Resolve<IOpenALSoundContext>())
+							{
+								audioContext.Initialise();
+								using (var view = container.Resolve<BaseOpenTKGameWindow>())
+								{
+//									container.RegisterInstance<Microsoft.Xna.Framework.GameWindow>(view);
+									using (var backbone = container.Resolve<IGameBackbone> ())
+									{
+										var exitStrategy = container.Resolve<IWindowExitStrategy>();
+										exitStrategy.Initialise();
+
+										backbone.Run ();
+									}
 								}
 							}
 						}

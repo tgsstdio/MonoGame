@@ -4,6 +4,7 @@ namespace MonoGame.Audio.OpenAL
 {
 	public interface IOpenALSoundController : IDisposable
 	{
+		void PlaySound (IOALSoundBuffer soundBuffer);
 		void RecycleSource (IOALSoundBuffer soundBuffer);
 		void StopSound (IOALSoundBuffer soundBuffer);
 		void PauseSound (IOALSoundBuffer soundBuffer);

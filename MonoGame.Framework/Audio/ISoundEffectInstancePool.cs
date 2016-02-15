@@ -6,9 +6,9 @@ namespace Microsoft.Xna.Framework.Audio
 {
 	public interface ISoundEffectInstancePool
 	{
-		SoundEffectInstance GetInstance (bool forXAct);
+		ISoundEffectInstance GetInstance (bool forXAct);
 		bool SoundsAvailable { get; }
-		void Remove (SoundEffectInstance inst);
+		void Remove (ISoundEffectInstance inst);
 		void Update ();	
 		void UpdateMasterVolume();
 	}

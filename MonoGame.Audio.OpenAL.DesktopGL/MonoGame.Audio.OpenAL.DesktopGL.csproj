@@ -41,6 +41,8 @@
     <Compile Include="DesktopGLOALSoundController.cs" />
     <Compile Include="DesktopGLOALSourcesArray.cs" />
     <Compile Include="DesktopGLOpenALSoundContext.cs" />
+    <Compile Include="DesktopGLSoundEffectInstancePoolPlatform.cs" />
+    <Compile Include="DesktopGLSoundEffectInstance.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

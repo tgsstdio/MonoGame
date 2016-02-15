@@ -160,8 +160,6 @@ namespace Microsoft.Xna.Framework
                     ReleasePlatform ();
 
                     ContentTypeReaderManager.ClearTypeCreators();
-
-                    SoundEffect.PlatformShutdown();
                 }
 #if ANDROID
                 Activity = null;
