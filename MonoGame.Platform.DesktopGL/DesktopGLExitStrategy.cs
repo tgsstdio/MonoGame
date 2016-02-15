@@ -6,8 +6,8 @@ namespace MonoGame.Platform.DesktopGL
 	public class DesktopGLExitStrategy : IWindowExitStrategy
 	{
 		private readonly IDrawSuppressor mSuppression;
-		private readonly GamePlatform mPlatform;
-		public DesktopGLExitStrategy (GamePlatform platform, IDrawSuppressor suppression)
+		private readonly IGamePlatform mPlatform;
+		public DesktopGLExitStrategy (IGamePlatform platform, IDrawSuppressor suppression)
 		{
 			mSuppression = suppression;
 			mPlatform = platform;

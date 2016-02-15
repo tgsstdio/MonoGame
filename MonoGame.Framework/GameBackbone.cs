@@ -22,7 +22,7 @@ namespace Microsoft.Xna.Framework
         private GameComponentCollection _components;
         //private GameServiceContainer _services;
         private IContentManager _content;
-        internal GamePlatform Platform;
+        internal IGamePlatform Platform;
 
         private SortingFilteringCollection<IDrawable> _drawables =
             new SortingFilteringCollection<IDrawable>(
@@ -54,7 +54,7 @@ namespace Microsoft.Xna.Framework
 		private ISoundEffectInstancePool mPool;
 		public GameBackbone(
 			Game vg,
-			GamePlatform platform,
+			IGamePlatform platform,
 			IContentManager content,
 			IContentTypeReaderManager ctrm,
 			IPlatformActivator activator,
@@ -99,7 +99,7 @@ namespace Microsoft.Xna.Framework
             Raise(Disposed, EventArgs.Empty);
         }
 
-		protected void SetupPlatform (GamePlatform platform)
+		protected void SetupPlatform (IGamePlatform platform)
 		{
 			//Platform = GamePlatform.Create(this);
 			Platform = platform;
@@ -343,14 +343,14 @@ namespace Microsoft.Xna.Framework
 #if IOS || WINDOWS_STOREAPP && !WINDOWS_PHONE81
         [Obsolete("This platform's policy does not allow programmatically closing.", true)]
 #endif
-        public void Exit()
-        {
-			// TODO : refactor this
-			// ALSO THIS CODE IS CONSIDER Obsolete on other platforms
-            Platform.Exit();
-         //   _suppressDraw = true;
-			mSuppressor.SuppressDraw = true;
-        }
+//        public void Exit()
+//        {
+//			// TODO : refactor this
+//			// ALSO THIS CODE IS CONSIDER Obsolete on other platforms
+//            Platform.Exit();
+//         //   _suppressDraw = true;
+//			mSuppressor.SuppressDraw = true;
+//        }
 
         public void ResetElapsedTime()
         {
@@ -416,7 +416,7 @@ namespace Microsoft.Xna.Framework
             switch (runBehavior)
             {
             case GameRunBehavior.Asynchronous:
-                Platform.AsyncRunLoopEnded += Platform_AsyncRunLoopEnded;
+				Platform.AddAsyncHandler(Platform_AsyncRunLoopEnded);
                 Platform.StartRunLoop();
                 break;
             case GameRunBehavior.Synchronous:
@@ -623,8 +623,8 @@ namespace Microsoft.Xna.Framework
         {
             AssertNotDisposed();
 
-            var platform = (GamePlatform)sender;
-            platform.AsyncRunLoopEnded -= Platform_AsyncRunLoopEnded;
+            var platform = (IGamePlatform)sender;
+			platform.RemoveAsyncHandler(Platform_AsyncRunLoopEnded);
 			Instance.EndRun();
 			DoExiting();
         }

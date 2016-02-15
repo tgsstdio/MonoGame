@@ -12,7 +12,7 @@ using Windows.UI.ViewManagement;
 
 namespace Microsoft.Xna.Framework
 {
-    public abstract class GamePlatform : IDisposable
+    public abstract class BaseGamePlatform : IGamePlatform
     {
         #region Fields
 
@@ -54,13 +54,13 @@ namespace Microsoft.Xna.Framework
 
 		protected IGraphicsDeviceManager Graphics;
 		protected IPlatformActivator Activator;
-		protected GamePlatform(IGraphicsDeviceManager graphics, IPlatformActivator activator)
+		protected BaseGamePlatform(IGraphicsDeviceManager graphics, IPlatformActivator activator)
         {
 			Graphics = graphics;
 			Activator = activator;
         }
 
-        ~GamePlatform()
+        ~BaseGamePlatform()
         {
             Dispose(false);
         }
@@ -136,6 +136,16 @@ namespace Microsoft.Xna.Framework
         #endregion
 
         #region Events
+
+		public void AddAsyncHandler(EventHandler<EventArgs> handler)
+		{
+			AsyncRunLoopEnded += handler;
+		}
+
+		public void RemoveAsyncHandler(EventHandler<EventArgs> handler)
+		{
+			AsyncRunLoopEnded -= handler;
+		}
 
         public event EventHandler<EventArgs> AsyncRunLoopEnded;
       //  public event EventHandler<EventArgs> Activated;
@@ -325,8 +335,8 @@ namespace Microsoft.Xna.Framework
 		/// <param name='Message'>
 		/// 
 		/// </param>
-		[System.Diagnostics.Conditional("DEBUG")]
-		public virtual void Log(string Message) {}		
+		//[System.Diagnostics.Conditional("DEBUG")]
+		public virtual void Log(string message) {}		
 			
 
         #endregion

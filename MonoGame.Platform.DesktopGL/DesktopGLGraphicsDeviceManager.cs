@@ -63,6 +63,7 @@ namespace MonoGame.Platform.DesktopGL.Graphics
 		private IGraphicsDevicePlatform mDevicePlatform;
 		private ISamplerStateCollectionPlatform mSamplerStateCollectionPlatform;
 		private ITextureCollectionPlatform mTextureCollectionPlatform;
+		private IGraphicsAdapterCollection mAdapters;
 
 		public DesktopGLGraphicsDeviceManager(
 			BaseOpenTKGameWindow window,
@@ -70,7 +71,9 @@ namespace MonoGame.Platform.DesktopGL.Graphics
 			IGraphicsDevicePlatform devicePlatform,
 			ISamplerStateCollectionPlatform samplerStateCollectionPlatform,
 			ITextureCollectionPlatform texCollectionPlatform,
-			IPresentationParameters presentationParams)
+			IPresentationParameters presentationParams,
+			IGraphicsAdapterCollection adapters
+			)
 		{
 			mWindowReset = windowReset;
 			mDevicePlatform = devicePlatform;
@@ -79,6 +82,12 @@ namespace MonoGame.Platform.DesktopGL.Graphics
 			mPresentationParameters = presentationParams;
 
 			mWindow = window;
+			mAdapters = adapters;
+
+			if (mAdapters.Options.Length < 1)
+			{
+				throw new InvalidOperationException ("No adapters were provided");
+			}
 
 			_supportedOrientations = DisplayOrientation.Default;
 
@@ -401,11 +410,11 @@ namespace MonoGame.Platform.DesktopGL.Graphics
 		// TODO: Implement multisampling (aka anti-alising) for all platforms!
 		if (PreparingDeviceSettings != null)
 		{
-			GraphicsDeviceInformation gdi = new GraphicsDeviceInformation();
+			var gdi = new GraphicsDeviceInformation();
 			gdi.GraphicsProfile = GraphicsProfile; // Microsoft defaults this to Reach.
-			gdi.Adapter = GraphicsAdapter.DefaultAdapter;
+			gdi.Adapter = mAdapters.Options[0];
 			gdi.PresentationParameters = mPresentationParameters;
-			PreparingDeviceSettingsEventArgs pe = new PreparingDeviceSettingsEventArgs(gdi);
+			var pe = new PreparingDeviceSettingsEventArgs(gdi);
 			PreparingDeviceSettings(this, pe);
 			mPresentationParameters = pe.GraphicsDeviceInformation.PresentationParameters;
 			GraphicsProfile = pe.GraphicsDeviceInformation.GraphicsProfile;

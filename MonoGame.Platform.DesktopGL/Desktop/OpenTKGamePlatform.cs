@@ -77,7 +77,7 @@ using OpenTK;
 
 namespace MonoGame.Platform.DesktopGL
 {
-    public class OpenTKGamePlatform : GamePlatform
+    public class OpenTKGamePlatform : BaseGamePlatform
     {
         private BaseOpenTKGameWindow _view;
 		private IOpenALSoundController soundControllerInstance = null;

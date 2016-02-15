@@ -13,7 +13,7 @@ namespace MonoGame.Audio.OpenAL.DesktopGL
 	/// Desktop GL sound effect instance platform.
 	/// One per a SoundEffectInstance
 	/// </summary>
-	public class DesktopGLSoundEffectInstance : SoundEffectInstance
+	public class DesktopGLSoundEffectInstance : BaseSoundEffectInstance
     {
 		private SoundState soundState = SoundState.Stopped;
 		private bool _looped = false;
@@ -27,8 +27,8 @@ namespace MonoGame.Audio.OpenAL.DesktopGL
         bool hasSourceId = false;
 
         #region Initialization
-		public DesktopGLSoundEffectInstance (ISoundEffectInstancePool pool, ISoundEnvironment environment, IOpenALSoundController soundController, IOALSoundBuffer buffer)
-			: base(pool, environment)
+		public DesktopGLSoundEffectInstance (ISoundEffectInstancePool pool, IOpenALSoundController soundController, IOALSoundBuffer buffer)
+			: base(pool)
 		{
 			controller = soundController;
 			soundBuffer = buffer;

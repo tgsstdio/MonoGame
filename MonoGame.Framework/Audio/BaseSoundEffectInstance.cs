@@ -10,7 +10,7 @@ namespace Microsoft.Xna.Framework.Audio
     /// <remarks>
     /// <para>SoundEffectInstances are created through SoundEffect.CreateInstance() and used internally by SoundEffect.Play()</para>
     /// </remarks>
-    public abstract class SoundEffectInstance : ISoundEffectInstance
+    public abstract class BaseSoundEffectInstance : ISoundEffectInstance
     {
 		internal bool _isPooled = true;
 
@@ -96,7 +96,7 @@ namespace Microsoft.Xna.Framework.Audio
                 if (IsXAct)
 					PlatformSetVolume(value);
                 else
-					PlatformSetVolume(value * mEnvironment.MasterVolume);
+					PlatformSetVolume(value * mPool.MasterVolume);
             }
         }
 
@@ -105,11 +105,9 @@ namespace Microsoft.Xna.Framework.Audio
 
 		//private readonly ISoundEffectInstancePlatform mInstPlatform;
 		private ISoundEffectInstancePool mPool;
-		private ISoundEnvironment mEnvironment;
-		protected SoundEffectInstance(ISoundEffectInstancePool pool, ISoundEnvironment environment)
+		protected BaseSoundEffectInstance(ISoundEffectInstancePool pool)
         {
 			mPool = pool;
-			mEnvironment = environment;
             mPan = 0.0f;
             mVolume = 1.0f;
             mPitch = 0.0f;            
@@ -125,7 +123,7 @@ namespace Microsoft.Xna.Framework.Audio
         /// Releases unmanaged resources and performs other cleanup operations before the
         /// <see cref="Microsoft.Xna.Framework.Audio.SoundEffectInstance"/> is reclaimed by garbage collection.
         /// </summary>
-        ~SoundEffectInstance()
+        ~BaseSoundEffectInstance()
         {
             Dispose(false);
         }
@@ -174,7 +172,7 @@ namespace Microsoft.Xna.Framework.Audio
             // For non-XAct sounds we need to be sure the latest
             // master volume level is applied before playback.
             if (!IsXAct)
-				PlatformSetVolume(mVolume * mEnvironment.MasterVolume);
+				PlatformSetVolume(mVolume * mPool.MasterVolume);
 
 			PlatformPlay();
         }

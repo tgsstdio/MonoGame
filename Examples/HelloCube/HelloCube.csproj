@@ -51,7 +51,6 @@
     <Compile Include="NullTextureCollectionPlatform.cs" />
     <Compile Include="NullOpenTKWindowResetter.cs" />
     <Compile Include="FullDesktopGLGraphicsDevicePlatform.cs" />
-    <Compile Include="NullSoundEffectInstanceFactory.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

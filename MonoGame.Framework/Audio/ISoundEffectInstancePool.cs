@@ -10,6 +10,6 @@ namespace Microsoft.Xna.Framework.Audio
 		bool SoundsAvailable { get; }
 		void Remove (ISoundEffectInstance inst);
 		void Update ();	
-		void UpdateMasterVolume();
+		float MasterVolume { get; set; }
 	}
 }

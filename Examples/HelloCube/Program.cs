@@ -29,9 +29,11 @@ namespace HelloCube
 					container.Register<BaseOpenTKGameWindow, OpenTKGameWindow>(Reuse.Singleton);
 					container.RegisterMapping<Microsoft.Xna.Framework.GameWindow, BaseOpenTKGameWindow>();
 
-					container.Register<GamePlatform, OpenTKGamePlatform>(Reuse.Singleton);
+					container.Register<IGamePlatform, OpenTKGamePlatform>(Reuse.Singleton);
 					container.Register<IGraphicsDeviceManager, DesktopGLGraphicsDeviceManager>(Reuse.Singleton);
 					container.Register<IPlatformActivator, PlatformActivator>(Reuse.Singleton);
+
+					container.Register<IGraphicsAdapterCollection, DesktopGLGraphicsAdapterCollection>(Reuse.Singleton);
 
 					// WINDOW EXIT
 					container.Register<IDrawSuppressor, DrawSupressor>(Reuse.Singleton);
@@ -46,9 +48,8 @@ namespace HelloCube
 					container.Register<IOpenALSoundContext, DesktopGLOpenALSoundContext>(Reuse.Singleton);
 					container.Register<IOALSourceArray, DesktopGLOALSourcesArray>(Reuse.Singleton);
 					container.Register<ISoundEffectInstancePoolPlatform, DesktopGLSoundEffectInstancePoolPlatform>(Reuse.Singleton);
-					container.Register<ISoundEffectInstancePool, SoundEffectInstancePool>(Reuse.Singleton);
-					// TODO : fix this
-					container.Register<ISoundEffectInstanceFactory, NullSoundEffectInstanceFactory>(Reuse.Singleton);
+					container.Register<ISoundEffectInstancePool, DesktopGLOALSoundEffectInstancePool>(Reuse.Singleton);
+					container.Register<ISoundEnvironment, SoundEnvironment>(Reuse.Singleton);
 
 					// MOCK 
 					container.Register<IGraphicsDevice, NullGraphicsDevice> (Reuse.Singleton);
@@ -58,7 +59,7 @@ namespace HelloCube
 					container.Register<ITextureCollectionPlatform, NullTextureCollectionPlatform>(Reuse.Singleton);
 					container.Register<IGraphicsDevicePlatform, FullDesktopGLGraphicsDevicePlatform>(Reuse.Singleton);
 
-					container.Register<IBackBufferPreferences, DefaultBackBufferPreferences>(Reuse.Singleton);
+					container.Register<IBackBufferPreferences, DefaultBackBufferPreferences>();
 					container.Register<IPresentationParameters, PresentationParameters>(Reuse.Singleton);
 
 					// RUNTIME

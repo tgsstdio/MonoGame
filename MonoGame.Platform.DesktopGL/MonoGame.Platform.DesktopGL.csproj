@@ -61,6 +61,8 @@
     <Compile Include="DesktopGLGraphicsDeviceQuery.cs" />
     <Compile Include="Desktop\IOpenTKWindowResetter.cs" />
     <Compile Include="Utilities\OggStream.cs" />
+    <Compile Include="Graphics\DesktopGLGraphicsAdapter.cs" />
+    <Compile Include="Graphics\DesktopGLGraphicsAdapterCollection.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

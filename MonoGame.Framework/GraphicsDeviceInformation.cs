@@ -19,7 +19,7 @@ namespace Microsoft.Xna.Framework
         /// This is only valid on desktop systems where multiple graphics 
         /// adapters are possible.  Defaults to <see cref="GraphicsAdapter.DefaultAdapter"/>.
         /// </remarks>
-        public GraphicsAdapter Adapter { get; set; }
+        public IGraphicsAdapter Adapter { get; set; }
         
         /// <summary>
         /// The requested graphics device feature set. 

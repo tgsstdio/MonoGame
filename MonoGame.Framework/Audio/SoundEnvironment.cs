@@ -4,36 +4,6 @@ namespace Microsoft.Xna.Framework.Audio
 {
 	public class SoundEnvironment : ISoundEnvironment
 	{
-		private readonly ISoundEffectInstancePool mPool;		
-		public SoundEnvironment (ISoundEffectInstancePool pool)
-		{
-			mPool = pool;			
-		}
-
-		private float _masterVolume = 1.0f;
-		/// <summary>
-		/// Gets or sets the master volume scale applied to all SoundEffectInstances.
-		/// </summary>
-		/// <remarks>
-		/// <para>Each SoundEffectInstance has its own Volume property that is independent to SoundEffect.MasterVolume. During playback SoundEffectInstance.Volume is multiplied by SoundEffect.MasterVolume.</para>
-		/// <para>This property is used to adjust the volume on all current and newly created SoundEffectInstances. The volume of an individual SoundEffectInstance can be adjusted on its own.</para>
-		/// </remarks>
-		public float MasterVolume 
-		{ 
-			get { return _masterVolume; }
-			set
-			{
-				if (value < 0.0f || value > 1.0f)
-					throw new ArgumentOutOfRangeException();
-
-				if (Math.Abs(_masterVolume - value) <= float.Epsilon)
-					return;
-
-				_masterVolume = value;
-				mPool.UpdateMasterVolume();
-			}
-		}
-
 		#region Static Members
 
 		private float _distanceScale = 1.0f;

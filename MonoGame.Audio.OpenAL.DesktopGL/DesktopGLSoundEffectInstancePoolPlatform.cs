@@ -11,17 +11,24 @@ namespace MonoGame.Audio.OpenAL.DesktopGL
 		}
 
 		#region ISoundEffectInstancePoolPlatform implementation
-		public int MAX_PLAYING_INSTANCES {
+		public int MaximumPlayingInstances {
 			get {
 				return int.MaxValue;
 			}
 		}
-		#endregion
+
+		public float Epsilon {
+			get {
+				return float.Epsilon;
+			}
+		}
 
 		public void BeforeUpdate ()
 		{
 			mController.Update();
 		}
+
+		#endregion
 	}
 }
 

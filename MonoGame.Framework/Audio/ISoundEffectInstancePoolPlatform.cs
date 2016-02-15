@@ -7,7 +7,11 @@ namespace Microsoft.Xna.Framework.Audio
 {
 	public interface ISoundEffectInstancePoolPlatform
 	{
-		int MAX_PLAYING_INSTANCES {
+		int MaximumPlayingInstances {
+			get;
+		}
+
+		float Epsilon {
 			get;
 		}
 

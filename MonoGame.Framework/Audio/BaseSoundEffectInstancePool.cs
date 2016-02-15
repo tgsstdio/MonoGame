@@ -7,7 +7,7 @@ using System;
 
 namespace Microsoft.Xna.Framework.Audio
 {
-	public class SoundEffectInstancePool : ISoundEffectInstancePool
+	public abstract class BaseSoundEffectInstancePool : ISoundEffectInstancePool
     {
 
 #if WINDOWS || (WINRT && !WINDOWS_PHONE) || DESKTOPGL || WEB || ANGLE
@@ -40,15 +40,13 @@ namespace Microsoft.Xna.Framework.Audio
 		private readonly List<ISoundEffectInstance> _pooledInstances;
 
 		private ISoundEffectInstancePoolPlatform mPoolPlatform;
-		private ISoundEffectInstanceFactory mFactory;
-		public SoundEffectInstancePool(ISoundEffectInstancePoolPlatform platform, ISoundEffectInstanceFactory factory)
+		protected BaseSoundEffectInstancePool(ISoundEffectInstancePoolPlatform platform)
         {
 			//mPlatform.MAX_PLAYING_INSTANCES = 0;
             // Reduce garbage generation by allocating enough capacity for
             // the maximum playing instances or at least some reasonable value.
 			mPoolPlatform = platform;
-			mFactory = factory;
-			var maxInstances = mPoolPlatform.MAX_PLAYING_INSTANCES < 1024 ? mPoolPlatform.MAX_PLAYING_INSTANCES : 1024;
+			var maxInstances = mPoolPlatform.MaximumPlayingInstances < 1024 ? mPoolPlatform.MaximumPlayingInstances : 1024;
 			_playingInstances = new List<ISoundEffectInstance>(maxInstances);
 			_pooledInstances = new List<ISoundEffectInstance>(maxInstances);
         }
@@ -61,7 +59,7 @@ namespace Microsoft.Xna.Framework.Audio
         {
             get
             {
-				return _playingInstances.Count < mPoolPlatform.MAX_PLAYING_INSTANCES;
+				return _playingInstances.Count < mPoolPlatform.MaximumPlayingInstances;
             }
         }
 
@@ -117,13 +115,15 @@ namespace Microsoft.Xna.Framework.Audio
             else
             {
 				// TODO : remove instance stuff
-				inst = mFactory.CreateNewInstance(this);
+				inst = CreateNewInstance();
                 inst.IsPooled = true;
                 inst.IsXAct = forXAct;
             }
 
             return inst;
         }
+
+		protected abstract ISoundEffectInstance CreateNewInstance ();
 
         /// <summary>
         /// Iterates the list of playing instances, returning them to the pool if they
@@ -158,7 +158,31 @@ namespace Microsoft.Xna.Framework.Audio
             }
         }
 
-        public void UpdateMasterVolume()
+		private float _masterVolume = 1.0f;
+		/// <summary>
+		/// Gets or sets the master volume scale applied to all SoundEffectInstances.
+		/// </summary>
+		/// <remarks>
+		/// <para>Each SoundEffectInstance has its own Volume property that is independent to SoundEffect.MasterVolume. During playback SoundEffectInstance.Volume is multiplied by SoundEffect.MasterVolume.</para>
+		/// <para>This property is used to adjust the volume on all current and newly created SoundEffectInstances. The volume of an individual SoundEffectInstance can be adjusted on its own.</para>
+		/// </remarks>
+		public float MasterVolume 
+		{ 
+			get { return _masterVolume; }
+			set
+			{
+				if (value < 0.0f || value > 1.0f)
+					throw new ArgumentOutOfRangeException();
+
+				if (Math.Abs(_masterVolume - value) <= mPoolPlatform.Epsilon)
+					return;
+
+				_masterVolume = value;
+				UpdateMasterVolume();
+			}
+		}
+
+        private void UpdateMasterVolume()
         {
             foreach (var inst in _playingInstances)
             {
