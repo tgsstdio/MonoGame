@@ -26,10 +26,12 @@ namespace MonoGame.Graphics
     /// </summary>
 	public class GraphicsCapabilities : IGraphicsCapabilities
     {
-		public GraphicsCapabilities(IGraphicsCapabilitiesLookup extensions)
+		private readonly IGraphicsCapabilitiesLookup mLookup;
+		public GraphicsCapabilities(IGraphicsCapabilitiesLookup lookup)
         {
-			Initialize(extensions);
+			mLookup = lookup;
         }
+
         /// <summary>
         /// Whether the device fully supports non power-of-two textures, including
         /// mip maps and wrap modes other than CLAMP_TO_EDGE
@@ -106,15 +108,15 @@ namespace MonoGame.Graphics
 
 		public bool SupportsVertexTextures { get; private set; }
 
-		internal void Initialize(IGraphicsCapabilitiesLookup extensions)
+		public void Initialise()
         {
-			SupportsNonPowerOfTwo = extensions.SupportsNonPowerOfTwo();
+			SupportsNonPowerOfTwo = mLookup.SupportsNonPowerOfTwo();
 
 #if OPENGL
             SupportsTextureFilterAnisotropic = device._extensions.Contains("GL_EXT_texture_filter_anisotropic");
 #else
 			//  SupportsTextureFilterAnisotropic = true;
-			SupportsTextureFilterAnisotropic = extensions.SupportsTextureFilterAnisotropic();
+			SupportsTextureFilterAnisotropic = mLookup.SupportsTextureFilterAnisotropic();
 #endif
 #if GLES
 			SupportsDepth24 = device._extensions.Contains("GL_OES_depth24");
@@ -127,10 +129,10 @@ namespace MonoGame.Graphics
 //			SupportsDepthNonLinear = false;
 //            SupportsTextureMaxLevel = true;
 
-			SupportsDepth24 = extensions.SupportsDepth24();
-			SupportsPackedDepthStencil = extensions.SupportsPackedDepthStencil();
-			SupportsDepthNonLinear = extensions.SupportsDepthNonLinear();
-			SupportsTextureMaxLevel = extensions.SupportsTextureMaxLevel();
+			SupportsDepth24 = mLookup.SupportsDepth24();
+			SupportsPackedDepthStencil = mLookup.SupportsPackedDepthStencil();
+			SupportsDepthNonLinear = mLookup.SupportsDepthNonLinear();
+			SupportsTextureMaxLevel = mLookup.SupportsTextureMaxLevel();
 #endif
 
             // Texture compression
@@ -148,11 +150,11 @@ namespace MonoGame.Graphics
             SupportsAtitc = device._extensions.Contains("GL_ATI_texture_compression_atitc") ||
                 device._extensions.Contains("GL_AMD_compressed_ATC_texture");
 #endif
-			SupportsS3tc = extensions.SupportsS3tc ();
-			SupportsDxt1 = SupportsS3tc || extensions.SupportsDxt1();
-			SupportsPvrtc = extensions.SupportsPvrtc();
-			SupportsEtc1 = extensions.SupportsEtc1 ();
-			SupportsAtitc = extensions.SupportsAtitc ();
+			SupportsS3tc = mLookup.SupportsS3tc ();
+			SupportsDxt1 = SupportsS3tc || mLookup.SupportsDxt1();
+			SupportsPvrtc = mLookup.SupportsPvrtc();
+			SupportsEtc1 = mLookup.SupportsEtc1 ();
+			SupportsAtitc = mLookup.SupportsAtitc ();
 
             // OpenGL framebuffer objects
 #if OPENGL
@@ -164,8 +166,8 @@ namespace MonoGame.Graphics
             SupportsFramebufferObjectEXT = device._extensions.Contains("GL_EXT_framebuffer_object");
 #endif
 #endif
-			SupportsFramebufferObjectARB = extensions.SupportsFramebufferObjectARB ();
-			SupportsFramebufferObjectEXT = extensions.SupportsFramebufferObjectEXT ();
+			SupportsFramebufferObjectARB = mLookup.SupportsFramebufferObjectARB ();
+			SupportsFramebufferObjectEXT = mLookup.SupportsFramebufferObjectEXT ();
 
 
             // Anisotropic filtering
@@ -178,7 +180,7 @@ namespace MonoGame.Graphics
             }
             MaxTextureAnisotropy = anisotropy;
 #endif
-			MaxTextureAnisotropy = extensions.GetMaxTextureAnisotropy();
+			MaxTextureAnisotropy = mLookup.GetMaxTextureAnisotropy();
 
             // sRGB
 #if DIRECTX
@@ -190,7 +192,7 @@ namespace MonoGame.Graphics
             SupportsSRgb = device._extensions.Contains("GL_EXT_texture_sRGB") && device._extensions.Contains("GL_EXT_framebuffer_sRGB");
 #endif
 #endif
-			SupportsSRgb = extensions.SupportsSRgb();
+			SupportsSRgb = mLookup.SupportsSRgb();
 
 #if DIRECTX
             SupportsTextureArrays = device.GraphicsProfile == GraphicsProfile.HiDef;
@@ -199,14 +201,14 @@ namespace MonoGame.Graphics
             // once we can author shaders that use texture arrays.
             SupportsTextureArrays = false;
 #endif
-			SupportsTextureArrays = extensions.SupportsTextureArrays();
+			SupportsTextureArrays = mLookup.SupportsTextureArrays();
 
 #if DIRECTX
             SupportsDepthClamp = device.GraphicsProfile == GraphicsProfile.HiDef;
 #elif OPENGL
             SupportsDepthClamp = device._extensions.Contains("GL_ARB_depth_clamp");
 #endif
-			SupportsTextureArrays = extensions.SupportsDepthClamp();
+			SupportsTextureArrays = mLookup.SupportsDepthClamp();
 
 #if DIRECTX
             SupportsVertexTextures = device.GraphicsProfile == GraphicsProfile.HiDef;
@@ -214,7 +216,7 @@ namespace MonoGame.Graphics
             SupportsVertexTextures = false; // For now, until we implement vertex textures in OpenGL.
 #endif
 
-			SupportsVertexTextures = extensions.SupportsVertexTextures ();
+			SupportsVertexTextures = mLookup.SupportsVertexTextures ();
         }
 
 //        bool GetNonPowerOfTwo(IGraphicsDevice device)

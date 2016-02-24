@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace HelloCube
 {
-	public class NullGraphicsDevice : IGraphicsDevice
+	public class MockGraphicsDevice : IGraphicsDevice
 	{
 		#region IGraphicsDevice implementation
 

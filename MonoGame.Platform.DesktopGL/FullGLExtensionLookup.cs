@@ -15,7 +15,7 @@ namespace MonoGame.Platform.DesktopGL.Graphics
 
 		public void Initialise()
 		{
-			//PreviousImpl ();
+			Extensions.Clear ();
 
 			AfterVersion3_0 ();
 

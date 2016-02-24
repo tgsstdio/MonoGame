@@ -8,9 +8,14 @@ namespace MonoGame.Platform.DesktopGL
 	{
 		public StringCollection Extensions {get; private set;}
 
+		public Es20GLSpecificExtensionLookup ()
+		{
+			Extensions = new StringCollection();			
+		}
+
 		public void Initialise()
 		{
-			Extensions = new StringCollection();
+			Extensions.Clear ();
 
 			ProirToVersion3_0 ();
 		}

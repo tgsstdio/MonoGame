@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGame.Platform.DesktopGL
 {
-	public abstract class BaseGraphicsDevice : IGraphicsDevice
+	public class BaseGraphicsDevice : IGraphicsDevice
 	{
 		// FIXME: PLACEHOLDER
 		private readonly IGraphicsDevicePlatform mPlatform;
@@ -63,8 +63,15 @@ namespace MonoGame.Platform.DesktopGL
 			GC.SuppressFinalize(this);
 		}
 
-		protected abstract void ReleaseUnmanagedResources ();
-		protected abstract void ReleaseManagedResources ();
+		protected virtual void ReleaseUnmanagedResources ()
+		{
+
+		}
+
+		protected virtual void ReleaseManagedResources ()
+		{
+
+		}
 
 		private bool _isDisposed = false;
 		protected virtual void Dispose(bool disposing)

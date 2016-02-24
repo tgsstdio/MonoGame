@@ -46,12 +46,12 @@
     <Compile Include="DryIoc\FactoryCompiler.cs" />
     <Compile Include="NullContentManager.cs" />
     <Compile Include="NullContentTypeReaderManager.cs" />
-    <Compile Include="NullGraphicsDevice.cs" />
-    <Compile Include="NullSamplerStateCollectionPlatform.cs" />
     <Compile Include="NullTextureCollectionPlatform.cs" />
     <Compile Include="FullDesktopGLGraphicsDevicePlatform.cs" />
-    <Compile Include="NullGLExtensionLookup.cs" />
     <Compile Include="MockGraphicsDevicePreferences.cs" />
+    <Compile Include="NullGraphicsDeviceLogger.cs" />
+    <Compile Include="MockSamplerStateCollectionPlatform.cs" />
+    <Compile Include="MockGraphicsDevice.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

@@ -4,17 +4,11 @@ using MonoGame.Graphics;
 
 namespace MonoGame.Platform.DesktopGL
 {
-	public class FullGLSpecificExtensionLookup : IGraphicsCapabilitiesLookup
+	public class FullGLSpecificGraphicsCapabilitiesLookup : IGraphicsCapabilitiesLookup
 	{
-		private int mMaxTextureSize;		
 		private IGLExtensionLookup mExtensions;
-		public FullGLSpecificExtensionLookup (IGLExtensionLookup extensions)
+		public FullGLSpecificGraphicsCapabilitiesLookup (IGLExtensionLookup extensions)
 		{
-			int _maxTextureSize;
-			GL.GetInteger(GetPName.MaxTextureSize, out _maxTextureSize);
-			GraphicsExtensions.CheckGLError();
-			mMaxTextureSize = _maxTextureSize;			
-
 			mExtensions = extensions;
 		}
 
@@ -22,10 +16,14 @@ namespace MonoGame.Platform.DesktopGL
 
 		public bool SupportsNonPowerOfTwo ()
 		{
+			int maxTextureSize;
+			GL.GetInteger(GetPName.MaxTextureSize, out maxTextureSize);
+			GraphicsExtensions.CheckGLError();
+
             // Unfortunately non PoT texture support is patchy even on desktop systems and we can't
             // rely on the fact that GL2.0+ supposedly supports npot in the core.
             // Reference: http://aras-p.info/blog/2012/10/17/non-power-of-two-textures/
-			return mMaxTextureSize >= 8192;
+			return maxTextureSize >= 8192;
 		}
 
 		public bool SupportsTextureMaxLevel ()

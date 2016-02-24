@@ -49,7 +49,6 @@
     <Compile Include="Desktop\OpenTKGamePlatform.cs" />
     <Compile Include="Graphics\GraphicsExtensions.cs" />
     <Compile Include="DesktopGLThreadingContext.cs" />
-    <Compile Include="FullGLSpecificExtensionLookup.cs" />
     <Compile Include="Es20GLSpecificExtensionLookup.cs" />
     <Compile Include="Desktop\DesktopGLWindowResetter.cs" />
     <Compile Include="DesktopGLExitStrategy.cs" />
@@ -61,16 +60,19 @@
     <Compile Include="Graphics\DesktopGLGraphicsAdapter.cs" />
     <Compile Include="Graphics\DesktopGLGraphicsAdapterCollection.cs" />
     <Compile Include="Graphics\BaseGraphicsDevice.cs" />
-    <Compile Include="Graphics\DesktopGLGraphicsDevice.cs" />
     <Compile Include="Graphics\IGraphicsDeviceLogger.cs" />
     <Compile Include="Graphics\FullGLFramebufferHelperEXT.cs" />
-    <Compile Include="Graphics\Es20FramebufferHelper.cs" />
     <Compile Include="Graphics\FullGLFramebufferHelper.cs" />
     <Compile Include="Graphics\IGLDevicePlatform.cs" />
     <Compile Include="Graphics\FullGLDevicePlatform.cs" />
     <Compile Include="DesktopGLBackBufferPreferences.cs" />
     <Compile Include="Es20GraphicCapabilitiesLookup.cs" />
     <Compile Include="FullGLExtensionLookup.cs" />
+    <Compile Include="Graphics\DesktopGLGraphicsDevicePlatform.cs" />
+    <Compile Include="FullGLFramebufferHelperSelector.cs" />
+    <Compile Include="Es20GLFramebufferHelperSelector.cs" />
+    <Compile Include="Graphics\Es20GLFramebufferHelper.cs" />
+    <Compile Include="FullGLSpecificGraphicsCapabilitiesLookup.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

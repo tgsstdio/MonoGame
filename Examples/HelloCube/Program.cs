@@ -37,11 +37,15 @@ namespace HelloCube
 					container.Register<IGraphicsAdapterCollection, DesktopGLGraphicsAdapterCollection>(Reuse.Singleton);
 					container.Register<IGraphicsCapabilities, GraphicsCapabilities>(Reuse.Singleton);
 					//container.Register<IGLExtensionLookup, FullGLExtensionLookup>(Reuse.Singleton);
-					container.Register<IGLExtensionLookup, NullGLExtensionLookup>(Reuse.Singleton);
-					container.Register<IGraphicsCapabilitiesLookup, FullGLSpecificExtensionLookup>(Reuse.Singleton);
+					container.Register<IGraphicsDevicePlatform, DesktopGLGraphicsDevicePlatform> (Reuse.Singleton);
+					container.Register<IGLExtensionLookup, FullGLExtensionLookup>(Reuse.Singleton);
+					container.Register<IGraphicsCapabilitiesLookup, FullGLSpecificGraphicsCapabilitiesLookup>(Reuse.Singleton);
+					container.Register<IGLDevicePlatform, FullGLDevicePlatform>(Reuse.Singleton);
 
 					container.Register<IGraphicsDevicePreferences, MockGraphicsDevicePreferences>(Reuse.Singleton);
-
+					container.Register<IBackBufferPreferences, DesktopGLBackBufferPreferences>();
+					container.Register<IGraphicsDeviceLogger, MockGraphicsDeviceLogger>(Reuse.Singleton);
+					container.Register<IGLFramebufferHelperSelector, FullGLFramebufferHelperSelector>(Reuse.Singleton);
 
 					// WINDOW EXIT
 					container.Register<IDrawSuppressor, DrawSupressor>(Reuse.Singleton);
@@ -60,14 +64,12 @@ namespace HelloCube
 					container.Register<ISoundEnvironment, SoundEnvironment>(Reuse.Singleton);
 
 					// MOCK 
-					container.Register<IGraphicsDevice, DesktopGLGraphicsDevice> (Reuse.Singleton);
+
 					container.Register<IContentManager, NullContentManager> (Reuse.Singleton);
 					container.Register<IContentTypeReaderManager, NullContentTypeReaderManager> (Reuse.Singleton);
-					container.Register<ISamplerStateCollectionPlatform, NullSamplerStateCollectionPlatform>(Reuse.Singleton);
+					container.Register<ISamplerStateCollectionPlatform, MockSamplerStateCollectionPlatform>(Reuse.Singleton);
 					container.Register<ITextureCollectionPlatform, NullTextureCollectionPlatform>(Reuse.Singleton);
-					container.Register<IGraphicsDevicePlatform, FullDesktopGLGraphicsDevicePlatform>(Reuse.Singleton);
 
-					container.Register<IBackBufferPreferences, DesktopGLBackBufferPreferences>();
 					container.Register<IPresentationParameters, PresentationParameters>(Reuse.Singleton);
 
 					// RUNTIME
@@ -79,39 +81,25 @@ namespace HelloCube
 							container.RegisterInstance<INativeWindow>(window);
 
 							using (var audioContext = container.Resolve<IOpenALSoundContext>())
+							using (var platform = container.Resolve<IGraphicsDevicePlatform>())
 							{
 								audioContext.Initialise();
-								using (var view = container.Resolve<BaseOpenTKGameWindow>())								
+
+								platform.Setup();
+
+								var capabilities = container.Resolve<IGraphicsCapabilities>();
+								capabilities.Initialise();
+
+								platform.Initialize();
+
+								using (var backbone = container.Resolve<IGameBackbone> ())
 								{
-									using (var backbone = container.Resolve<IGameBackbone> ())
-									{
-										var exitStrategy = container.Resolve<IWindowExitStrategy>();
-										exitStrategy.Initialise();
+									var exitStrategy = container.Resolve<IWindowExitStrategy>();
+									exitStrategy.Initialise();
 
-//										var extensions = container.Resolve<IGLExtensionLookup>();
-//										extensions.Initialise();
-//	
-//										var capabilities = container.Resolve<IGraphicsCapabilities>();
-//										if (capabilities.SupportsFramebufferObjectARB)
-//										{
-//											container.Register<IGLFramebufferHelper, FullGLFramebufferHelper>(Reuse.Singleton);
-//										}
-//										//#if !(GLES || MONOMAC)
-//										else if (capabilities.SupportsFramebufferObjectEXT)
-//										{
-//											container.Register<IGLFramebufferHelper, FullGLFramebufferHelperEXT>(Reuse.Singleton);
-//										}
-//										//#endif
-//										else
-//										{
-//											throw new PlatformNotSupportedException(
-//												"MonoGame requires either ARB_framebuffer_object or EXT_framebuffer_object." +
-//												"Try updating your graphics drivers.");
-//										}
-
-										backbone.Run ();
-									}
+									backbone.Run ();
 								}
+
 							}
 						}
 					}

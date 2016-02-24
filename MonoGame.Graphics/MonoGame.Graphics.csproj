@@ -105,6 +105,7 @@
     <Compile Include="IGraphicsCapabilities.cs" />
     <Compile Include="VertexElementFormat.cs" />
     <Compile Include="IGLExtensionLookup.cs" />
+    <Compile Include="IGLFramebufferHelperSelector.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

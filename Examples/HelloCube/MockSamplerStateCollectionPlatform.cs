@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace HelloCube
 {
-	public class NullSamplerStateCollectionPlatform : ISamplerStateCollectionPlatform
+	public class MockSamplerStateCollectionPlatform : ISamplerStateCollectionPlatform
 	{
 		#region ISamplerStateCollectionPlatform implementation
 

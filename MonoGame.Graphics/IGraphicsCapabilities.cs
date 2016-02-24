@@ -6,6 +6,8 @@ namespace MonoGame.Graphics
 {
 	public interface IGraphicsCapabilities
 	{
+		void Initialise();
+
 		/// <summary>
 		/// Whether the device fully supports non power-of-two textures, including
 		/// mip maps and wrap modes other than CLAMP_TO_EDGE
