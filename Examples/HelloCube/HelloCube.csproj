@@ -49,8 +49,9 @@
     <Compile Include="NullGraphicsDevice.cs" />
     <Compile Include="NullSamplerStateCollectionPlatform.cs" />
     <Compile Include="NullTextureCollectionPlatform.cs" />
-    <Compile Include="NullOpenTKWindowResetter.cs" />
     <Compile Include="FullDesktopGLGraphicsDevicePlatform.cs" />
+    <Compile Include="NullGLExtensionLookup.cs" />
+    <Compile Include="MockGraphicsDevicePreferences.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -73,6 +74,14 @@
     <ProjectReference Include="..\..\MonoGame.Audio.OpenAL.DesktopGL\MonoGame.Audio.OpenAL.DesktopGL.csproj">
       <Project>{D68E983C-FA4D-418A-8353-43C4CDE75B23}</Project>
       <Name>MonoGame.Audio.OpenAL.DesktopGL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\MonoGame.Graphics\MonoGame.Graphics.csproj">
+      <Project>{52C293E3-DCC5-43BE-A94F-DBE0CF44E25E}</Project>
+      <Name>MonoGame.Graphics</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\MonoGame.Core\MonoGame.Core.csproj">
+      <Project>{699977AD-6D8C-4E0B-ADDA-554B66002D08}</Project>
+      <Name>MonoGame.Core</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>

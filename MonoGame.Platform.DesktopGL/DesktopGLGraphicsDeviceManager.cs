@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input.Touch;
 using MonoGame.Platform.DesktopGL;
+using MonoGame.Graphics;
 
 #if MONOMAC
 using MonoMac.OpenGL;
@@ -28,11 +29,11 @@ namespace MonoGame.Platform.DesktopGL.Graphics
 	{
 		private BaseOpenTKGameWindow mWindow;
 		public IGraphicsDevice GraphicsDevice { get; set; }
-		//private int _preferredBackBufferHeight;
-		//private int _preferredBackBufferWidth;
+		private int _preferredBackBufferHeight;
+		private int _preferredBackBufferWidth;
 		private SurfaceFormat _preferredBackBufferFormat;
 		private DepthFormat _preferredDepthStencilFormat;
-		private bool _preferMultiSampling;
+		//private bool _preferMultiSampling;
 		private DisplayOrientation _supportedOrientations;
 		private bool _synchronizedWithVerticalRetrace = true;
 		private bool _drawBegun;
@@ -61,25 +62,28 @@ namespace MonoGame.Platform.DesktopGL.Graphics
 
 		private IOpenTKWindowResetter mWindowReset;
 		private IGraphicsDevicePlatform mDevicePlatform;
-		private ISamplerStateCollectionPlatform mSamplerStateCollectionPlatform;
-		private ITextureCollectionPlatform mTextureCollectionPlatform;
+	//	private ISamplerStateCollectionPlatform mSamplerStateCollectionPlatform;
+	//	private ITextureCollectionPlatform mTextureCollectionPlatform;
 		private IGraphicsAdapterCollection mAdapters;
-
+		private IGraphicsDevicePreferences mDevicePreferences;
 		public DesktopGLGraphicsDeviceManager(
 			BaseOpenTKGameWindow window,
 			IOpenTKWindowResetter windowReset,
 			IGraphicsDevicePlatform devicePlatform,
-			ISamplerStateCollectionPlatform samplerStateCollectionPlatform,
-			ITextureCollectionPlatform texCollectionPlatform,
+			//ISamplerStateCollectionPlatform samplerStateCollectionPlatform,
+			//ITextureCollectionPlatform texCollectionPlatform,
+			IBackBufferPreferences backBufferPreferences,
 			IPresentationParameters presentationParams,
-			IGraphicsAdapterCollection adapters
+			IGraphicsAdapterCollection adapters,
+			IGraphicsDevicePreferences devicePreferences
 			)
 		{
 			mWindowReset = windowReset;
 			mDevicePlatform = devicePlatform;
-			mSamplerStateCollectionPlatform = samplerStateCollectionPlatform;
-			mTextureCollectionPlatform = texCollectionPlatform;
+			//mSamplerStateCollectionPlatform = samplerStateCollectionPlatform;
+		//	mTextureCollectionPlatform = texCollectionPlatform;
 			mPresentationParameters = presentationParams;
+			mDevicePreferences = devicePreferences;
 
 			mWindow = window;
 			mAdapters = adapters;
@@ -91,16 +95,16 @@ namespace MonoGame.Platform.DesktopGL.Graphics
 
 			_supportedOrientations = DisplayOrientation.Default;
 
-//			#if WINDOWS || MONOMAC || DESKTOPGL
-//			_preferredBackBufferHeight = BackbufferPreferences.DefaultBackBufferHeight;
-//			_preferredBackBufferWidth = BackbufferPreferences.DefaultBackBufferWidth;
-//			#else
-//			// Preferred buffer width/height is used to determine default supported orientations,
-//			// so set the default values to match Xna behaviour of landscape only by default.
-//			// Note also that it's using the device window dimensions.
-//			_preferredBackBufferWidth = Math.Max(_game.Window.ClientBounds.Height, _game.Window.ClientBounds.Width);
-//			_preferredBackBufferHeight = Math.Min(_game.Window.ClientBounds.Height, _game.Window.ClientBounds.Width);
-//			#endif
+			#if WINDOWS || MONOMAC || DESKTOPGL
+			_preferredBackBufferHeight = backBufferPreferences.DefaultBackBufferHeight;
+			_preferredBackBufferWidth = backBufferPreferences.DefaultBackBufferWidth;
+			#else
+			// Preferred buffer width/height is used to determine default supported orientations,
+			// so set the default values to match Xna behaviour of landscape only by default.
+			// Note also that it's using the device window dimensions.
+			_preferredBackBufferWidth = Math.Max(_game.Window.ClientBounds.Height, _game.Window.ClientBounds.Width);
+			_preferredBackBufferHeight = Math.Min(_game.Window.ClientBounds.Height, _game.Window.ClientBounds.Width);
+			#endif
 
 			_preferredBackBufferFormat = SurfaceFormat.Color;
 			_preferredDepthStencilFormat = DepthFormat.Depth24;
@@ -527,11 +531,11 @@ namespace MonoGame.Platform.DesktopGL.Graphics
 	{
 		get
 		{
-			return _preferMultiSampling;
+			return mDevicePreferences.PreferMultiSampling;
 		}
 		set
 		{
-			_preferMultiSampling = value;
+			mDevicePreferences.PreferMultiSampling = value;
 		}
 	}
 

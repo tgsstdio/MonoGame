@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using MonoGame.Graphics;
 
 #if OPENGL
 #if MONOMAC

@@ -37,6 +37,7 @@ permitted under your local laws, the contributors exclude the implied warranties
 purpose and non-infringement.
 */
 using MonoGame.Platform.DesktopGL.Input;
+using Microsoft.Xna.Framework.Graphics;
 
 
 #endregion License
@@ -47,7 +48,6 @@ using System.ComponentModel;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Reflection;
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using OpenTK;
 using OpenTK.Graphics;
@@ -298,6 +298,7 @@ namespace MonoGame.Platform.DesktopGL
 		/// This event is only supported on the Windows DirectX, Windows OpenGL and Linux platforms.
 		/// </remarks>
 		public event EventHandler<TextInputEventArgs> TextInput;
+
 		#endif
 
         private void HandleInput()
@@ -418,7 +419,12 @@ namespace MonoGame.Platform.DesktopGL
 
 		#endregion
 
-		#region implemented abstract members of IOpenTKGameWindow
+		#region implemented abstract members of BaseOpenTKGameWindow
+
+		public override OpenTK.Platform.IWindowInfo GetWindowInfo ()
+		{
+			return window.WindowInfo;
+		}
 
 		public override void SetWindowVisible (bool visible)
 		{

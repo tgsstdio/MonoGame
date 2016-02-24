@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using MonoGame.Graphics;
 
 #if MONOMAC
 using MonoMac.AppKit;

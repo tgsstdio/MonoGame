@@ -59,5 +59,9 @@
       <Project>{6E03191C-70AE-4B0B-8782-68D377B72A0F}</Project>
       <Name>Microsoft.Xna.Framework</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MonoGame.Core\MonoGame.Core.csproj">
+      <Project>{699977AD-6D8C-4E0B-ADDA-554B66002D08}</Project>
+      <Name>MonoGame.Core</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>

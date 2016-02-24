@@ -5,6 +5,7 @@
 using System;
 using System.Diagnostics;
 using System.Threading;
+using MonoGame.Graphics;
 
 namespace Microsoft.Xna.Framework.Graphics
 {

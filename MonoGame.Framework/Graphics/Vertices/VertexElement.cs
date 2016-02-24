@@ -1,4 +1,5 @@
 using System;
+using MonoGame.Graphics;
 
 namespace Microsoft.Xna.Framework.Graphics
 {

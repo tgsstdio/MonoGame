@@ -8,7 +8,12 @@ namespace HelloCube
 	{
 		#region IGraphicsDevice implementation
 
-		public void CreateDevice (GraphicsAdapter adapter, GraphicsProfile graphicsProfile)
+		public void Initialize ()
+		{
+			throw new NotImplementedException ();
+		}
+
+		public void CreateDevice (IGraphicsAdapter adapter, GraphicsProfile graphicsProfile)
 		{
 			throw new NotImplementedException ();
 		}
@@ -41,11 +46,6 @@ namespace HelloCube
 			}
 		}
 
-		public IGraphicsCapabilities GraphicsCapabilities {
-			get {
-				throw new NotImplementedException ();
-			}
-		}
 
 		#endregion
 	}

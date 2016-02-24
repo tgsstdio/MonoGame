@@ -11,6 +11,7 @@ using MonoGame.Platform.DesktopGL.Graphics;
 using MonoGame.Platform.DesktopGL.Input;
 using OpenTK;
 using Microsoft.Xna.Framework.Audio;
+using MonoGame.Graphics;
 
 namespace HelloCube
 {
@@ -34,6 +35,13 @@ namespace HelloCube
 					container.Register<IPlatformActivator, PlatformActivator>(Reuse.Singleton);
 
 					container.Register<IGraphicsAdapterCollection, DesktopGLGraphicsAdapterCollection>(Reuse.Singleton);
+					container.Register<IGraphicsCapabilities, GraphicsCapabilities>(Reuse.Singleton);
+					//container.Register<IGLExtensionLookup, FullGLExtensionLookup>(Reuse.Singleton);
+					container.Register<IGLExtensionLookup, NullGLExtensionLookup>(Reuse.Singleton);
+					container.Register<IGraphicsCapabilitiesLookup, FullGLSpecificExtensionLookup>(Reuse.Singleton);
+
+					container.Register<IGraphicsDevicePreferences, MockGraphicsDevicePreferences>(Reuse.Singleton);
+
 
 					// WINDOW EXIT
 					container.Register<IDrawSuppressor, DrawSupressor>(Reuse.Singleton);
@@ -52,14 +60,14 @@ namespace HelloCube
 					container.Register<ISoundEnvironment, SoundEnvironment>(Reuse.Singleton);
 
 					// MOCK 
-					container.Register<IGraphicsDevice, NullGraphicsDevice> (Reuse.Singleton);
+					container.Register<IGraphicsDevice, DesktopGLGraphicsDevice> (Reuse.Singleton);
 					container.Register<IContentManager, NullContentManager> (Reuse.Singleton);
 					container.Register<IContentTypeReaderManager, NullContentTypeReaderManager> (Reuse.Singleton);
 					container.Register<ISamplerStateCollectionPlatform, NullSamplerStateCollectionPlatform>(Reuse.Singleton);
 					container.Register<ITextureCollectionPlatform, NullTextureCollectionPlatform>(Reuse.Singleton);
 					container.Register<IGraphicsDevicePlatform, FullDesktopGLGraphicsDevicePlatform>(Reuse.Singleton);
 
-					container.Register<IBackBufferPreferences, DefaultBackBufferPreferences>();
+					container.Register<IBackBufferPreferences, DesktopGLBackBufferPreferences>();
 					container.Register<IPresentationParameters, PresentationParameters>(Reuse.Singleton);
 
 					// RUNTIME
@@ -67,19 +75,39 @@ namespace HelloCube
 					using (var scope = container.OpenScope ())
 					{
 						using (var window = new NativeWindow())
-						{
+						{							
 							container.RegisterInstance<INativeWindow>(window);
 
 							using (var audioContext = container.Resolve<IOpenALSoundContext>())
 							{
 								audioContext.Initialise();
-								using (var view = container.Resolve<BaseOpenTKGameWindow>())
+								using (var view = container.Resolve<BaseOpenTKGameWindow>())								
 								{
-//									container.RegisterInstance<Microsoft.Xna.Framework.GameWindow>(view);
 									using (var backbone = container.Resolve<IGameBackbone> ())
 									{
 										var exitStrategy = container.Resolve<IWindowExitStrategy>();
 										exitStrategy.Initialise();
+
+//										var extensions = container.Resolve<IGLExtensionLookup>();
+//										extensions.Initialise();
+//	
+//										var capabilities = container.Resolve<IGraphicsCapabilities>();
+//										if (capabilities.SupportsFramebufferObjectARB)
+//										{
+//											container.Register<IGLFramebufferHelper, FullGLFramebufferHelper>(Reuse.Singleton);
+//										}
+//										//#if !(GLES || MONOMAC)
+//										else if (capabilities.SupportsFramebufferObjectEXT)
+//										{
+//											container.Register<IGLFramebufferHelper, FullGLFramebufferHelperEXT>(Reuse.Singleton);
+//										}
+//										//#endif
+//										else
+//										{
+//											throw new PlatformNotSupportedException(
+//												"MonoGame requires either ARB_framebuffer_object or EXT_framebuffer_object." +
+//												"Try updating your graphics drivers.");
+//										}
 
 										backbone.Run ();
 									}

@@ -10,6 +10,12 @@ namespace Microsoft.Xna.Framework.Input.Touch
     {
         private readonly List<TouchEvent> _queue = new List<TouchEvent>(); 
 
+		private readonly ITouchListener mTouch;
+		public TouchQueue (ITouchListener touch)
+		{
+			mTouch = touch;
+		}
+
         public void Enqueue(int id, TouchLocationState state, Vector2 pos, bool isMouse = false)
         {
             lock (_queue)
@@ -25,7 +31,7 @@ namespace Microsoft.Xna.Framework.Input.Touch
                 for (var i = 0; i < _queue.Count; i++)
                 {
                     var ev = _queue[i];
-                    TouchPanel.AddEvent(ev.Id, ev.State, ev.Pos, ev.IsMouse);
+					mTouch.AddEvent(ev.Id, ev.State, ev.Pos, ev.IsMouse);
                 }
                 _queue.Clear();
             }

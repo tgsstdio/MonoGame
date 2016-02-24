@@ -1,59 +1,24 @@
-﻿using System.Collections.Specialized;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Platform.DesktopGL.Graphics;
+﻿using MonoGame.Platform.DesktopGL.Graphics;
 using OpenTK.Graphics.OpenGL;
+using MonoGame.Graphics;
 
 namespace MonoGame.Platform.DesktopGL
 {
 	public class FullGLSpecificExtensionLookup : IGraphicsCapabilitiesLookup
 	{
-		#region IGraphicsCapabilitiesLookup implementation
-		private IGraphicsDevice mGraphicsDevice;
-		public FullGLSpecificExtensionLookup (IGraphicsDevice device)
+		private int mMaxTextureSize;		
+		private IGLExtensionLookup mExtensions;
+		public FullGLSpecificExtensionLookup (IGLExtensionLookup extensions)
 		{
-			mGraphicsDevice = device;
-		}
-
-		public StringCollection Extensions {get; private set;}
-
-		private int mMaxTextureSize;
-		public void Initialise()
-		{
-			Extensions = new StringCollection();
-			AfterVersion3_0 ();
-
-			ProirToVersion3_0 ();
-
 			int _maxTextureSize;
 			GL.GetInteger(GetPName.MaxTextureSize, out _maxTextureSize);
 			GraphicsExtensions.CheckGLError();
-			mMaxTextureSize = _maxTextureSize;
+			mMaxTextureSize = _maxTextureSize;			
+
+			mExtensions = extensions;
 		}
 
-		public bool HasExtension (string extension)
-		{
-			return Extensions.Contains(extension);
-		}
-
-		void AfterVersion3_0 ()
-		{
-			int count = GL.GetInteger (GetPName.NumExtensions);
-			for (int i = 0; i < count; i++)
-			{
-				string extension = GL.GetString (StringNameIndexed.Extensions, i);
-				Extensions.Add (extension);
-			}
-		}
-
-		private void ProirToVersion3_0 ()
-		{
-			string extension_string = GL.GetString (StringName.Extensions);
-			foreach (string extension in extension_string.Split (' '))
-			{
-				Extensions.Add (extension);
-			}
-		}
+		#region IGraphicsCapabilitiesLookup implementation
 
 		public bool SupportsNonPowerOfTwo ()
 		{
@@ -70,7 +35,7 @@ namespace MonoGame.Platform.DesktopGL
 
 		public bool SupportsTextureFilterAnisotropic ()
 		{
-			return Extensions.Contains("GL_EXT_texture_filter_anisotropic");
+			return mExtensions.HasExtension("GL_EXT_texture_filter_anisotropic");
 		}
 
 		public bool SupportsDepth24 ()
@@ -90,41 +55,41 @@ namespace MonoGame.Platform.DesktopGL
 
 		public bool SupportsS3tc ()
 		{
-			return  Extensions.Contains("GL_EXT_texture_compression_s3tc") ||
-				Extensions.Contains("GL_OES_texture_compression_S3TC") ||
-				Extensions.Contains("GL_EXT_texture_compression_dxt3") ||
-				Extensions.Contains("GL_EXT_texture_compression_dxt5");
+			return  mExtensions.HasExtension("GL_EXT_texture_compression_s3tc") ||
+				mExtensions.HasExtension("GL_OES_texture_compression_S3TC") ||
+				mExtensions.HasExtension("GL_EXT_texture_compression_dxt3") ||
+				mExtensions.HasExtension("GL_EXT_texture_compression_dxt5");
 		}
 
 		public bool SupportsDxt1 ()
 		{
-			return SupportsS3tc() || Extensions.Contains("GL_EXT_texture_compression_dxt1");
+			return SupportsS3tc() || mExtensions.HasExtension("GL_EXT_texture_compression_dxt1");
 		}
 
 		public bool SupportsPvrtc ()
 		{
-			return Extensions.Contains("GL_IMG_texture_compression_pvrtc");
+			return mExtensions.HasExtension("GL_IMG_texture_compression_pvrtc");
 		}
 
 		public bool SupportsEtc1 ()
 		{
-			return Extensions.Contains("GL_OES_compressed_ETC1_RGB8_texture");
+			return mExtensions.HasExtension("GL_OES_compressed_ETC1_RGB8_texture");
 		}
 
 		public bool SupportsAtitc ()
 		{
-			return Extensions.Contains("GL_ATI_texture_compression_atitc") ||
-				Extensions.Contains("GL_AMD_compressed_ATC_texture");
+			return mExtensions.HasExtension("GL_ATI_texture_compression_atitc") ||
+				mExtensions.HasExtension("GL_AMD_compressed_ATC_texture");
 		}
 
 		public bool SupportsFramebufferObjectARB ()
 		{
-			return Extensions.Contains("GL_ARB_framebuffer_object");
+			return mExtensions.HasExtension("GL_ARB_framebuffer_object");
 		}
 
 		public bool SupportsFramebufferObjectEXT ()
 		{
-			return Extensions.Contains("GL_EXT_framebuffer_object");
+			return mExtensions.HasExtension("GL_EXT_framebuffer_object");
 		}
 
 		public int GetMaxTextureAnisotropy ()
@@ -140,7 +105,7 @@ namespace MonoGame.Platform.DesktopGL
 
 		public bool SupportsSRgb ()
 		{
-			return Extensions.Contains("GL_EXT_texture_sRGB") && Extensions.Contains("GL_EXT_framebuffer_sRGB");
+			return mExtensions.HasExtension("GL_EXT_texture_sRGB") && mExtensions.HasExtension("GL_EXT_framebuffer_sRGB");
 		}
 
 		public bool SupportsTextureArrays ()
@@ -154,7 +119,7 @@ namespace MonoGame.Platform.DesktopGL
 
 		public bool SupportsDepthClamp ()
 		{
-			return Extensions.Contains("GL_ARB_depth_clamp");
+			return mExtensions.HasExtension("GL_ARB_depth_clamp");
 		}
 
 		public bool SupportsVertexTextures ()

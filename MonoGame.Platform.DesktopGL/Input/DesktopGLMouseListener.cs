@@ -1,16 +1,17 @@
 ﻿using System;
 using OpenTK;
+using Microsoft.Xna.Framework;
 
 namespace MonoGame.Platform.DesktopGL.Input
 {
 	using MouseState = Microsoft.Xna.Framework.Input.MouseState;
 	using IMouseListener = Microsoft.Xna.Framework.Input.IMouseListener;
-	using GameWindow = Microsoft.Xna.Framework.GameWindow; 
+	using IGameWindow = Microsoft.Xna.Framework.IGameWindow; 
 	using ButtonState = Microsoft.Xna.Framework.Input.ButtonState;
 
 	public class DesktopGLMouseListener :  IMouseListener
 	{
-		public GameWindow PrimaryWindow {
+		public IGameWindow PrimaryWindow {
 			get;
 			set;
 		}
@@ -24,54 +25,59 @@ namespace MonoGame.Platform.DesktopGL.Input
 			mSource = source;
 		}
 
-		public MouseState GetState (GameWindow window)
+		public MouseState GetState (IGameWindow window)
 		{
 			var state = OpenTK.Input.Mouse.GetCursorState();
 
 			var internalWindow = window as OpenTKGameWindow;
-
+			var result = window.LastMouseState;
 			if (internalWindow != null)
 			{
 				var pc = internalWindow.Window.PointToClient (new System.Drawing.Point (state.X, state.Y));
-				window.MouseState.X = pc.X;
-				window.MouseState.Y = pc.Y;
 
-				window.MouseState.LeftButton = (ButtonState)state.LeftButton;
-				window.MouseState.RightButton = (ButtonState)state.RightButton;
-				window.MouseState.MiddleButton = (ButtonState)state.MiddleButton;
-				window.MouseState.XButton1 = (ButtonState)state.XButton1;
-				window.MouseState.XButton2 = (ButtonState)state.XButton2;
+				result.X = pc.X;
+				result.Y = pc.Y;
+
+				result.LeftButton = (ButtonState)state.LeftButton;
+				result.RightButton = (ButtonState)state.RightButton;
+				result.MiddleButton = (ButtonState)state.MiddleButton;
+				result.XButton1 = (ButtonState)state.XButton1;
+				result.XButton2 = (ButtonState)state.XButton2;
 
 				// XNA uses the winapi convention of 1 click = 120 delta
 				// OpenTK scales 1 click = 1.0 delta, so make that match
-				window.MouseState.ScrollWheelValue = (int)(state.Scroll.Y * 120);
+				result.ScrollWheelValue = (int)(state.Scroll.Y * 120);
 			}
-			return window.MouseState;
+			window.LastMouseState = result;
+			return window.LastMouseState;
 		}
 
-		public MouseState GetNativeState (GameWindow window)
+		public MouseState GetNativeState (IGameWindow window)
 		{
 			var state = OpenTK.Input.Mouse.GetCursorState();
 
 			var internalWindow = mSource;
 
+			var result = new MouseState();
 			if (internalWindow != null)
 			{
 				var pc = mSource.PointToClient (new System.Drawing.Point (state.X, state.Y));
-				window.MouseState.X = pc.X;
-				window.MouseState.Y = pc.Y;
 
-				window.MouseState.LeftButton = (ButtonState)state.LeftButton;
-				window.MouseState.RightButton = (ButtonState)state.RightButton;
-				window.MouseState.MiddleButton = (ButtonState)state.MiddleButton;
-				window.MouseState.XButton1 = (ButtonState)state.XButton1;
-				window.MouseState.XButton2 = (ButtonState)state.XButton2;
+				result.X = pc.X;
+				result.Y = pc.Y;
+
+				result.LeftButton = (ButtonState)state.LeftButton;
+				result.RightButton = (ButtonState)state.RightButton;
+				result.MiddleButton = (ButtonState)state.MiddleButton;
+				result.XButton1 = (ButtonState)state.XButton1;
+				result.XButton2 = (ButtonState)state.XButton2;
 
 				// XNA uses the winapi convention of 1 click = 120 delta
 				// OpenTK scales 1 click = 1.0 delta, so make that match
-				window.MouseState.ScrollWheelValue = (int)(state.Scroll.Y * 120);
+				result.ScrollWheelValue = (int)(state.Scroll.Y * 120);
 			}
-			return window.MouseState;
+			window.LastMouseState = result;
+			return result;
 		}
 
 		public MouseState GetState ()
@@ -87,8 +93,10 @@ namespace MonoGame.Platform.DesktopGL.Input
 
 		public void UpdateStatePosition (int x, int y)
 		{
-			PrimaryWindow.MouseState.X = x;
-			PrimaryWindow.MouseState.Y = y;
+			var result = PrimaryWindow.LastMouseState;
+			result.X = x;
+			result.Y = y;
+			PrimaryWindow.LastMouseState = result;
 		}
 
 		public IntPtr WindowHandle {

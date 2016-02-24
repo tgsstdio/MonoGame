@@ -28,6 +28,50 @@ namespace Microsoft.Xna.Framework
 				_resources.Remove(resourceReference);
 			}
 		}
+
+		~WeakReferenceCollection()
+		{
+			Dispose (false);
+		}
+
+		public void Dispose ()
+		{
+			Dispose (true);
+			GC.SuppressFinalize (this);
+		}
+
+		void ReleaseUnmanagedResources ()
+		{
+			lock (_resourcesLock)
+			{
+				foreach (var resource in _resources)
+				{
+					var target = resource.Target as IDisposable;
+					if (target != null)
+						target.Dispose ();
+				}
+				_resources.Clear ();
+			}
+		}
+
+		private bool mDisposed = false;
+		private void Dispose (bool disposing)
+		{
+			if (mDisposed)
+			{
+				return;
+			}
+
+			if (disposing)
+			{
+				// managed stuff here
+			}
+			
+			ReleaseUnmanagedResources ();
+
+			mDisposed = true;
+		}
+
 	}
 }
 

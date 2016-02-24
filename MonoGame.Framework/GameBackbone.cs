@@ -54,17 +54,17 @@ namespace Microsoft.Xna.Framework
 		private ISoundEffectInstancePool mPool;
 		public GameBackbone(
 			Game vg,
-			IGamePlatform platform,
+			IGamePlatform gamePlatform,
 			IContentManager content,
 			IContentTypeReaderManager ctrm,
-			IPlatformActivator activator,
-			IPresentationParameters presentation,
+			IPlatformActivator platfromActivator,
+			IPresentationParameters presentationParameters,
 			IDrawSuppressor suppression,
 			ISoundEffectInstancePool pool)
         {
 			mSuppressor = suppression;
-			mPlatformActivator = activator;
-			mPresentationParameters = presentation;
+			mPlatformActivator = platfromActivator;
+			mPresentationParameters = presentationParameters;
 			mPool = pool;
 			_instance = vg;
 			ContentTypeReaderManager = ctrm;
@@ -75,7 +75,7 @@ namespace Microsoft.Xna.Framework
            // _content = new ContentManager(_services);
 			_content = content;
 
-			SetupPlatform (platform);
+			SetupPlatform (gamePlatform);
         }
 
         ~GameBackbone()
@@ -99,10 +99,10 @@ namespace Microsoft.Xna.Framework
             Raise(Disposed, EventArgs.Empty);
         }
 
-		protected void SetupPlatform (IGamePlatform platform)
+		protected void SetupPlatform (IGamePlatform gamePlatform)
 		{
 			//Platform = GamePlatform.Create(this);
-			Platform = platform;
+			Platform = gamePlatform;
 
 			mPlatformActivator.AddActivatedHandler (OnActivated);
 			mPlatformActivator.AddDeactivatedHandler (OnDeactivated);
@@ -299,7 +299,7 @@ namespace Microsoft.Xna.Framework
 //        }
 
         [CLSCompliant(false)]
-        public GameWindow Window
+        public IGameWindow Window
         {
             get { return Platform.Window; }
         }
@@ -676,8 +676,8 @@ namespace Microsoft.Xna.Framework
 
 				Instance.Update(gameTime);
 
-                //The TouchPanel needs to know the time for when touches arrive
-                TouchPanelState.CurrentTimestamp = gameTime.TotalGameTime;
+                //TODO : The TouchPanel needs to know the time for when touches arrive
+                //TouchPanelState.CurrentTimestamp = gameTime.TotalGameTime;
             }
         }
 

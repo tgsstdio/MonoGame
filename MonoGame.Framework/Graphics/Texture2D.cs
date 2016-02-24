@@ -26,7 +26,7 @@ namespace Microsoft.Xna.Framework.Graphics
 			ITexturePlatform platform,
 			ITexture2DPlatform tex2DPlatform,
 			IWeakReferenceCollection owner,
-			GraphicsCapabilities capability,
+			IGraphicsCapabilities capability,
 			int width, int height)
 			: this(platform, tex2DPlatform, owner, capability, width, height, false, SurfaceFormat.Color, SurfaceType.Texture, false, 1)
         {
@@ -36,7 +36,7 @@ namespace Microsoft.Xna.Framework.Graphics
 			ITexturePlatform platform,
 			ITexture2DPlatform tex2DPlatform,
 			IWeakReferenceCollection owner,
-			GraphicsCapabilities capabilities,
+			IGraphicsCapabilities capabilities,
 			int width, int height, bool mipmap, SurfaceFormat format)
 			: this(platform, tex2DPlatform, owner, capabilities, width, height, mipmap, format, SurfaceType.Texture, false, 1)
         {
@@ -46,7 +46,7 @@ namespace Microsoft.Xna.Framework.Graphics
 			ITexturePlatform platform,
 			ITexture2DPlatform tex2DPlatform,
 			IWeakReferenceCollection owner,
-			GraphicsCapabilities capabilities,
+			IGraphicsCapabilities capabilities,
 			int width, int height, bool mipmap, SurfaceFormat format, int arraySize)
 			: this(platform, tex2DPlatform, owner, capabilities , width, height, mipmap, format, SurfaceType.Texture, false, arraySize)
         {
@@ -57,18 +57,18 @@ namespace Microsoft.Xna.Framework.Graphics
 			ITexturePlatform platform,
 			ITexture2DPlatform tex2DPlatform,
 			IWeakReferenceCollection owner,
-			GraphicsCapabilities capabilities,
+			IGraphicsCapabilities capabilities,
 			int width, int height, bool mipmap, SurfaceFormat format, SurfaceType type)
 			: this(platform, tex2DPlatform, owner,capabilities, width, height, mipmap, format, type, false, 1)
         {
         }
 
-		private GraphicsCapabilities mCapabilities;
+		private IGraphicsCapabilities mCapabilities;
 		protected Texture2D(
 			ITexturePlatform platform,
 			ITexture2DPlatform tex2DPlatform,
 			IWeakReferenceCollection owner,
-			GraphicsCapabilities capability,
+			IGraphicsCapabilities capability,
 			int width, int height, bool mipmap,
 			SurfaceFormat format, SurfaceType type, bool shared, int arraySize)
 			: base(platform)

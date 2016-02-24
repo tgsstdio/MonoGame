@@ -66,6 +66,7 @@ non-infringement.
 */
 using Microsoft.Xna.Framework;
 using MonoGame.Audio.OpenAL;
+using Microsoft.Xna.Framework.Input;
 
 #endregion License
 
@@ -88,8 +89,8 @@ namespace MonoGame.Platform.DesktopGL
 		//private IGameBackbone mBackbone;
 		private IGraphicsDeviceManager mGraphics;
 		private IOpenTKWindowResetter mWindowReset;
-		public OpenTKGamePlatform(IPlatformActivator activator, IGraphicsDeviceManager graphics, BaseOpenTKGameWindow view, IOpenTKWindowResetter resetter, IOpenALSoundController soundController)
-			: base(graphics, activator)
+		public OpenTKGamePlatform(IPlatformActivator activator, IGraphicsDeviceManager graphics, BaseOpenTKGameWindow view, IOpenTKWindowResetter resetter, IOpenALSoundController soundController, IMouseListener mouseListener)
+			: base(graphics, activator, mouseListener)
         {
 			mGraphics = graphics;
 			mWindowReset = resetter;
@@ -217,9 +218,9 @@ namespace MonoGame.Platform.DesktopGL
             
         }
         
-        public override void Log(string Message)
+        public override void Log(string message)
         {
-            Console.WriteLine(Message);
+            Console.WriteLine(message);
         }
 
         public override void Present()

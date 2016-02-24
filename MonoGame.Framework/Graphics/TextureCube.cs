@@ -4,6 +4,7 @@
 
 using System;
 using System.Runtime.InteropServices;
+using MonoGame.Graphics;
 
 namespace Microsoft.Xna.Framework.Graphics
 {

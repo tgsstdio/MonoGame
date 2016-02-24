@@ -8,7 +8,7 @@ using System;
 using System.ComponentModel;
 
 namespace Microsoft.Xna.Framework {
-	public abstract class GameWindow : IDisposable {
+	public abstract class GameWindow : IGameWindow {
 		#region Properties
 
 		[DefaultValue(false)]
@@ -70,12 +70,17 @@ namespace Microsoft.Xna.Framework {
             }
         }
 
-        public MouseState MouseState;
-	    internal TouchPanelState TouchPanelState;
+		public MouseState LastMouseState { get; set; }
+	 //   internal TouchPanelState TouchPanelState;
+
+		public ITouchListener Touch {
+			get;
+			private set;
+		}
 
         protected GameWindow()
         {
-            TouchPanelState = new TouchPanelState(this);
+            //TouchPanelState = new TouchPanelState(this);
         }
 
 		#endregion Properties

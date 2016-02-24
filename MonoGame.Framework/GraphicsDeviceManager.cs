@@ -5,6 +5,7 @@
 using System;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input.Touch;
+using MonoGame.Graphics;
 
 #if MONOMAC
 using MonoMac.OpenGL;

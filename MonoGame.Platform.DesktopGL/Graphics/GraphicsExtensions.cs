@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
+using MonoGame.Graphics;
 
 #if OPENGL
 #if MONOMAC
@@ -530,7 +531,7 @@ namespace MonoGame.Platform.DesktopGL.Graphics
 
 
 		internal static void GetGLFormat (this SurfaceFormat format,
-			IGraphicsDevice graphicsDevice,
+			IGraphicsCapabilities capabilities,
 			out PixelInternalFormat glInternalFormat,
 			out PixelFormat glFormat,
 			out PixelType glType)
@@ -539,7 +540,7 @@ namespace MonoGame.Platform.DesktopGL.Graphics
 			glFormat = PixelFormat.Rgba;
 			glType = PixelType.UnsignedByte;
 
-			var supportsSRgb = graphicsDevice.GraphicsCapabilities.SupportsSRgb;
+			var supportsSRgb = capabilities.SupportsSRgb;
 
 			switch (format) {
 			case SurfaceFormat.Color:

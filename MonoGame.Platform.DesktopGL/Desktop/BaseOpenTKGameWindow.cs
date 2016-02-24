@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using OpenTK.Platform;
 
 namespace MonoGame.Platform.DesktopGL
 {
@@ -15,6 +16,7 @@ namespace MonoGame.Platform.DesktopGL
 		/// </summary>
 		public abstract void ToggleFullScreen();
 		public abstract void ChangeClientBounds(Rectangle clientBounds);
+		public abstract IWindowInfo GetWindowInfo ();
 	}
 }
 

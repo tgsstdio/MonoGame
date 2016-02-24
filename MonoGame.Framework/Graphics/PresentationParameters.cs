@@ -3,6 +3,7 @@
 // file 'LICENSE.txt', which is part of this source code package.
 
 	using System;
+using MonoGame.Graphics;
 
 #if WINDOWS_STOREAPP || WINDOWS_UAP
 using Windows.UI.Xaml.Controls;

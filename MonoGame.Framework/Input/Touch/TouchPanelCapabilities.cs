@@ -16,14 +16,14 @@ namespace Microsoft.Xna.Framework.Input.Touch
     /// <summary>
     /// Allows retrieval of capabilities information from touch panel device.
     /// </summary>
-    public struct TouchPanelCapabilities
+    public struct TouchPanelCapabilities : ITouchPanelCapabilities
     {
         private bool hasPressure;
         private bool isConnected;
         private int maximumTouchCount;
         private bool initialized;
 
-        internal void Initialize()
+        public void Initialize()
         {
             if (!initialized)
             {
