@@ -13,52 +13,46 @@ using System.Collections.Generic;
 
 namespace Microsoft.Xna.Framework.Media
 {
-	public class SongCollection : ICollection<Song>, IEnumerable<Song>, IEnumerable, IDisposable
+	#if WINDOWS_PHONE	
+	public class WindowsPhoneSongCollection : ISongCollection
 	{
 		private bool isReadOnly = false;
-		private List<Song> innerlist = new List<Song>();
-#if WINDOWS_PHONE
+		private List<ISong> innerlist = new List<ISong>();
+
         private MsSongCollection songCollection;
 
-        internal SongCollection(MsSongCollection songCollection)
+		internal WindowsPhoneSongCollection(MsSongCollection songCollection)
         {
             this.songCollection = songCollection;
         }
-#endif
 
-        internal SongCollection()
+		internal WindowsPhoneSongCollection()
         {
 
         }
 
-        internal SongCollection(List<Song> songs)
+		internal WindowsPhoneSongCollection(List<ISong> songs)
         {
             this.innerlist = songs;
         }
 
 		public void Dispose()
         {
-#if WINDOWS_PHONE
             if (this.songCollection != null)
                 this.songCollection.Dispose();
-#endif
         }
 		
-		public IEnumerator<Song> GetEnumerator()
+		public IEnumerator<ISong> GetEnumerator()
         {
-#if WINDOWS_PHONE
             if (this.songCollection != null)
                 throw new NotSupportedException();
-#endif
             return innerlist.GetEnumerator();
         }
 		
         IEnumerator IEnumerable.GetEnumerator()
         {
-#if WINDOWS_PHONE
             if (this.songCollection != null)
                 return this.songCollection.GetEnumerator();
-#endif
             return innerlist.GetEnumerator();
         }
 
@@ -66,10 +60,8 @@ namespace Microsoft.Xna.Framework.Media
         {
             get
             {
-#if WINDOWS_PHONE
                 if (this.songCollection != null)
                     return this.songCollection.Count;
-#endif
 				return innerlist.Count;
             }
         }
@@ -78,32 +70,26 @@ namespace Microsoft.Xna.Framework.Media
         {
 		    get
 		    {
-#if WINDOWS_PHONE
 		        if (this.songCollection != null)
 		            return true;
-#endif
 		        return this.isReadOnly;
 		    }
         }
 
-        public Song this[int index]
+        public ISong this[int index]
         {
             get
             {
-#if WINDOWS_PHONE
                 if (this.songCollection != null)
                     return new Song(this.songCollection[index]);
-#endif
 				return this.innerlist[index];
             }
         }
 		
-		public void Add(Song item)
+		public void Add(ISong item)
         {
-#if WINDOWS_PHONE
             if (this.songCollection != null)
                 throw new NotSupportedException();
-#endif
 
             if (item == null)
                 throw new ArgumentNullException();
@@ -128,60 +114,49 @@ namespace Microsoft.Xna.Framework.Media
 		
 		public void Clear()
         {
-#if WINDOWS_PHONE
             if (this.songCollection != null)
                 throw new NotSupportedException();
-#endif
             innerlist.Clear();
         }
         
-        public SongCollection Clone()
-        {
-#if WINDOWS_PHONE
-            if (this.songCollection != null)
-                throw new NotSupportedException();
-#endif
-            SongCollection sc = new SongCollection();
-            foreach (Song song in this.innerlist)
-                sc.Add(song);
-            return sc;
-        }
+//        public SongCollection Clone()
+//        {
+//            if (this.songCollection != null)
+//                throw new NotSupportedException();
+//            SongCollection sc = new SongCollection();
+//			foreach (ISong song in this.innerlist)
+//                sc.Add(song);
+//            return sc;
+//        }
         
-        public bool Contains(Song item)
+		public bool Contains(ISong item)
         {
-#if WINDOWS_PHONE
             if (this.songCollection != null)
                 throw new NotSupportedException();
-#endif
             return innerlist.Contains(item);
         }
         
-        public void CopyTo(Song[] array, int arrayIndex)
+		public void CopyTo(ISong[] array, int arrayIndex)
         {
-#if WINDOWS_PHONE
             if (this.songCollection != null)
                 throw new NotSupportedException();
-#endif
             innerlist.CopyTo(array, arrayIndex);
         }
 		
-		public int IndexOf(Song item)
+		public int IndexOf(ISong item)
         {
-#if WINDOWS_PHONE
             if (this.songCollection != null)
                 throw new NotSupportedException();
-#endif
             return innerlist.IndexOf(item);
         }
         
-        public bool Remove(Song item)
+		public bool Remove(ISong item)
         {
-#if WINDOWS_PHONE
             if (this.songCollection != null)
                 throw new NotSupportedException();
-#endif
             return innerlist.Remove(item);
         }
 	}
+	#endif
 }
 

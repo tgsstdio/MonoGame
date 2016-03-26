@@ -9,7 +9,7 @@ namespace MonoGame.Platform.DesktopGL
 {
 	public class DesktopGLGraphicsDevicePlatform : IGraphicsDevicePlatform
 	{
-		private readonly BaseOpenTKGameWindow mWindow;
+		private readonly IOpenTKGameWindow mWindow;
 		private readonly IGraphicsDevicePreferences mDevicePreferences;
 		private readonly IGraphicsDeviceLogger mLogger;
 		private readonly IGLExtensionLookup mExtensions;
@@ -20,7 +20,7 @@ namespace MonoGame.Platform.DesktopGL
 		public DesktopGLGraphicsDevicePlatform 
 		(
 			// IMPLEMENTATION BELOW
-			BaseOpenTKGameWindow window
+			IOpenTKGameWindow window
 			,IGraphicsDevicePreferences devicePreferences
 			,IGraphicsDeviceLogger logger
 			,IGLExtensionLookup extensions
@@ -90,7 +90,7 @@ namespace MonoGame.Platform.DesktopGL
 			}
 			Context.MakeCurrent(wnd);
 			(Context as IGraphicsContextInternal).LoadAll();
-			Context.SwapInterval = mPresentation.PresentationInterval.GetSwapInterval();
+			Context.SwapInterval = GraphicsExtensions.GetSwapInterval(mPresentation.PresentationInterval);
 
 			// TODO : background threading 
 			// Provide the graphics context for background loading
@@ -105,7 +105,6 @@ namespace MonoGame.Platform.DesktopGL
 //			}
 			Context.MakeCurrent(wnd);
 
-			// TODO : initialise extension stuff
 			mExtensions.Initialise();
 
 			mGLPlatform.Initialise ();

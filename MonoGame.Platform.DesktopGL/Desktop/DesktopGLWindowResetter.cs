@@ -5,12 +5,12 @@ namespace MonoGame.Platform.DesktopGL
 {
 	public class DesktopGLWindowResetter : IOpenTKWindowResetter
 	{
-		private readonly BaseOpenTKGameWindow mWindow;
+		private readonly IOpenTKGameWindow mWindow;
 		private readonly IGraphicsDeviceQuery mDeviceQuery;
 		private readonly IPresentationParameters mPresentation;
 		private bool isCurrentlyFullScreen = false;
 
-		public DesktopGLWindowResetter (BaseOpenTKGameWindow window, IGraphicsDeviceQuery deviceQuery, IPresentationParameters presentation)
+		public DesktopGLWindowResetter (IOpenTKGameWindow window, IGraphicsDeviceQuery deviceQuery, IPresentationParameters presentation)
 		{
 			mWindow = window;
 			mDeviceQuery = deviceQuery;

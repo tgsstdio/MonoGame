@@ -27,8 +27,8 @@ namespace HelloCube
 					container.Register<Game, HelloCubeGame> (Reuse.Singleton);
 
 					// DESKTOPGL SPECIFIC
-					container.Register<BaseOpenTKGameWindow, OpenTKGameWindow>(Reuse.Singleton);
-					container.RegisterMapping<Microsoft.Xna.Framework.GameWindow, BaseOpenTKGameWindow>();
+					container.Register<IOpenTKGameWindow, OpenTKGameWindow>(Reuse.Singleton);
+					container.RegisterMapping<Microsoft.Xna.Framework.GameWindow, IOpenTKGameWindow>();
 
 					container.Register<IGamePlatform, OpenTKGamePlatform>(Reuse.Singleton);
 					container.Register<IGraphicsDeviceManager, DesktopGLGraphicsDeviceManager>(Reuse.Singleton);

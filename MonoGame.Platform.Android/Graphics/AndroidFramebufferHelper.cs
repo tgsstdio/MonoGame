@@ -5,7 +5,7 @@ using MonoGame.Graphics;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 
-namespace MonoGame.Platform.Android.Graphics
+namespace MonoGame.Platform.AndroidGL.Graphics
 {
 	public class AndroidGLFramebufferHelper : IGLFramebufferHelper
 	{

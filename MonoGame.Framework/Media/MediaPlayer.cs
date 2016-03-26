@@ -6,66 +6,68 @@ using System;
 
 namespace Microsoft.Xna.Framework.Media
 {
-    public static partial class MediaPlayer
+    public partial class MediaPlayer : IMediaPlayer
     {
 		// Need to hold onto this to keep track of how many songs
 		// have played when in shuffle mode
-		private static int _numSongsInQueuePlayed = 0;
-		private static MediaState _state = MediaState.Stopped;
-		private static float _volume = 1.0f;
-		private static bool _isMuted;
-        private static bool _isRepeating;
-        private static bool _isShuffled;
-		private static readonly MediaQueue _queue = new MediaQueue();
+		private int _numSongsInQueuePlayed = 0;
+		private MediaState _state = MediaState.Stopped;
+		private float _volume = 1.0f;
+		private bool _isMuted;
+        private bool _isRepeating;
+        private bool _isShuffled;
+		private readonly MediaQueue _queue = new MediaQueue();
 
 #if WINDOWS_PHONE
         // PlayingInternal should default to true to be to work with the user's default playing music
         private static bool playingInternal = true;
 #endif
 
-		public static event EventHandler<EventArgs> ActiveSongChanged;
-        public static event EventHandler<EventArgs> MediaStateChanged;
+		public event EventHandler<EventArgs> ActiveSongChanged;
+        public event EventHandler<EventArgs> MediaStateChanged;
 
-        static MediaPlayer()
+		private IMediaPlayerPlatform mPlatform;
+        public MediaPlayer(IMediaPlayerPlatform platform)
         {
-            PlatformInitialize();
+			mPlatform = platform;
+			mPlatform.Initialize();
         }
 
         #region Properties
 
-        public static MediaQueue Queue { get { return _queue; } }
-		
-		public static bool IsMuted
+        public MediaQueue Queue { get { return _queue; } }
+
+		public bool IsMuted
         {
-            get { return PlatformGetIsMuted(); }
-            set { PlatformSetIsMuted(value); }
+			get { return mPlatform.GetIsMuted(); }
+			set { mPlatform.SetIsMuted(value); }
         }
 
-        public static bool IsRepeating 
+        public bool IsRepeating 
         {
-            get { return PlatformGetIsRepeating(); }
-            set { PlatformSetIsRepeating(value); }
+			get { return mPlatform.GetIsRepeating(); }
+			set { mPlatform.SetIsRepeating(value); }
         }
 
-        public static bool IsShuffled
+        public bool IsShuffled
         {
-            get { return PlatformGetIsShuffled(); }
-            set { PlatformSetIsShuffled(value); }
+			get { return mPlatform.GetIsShuffled(); }
+			set { mPlatform.SetIsShuffled(value); }
         }
 
-        public static bool IsVisualizationEnabled { get { return false; } }
+        public bool IsVisualizationEnabled { get { return false; } }
 
-        public static TimeSpan PlayPosition
+        public TimeSpan PlayPosition
         {
-            get { return PlatformGetPlayPosition(); }
-#if IOS || ANDROID
-            set { PlatformSetPlayPosition(value); }
-#endif
+			get { return mPlatform.GetPlayPosition(); }
+//#if IOS || ANDROID
+			set { mPlatform.SetPlayPosition(value); }
+//#endif
         }
 
-        public static MediaState State
+        public MediaState State
         {
-            get { return PlatformGetState(); }
+			get { return mPlatform.GetState(); }
             private set
             {
                 if (_state != value)
@@ -81,34 +83,34 @@ namespace Microsoft.Xna.Framework.Media
             }
         }
 
-        public static bool GameHasControl
+        public bool GameHasControl
         {
             get
             {
-                return PlatformGetGameHasControl();
+				return mPlatform.GetGameHasControl();
             }
         }
 		
 
-        public static float Volume
+        public float Volume
         {
-            get { return PlatformGetVolume(); }
+			get { return mPlatform.GetVolume(); }
             set
             {
                 var volume = MathHelper.Clamp(value, 0, 1);
 
-                PlatformSetVolume(volume);
+				mPlatform.SetVolume(volume);
             }
         }
 
 		#endregion
 		
-        public static void Pause()
+        public void Pause()
         {
             if (State != MediaState.Playing || _queue.ActiveSong == null)
                 return;
 
-            PlatformPause();
+			mPlatform.Pause();
 
             State = MediaState.Paused;
         }
@@ -117,7 +119,7 @@ namespace Microsoft.Xna.Framework.Media
 		/// Play clears the current playback queue, and then queues up the specified song for playback. 
 		/// Playback starts immediately at the beginning of the song.
 		/// </summary>
-        public static void Play(Song song)
+        public void Play(ISong song)
         {
             var previousSong = _queue.Count > 0 ? _queue[0] : null;
             _queue.Clear();
@@ -131,7 +133,7 @@ namespace Microsoft.Xna.Framework.Media
                 ActiveSongChanged.Invoke(null, EventArgs.Empty);
         }
 		
-		public static void Play(SongCollection collection, int index = 0)
+		public void Play(StandardSongCollection collection, int index = 0)
 		{
             _queue.Clear();
             _numSongsInQueuePlayed = 0;
@@ -144,13 +146,13 @@ namespace Microsoft.Xna.Framework.Media
 			PlaySong(_queue.ActiveSong);
 		}
 
-        private static void PlaySong(Song song)
+        private void PlaySong(ISong song)
         {
-            PlatformPlaySong(song);
+			mPlatform.PlaySong(song);
             State = MediaState.Playing;
         }
 
-        internal static void OnSongFinishedPlaying(object sender, EventArgs args)
+        internal void OnSongFinishedPlaying(object sender, EventArgs args)
 		{
 			// TODO: Check args to see if song sucessfully played
 			_numSongsInQueuePlayed++;
@@ -185,35 +187,35 @@ namespace Microsoft.Xna.Framework.Media
 			MoveNext();
 		}
 
-        public static void Resume()
+        public void Resume()
         {
             if (State != MediaState.Paused)
                 return;
 
-            PlatformResume();
+			mPlatform.Resume();
 			State = MediaState.Playing;
         }
 
-        public static void Stop()
+        public void Stop()
         {
             if (State == MediaState.Stopped)
                 return;
 
-            PlatformStop();
+			mPlatform.Stop();
 			State = MediaState.Stopped;
 		}
 		
-		public static void MoveNext()
+		public void MoveNext()
 		{
 			NextSong(1);
 		}
 		
-		public static void MovePrevious()
+		public void MovePrevious()
 		{
 			NextSong(-1);
 		}
 		
-		private static void NextSong(int direction)
+		private void NextSong(int direction)
 		{
             Stop();
 

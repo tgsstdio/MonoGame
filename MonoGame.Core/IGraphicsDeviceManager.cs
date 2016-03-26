@@ -11,6 +11,12 @@ namespace Microsoft.Xna.Framework
         void CreateDevice();
         void EndDraw();
 		IGraphicsDevice GraphicsDevice { get; }
+		void ResetClientBounds ();
+
+		DisplayOrientation SupportedOrientations {
+			get;
+			set;
+		}
 	}
 }
 

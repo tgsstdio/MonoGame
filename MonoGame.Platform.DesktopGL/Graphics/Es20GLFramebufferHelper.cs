@@ -111,13 +111,13 @@ namespace MonoGame.Platform.DesktopGL.Graphics
 			if (samples > 0 && this.GLFramebufferTexture2DMultisample != null)
 				this.GLFramebufferTexture2DMultisample(All.Framebuffer, (All)attachement, (All)target, texture, level, samples);
 			else
-				GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, (FramebufferSlot)attachement, (TextureTarget)target, texture, level);
+				GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, (All) attachement, (TextureTarget2d) target, texture, level);
 			GraphicsExtensions.CheckGLError();
 		}
 
 		public void FramebufferRenderbuffer(int attachement, int renderbuffer, int level = 0)
 		{
-			GL.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, (FramebufferSlot)attachement, RenderbufferTarget.Renderbuffer, renderbuffer);
+			GL.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, (All)attachement, RenderbufferTarget.Renderbuffer, renderbuffer);
 			GraphicsExtensions.CheckGLError();
 		}
 

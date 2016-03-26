@@ -308,14 +308,14 @@ namespace Microsoft.Xna.Framework
             ResetClientBounds();
 #endif
 
-            // Set the new display size on the touch panel.
-            //
-            // TODO: In XNA this seems to be done as part of the 
-            // GraphicsDevice.DeviceReset event... we need to get 
-            // those working.
-            //
-            TouchPanel.DisplayWidth = _graphicsDevice.PresentationParameters.BackBufferWidth;
-            TouchPanel.DisplayHeight = _graphicsDevice.PresentationParameters.BackBufferHeight;
+//            // Set the new display size on the touch panel.
+//            //
+//            // TODO: In XNA this seems to be done as part of the 
+//            // GraphicsDevice.DeviceReset event... we need to get 
+//            // those working.
+//            //
+//            TouchPanel.DisplayWidth = _graphicsDevice.PresentationParameters.BackBufferWidth;
+//            TouchPanel.DisplayHeight = _graphicsDevice.PresentationParameters.BackBufferHeight;
 
 #if (WINDOWS || WINDOWS_UAP) && DIRECTX
 
@@ -408,9 +408,9 @@ namespace Microsoft.Xna.Framework
             // GraphicsDevice.DeviceReset event... we need to get 
             // those working.
             //
-            TouchPanel.DisplayWidth = _graphicsDevice.PresentationParameters.BackBufferWidth;
-            TouchPanel.DisplayHeight = _graphicsDevice.PresentationParameters.BackBufferHeight;
-            TouchPanel.DisplayOrientation = _graphicsDevice.PresentationParameters.DisplayOrientation;
+//            TouchPanel.DisplayWidth = _graphicsDevice.PresentationParameters.BackBufferWidth;
+//            TouchPanel.DisplayHeight = _graphicsDevice.PresentationParameters.BackBufferHeight;
+//            TouchPanel.DisplayOrientation = _graphicsDevice.PresentationParameters.DisplayOrientation;
         }
 
         public void ToggleFullScreen()
@@ -604,7 +604,7 @@ namespace Microsoft.Xna.Framework
         ///     graphics.PreferredBackBufferWidth = Window.ClientBounds.Width;
         ///
         /// </summary>
-        internal void ResetClientBounds()
+        public void ResetClientBounds()
         {
 #if ANDROID
             float preferredAspectRatio = (float)PreferredBackBufferWidth /

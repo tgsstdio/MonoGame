@@ -60,7 +60,7 @@ namespace MonoGame.Platform.DesktopGL
 {
 	using Rectangle = Microsoft.Xna.Framework.Rectangle;
 
-	public class OpenTKGameWindow : BaseOpenTKGameWindow
+	public class OpenTKGameWindow : Microsoft.Xna.Framework.GameWindow, IOpenTKGameWindow
     {
         private bool _isResizable;
         private bool _isBorderless;
@@ -90,12 +90,12 @@ namespace MonoGame.Platform.DesktopGL
 
         public override IntPtr Handle { get { return _windowHandle; } }
 
-        public override string ScreenDeviceName { get { return window.Title; } }
+		public override string ScreenDeviceName { get { return window.Title; } }
 
-        public override Microsoft.Xna.Framework.Rectangle ClientBounds { get { return mClientBounds; } }
+		public override Microsoft.Xna.Framework.Rectangle ClientBounds { get { return mClientBounds; } }
 
         // TODO: this is buggy on linux - report to opentk team
-        public override bool AllowUserResizing
+		public override bool AllowUserResizing
         {
             get { return _isResizable; }
             set
@@ -110,7 +110,7 @@ namespace MonoGame.Platform.DesktopGL
             }
         }
 
-        public override DisplayOrientation CurrentOrientation
+		public override DisplayOrientation CurrentOrientation
         {
             get { return DisplayOrientation.LandscapeLeft; }
         }
@@ -133,12 +133,12 @@ namespace MonoGame.Platform.DesktopGL
             }
         }
 #endif
-        public override void SetSupportedOrientations(DisplayOrientation orientations)
+		public override void SetSupportedOrientations(DisplayOrientation orientations)
         {
             // Do nothing.  Desktop platforms don't do orientation.
         }
 
-        public override bool IsBorderless
+		public override bool IsBorderless
         {
             get { return _isBorderless; }
             set
@@ -228,7 +228,7 @@ namespace MonoGame.Platform.DesktopGL
             OnClientSizeChanged();
         }
 
-		public override void ProcessEvents()
+		public void ProcessEvents()
         {
             UpdateBorder();
             Window.ProcessEvents();
@@ -371,12 +371,12 @@ namespace MonoGame.Platform.DesktopGL
             SetMouseVisible(false);
         }
 
-        protected override void SetTitle(string title)
+		protected override void SetTitle(string title)
         {
             window.Title = title;            
         }
 
-		public override void ToggleFullScreen()
+		public void ToggleFullScreen()
         {
             if (windowState == WindowState.Fullscreen)
                 windowState = WindowState.Normal;
@@ -385,7 +385,7 @@ namespace MonoGame.Platform.DesktopGL
             updateClientBounds = true;
         }
 
-        public override void ChangeClientBounds(Rectangle clientBounds)
+        public void ChangeClientBounds(Rectangle clientBounds)
         {
             if (this.mClientBounds != clientBounds)
             {
@@ -408,11 +408,11 @@ namespace MonoGame.Platform.DesktopGL
 			_windowHandle = IntPtr.Zero;
 		}
 
-        public override void BeginScreenDeviceChange(bool willBeFullScreen)
+		public override void BeginScreenDeviceChange(bool willBeFullScreen)
         {
         }
 
-        public override void EndScreenDeviceChange(string screenDeviceName, int clientWidth, int clientHeight)
+		public override void EndScreenDeviceChange(string screenDeviceName, int clientWidth, int clientHeight)
         {
 
         }
@@ -421,22 +421,22 @@ namespace MonoGame.Platform.DesktopGL
 
 		#region implemented abstract members of BaseOpenTKGameWindow
 
-		public override OpenTK.Platform.IWindowInfo GetWindowInfo ()
+		public OpenTK.Platform.IWindowInfo GetWindowInfo ()
 		{
 			return window.WindowInfo;
 		}
 
-		public override void SetWindowVisible (bool visible)
+		public void SetWindowVisible (bool visible)
 		{
 			Window.Visible = visible;
 		}
 
-		public override bool IsWindowFocused ()
+		public bool IsWindowFocused ()
 		{
 			return Window.Focused;
 		}
 
-		public override void SetMouseVisible(bool visible)
+		public void SetMouseVisible(bool visible)
         {
             window.Cursor = visible ? MouseCursor.Default : MouseCursor.Empty;
         }

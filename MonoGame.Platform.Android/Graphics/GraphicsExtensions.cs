@@ -2,8 +2,9 @@
 using System.Diagnostics;
 using MonoGame.Graphics;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Graphics;
 
-namespace MonoGame.Platform.Android.Graphics
+namespace MonoGame.Platform.AndroidGL.Graphics
 {
 	using OpenTK.Graphics.ES20;
 	using VertexPointerType = OpenTK.Graphics.ES20.All;
@@ -114,51 +115,51 @@ namespace MonoGame.Platform.Android.Graphics
 			throw new ArgumentException();
 		}
 
-		public static VertexAttribPointerType OpenGLVertexAttribPointerType(this VertexElementFormat elementFormat)
-		{
-			switch (elementFormat)
-			{
-			case VertexElementFormat.Single:
-				return VertexAttribPointerType.Float;
-
-			case VertexElementFormat.Vector2:
-				return VertexAttribPointerType.Float;
-
-			case VertexElementFormat.Vector3:
-				return VertexAttribPointerType.Float;
-
-			case VertexElementFormat.Vector4:
-				return VertexAttribPointerType.Float;
-
-			case VertexElementFormat.Color:
-				return VertexAttribPointerType.UnsignedByte;
-
-			case VertexElementFormat.Byte4:
-				return VertexAttribPointerType.UnsignedByte;
-
-			case VertexElementFormat.Short2:
-				return VertexAttribPointerType.Short;
-
-			case VertexElementFormat.Short4:
-				return VertexAttribPointerType.Short;
-
-			case VertexElementFormat.NormalizedShort2:
-				return VertexAttribPointerType.Short;
-
-			case VertexElementFormat.NormalizedShort4:
-				return VertexAttribPointerType.Short;
-
-		#if MONOMAC || WINDOWS || DESKTOPGL
-			case VertexElementFormat.HalfVector2:
-				return VertexAttribPointerType.HalfFloat;
-
-			case VertexElementFormat.HalfVector4:
-				return VertexAttribPointerType.HalfFloat;
-		#endif
-			}
-
-			throw new ArgumentException();
-		}
+//		public static VertexAttribPointerType OpenGLVertexAttribPointerType(this VertexElementFormat elementFormat)
+//		{
+//			switch (elementFormat)
+//			{
+//			case VertexElementFormat.Single:
+//				return VertexAttribPointerType.Float;
+//
+//			case VertexElementFormat.Vector2:
+//				return VertexAttribPointerType.Float;
+//
+//			case VertexElementFormat.Vector3:
+//				return VertexAttribPointerType.Float;
+//
+//			case VertexElementFormat.Vector4:
+//				return VertexAttribPointerType.Float;
+//
+//			case VertexElementFormat.Color:
+//				return VertexAttribPointerType.UnsignedByte;
+//
+//			case VertexElementFormat.Byte4:
+//				return VertexAttribPointerType.UnsignedByte;
+//
+//			case VertexElementFormat.Short2:
+//				return VertexAttribPointerType.Short;
+//
+//			case VertexElementFormat.Short4:
+//				return VertexAttribPointerType.Short;
+//
+//			case VertexElementFormat.NormalizedShort2:
+//				return VertexAttribPointerType.Short;
+//
+//			case VertexElementFormat.NormalizedShort4:
+//				return VertexAttribPointerType.Short;
+//
+//		#if MONOMAC || WINDOWS || DESKTOPGL
+//			case VertexElementFormat.HalfVector2:
+//				return VertexAttribPointerType.HalfFloat;
+//
+//			case VertexElementFormat.HalfVector4:
+//				return VertexAttribPointerType.HalfFloat;
+//		#endif
+//			}
+//
+//			throw new ArgumentException();
+//		}
 //
 //		public static bool OpenGLVertexAttribNormalized(this VertexElement element)
 //		{
@@ -323,70 +324,70 @@ namespace MonoGame.Platform.Android.Graphics
 		}
 
 
-		public static BlendEquationMode GetBlendEquationMode (this BlendFunction function)
-		{
-			switch (function) {
-			case BlendFunction.Add:
-				return BlendEquationMode.FuncAdd;
-		#if IOS
-		case BlendFunction.Max:
-		return (BlendEquationMode)All.MaxExt;
-		case BlendFunction.Min:
-		return (BlendEquationMode)All.MinExt;
-		#elif MONOMAC || WINDOWS || DESKTOPGL
-			case BlendFunction.Max:
-				return BlendEquationMode.Max;
-			case BlendFunction.Min:
-				return BlendEquationMode.Min;
-		#endif
-			case BlendFunction.ReverseSubtract:
-				return BlendEquationMode.FuncReverseSubtract;
-			case BlendFunction.Subtract:
-				return BlendEquationMode.FuncSubtract;
+//		public static BlendEquationMode GetBlendEquationMode (this BlendFunction function)
+//		{
+//			switch (function) {
+//			case BlendFunction.Add:
+//				return BlendEquationMode.FuncAdd;
+//		#if IOS
+//		case BlendFunction.Max:
+//		return (BlendEquationMode)All.MaxExt;
+//		case BlendFunction.Min:
+//		return (BlendEquationMode)All.MinExt;
+//		#elif MONOMAC || WINDOWS || DESKTOPGL
+//			case BlendFunction.Max:
+//				return BlendEquationMode.Max;
+//			case BlendFunction.Min:
+//				return BlendEquationMode.Min;
+//		#endif
+//			case BlendFunction.ReverseSubtract:
+//				return BlendEquationMode.FuncReverseSubtract;
+//			case BlendFunction.Subtract:
+//				return BlendEquationMode.FuncSubtract;
+//
+//			default:
+//				throw new ArgumentException();
+//			}
+//		}
 
-			default:
-				throw new ArgumentException();
-			}
-		}
-
-		public static BlendingFactorSrc GetBlendFactorSrc (this Blend blend)
-		{
-			switch (blend) {
-			case Blend.DestinationAlpha:
-				return BlendingFactorSrc.DstAlpha;
-			case Blend.DestinationColor:
-				return BlendingFactorSrc.DstColor;
-			case Blend.InverseDestinationAlpha:
-				return BlendingFactorSrc.OneMinusDstAlpha;
-			case Blend.InverseDestinationColor:
-				return BlendingFactorSrc.OneMinusDstColor;
-			case Blend.InverseSourceAlpha:
-				return BlendingFactorSrc.OneMinusSrcAlpha;
-			case Blend.InverseSourceColor:
-		#if MONOMAC || WINDOWS || DESKTOPGL
-				return (BlendingFactorSrc)All.OneMinusSrcColor;
-		#else
-		return BlendingFactorSrc.OneMinusSrcColor;
-		#endif
-			case Blend.One:
-				return BlendingFactorSrc.One;
-			case Blend.SourceAlpha:
-				return BlendingFactorSrc.SrcAlpha;
-			case Blend.SourceAlphaSaturation:
-				return BlendingFactorSrc.SrcAlphaSaturate;
-			case Blend.SourceColor:
-		#if MONOMAC || WINDOWS || DESKTOPGL
-				return (BlendingFactorSrc)All.SrcColor;
-		#else
-		return BlendingFactorSrc.SrcColor;
-		#endif
-			case Blend.Zero:
-				return BlendingFactorSrc.Zero;
-			default:
-				return BlendingFactorSrc.One;
-			}
-
-		}
+//		public static BlendingFactorSrc GetBlendFactorSrc (this Blend blend)
+//		{
+//			switch (blend) {
+//			case Blend.DestinationAlpha:
+//				return BlendingFactorSrc.DstAlpha;
+//			case Blend.DestinationColor:
+//				return BlendingFactorSrc.DstColor;
+//			case Blend.InverseDestinationAlpha:
+//				return BlendingFactorSrc.OneMinusDstAlpha;
+//			case Blend.InverseDestinationColor:
+//				return BlendingFactorSrc.OneMinusDstColor;
+//			case Blend.InverseSourceAlpha:
+//				return BlendingFactorSrc.OneMinusSrcAlpha;
+//			case Blend.InverseSourceColor:
+//		#if MONOMAC || WINDOWS || DESKTOPGL
+//				return (BlendingFactorSrc)All.OneMinusSrcColor;
+//		#else
+//		return BlendingFactorSrc.OneMinusSrcColor;
+//		#endif
+//			case Blend.One:
+//				return BlendingFactorSrc.One;
+//			case Blend.SourceAlpha:
+//				return BlendingFactorSrc.SrcAlpha;
+//			case Blend.SourceAlphaSaturation:
+//				return BlendingFactorSrc.SrcAlphaSaturate;
+//			case Blend.SourceColor:
+//		#if MONOMAC || WINDOWS || DESKTOPGL
+//				return (BlendingFactorSrc)All.SrcColor;
+//		#else
+//		return BlendingFactorSrc.SrcColor;
+//		#endif
+//			case Blend.Zero:
+//				return BlendingFactorSrc.Zero;
+//			default:
+//				return BlendingFactorSrc.One;
+//			}
+//
+//		}
 
 		public static BlendingFactorDest GetBlendFactorDest (this Blend blend)
 		{
@@ -427,29 +428,29 @@ namespace MonoGame.Platform.Android.Graphics
 
 		}
 
-		public static DepthFunction GetDepthFunction(this CompareFunction compare)
-		{
-			switch (compare)
-			{
-			default:
-			case CompareFunction.Always:
-				return DepthFunction.Always;
-			case CompareFunction.Equal:
-				return DepthFunction.Equal;
-			case CompareFunction.Greater:
-				return DepthFunction.Greater;
-			case CompareFunction.GreaterEqual:
-				return DepthFunction.Gequal;
-			case CompareFunction.Less:
-				return DepthFunction.Less;
-			case CompareFunction.LessEqual:
-				return DepthFunction.Lequal;
-			case CompareFunction.Never:
-				return DepthFunction.Never;
-			case CompareFunction.NotEqual:
-				return DepthFunction.Notequal;
-			}
-		}
+//		public static DepthFunction GetDepthFunction(this CompareFunction compare)
+//		{
+//			switch (compare)
+//			{
+//			default:
+//			case CompareFunction.Always:
+//				return DepthFunction.Always;
+//			case CompareFunction.Equal:
+//				return DepthFunction.Equal;
+//			case CompareFunction.Greater:
+//				return DepthFunction.Greater;
+//			case CompareFunction.GreaterEqual:
+//				return DepthFunction.Gequal;
+//			case CompareFunction.Less:
+//				return DepthFunction.Less;
+//			case CompareFunction.LessEqual:
+//				return DepthFunction.Lequal;
+//			case CompareFunction.Never:
+//				return DepthFunction.Never;
+//			case CompareFunction.NotEqual:
+//				return DepthFunction.Notequal;
+//			}
+//		}
 
 		#if WINDOWS || DESKTOPGL || ANGLE
 		/// <summary>
@@ -515,156 +516,156 @@ namespace MonoGame.Platform.Android.Graphics
 		}
 		#endif
 
-		internal static void GetGLFormat (this SurfaceFormat format,
-			IGraphicsCapabilities capabilities,
-			out PixelInternalFormat glInternalFormat,
-			out PixelFormat glFormat,
-			out PixelType glType)
-		{
-			glInternalFormat = PixelInternalFormat.Rgba;
-			glFormat = PixelFormat.Rgba;
-			glType = PixelType.UnsignedByte;
+//		internal static void GetGLFormat (this SurfaceFormat format,
+//			IGraphicsCapabilities capabilities,
+//			out PixelInternalFormat glInternalFormat,
+//			out PixelFormat glFormat,
+//			out PixelType glType)
+//		{
+//			glInternalFormat = PixelInternalFormat.Rgba;
+//			glFormat = PixelFormat.Rgba;
+//			glType = PixelType.UnsignedByte;
+//
+//			var supportsSRgb = capabilities.SupportsSRgb;
+//
+//			switch (format) {
+//			case SurfaceFormat.Color:
+//				glInternalFormat = PixelInternalFormat.Rgba;
+//				glFormat = PixelFormat.Rgba;
+//				glType = PixelType.UnsignedByte;
+//				break;
+//			case SurfaceFormat.ColorSRgb:
+//				if (!supportsSRgb)
+//					goto case SurfaceFormat.Color;
+//				glInternalFormat = (PixelInternalFormat) 0x8C40; // PixelInternalFormat.Srgb;
+//				glFormat = PixelFormat.Rgba;
+//				glType = PixelType.UnsignedByte;
+//				break;
+//			case SurfaceFormat.Bgr565:
+//				glInternalFormat = PixelInternalFormat.Rgb;
+//				glFormat = PixelFormat.Rgb;
+//				glType = PixelType.UnsignedShort565;
+//				break;
+//			case SurfaceFormat.Bgra4444:
+//				glInternalFormat = PixelInternalFormat.Rgba;
+//				glFormat = PixelFormat.Rgba;
+//				glType = PixelType.UnsignedShort4444;
+//				break;
+//			case SurfaceFormat.Bgra5551:
+//				glInternalFormat = PixelInternalFormat.Rgba;
+//				glFormat = PixelFormat.Rgba;
+//				glType = PixelType.UnsignedShort5551;
+//				break;
+//			case SurfaceFormat.Alpha8:
+//				glInternalFormat = PixelInternalFormat.Luminance;
+//				glFormat = PixelFormat.Luminance;
+//				glType = PixelType.UnsignedByte;
+//				break;
+//		#if ANDROID
+//			case SurfaceFormat.Dxt1:
+//				// 0x83F0 is the RGB version, 0x83F1 is the RGBA version (1-bit alpha)
+//				// XNA uses the RGB version.
+//				glInternalFormat = (PixelInternalFormat)0x83F0; 
+//				glFormat = (PixelFormat)All.CompressedTextureFormats;
+//				break;
+//			case SurfaceFormat.Dxt1SRgb:
+//				if (!supportsSRgb)
+//					goto case SurfaceFormat.Dxt1;
+//				glInternalFormat = (PixelInternalFormat)0x8C4C;
+//				glFormat = (PixelFormat)All.CompressedTextureFormats;
+//				break;
+//			case SurfaceFormat.Dxt1a:
+//				// 0x83F0 is the RGB version, 0x83F1 is the RGBA version (1-bit alpha)
+//				glInternalFormat = (PixelInternalFormat)0x83F1;
+//				glFormat = (PixelFormat)All.CompressedTextureFormats;
+//				break;
+//			case SurfaceFormat.Dxt3:
+//				glInternalFormat = (PixelInternalFormat)0x83F2;
+//				glFormat = (PixelFormat)All.CompressedTextureFormats;
+//				break;
+//			case SurfaceFormat.Dxt3SRgb:
+//				if (!supportsSRgb)
+//					goto case SurfaceFormat.Dxt3;
+//				glInternalFormat = (PixelInternalFormat)0x8C4E;
+//				glFormat = (PixelFormat)All.CompressedTextureFormats;
+//				break;
+//			case SurfaceFormat.Dxt5:
+//				glInternalFormat = (PixelInternalFormat)0x83F3;
+//				glFormat = (PixelFormat)All.CompressedTextureFormats;
+//				break;
+//			case SurfaceFormat.Dxt5SRgb:
+//				if (!supportsSRgb)
+//					goto case SurfaceFormat.Dxt5;
+//				glInternalFormat = (PixelInternalFormat)0x8C4F;
+//				glFormat = (PixelFormat)All.CompressedTextureFormats;
+//				break;
+//			case SurfaceFormat.RgbaAtcExplicitAlpha:
+//				glInternalFormat = (PixelInternalFormat)All.AtcRgbaExplicitAlphaAmd;
+//				glFormat = (PixelFormat)All.CompressedTextureFormats;
+//				break;
+//			case SurfaceFormat.RgbaAtcInterpolatedAlpha:
+//				glInternalFormat = (PixelInternalFormat)All.AtcRgbaInterpolatedAlphaAmd;
+//				glFormat = (PixelFormat)All.CompressedTextureFormats;
+//				break;
+//			case SurfaceFormat.RgbEtc1:
+//				glInternalFormat = (PixelInternalFormat)0x8D64; // GL_ETC1_RGB8_OES
+//				glFormat = (PixelFormat)All.CompressedTextureFormats;
+//				break;
+//		#endif
+//		#if IOS || ANDROID
+//			case SurfaceFormat.RgbPvrtc2Bpp:
+//				glInternalFormat = (PixelInternalFormat)All.CompressedRgbPvrtc2Bppv1Img;
+//				glFormat = (PixelFormat)All.CompressedTextureFormats;
+//				break;
+//			case SurfaceFormat.RgbPvrtc4Bpp:
+//				glInternalFormat = (PixelInternalFormat)All.CompressedRgbPvrtc4Bppv1Img;
+//				glFormat = (PixelFormat)All.CompressedTextureFormats;
+//				break;
+//			case SurfaceFormat.RgbaPvrtc2Bpp:
+//				glInternalFormat = (PixelInternalFormat)All.CompressedRgbaPvrtc2Bppv1Img;
+//				glFormat = (PixelFormat)All.CompressedTextureFormats;
+//				break;
+//			case SurfaceFormat.RgbaPvrtc4Bpp:
+//				glInternalFormat = (PixelInternalFormat)All.CompressedRgbaPvrtc4Bppv1Img;
+//				glFormat = (PixelFormat)All.CompressedTextureFormats;
+//				break;
+//		#endif
+//			default:
+//				throw new NotSupportedException();
+//			}
+//		}
 
-			var supportsSRgb = capabilities.SupportsSRgb;
+//		public static int GetBoundTexture2D()
+//		{
+//			var prevTexture = 0;
+//			GL.GetInteger (GetPName.TextureBinding2D, out prevTexture);
+//			GraphicsExtensions.LogGLError("GraphicsExtensions.GetBoundTexture2D() GL.GetInteger");
+//			return prevTexture;
+//		}
 
-			switch (format) {
-			case SurfaceFormat.Color:
-				glInternalFormat = PixelInternalFormat.Rgba;
-				glFormat = PixelFormat.Rgba;
-				glType = PixelType.UnsignedByte;
-				break;
-			case SurfaceFormat.ColorSRgb:
-				if (!supportsSRgb)
-					goto case SurfaceFormat.Color;
-				glInternalFormat = (PixelInternalFormat) 0x8C40; // PixelInternalFormat.Srgb;
-				glFormat = PixelFormat.Rgba;
-				glType = PixelType.UnsignedByte;
-				break;
-			case SurfaceFormat.Bgr565:
-				glInternalFormat = PixelInternalFormat.Rgb;
-				glFormat = PixelFormat.Rgb;
-				glType = PixelType.UnsignedShort565;
-				break;
-			case SurfaceFormat.Bgra4444:
-				glInternalFormat = PixelInternalFormat.Rgba;
-				glFormat = PixelFormat.Rgba;
-				glType = PixelType.UnsignedShort4444;
-				break;
-			case SurfaceFormat.Bgra5551:
-				glInternalFormat = PixelInternalFormat.Rgba;
-				glFormat = PixelFormat.Rgba;
-				glType = PixelType.UnsignedShort5551;
-				break;
-			case SurfaceFormat.Alpha8:
-				glInternalFormat = PixelInternalFormat.Luminance;
-				glFormat = PixelFormat.Luminance;
-				glType = PixelType.UnsignedByte;
-				break;
-		#if ANDROID
-			case SurfaceFormat.Dxt1:
-				// 0x83F0 is the RGB version, 0x83F1 is the RGBA version (1-bit alpha)
-				// XNA uses the RGB version.
-				glInternalFormat = (PixelInternalFormat)0x83F0; 
-				glFormat = (PixelFormat)All.CompressedTextureFormats;
-				break;
-			case SurfaceFormat.Dxt1SRgb:
-				if (!supportsSRgb)
-					goto case SurfaceFormat.Dxt1;
-				glInternalFormat = (PixelInternalFormat)0x8C4C;
-				glFormat = (PixelFormat)All.CompressedTextureFormats;
-				break;
-			case SurfaceFormat.Dxt1a:
-				// 0x83F0 is the RGB version, 0x83F1 is the RGBA version (1-bit alpha)
-				glInternalFormat = (PixelInternalFormat)0x83F1;
-				glFormat = (PixelFormat)All.CompressedTextureFormats;
-				break;
-			case SurfaceFormat.Dxt3:
-				glInternalFormat = (PixelInternalFormat)0x83F2;
-				glFormat = (PixelFormat)All.CompressedTextureFormats;
-				break;
-			case SurfaceFormat.Dxt3SRgb:
-				if (!supportsSRgb)
-					goto case SurfaceFormat.Dxt3;
-				glInternalFormat = (PixelInternalFormat)0x8C4E;
-				glFormat = (PixelFormat)All.CompressedTextureFormats;
-				break;
-			case SurfaceFormat.Dxt5:
-				glInternalFormat = (PixelInternalFormat)0x83F3;
-				glFormat = (PixelFormat)All.CompressedTextureFormats;
-				break;
-			case SurfaceFormat.Dxt5SRgb:
-				if (!supportsSRgb)
-					goto case SurfaceFormat.Dxt5;
-				glInternalFormat = (PixelInternalFormat)0x8C4F;
-				glFormat = (PixelFormat)All.CompressedTextureFormats;
-				break;
-			case SurfaceFormat.RgbaAtcExplicitAlpha:
-				glInternalFormat = (PixelInternalFormat)All.AtcRgbaExplicitAlphaAmd;
-				glFormat = (PixelFormat)All.CompressedTextureFormats;
-				break;
-			case SurfaceFormat.RgbaAtcInterpolatedAlpha:
-				glInternalFormat = (PixelInternalFormat)All.AtcRgbaInterpolatedAlphaAmd;
-				glFormat = (PixelFormat)All.CompressedTextureFormats;
-				break;
-			case SurfaceFormat.RgbEtc1:
-				glInternalFormat = (PixelInternalFormat)0x8D64; // GL_ETC1_RGB8_OES
-				glFormat = (PixelFormat)All.CompressedTextureFormats;
-				break;
-		#endif
-		#if IOS || ANDROID
-			case SurfaceFormat.RgbPvrtc2Bpp:
-				glInternalFormat = (PixelInternalFormat)All.CompressedRgbPvrtc2Bppv1Img;
-				glFormat = (PixelFormat)All.CompressedTextureFormats;
-				break;
-			case SurfaceFormat.RgbPvrtc4Bpp:
-				glInternalFormat = (PixelInternalFormat)All.CompressedRgbPvrtc4Bppv1Img;
-				glFormat = (PixelFormat)All.CompressedTextureFormats;
-				break;
-			case SurfaceFormat.RgbaPvrtc2Bpp:
-				glInternalFormat = (PixelInternalFormat)All.CompressedRgbaPvrtc2Bppv1Img;
-				glFormat = (PixelFormat)All.CompressedTextureFormats;
-				break;
-			case SurfaceFormat.RgbaPvrtc4Bpp:
-				glInternalFormat = (PixelInternalFormat)All.CompressedRgbaPvrtc4Bppv1Img;
-				glFormat = (PixelFormat)All.CompressedTextureFormats;
-				break;
-		#endif
-			default:
-				throw new NotSupportedException();
-			}
-		}
-
-		public static int GetBoundTexture2D()
-		{
-			var prevTexture = 0;
-			GL.GetInteger (GetPName.TextureBinding2D, out prevTexture);
-			GraphicsExtensions.LogGLError("GraphicsExtensions.GetBoundTexture2D() GL.GetInteger");
-			return prevTexture;
-		}
-
-		[Conditional("DEBUG")]
-		[DebuggerHidden]
-		public static void CheckGLError()
-		{
-			var error = GL.GetErrorCode();
-
-			if (error != ErrorCode.NoError)
-				throw new MonoGameGLException("GL.GetError() returned " + error.ToString());
-		}
+//		[Conditional("DEBUG")]
+//		[DebuggerHidden]
+//		public static void CheckGLError()
+//		{
+//			var error = GL.GetErrorCode();
+//
+//			if (error != ErrorCode.NoError)
+//				throw new MonoGameGLException("GL.GetError() returned " + error.ToString());
+//		}
 
 
-		[Conditional("DEBUG")]
-		public static void LogGLError(string location)
-		{
-			try
-			{
-				GraphicsExtensions.CheckGLError();
-			}
-			catch (MonoGameGLException ex)
-			{
-				Debug.WriteLine("MonoGameGLException at " + location + " - " + ex.Message);
-			}
-		}
+//		[Conditional("DEBUG")]
+//		public static void LogGLError(string location)
+//		{
+//			try
+//			{
+//				GraphicsExtensions.CheckGLError();
+//			}
+//			catch (MonoGameGLException ex)
+//			{
+//				Debug.WriteLine("MonoGameGLException at " + location + " - " + ex.Message);
+//			}
+//		}
 
 	}
 

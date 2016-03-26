@@ -6,22 +6,26 @@ using System;
 
 namespace Microsoft.Xna.Framework.Media
 {
-	public partial class MediaLibrary : IDisposable
+	public partial class MediaLibrary : IMediaLibrary, IDisposable
 	{
-        public AlbumCollection Albums { get { return PlatformGetAlbums();  } }
+		public IAlbumCollection Albums { get { return mPlatform.GetAlbums();  } }
         //public ArtistCollection Artists { get; private set; }
         //public GenreCollection Genres { get; private set; }
         public bool IsDisposed { get; private set; }
         public MediaSource MediaSource { get { return null; } }
 		//public PlaylistCollection Playlists { get; private set; }
-        public SongCollection Songs { get { return PlatformGetSongs(); } }
+		public ISongCollection Songs { get { return mPlatform.GetSongs(); } }
 
-		public MediaLibrary()
+		private IMediaLibraryPlatform mPlatform;
+		public MediaLibrary(IMediaLibraryPlatform platform)
 		{
+			mPlatform = platform;
 #if WINDOWS_PHONE
-            // Load it automaticall on Windows Phone because it has no cost and people might expect the same behaviour as WP7
+			// TODO : should go into mPlatform.Initialize()
+			// Load it automaticall on Windows Phone because it has no cost and people might expect the same behaviour as WP7
             PlatformLoad(null);
 #endif
+			mPlatform.Initialize ();
 		}
 
         /// <summary>
@@ -30,7 +34,7 @@ namespace Microsoft.Xna.Framework.Media
         /// <param name="progressCallback">Callback that reports back the progress of the music library loading in percents (0-100).</param>
         public void Load(Action<int> progressCallback = null)
 	    {
-	        PlatformLoad(progressCallback);
+			mPlatform.Load(progressCallback);
 	    }
 		
 		public MediaLibrary(MediaSource mediaSource)
@@ -40,7 +44,7 @@ namespace Microsoft.Xna.Framework.Media
 		
 		public void Dispose()
 		{
-		    PlatformDispose();
+			mPlatform.Dispose();
 		    this.IsDisposed = true;
 		}
 	}

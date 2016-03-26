@@ -47,7 +47,6 @@
     <Compile Include="NullContentManager.cs" />
     <Compile Include="NullContentTypeReaderManager.cs" />
     <Compile Include="NullTextureCollectionPlatform.cs" />
-    <Compile Include="FullDesktopGLGraphicsDevicePlatform.cs" />
     <Compile Include="MockGraphicsDevicePreferences.cs" />
     <Compile Include="NullGraphicsDeviceLogger.cs" />
     <Compile Include="MockSamplerStateCollectionPlatform.cs" />

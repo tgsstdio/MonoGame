@@ -54,12 +54,12 @@ namespace Microsoft.Xna.Framework
 
 		protected IGraphicsDeviceManager Graphics;
 		protected IPlatformActivator Activator;
-		protected IMouseListener mMouse;
-		protected BaseGamePlatform(IGraphicsDeviceManager graphics, IPlatformActivator activator, IMouseListener mouse)
+		//protected IMouseListener Mouse;
+		protected BaseGamePlatform(IGraphicsDeviceManager graphics, IPlatformActivator activator)
         {
 			Graphics = graphics;
 			Activator = activator;
-			mMouse = mouse;
+		//	Mouse = mouse;
         }
 
         ~BaseGamePlatform()
@@ -125,11 +125,11 @@ namespace Microsoft.Xna.Framework
 
             protected set
             {
-                if (_window == null)
-                {
-					mMouse.PrimaryWindow = value;
-                    TouchPanel.PrimaryWindow = value;
-                }
+//                if (_window == null)
+//                {
+//					Mouse.PrimaryWindow = value;
+//                    TouchPanel.PrimaryWindow = value;
+//                }
 
                 _window = value;
             }
@@ -324,8 +324,8 @@ namespace Microsoft.Xna.Framework
         {
             if (!disposed)
             {
-				mMouse.PrimaryWindow = null;
-                TouchPanel.PrimaryWindow = null;
+//				Mouse.PrimaryWindow = null;
+//                TouchPanel.PrimaryWindow = null;
 
                 disposed = true;
             }

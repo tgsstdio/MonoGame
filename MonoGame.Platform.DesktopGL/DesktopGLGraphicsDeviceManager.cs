@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input.Touch;
 using MonoGame.Platform.DesktopGL;
 using MonoGame.Graphics;
+using MonoGame.Platform.DesktopGL.Graphics;
 
 #if MONOMAC
 using MonoMac.OpenGL;
@@ -23,11 +24,11 @@ using Windows.UI.Xaml.Controls;
 using Android.Views;
 #endif
 
-namespace MonoGame.Platform.DesktopGL.Graphics
+namespace MonoGame.Platform.DesktopGL
 {
 	public class DesktopGLGraphicsDeviceManager : IGraphicsDeviceService, IGraphicsDeviceManager
 	{
-		private BaseOpenTKGameWindow mWindow;
+		private IOpenTKGameWindow mWindow;
 		public IGraphicsDevice GraphicsDevice { get; set; }
 		private int _preferredBackBufferHeight;
 		private int _preferredBackBufferWidth;
@@ -59,7 +60,7 @@ namespace MonoGame.Platform.DesktopGL.Graphics
 //				return 800;
 //			}
 //		}
-
+		private ITouchPanel mTouchPanel;
 		private IOpenTKWindowResetter mWindowReset;
 		private IGraphicsDevicePlatform mDevicePlatform;
 	//	private ISamplerStateCollectionPlatform mSamplerStateCollectionPlatform;
@@ -67,7 +68,7 @@ namespace MonoGame.Platform.DesktopGL.Graphics
 		private IGraphicsAdapterCollection mAdapters;
 		private IGraphicsDevicePreferences mDevicePreferences;
 		public DesktopGLGraphicsDeviceManager(
-			BaseOpenTKGameWindow window,
+			IOpenTKGameWindow window,
 			IOpenTKWindowResetter windowReset,
 			IGraphicsDevicePlatform devicePlatform,
 			//ISamplerStateCollectionPlatform samplerStateCollectionPlatform,
@@ -75,7 +76,8 @@ namespace MonoGame.Platform.DesktopGL.Graphics
 			IBackBufferPreferences backBufferPreferences,
 			IPresentationParameters presentationParams,
 			IGraphicsAdapterCollection adapters,
-			IGraphicsDevicePreferences devicePreferences
+			IGraphicsDevicePreferences devicePreferences,
+			ITouchPanel touchPanel
 			)
 		{
 			mWindowReset = windowReset;
@@ -87,6 +89,7 @@ namespace MonoGame.Platform.DesktopGL.Graphics
 
 			mWindow = window;
 			mAdapters = adapters;
+			mTouchPanel = touchPanel;
 
 			if (mAdapters.Options.Length < 1)
 			{
@@ -302,7 +305,7 @@ namespace MonoGame.Platform.DesktopGL.Graphics
 		//See GetSwapInterval for more details
 		int swapInterval;
 		if (_synchronizedWithVerticalRetrace)
-			swapInterval = GraphicsDevice.PresentationParameters.PresentationInterval.GetSwapInterval();
+			swapInterval = GraphicsExtensions.GetSwapInterval(mPresentationParameters.PresentationInterval);
 		else
 			swapInterval = 0;
 			
@@ -340,8 +343,8 @@ namespace MonoGame.Platform.DesktopGL.Graphics
 			// GraphicsDevice.DeviceReset event... we need to get 
 			// those working.
 			//
-			TouchPanel.DisplayWidth = GraphicsDevice.PresentationParameters.BackBufferWidth;
-			TouchPanel.DisplayHeight = GraphicsDevice.PresentationParameters.BackBufferHeight;
+			mTouchPanel.DisplayWidth = GraphicsDevice.PresentationParameters.BackBufferWidth;
+			mTouchPanel.DisplayHeight = GraphicsDevice.PresentationParameters.BackBufferHeight;
 
 			#if (WINDOWS || WINDOWS_UAP) && DIRECTX
 
@@ -438,9 +441,9 @@ namespace MonoGame.Platform.DesktopGL.Graphics
 		// GraphicsDevice.DeviceReset event... we need to get 
 		// those working.
 		//
-		TouchPanel.DisplayWidth = GraphicsDevice.PresentationParameters.BackBufferWidth;
-		TouchPanel.DisplayHeight = GraphicsDevice.PresentationParameters.BackBufferHeight;
-		TouchPanel.DisplayOrientation = GraphicsDevice.PresentationParameters.DisplayOrientation;
+		mTouchPanel.DisplayWidth = GraphicsDevice.PresentationParameters.BackBufferWidth;
+		mTouchPanel.DisplayHeight = GraphicsDevice.PresentationParameters.BackBufferHeight;
+		mTouchPanel.DisplayOrientation = GraphicsDevice.PresentationParameters.DisplayOrientation;
 	}
 
 //	public void ToggleFullScreen()
@@ -499,18 +502,6 @@ namespace MonoGame.Platform.DesktopGL.Graphics
 //		}
 //	}
 
-	#if ANDROID
-	internal void ForceSetFullScreen()
-	{
-	if (IsFullScreen)
-	{
-	Game.Activity.Window.ClearFlags(Android.Views.WindowManagerFlags.ForceNotFullscreen);
-	Game.Activity.Window.SetFlags(WindowManagerFlags.Fullscreen, WindowManagerFlags.Fullscreen);
-	}
-	else
-	Game.Activity.Window.SetFlags(WindowManagerFlags.ForceNotFullscreen, WindowManagerFlags.ForceNotFullscreen);
-	}
-	#endif
 
 	/// <summary>
 	/// Gets or sets the boolean which defines how window switches from windowed to fullscreen state.
@@ -626,62 +617,9 @@ namespace MonoGame.Platform.DesktopGL.Graphics
 	///     graphics.PreferredBackBufferWidth = Window.ClientBounds.Width;
 	///
 	/// </summary>
-	internal void ResetClientBounds()
+	public void ResetClientBounds()
 	{
-		#if ANDROID
-		float preferredAspectRatio = (float)PreferredBackBufferWidth /
-		(float)PreferredBackBufferHeight;
-		float displayAspectRatio = (float)GraphicsDevice.DisplayMode.Width / 
-		(float)GraphicsDevice.DisplayMode.Height;
 
-		float adjustedAspectRatio = preferredAspectRatio;
-
-		if ((preferredAspectRatio > 1.0f && displayAspectRatio < 1.0f) ||
-		(preferredAspectRatio < 1.0f && displayAspectRatio > 1.0f))
-		{
-		// Invert preferred aspect ratio if it's orientation differs from the display mode orientation.
-		// This occurs when user sets preferredBackBufferWidth/Height and also allows multiple supported orientations
-		adjustedAspectRatio = 1.0f / preferredAspectRatio;
-		}
-
-		const float EPSILON = 0.00001f;
-		var newClientBounds = new Rectangle();
-		if (displayAspectRatio > (adjustedAspectRatio + EPSILON))
-		{
-		// Fill the entire height and reduce the width to keep aspect ratio
-		newClientBounds.Height = _graphicsDevice.DisplayMode.Height;
-		newClientBounds.Width = (int)(newClientBounds.Height * adjustedAspectRatio);
-		newClientBounds.X = (_graphicsDevice.DisplayMode.Width - newClientBounds.Width) / 2;
-		}
-		else if (displayAspectRatio < (adjustedAspectRatio - EPSILON))
-		{
-		// Fill the entire width and reduce the height to keep aspect ratio
-		newClientBounds.Width = _graphicsDevice.DisplayMode.Width;
-		newClientBounds.Height = (int)(newClientBounds.Width / adjustedAspectRatio);
-		newClientBounds.Y = (_graphicsDevice.DisplayMode.Height - newClientBounds.Height) / 2;
-		}
-		else
-		{
-		// Set the ClientBounds to match the DisplayMode
-		newClientBounds.Width = GraphicsDevice.DisplayMode.Width;
-		newClientBounds.Height = GraphicsDevice.DisplayMode.Height;
-		}
-
-		// Ensure buffer size is reported correctly
-		_graphicsDevice.PresentationParameters.BackBufferWidth = newClientBounds.Width;
-		_graphicsDevice.PresentationParameters.BackBufferHeight = newClientBounds.Height;
-
-		// Set the veiwport so the (potentially) resized client bounds are drawn in the middle of the screen
-		_graphicsDevice.Viewport = new Viewport(newClientBounds.X, -newClientBounds.Y, newClientBounds.Width, newClientBounds.Height);
-
-		((AndroidGameWindow)_game.Window).ChangeClientBounds(newClientBounds);
-
-		// Touch panel needs latest buffer size for scaling
-		TouchPanel.DisplayWidth = newClientBounds.Width;
-		TouchPanel.DisplayHeight = newClientBounds.Height;
-
-		Android.Util.Log.Debug("MonoGame", "GraphicsDeviceManager.ResetClientBounds: newClientBounds=" + newClientBounds.ToString());
-		#endif
 	}
 
 }

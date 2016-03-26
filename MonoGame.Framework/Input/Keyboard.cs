@@ -47,7 +47,7 @@ namespace Microsoft.Xna.Framework.Input
     /// <summary>
     /// Allows getting keystrokes from keyboard.
     /// </summary>
-	public static class Keyboard
+	public class Keyboard : IKeyboardListener
 	{
         static List<Keys> _keys;
 
@@ -55,7 +55,7 @@ namespace Microsoft.Xna.Framework.Input
         /// Returns the current keyboard state.
         /// </summary>
         /// <returns>Current keyboard state.</returns>
-		public static KeyboardState GetState()
+		public KeyboardState GetState()
 		{
             return new KeyboardState(_keys);
 		}
@@ -66,12 +66,12 @@ namespace Microsoft.Xna.Framework.Input
         /// <param name="playerIndex">Player index of the keyboard.</param>
         /// <returns>Current keyboard state.</returns>
         [Obsolete("Use GetState() instead. In future versions this method can be removed.")]
-        public static KeyboardState GetState(PlayerIndex playerIndex)
+        public KeyboardState GetState(PlayerIndex playerIndex)
 		{
             return new KeyboardState(_keys);
 		}
 
-        public static void SetKeys(List<Keys> keys)
+        public void SetKeys(List<Keys> keys)
         {
             _keys = keys;
         }

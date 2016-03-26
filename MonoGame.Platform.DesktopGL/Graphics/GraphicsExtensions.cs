@@ -505,7 +505,7 @@ namespace MonoGame.Platform.DesktopGL.Graphics
 		/// </summary>
 		/// <returns>A value according to EXT_swap_control</returns>
 		/// <param name="interval">The <see cref="PresentInterval"/> to convert.</param>
-		internal static int GetSwapInterval(this PresentInterval interval)
+		internal static int GetSwapInterval(PresentInterval interval)
 		{
 			// See http://www.opengl.org/registry/specs/EXT/swap_control.txt
 			// and https://www.opengl.org/registry/specs/EXT/glx_swap_control_tear.txt

@@ -17,7 +17,7 @@ namespace Microsoft.Xna.Framework.Input.Touch
 
         private TouchLocation[] Collection
         {
-            get { return _collection ?? EmptyLocationArray; }
+			get { return _collection ?? new TouchLocation[0]; }
         }
 
         #region Properties
@@ -25,19 +25,21 @@ namespace Microsoft.Xna.Framework.Input.Touch
         /// <summary>
         /// States if a touch screen is available.
         /// </summary>
-        public bool IsConnected { get { return TouchPanel.GetCapabilities().IsConnected; } }
+		public bool IsConnected { get { return mCapabilities.IsConnected; } }
 
-        private static readonly TouchLocation[] EmptyLocationArray = new TouchLocation[0];
-        internal static readonly TouchCollection Empty = new TouchCollection(EmptyLocationArray);
+//        private static readonly TouchLocation[] EmptyLocationArray = new TouchLocation[0];
+//        internal static readonly TouchCollection Empty = new TouchCollection(EmptyLocationArray, null);
 
 		#endregion
-
+		private ITouchPanelCapabilities mCapabilities;
         /// <summary>
         /// Initializes a new instance of the <see cref="TouchCollection"/> with a pre-determined set of touch locations.
         /// </summary>
         /// <param name="touches">Array of <see cref="TouchLocation"/> items to initialize with.</param>
-        public TouchCollection(TouchLocation[] touches)
+		/// <param name = "capabilities"></param>
+		public TouchCollection(TouchLocation[] touches, ITouchPanelCapabilities capabilities)
         {
+			mCapabilities = capabilities;
             if (touches == null)
                 throw new ArgumentNullException("touches");
 

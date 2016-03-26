@@ -147,7 +147,7 @@ namespace Microsoft.Xna.Framework.Input.Touch
                 }
             }
 
-            var result = (_touchState.Count > 0) ? new TouchCollection(_touchState.ToArray()) : TouchCollection.Empty;
+			var result = (_touchState.Count > 0) ? new TouchCollection(_touchState.ToArray(), Capabilities) : new TouchCollection(new TouchLocation[0], Capabilities);
             AgeTouches(_touchState);
             return result;
         }

@@ -22,15 +22,15 @@ using Android.Provider;
 
 namespace Microsoft.Xna.Framework.Media
 {
-    public sealed class Album : IDisposable
+    public sealed class Album : IAlbum, IDisposable
     {
 #if WINDOWS_PHONE
         private MsAlbum album;
 #else
-        private Artist artist;
-        private Genre genre;
+        private IArtist artist;
+        private IGenre genre;
         private string album;
-        private SongCollection songCollection;
+		private ISongCollection songCollection;
 #if WINDOWS_STOREAPP || WINDOWS_UAP
         private StorageItemThumbnail thumbnail;
 #elif IOS
@@ -40,7 +40,7 @@ namespace Microsoft.Xna.Framework.Media
 #endif
 #endif
 
-        public Artist Artist
+		public IArtist Artist
         {
             get
             {
@@ -70,7 +70,7 @@ namespace Microsoft.Xna.Framework.Media
         /// <summary>
         /// Gets the Genre of the Album.
         /// </summary>
-        public Genre Genre
+        public IGenre Genre
         {
             get
             {
@@ -137,7 +137,7 @@ namespace Microsoft.Xna.Framework.Media
         /// <summary>
         /// Gets a SongCollection that contains the songs on the album.
         /// </summary>
-        public SongCollection Songs
+        public ISongCollection Songs
         {
             get
             {
@@ -160,7 +160,7 @@ namespace Microsoft.Xna.Framework.Media
             this.album = album;
         }
 #else
-        private Album(SongCollection songCollection, string name, Artist artist, Genre genre)
+        private Album(ISongCollection songCollection, string name, IArtist artist, IGenre genre)
         {
             this.songCollection = songCollection;
             this.album = name;
@@ -168,19 +168,19 @@ namespace Microsoft.Xna.Framework.Media
             this.genre = genre;
         }
 #if WINDOWS_STOREAPP || WINDOWS_UAP
-        internal Album(SongCollection songCollection, string name, Artist artist, Genre genre, StorageItemThumbnail thumbnail)
+		internal Album(SongCollection songCollection, string name, IArtist artist, IGenre genre, StorageItemThumbnail thumbnail)
             : this(songCollection, name, artist, genre)
         {
             this.thumbnail = thumbnail;
         }
 #elif IOS
-        internal Album(SongCollection songCollection, string name, Artist artist, Genre genre, MPMediaItemArtwork thumbnail)
+		internal Album(SongCollection songCollection, string name, IArtist artist, IGenre genre, MPMediaItemArtwork thumbnail)
             : this(songCollection, name, artist, genre)
         {
             this.thumbnail = thumbnail;
         }
 #elif ANDROID
-        internal Album(SongCollection songCollection, string name, Artist artist, Genre genre, Android.Net.Uri thumbnail)
+		internal Album(SongCollection songCollection, string name, IArtist artist, IGenre genre, Android.Net.Uri thumbnail)
             : this(songCollection, name, artist, genre)
         {
             this.thumbnail = thumbnail;

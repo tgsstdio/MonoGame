@@ -9,9 +9,9 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: global::Android.Runtime.ResourceDesignerAttribute("MonoGame.Platform.Android.Resource", IsApplication=false)]
+[assembly: global::Android.Runtime.ResourceDesignerAttribute("MonoGame.Platform.AndroidGL.Resource", IsApplication=false)]
 
-namespace MonoGame.Platform.Android
+namespace MonoGame.Platform.AndroidGL
 {
 	
 	

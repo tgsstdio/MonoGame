@@ -7,17 +7,17 @@ using System.IO;
 
 namespace Microsoft.Xna.Framework.Media
 {
-    public sealed partial class Song : IEquatable<Song>, IDisposable
+	public abstract class BaseSong : IEquatable<ISong>, ISong
     {
-        private string _name;
-		private int _playCount = 0;
-        private TimeSpan _duration = TimeSpan.Zero;
-        bool disposed;
+        //private string _name;
+		//private int _playCount = 0;
+       // private TimeSpan _duration = TimeSpan.Zero;
+       // bool disposed;
 
         /// <summary>
         /// Gets the Album on which the Song appears.
         /// </summary>
-        public Album Album
+        public IAlbum Album
         {
             get { return mPlatform.GetAlbum(); }
 #if WINDOWS_STOREAPP || WINDOWS_UAP
@@ -28,7 +28,7 @@ namespace Microsoft.Xna.Framework.Media
         /// <summary>
         /// Gets the Artist of the Song.
         /// </summary>
-        public Artist Artist
+        public IArtist Artist
         {
             get { return mPlatform.GetArtist(); }
         }
@@ -36,7 +36,7 @@ namespace Microsoft.Xna.Framework.Media
         /// <summary>
         /// Gets the Genre of the Song.
         /// </summary>
-        public Genre Genre
+        public IGenre Genre
         {
             get { return mPlatform.GetGenre(); }
         }
@@ -48,14 +48,14 @@ namespace Microsoft.Xna.Framework.Media
 #endif
 #endif
 
-		internal Song(ISongPlatform platform, string fileName, int durationMS)
+		internal BaseSong(ISongPlatform platform, string fileName, int durationMS)
 			: this(platform, fileName)
         {
             _duration = TimeSpan.FromMilliseconds(durationMS);
         }
 
-		private ISongPlatform mPlatform;
-		internal Song(ISongPlatform platform, string fileName)
+		private readonly ISongPlatform mPlatform;
+		internal BaseSong(ISongPlatform platform, string fileName)
 		{			
 			mPlatform = platform;
 			_name = fileName;
@@ -63,7 +63,7 @@ namespace Microsoft.Xna.Framework.Media
 			mPlatform.Initialize(fileName);
         }
 
-        ~Song()
+		~BaseSong()
         {
             Dispose(false);
         }
@@ -73,19 +73,20 @@ namespace Microsoft.Xna.Framework.Media
 			get { return _name; }
 		}
 
-		public static Song FromUri(ISongPlatform platform, string name, Uri uri)
-        {
-            if (!uri.IsAbsoluteUri)
-            {
-				var song = new Song(platform, uri.OriginalString);
-                song._name = name;
-                return song;
-            }
-            else
-            {
-                throw new NotImplementedException("Loading songs from an absolute path is not implemented");
-            }
-        }
+// TODO : Fix this
+//		public static Song FromUri(ISongPlatform platform, string name, Uri uri)
+//        {
+//            if (!uri.IsAbsoluteUri)
+//            {
+//				var song = new Song(platform, uri.OriginalString);
+//                song._name = name;
+//                return song;
+//            }
+//            else
+//            {
+//                throw new NotImplementedException("Loading songs from an absolute path is not implemented");
+//            }
+//        }
 		
 		public void Dispose()
         {
@@ -111,7 +112,9 @@ namespace Microsoft.Xna.Framework.Media
 			return base.GetHashCode ();
 		}
 
-        public bool Equals(Song song)
+		protected abstract bool SongEquals (ISong left, ISong right);
+
+		public bool Equals(ISong song)
         {
 #if DIRECTX
             return song != null && song.FilePath == FilePath;
@@ -128,10 +131,10 @@ namespace Microsoft.Xna.Framework.Media
 				return false;
 			}
 			
-			return Equals(obj as Song);  
+			return Equals(obj as ISong);  
 		}
 		
-		public static bool operator ==(Song song1, Song song2)
+		public static bool operator ==(ISong song1, ISong song2)
 		{
 			if((object)song1 == null)
 			{
@@ -141,7 +144,7 @@ namespace Microsoft.Xna.Framework.Media
 			return song1.Equals(song2);
 		}
 		
-		public static bool operator !=(Song song1, Song song2)
+		public static bool operator !=(ISong song1, ISong song2)
 		{
 		  return ! (song1 == song2);
 		}
@@ -179,7 +182,15 @@ namespace Microsoft.Xna.Framework.Media
         public int TrackNumber
         {
 			get { return mPlatform.GetTrackNumber(); }
+			set { mPlatform.SetTrackNumber(value); }
         }
+
+		public abstract void Stop ();
+
+		public float Volume {
+			get;
+			set;
+		}	
     }
 }
 

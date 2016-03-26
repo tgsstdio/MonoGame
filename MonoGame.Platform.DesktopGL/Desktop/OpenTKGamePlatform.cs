@@ -80,7 +80,7 @@ namespace MonoGame.Platform.DesktopGL
 {
     public class OpenTKGamePlatform : BaseGamePlatform
     {
-        private BaseOpenTKGameWindow _view;
+        private IOpenTKGameWindow _view;
 		private IOpenALSoundController soundControllerInstance = null;
         // stored the current screen state, so we can check if it has changed.
         private Toolkit toolkit;
@@ -89,8 +89,8 @@ namespace MonoGame.Platform.DesktopGL
 		//private IGameBackbone mBackbone;
 		private IGraphicsDeviceManager mGraphics;
 		private IOpenTKWindowResetter mWindowReset;
-		public OpenTKGamePlatform(IPlatformActivator activator, IGraphicsDeviceManager graphics, BaseOpenTKGameWindow view, IOpenTKWindowResetter resetter, IOpenALSoundController soundController, IMouseListener mouseListener)
-			: base(graphics, activator, mouseListener)
+		public OpenTKGamePlatform(IPlatformActivator activator, IGraphicsDeviceManager graphics, IOpenTKGameWindow view, IOpenTKWindowResetter resetter, IOpenALSoundController soundController, IMouseListener mouseListener)
+			: base(graphics, activator)
         {
 			mGraphics = graphics;
 			mWindowReset = resetter;

@@ -45,35 +45,40 @@ namespace Microsoft.Xna.Framework.Input.Touch
     /// <summary>
     /// Allows retrieval of information from Touch Panel device.
     /// </summary>
-    public static class TouchPanel
+    public class TouchPanel : ITouchPanel
     {
-        internal static IGameWindow PrimaryWindow;
+        internal IGameWindow PrimaryWindow;
+
+		public TouchPanel (IGameWindow primary)
+		{
+			PrimaryWindow = primary;
+		}
 
         /// <summary>
         /// Gets the current state of the touch panel.
         /// </summary>
         /// <returns><see cref="TouchCollection"/></returns>
-        public static TouchCollection GetState()
+        public TouchCollection GetState()
         {
             return PrimaryWindow.Touch.GetState();
         }
 
-        public static TouchPanelState GetState(IGameWindow window)
+        public TouchPanelState GetState(IGameWindow window)
         {
 			return window.Touch.GetPanelState();
         }
 
-        public static ITouchPanelCapabilities GetCapabilities()
+        public ITouchPanelCapabilities GetCapabilities()
         {
             return PrimaryWindow.Touch.GetCapabilities();
         }
 
-        internal static void AddEvent(int id, TouchLocationState state, Vector2 position)
+        public void AddEvent(int id, TouchLocationState state, Vector2 position)
         {
             AddEvent(id, state, position, false);
         }
 
-        internal static void AddEvent(int id, TouchLocationState state, Vector2 position, bool isMouse)
+		public void AddEvent(int id, TouchLocationState state, Vector2 position, bool isMouse)
         {
             PrimaryWindow.Touch.AddEvent(id, state, position, isMouse);
         }
@@ -82,7 +87,7 @@ namespace Microsoft.Xna.Framework.Input.Touch
         /// Returns the next available gesture on touch panel device.
         /// </summary>
         /// <returns><see cref="GestureSample"/></returns>
-		public static GestureSample ReadGesture()
+		public GestureSample ReadGesture()
         {
             // Return the next gesture.
             //return PrimaryWindow.Touch.GestureList.Dequeue();
@@ -92,7 +97,7 @@ namespace Microsoft.Xna.Framework.Input.Touch
         /// <summary>
         /// The window handle of the touch panel. Purely for Xna compatibility.
         /// </summary>
-        public static IntPtr WindowHandle
+        public IntPtr WindowHandle
         {
             get { return PrimaryWindow.Touch.WindowHandle; }
             set { PrimaryWindow.Touch.WindowHandle = value; }
@@ -101,7 +106,7 @@ namespace Microsoft.Xna.Framework.Input.Touch
         /// <summary>
         /// Gets or sets the display height of the touch panel.
         /// </summary>
-        public static int DisplayHeight
+        public int DisplayHeight
         {
             get { return PrimaryWindow.Touch.DisplayHeight; }
             set { PrimaryWindow.Touch.DisplayHeight = value; }
@@ -110,7 +115,7 @@ namespace Microsoft.Xna.Framework.Input.Touch
         /// <summary>
         /// Gets or sets the display orientation of the touch panel.
         /// </summary>
-        public static DisplayOrientation DisplayOrientation
+        public DisplayOrientation DisplayOrientation
         {
             get { return PrimaryWindow.Touch.DisplayOrientation; }
             set { PrimaryWindow.Touch.DisplayOrientation = value; }
@@ -119,7 +124,7 @@ namespace Microsoft.Xna.Framework.Input.Touch
         /// <summary>
         /// Gets or sets the display width of the touch panel.
         /// </summary>
-        public static int DisplayWidth
+        public int DisplayWidth
         {
             get { return PrimaryWindow.Touch.DisplayWidth; }
             set { PrimaryWindow.Touch.DisplayWidth = value; }
@@ -128,19 +133,19 @@ namespace Microsoft.Xna.Framework.Input.Touch
         /// <summary>
         /// Gets or sets enabled gestures.
         /// </summary>
-        public static GestureType EnabledGestures
+        public GestureType EnabledGestures
         {
             get { return PrimaryWindow.Touch.EnabledGestures; }
             set { PrimaryWindow.Touch.EnabledGestures = value; }
         }
 
-        public static bool EnableMouseTouchPoint
+        public bool EnableMouseTouchPoint
         {
             get { return PrimaryWindow.Touch.EnableMouseTouchPoint; }
             set { PrimaryWindow.Touch.EnableMouseTouchPoint = value; }
         }
 
-        public static bool EnableMouseGestures
+        public bool EnableMouseGestures
         {
             get { return PrimaryWindow.Touch.EnableMouseGestures; }
             set { PrimaryWindow.Touch.EnableMouseGestures = value; }
@@ -149,7 +154,7 @@ namespace Microsoft.Xna.Framework.Input.Touch
         /// <summary>
         /// Returns true if a touch gesture is available.
         /// </summary>
-        public static bool IsGestureAvailable
+        public bool IsGestureAvailable
         {
             get { return PrimaryWindow.Touch.IsGestureAvailable; }
         }

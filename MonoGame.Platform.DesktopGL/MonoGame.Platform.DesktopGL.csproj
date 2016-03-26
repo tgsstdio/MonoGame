@@ -53,7 +53,6 @@
     <Compile Include="Desktop\DesktopGLWindowResetter.cs" />
     <Compile Include="DesktopGLExitStrategy.cs" />
     <Compile Include="IWindowExitStrategy.cs" />
-    <Compile Include="Desktop\BaseOpenTKGameWindow.cs" />
     <Compile Include="DesktopGLGraphicsDeviceQuery.cs" />
     <Compile Include="Desktop\IOpenTKWindowResetter.cs" />
     <Compile Include="Utilities\OggStream.cs" />
@@ -73,6 +72,7 @@
     <Compile Include="Es20GLFramebufferHelperSelector.cs" />
     <Compile Include="Graphics\Es20GLFramebufferHelper.cs" />
     <Compile Include="FullGLSpecificGraphicsCapabilitiesLookup.cs" />
+    <Compile Include="Desktop\IOpenTKGameWindow.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

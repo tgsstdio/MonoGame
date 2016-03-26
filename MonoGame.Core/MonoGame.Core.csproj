@@ -83,11 +83,45 @@
     <Compile Include="Input\ButtonState.cs" />
     <Compile Include="Input\Touch\ITouchListener.cs" />
     <Compile Include="MathHelper.cs" />
+    <Compile Include="GraphicsDeviceInformation.cs" />
+    <Compile Include="Graphics\IGraphicsAdapterCollection.cs" />
+    <Compile Include="Graphics\IGraphicsDevicePreferences.cs" />
+    <Compile Include="Graphics\IGraphicsDeviceService.cs" />
+    <Compile Include="PreparingDeviceSettingsEventArgs.cs" />
+    <Compile Include="GameWindow.cs" />
+    <Compile Include="Media\IMediaPlayer.cs" />
+    <Compile Include="Media\IMediaLibrary.cs" />
+    <Compile Include="Media\MediaState.cs" />
+    <Compile Include="Content\IContentManager.cs" />
+    <Compile Include="Media\IMediaLibraryPlatform.cs" />
+    <Compile Include="Media\IAlbumCollection.cs" />
+    <Compile Include="Media\ISongCollection.cs" />
+    <Compile Include="Media\IAlbum.cs" />
+    <Compile Include="Media\IArtist.cs" />
+    <Compile Include="Media\ISong.cs" />
+    <Compile Include="Media\IGenre.cs" />
+    <Compile Include="Media\StandardAlbumCollection.cs" />
+    <Compile Include="Media\StandardSongCollection.cs" />
+    <Compile Include="Media\StandardArtist.cs" />
+    <Compile Include="Media\StandardGenre.cs" />
+    <Compile Include="Media\ISongPlatform.cs" />
+    <Compile Include="Media\IMediaPlayerPlatform.cs" />
+    <Compile Include="Graphics\NoSuitableGraphicsDeviceException.cs" />
+    <Compile Include="Input\Touch\ITouchPanel.cs" />
+    <Compile Include="IGraphicsDeviceQuery.cs" />
+    <Compile Include="Input\Keys.cs" />
+    <Compile Include="Input\KeyboardState.cs" />
+    <Compile Include="Input\KeyState.cs" />
+    <Compile Include="PlayerIndex.cs" />
+    <Compile Include="Input\IKeyboardListener.cs" />
+    <Compile Include="Graphics\IGraphicsDevicePlatform.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>
     <Folder Include="Input\" />
     <Folder Include="Input\Touch\" />
     <Folder Include="Graphics\" />
+    <Folder Include="Media\" />
+    <Folder Include="Content\" />
   </ItemGroup>
 </Project>

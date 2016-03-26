@@ -108,10 +108,4 @@
     <Compile Include="IGLFramebufferHelperSelector.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <ItemGroup>
-    <ProjectReference Include="..\MonoGame.Content\MonoGame.Content.csproj">
-      <Project>{E44E47ED-2203-4E45-85A9-C755B10AC044}</Project>
-      <Name>MonoGame.Content</Name>
-    </ProjectReference>
-  </ItemGroup>
 </Project>
