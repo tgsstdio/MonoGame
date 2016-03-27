@@ -8,7 +8,7 @@ using Android.Widget;
 using Android.OS;
 using Android.Content.PM;
 
-namespace MonoGame.Platform.Android.Example
+namespace  MonoGame.Platform.Android.Example
 {
 	// the ConfigurationChanges flags set here keep the EGL context
 	// from being destroyed whenever the device is rotated or the

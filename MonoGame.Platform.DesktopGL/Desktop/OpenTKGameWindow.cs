@@ -159,12 +159,14 @@ namespace MonoGame.Platform.DesktopGL
         #endregion
 
 		private IMouseListener mMouse;
+		private IKeyboardListener mKeyboard;
 		private IDrawSuppressor mSuppressor;
-		public OpenTKGameWindow(IPresentationParameters parameters, INativeWindow emptyWindow, IDrawSuppressor suppressor, IMouseListener mouseListener)
+		public OpenTKGameWindow(IPresentationParameters parameters, INativeWindow emptyWindow, IDrawSuppressor suppressor, IMouseListener mouseListener, IKeyboardListener keyboard)
         {
 			mSuppressor = suppressor;
 			PresentationParameters = parameters;
 			mMouse = mouseListener;
+			mKeyboard = keyboard;
 			Initialize(emptyWindow);
         }
 
@@ -306,7 +308,7 @@ namespace MonoGame.Platform.DesktopGL
             // mouse doesn't need to be treated here, Mouse class does it alone
 
             // keyboard
-            Keyboard.SetKeys(keys);
+			mKeyboard.SetKeys(keys);
         }
 
         private void OnKeyPress(object sender, KeyPressEventArgs e)

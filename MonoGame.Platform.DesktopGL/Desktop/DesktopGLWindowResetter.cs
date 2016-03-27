@@ -30,7 +30,7 @@ namespace MonoGame.Platform.DesktopGL
 			//bool wasActive = IsActive;
 			//IsActive = false;
 
-			if (mDeviceQuery.IsFullScreen)
+			if (mPresentation.IsFullScreen)
 			{
 				bounds = new Rectangle(0, 0, mDeviceQuery.PreferredBackBufferWidth, mDeviceQuery.PreferredBackBufferHeight);
 
@@ -61,18 +61,18 @@ namespace MonoGame.Platform.DesktopGL
 			mPresentation.BackBufferHeight = (int)bounds.Height;
 			mPresentation.BackBufferWidth = (int)bounds.Width;
 
-			if (mDeviceQuery.IsFullScreen != isCurrentlyFullScreen)
+			if (mPresentation.IsFullScreen != isCurrentlyFullScreen)
 			{                
 				mWindow.ToggleFullScreen();
 			}
 
 			// we only change window bounds if we are not fullscreen
 			// or if fullscreen mode was just entered
-			if (!mDeviceQuery.IsFullScreen || (mDeviceQuery.IsFullScreen != isCurrentlyFullScreen))
+			if (!mPresentation.IsFullScreen || (mPresentation.IsFullScreen != isCurrentlyFullScreen))
 				mWindow.ChangeClientBounds(bounds);
 
 			// store the current fullscreen state
-			isCurrentlyFullScreen = mDeviceQuery.IsFullScreen;
+			isCurrentlyFullScreen = mPresentation.IsFullScreen;
 
 			//IsActive = wasActive;
 		}

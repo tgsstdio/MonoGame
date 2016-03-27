@@ -643,15 +643,15 @@ namespace MonoGame.Platform.AndroidGL.Graphics
 //			return prevTexture;
 //		}
 
-//		[Conditional("DEBUG")]
-//		[DebuggerHidden]
-//		public static void CheckGLError()
-//		{
-//			var error = GL.GetErrorCode();
-//
-//			if (error != ErrorCode.NoError)
-//				throw new MonoGameGLException("GL.GetError() returned " + error.ToString());
-//		}
+		[Conditional("DEBUG")]
+		[DebuggerHidden]
+		public static void CheckGLError()
+		{
+			var error = GL.GetError();
+
+			if (error != All.NoError)
+				throw new MonoGameGLException("GL.GetError() returned " + error.ToString());
+		}
 
 
 //		[Conditional("DEBUG")]

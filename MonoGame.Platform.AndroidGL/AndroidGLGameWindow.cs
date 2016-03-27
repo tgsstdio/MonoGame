@@ -8,6 +8,8 @@ using Android.Content.PM;
 using Android.Views;
 using Microsoft.Xna.Framework.Input.Touch;
 using Microsoft.Xna.Framework;
+using OpenTK;
+using Microsoft.Xna.Framework.Graphics;
 
 #if OUYA
 using Microsoft.Xna.Framework.Input;
@@ -16,32 +18,65 @@ using Microsoft.Xna.Framework.Input;
 namespace MonoGame.Platform.AndroidGL
 {
     [CLSCompliant(false)]
-    public class AndroidGameWindow : GameWindow, IDisposable
+	public class AndroidGLGameWindow : GameWindow, IAndroidGLGameWindow
     {
+
+		public void ClearFlags (WindowManagerFlags forceNotFullscreen)
+		{
+			throw new NotImplementedException ();
+		}
+
         internal MonoGameAndroidGameView GameView { get; private set; }
         internal IResumeManager Resumer;
 		internal IGraphicsDeviceManager mDeviceManager;
-		private readonly IBackBufferPreferences mBackBufferPreferences;
+		private readonly IGraphicsDeviceQuery mDeviceQuery;
+		private IPlatformActivator mActivator;
 
-        private readonly Game _game;
+		private IGraphicsDevicePlatform _devicePlatform;
         private Rectangle _clientBounds;
         private DisplayOrientation _supportedOrientations = DisplayOrientation.Default;
         private DisplayOrientation _currentOrientation;
 
         public override IntPtr Handle { get { return IntPtr.Zero; } }
 
+		protected override void ReleaseManagedResources()
+		{
+			GameView = null;
+			GameView.RequestFocus ();
+		}
 
-        public void SetResumer(IResumeManager resumer)
-        {
-            Resumer = resumer;
-        }
+		protected override void ReleaseUnmanagedResources()
+		{
+			if (GameView != null)
+			{
+				GameView.Dispose();
+				GameView = null;
+			}
+		}
 
-		public AndroidGameWindow(AndroidGameActivity activity, Game game, View view, IGraphicsDeviceManager deviceManager, IBackBufferPreferences backBufferPreferences)
+//        public void SetResumer(IResumeManager resumer)
+//        {
+//            Resumer = resumer;
+//        }
+
+		private IGameBackbone mBackbone;
+		public AndroidGLGameWindow(
+			AndroidGameActivity activity,
+			IGraphicsDevicePlatform devicePlatform,
+			IGameBackbone backbone,
+			MonoGameAndroidGameView view,
+			IGraphicsDeviceManager deviceManager,
+			IGraphicsDeviceQuery deviceQuery,
+			IPlatformActivator activator,
+			IResumeManager resumer)
         {
-            _game = game;
+			_devicePlatform = devicePlatform;
+			mBackbone = backbone;
 			GameView = view;
 			mDeviceManager = deviceManager;
-			mBackBufferPreferences = backBufferPreferences;
+			mDeviceQuery = deviceQuery;
+			mActivator = activator;
+			Resumer = resumer;
             Initialize(activity);
 
             //game.Services.AddService(typeof(View), GameView);
@@ -86,18 +121,18 @@ namespace MonoGame.Platform.AndroidGL
 
             if (_game != null)
             {
-                if (!GameView.IsResuming && _game.Platform.IsActive && !ScreenReceiver.ScreenLocked) //Only call draw if an update has occured
+				if (!GameView.IsResuming && mActivator.IsActive && !mScreenReceiver.ScreenLocked) //Only call draw if an update has occured
                 {
-                    _game.Tick();
+					mBackbone.Tick();
                 }
                 else if (_game.GraphicsDevice != null)
                 {
-                    _game.GraphicsDevice.Clear(Color.Black);
+					devicePlatform.Clear(Color.Black);
                     if (GameView.IsResuming && Resumer != null)
                     {
                         Resumer.Draw();
                     }
-                    _game.Platform.Present();
+					_devicePlatform.Present();
                 }
             }
         }
@@ -105,7 +140,7 @@ namespace MonoGame.Platform.AndroidGL
         #endregion
 
 
-        protected internal override void SetSupportedOrientations(DisplayOrientation orientations)
+        public override void SetSupportedOrientations(DisplayOrientation orientations)
         {
             _supportedOrientations = orientations;
         }
@@ -116,7 +151,7 @@ namespace MonoGame.Platform.AndroidGL
         /// aspect ratio of PreferredBackBufferWidth / PreferredBackBufferHeight
         /// </summary>
         /// <returns></returns>
-        internal DisplayOrientation GetEffectiveSupportedOrientations()
+        public DisplayOrientation GetEffectiveSupportedOrientations()
         {
             if (_supportedOrientations == DisplayOrientation.Default)
             {
@@ -124,7 +159,7 @@ namespace MonoGame.Platform.AndroidGL
                 if (deviceManager == null)
                     return DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight;
 
-                if (deviceManager.PreferredBackBufferWidth > deviceManager.PreferredBackBufferHeight)
+				if (mDeviceQuery.PreferredBackBufferWidth > mDeviceQuery.PreferredBackBufferHeight)
                 {
                     return DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight;
                 }
@@ -142,7 +177,7 @@ namespace MonoGame.Platform.AndroidGL
         /// <summary>
         /// Updates the screen orientation. Filters out requests for unsupported orientations.
         /// </summary>
-        internal void SetOrientation(DisplayOrientation newOrientation, bool applyGraphicsChanges)
+        public void SetOrientation(DisplayOrientation newOrientation, bool applyGraphicsChanges)
         {
             DisplayOrientation supported = GetEffectiveSupportedOrientations();
 
@@ -185,7 +220,7 @@ namespace MonoGame.Platform.AndroidGL
             }
         }
         
-        internal void ChangeClientBounds(Rectangle bounds)
+        public void ChangeClientBounds(Rectangle bounds)
         {
             if (bounds != _clientBounds)
             {
@@ -312,15 +347,6 @@ namespace MonoGame.Platform.AndroidGL
             }
         }
 
-
-        public void Dispose()
-        {
-            if (GameView != null)
-            {
-                GameView.Dispose();
-                GameView = null;
-            }
-        }
 
         public override void BeginScreenDeviceChange(bool willBeFullScreen)
         {

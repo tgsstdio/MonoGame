@@ -5,6 +5,8 @@ namespace Microsoft.Xna.Framework
 {
 	public interface IGraphicsDevice : IDisposable
 	{
+		void OnDeviceReset ();
+
 		IPresentationParameters PresentationParameters { get; }
 		IWeakReferenceCollection WeakReferences { get; }
 		GraphicsProfile GraphicsProfile { get; }
@@ -13,6 +15,8 @@ namespace Microsoft.Xna.Framework
 		void Present();
 
 		void Initialize ();
+
+		void OnDeviceResetting ();
 	}
 }
 

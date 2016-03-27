@@ -8,24 +8,30 @@ using Android.Content;
 using Android.Media;
 using Android.Views;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Input.Touch;
 using OpenTK.Graphics;
 using OpenTK.Graphics.ES20;
 using OpenTK.Platform.Android;
 using Microsoft.Xna.Framework;
+using MonoGame.Platform.AndroidGL.Input.Touch;
+using MonoGame.Platform.AndroidGL.Input;
 
 namespace MonoGame.Platform.AndroidGL
 {
     /// <summary>
     /// Our override of OpenTK.AndroidGameView. Provides Touch and Key Input handling.
     /// </summary>
-    internal class MonoGameAndroidGameView : AndroidGameView, View.IOnTouchListener, ISurfaceHolderCallback
+    public class MonoGameAndroidGameView : AndroidGameView, View.IOnTouchListener, ISurfaceHolderCallback
     {
 		private readonly IGraphicsDeviceQuery mDeviceQuery;
-        private readonly AndroidGameWindow _gameWindow;
+        private readonly IAndroidGLGameWindow _gameWindow;
         private readonly IGraphicsDeviceManager _game;
         private readonly IAndroidTouchEventManager _touchManager;
+		private readonly IScreenLock mScreenLock;
+		private readonly IAndroidKeyboardListener mKeyboard;
+		private readonly IPlatformActivator mActivator;
+		private readonly IGraphicsDeviceService mDeviceService;
+		private readonly IGraphicsDevice mGraphicsDevice;
+		private readonly IResumeManager mResumer;
 
         public bool IsResuming { get; private set; }
         private bool _lostContext;
@@ -33,13 +39,31 @@ namespace MonoGame.Platform.AndroidGL
         private bool backPressed;
 #endif
 
-		public MonoGameAndroidGameView(Context context, AndroidGameWindow androidGameWindow, IGraphicsDeviceManager game, IAndroidTouchEventManager touchManager, IGraphicsDeviceQuery deviceQuery)
+		public MonoGameAndroidGameView(
+			Context context,
+			IAndroidGLGameWindow androidGameWindow,
+			IGraphicsDeviceManager game,
+			IAndroidTouchEventManager touchManager,
+			IGraphicsDeviceQuery deviceQuery,
+			IScreenLock receiver,
+			IAndroidKeyboardListener keyboard,
+			IPlatformActivator activator,
+			IGraphicsDeviceService deviceService,
+			IGraphicsDevice graphicsDevice,
+			IResumeManager resumer
+			)
             : base(context)
         {
             _gameWindow = androidGameWindow;
 			_game = game;
 			_touchManager = touchManager;
 			mDeviceQuery = deviceQuery;
+			mScreenLock = receiver;
+			mKeyboard = keyboard;
+			mActivator = activator;
+			mDeviceService = deviceService;
+			mGraphicsDevice = graphicsDevice;
+			mResumer = resumer;
         }
 
         public bool TouchEnabled
@@ -85,7 +109,7 @@ namespace MonoGame.Platform.AndroidGL
                 {
                     // Forcing reinitialization of the view if SurfaceChanged() is called more than once to fix shifted drawing on KitKat.
                     // See https://github.com/mono/MonoGame/issues/2492.
-                    if (!ScreenReceiver.ScreenLocked && Game.Instance.Platform.IsActive &&
+					if (!mScreenLock.ScreenLocked && mActivator.IsActive &&
                         (_prevSurfaceWidth != width || _prevSurfaceHeight != height))
                     {
                         _prevSurfaceWidth = width;
@@ -153,7 +177,7 @@ namespace MonoGame.Platform.AndroidGL
 
         public override void Resume()
         {
-            if (!ScreenReceiver.ScreenLocked && Game.Instance.Platform.IsActive)
+			if (!mScreenLock.ScreenLocked && mActivator.IsActive)
                 base.Resume();
         }
 
@@ -168,10 +192,11 @@ namespace MonoGame.Platform.AndroidGL
             Android.Util.Log.Debug("MonoGame", "MonoGameAndroidGameView Context Lost");
 
             // DeviceResetting events
-            _game.OnDeviceResetting(EventArgs.Empty);
-            if (_game.GraphicsDevice != null)
-                _game.GraphicsDevice.OnDeviceResetting();
+			mDeviceService.DeviceResetting(this, EventArgs.Empty);
 
+			if (mDeviceService.DeviceResetting != null)
+				mDeviceService.DeviceResetting(this, EventArgs.Empty);
+            mGraphicsDevice.OnDeviceResetting();
             _lostContext = true;
         }
 
@@ -196,10 +221,7 @@ namespace MonoGame.Platform.AndroidGL
                     _game.GraphicsDevice.Initialize();
 
                     IsResuming = true;
-                    if (_gameWindow.Resumer != null)
-                    {
-                        _gameWindow.Resumer.LoadContent();
-                    }
+					mResumer.LoadContent();
 
                     // Reload textures on a different thread so the resumer can be drawn
                     System.Threading.Thread bgThread = new System.Threading.Thread(
@@ -210,8 +232,9 @@ namespace MonoGame.Platform.AndroidGL
                             Android.Util.Log.Debug("MonoGame", "End reloading graphics content");
 
                             // DeviceReset events
-                            _game.OnDeviceReset(EventArgs.Empty);
-                            _game.GraphicsDevice.OnDeviceReset();
+							if (mDeviceService.DeviceReset != null)
+								mDeviceService.DeviceReset(this, EventArgs.Empty);
+                            mGraphicsDevice.OnDeviceReset();
 
                             IsResuming = false;
                         });
@@ -282,7 +305,7 @@ namespace MonoGame.Platform.AndroidGL
                     continue;
                 }
                 Android.Util.Log.Debug("MonoGame", "Created format {0}", GraphicsContext.GraphicsMode);
-                var status = GL.CheckFramebufferStatus(FramebufferTarget.Framebuffer);
+                var status = GL.CheckFramebufferStatus(All.Framebuffer);
                 Android.Util.Log.Debug("MonoGame", "Framebuffer Status: " + status.ToString());
 
                 MakeCurrent();
@@ -302,7 +325,7 @@ namespace MonoGame.Platform.AndroidGL
                 return true;
 #endif
 
-            Keyboard.KeyDown(keyCode);
+			mKeyboard.KeyDown(keyCode);
             // we need to handle the Back key here because it doesnt work any other way
 #if !OUYA
             if (keyCode == Keycode.Back && !this.backPressed)
@@ -336,7 +359,7 @@ namespace MonoGame.Platform.AndroidGL
             if (GamePad.OnKeyUp(keyCode, e))
                 return true;
 #endif
-            Keyboard.KeyUp(keyCode);
+			mKeyboard.KeyUp(keyCode);
 
 #if !OUYA
             if (keyCode == Keycode.Back)

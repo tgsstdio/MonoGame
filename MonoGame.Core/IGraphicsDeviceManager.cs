@@ -17,6 +17,8 @@ namespace Microsoft.Xna.Framework
 			get;
 			set;
 		}
+
+		void ApplyChanges();
 	}
 }
 

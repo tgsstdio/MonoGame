@@ -48,7 +48,6 @@
     <Compile Include="AndroidCompatibility.cs" />
     <Compile Include="AndroidGameActivity.cs" />
     <Compile Include="AndroidGamePlatform.cs" />
-    <Compile Include="AndroidGameWindow.cs" />
     <Compile Include="AndroidGLGraphicsDeviceManager.cs" />
     <Compile Include="IAndroidCompatibility.cs" />
     <Compile Include="IAndroidGameActivity.cs" />
@@ -66,6 +65,19 @@
     <Compile Include="Input\Touch\AndroidTouchEventManager.cs" />
     <Compile Include="Input\Touch\IAndroidTouchEventManager.cs" />
     <Compile Include="Input\AndroidKeyboardListener.cs" />
+    <Compile Include="IAndroidGLGameWindow.cs" />
+    <Compile Include="AndroidGLGameWindow.cs" />
+    <Compile Include="Input\IAndroidKeyboardListener.cs" />
+    <Compile Include="Threading.cs" />
+    <Compile Include="IAndroidGLDevicePlatform.cs" />
+    <Compile Include="IScreenLock.cs" />
+    <Compile Include="BaseActivity.cs" />
+    <Compile Include="IBaseActivity.cs" />
+    <Compile Include="BroadcastReceiverRegistry.cs" />
+    <Compile Include="IBroadcastReceiverRegistry.cs" />
+    <Compile Include="IOrientationListener.cs" />
+    <Compile Include="IForceFullScreenToggle.cs" />
+    <Compile Include="ForceFullScreenToggle.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />

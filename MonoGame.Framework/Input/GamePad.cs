@@ -9,32 +9,38 @@ namespace Microsoft.Xna.Framework.Input
     /// <summary> 
     /// Supports querying the game controllers and setting the vibration motors.
     /// </summary>
-    public static partial class GamePad
+    public partial class GamePad
     {
+		private IGamepadPlatform mPlatform;
+		public GamePad (IGamepadPlatform platform)
+		{
+			mPlatform = platform;
+		}
+
         /// <summary>
         /// Returns the capabilites of the connected controller.
         /// </summary>
-        /// <param name="playerIndex">Player index for the controller you want to query.</param>
+		/// <param name="player">Player index for the controller you want to query.</param>
         /// <returns>The capabilites of the controller.</returns>
-        public static GamePadCapabilities GetCapabilities(PlayerIndex playerIndex)
+        public GamePadCapabilities GetCapabilities(PlayerIndex player)
         {
             // Make sure the player index is in range.
-            var index = (int)playerIndex;
+            var index = (int)player;
             if (index < (int)PlayerIndex.One || index > (int)PlayerIndex.Four)
                 throw new InvalidOperationException();
 
-            return PlatformGetCapabilities(index);
+			return mPlatform.GetCapabilities(index);
         }
 
         
         /// <summary>
         /// Gets the current state of a game pad controller with an independent axes dead zone.
         /// </summary>
-        /// <param name="playerIndex">Player index for the controller you want to query.</param>
+		/// <param name="player">Player index for the controller you want to query.</param>
         /// <returns>The state of the controller.</returns>
-        public static GamePadState GetState(PlayerIndex playerIndex)
+        public GamePadState GetState(PlayerIndex player)
         {
-            return GetState(playerIndex, GamePadDeadZone.IndependentAxes);
+            return GetState(player, GamePadDeadZone.IndependentAxes);
         }
 
 
@@ -42,35 +48,35 @@ namespace Microsoft.Xna.Framework.Input
         /// Gets the current state of a game pad controller, using a specified dead zone
         /// on analog stick positions.
         /// </summary>
-        /// <param name="playerIndex">Player index for the controller you want to query.</param>
+		/// <param name="player">Player index for the controller you want to query.</param>
         /// <param name="deadZoneMode">Enumerated value that specifies what dead zone type to use.</param>
         /// <returns>The state of the controller.</returns>
-        public static GamePadState GetState(PlayerIndex playerIndex, GamePadDeadZone deadZoneMode)
+        public GamePadState GetState(PlayerIndex player, GamePadDeadZone deadZoneMode)
         {
             // Make sure the player index is in range.
-            var index = (int)playerIndex;
+            var index = (int)player;
             if (index < (int)PlayerIndex.One || index > (int)PlayerIndex.Four)
                 throw new InvalidOperationException();
 
-            return PlatformGetState(index, deadZoneMode);
+            return mPlatform.GetState(index, deadZoneMode);
         }
 
 
         /// <summary>
         /// Sets the vibration motor speeds on the controller device if supported.
         /// </summary>
-        /// <param name="playerIndex">Player index that identifies the controller to set.</param>
+		/// <param name="player">Player index that identifies the controller to set.</param>
         /// <param name="leftMotor">The speed of the left motor, between 0.0 and 1.0. This motor is a low-frequency motor.</param>
         /// <param name="rightMotor">The speed of the right motor, between 0.0 and 1.0. This motor is a high-frequency motor.</param>
         /// <returns>Returns true if the vibration motors were set.</returns>
-        public static bool SetVibration(PlayerIndex playerIndex, float leftMotor, float rightMotor)
+        public bool SetVibration(PlayerIndex player, float leftMotor, float rightMotor)
         {
             // Make sure the player index is in range.
-            var index = (int)playerIndex;
+            var index = (int)player;
             if (index < (int)PlayerIndex.One || index > (int)PlayerIndex.Four)
                 throw new InvalidOperationException();
 
-            return PlatformSetVibration(index, MathHelper.Clamp(leftMotor, 0.0f, 1.0f), MathHelper.Clamp(rightMotor, 0.0f, 1.0f));
+            return mPlatform.SetVibration(index, MathHelper.Clamp(leftMotor, 0.0f, 1.0f), MathHelper.Clamp(rightMotor, 0.0f, 1.0f));
         }
     }
 }

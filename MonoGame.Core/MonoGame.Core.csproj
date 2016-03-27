@@ -115,6 +115,11 @@
     <Compile Include="PlayerIndex.cs" />
     <Compile Include="Input\IKeyboardListener.cs" />
     <Compile Include="Graphics\IGraphicsDevicePlatform.cs" />
+    <Compile Include="Graphics\Viewport.cs" />
+    <Compile Include="Graphics\IRenderTarget.cs" />
+    <Compile Include="Graphics\Vertices\PrimitiveType.cs" />
+    <Compile Include="Graphics\ClearOptions.cs" />
+    <Compile Include="Graphics\Vertices\IVertexDeclaration.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>
@@ -123,5 +128,6 @@
     <Folder Include="Graphics\" />
     <Folder Include="Media\" />
     <Folder Include="Content\" />
+    <Folder Include="Graphics\Vertices\" />
   </ItemGroup>
 </Project>

@@ -16,21 +16,22 @@ namespace MonoGame.Platform.AndroidGL
 		private IAndroidCompatibility mCompatibility;
 		private IMediaLibrary mMediaLibrary;
 		private IMediaPlayer mMediaPlayer;
+		private IAndroidDevicePlatform mDevicePlatform;
 
 		public AndroidGamePlatform (
 			IGraphicsDeviceManager manager,
 			IPlatformActivator activator,
-			// TODO : should remove mouse
-			IMouseListener mouse,
 
+			IAndroidDevicePlatform devicePlatform,
 			IAndroidGameActivity activity,
 			IAndroidCompatibility compatibility,
-			AndroidGameWindow window,
+			IAndroidGLGameWindow window,
 			IMediaPlayer mediaPlayer,
 			IMediaLibrary mediaLibrary)
-			: base (manager, activator, mouse)
+			: base (manager, activator)
         {
 			mActivity = activity;
+			mDevicePlatform = devicePlatform;
 			mCompatibility = compatibility;
 			mMediaLibrary = mediaLibrary;
 			mMediaPlayer = mediaPlayer;
@@ -57,7 +58,7 @@ namespace MonoGame.Platform.AndroidGL
 
         private bool _initialized;
         public static bool IsPlayingVdeo { get; set; }
-        private AndroidGameWindow _gameWindow;
+        private IAndroidGLGameWindow _gameWindow;
 
         public override void Exit()
         {
@@ -138,9 +139,9 @@ namespace MonoGame.Platform.AndroidGL
         // EnterForeground
         void Activity_Resumed(object sender, EventArgs e)
         {
-            if (!IsActive)
+			if (!Activator.IsActive)
             {
-                IsActive = true;
+				Activator.IsActive = true;
 				_gameWindow.GameView.Resume();
 				if(_MediaPlayer_PrevState == MediaState.Playing && Game.Activity.AutoPauseAndResumeMediaPlayer)
                 	mMediaPlayer.Resume();
@@ -153,12 +154,14 @@ namespace MonoGame.Platform.AndroidGL
 	    // EnterBackground
         void Activity_Paused(object sender, EventArgs e)
         {
-            if (IsActive)
+			if (Activator.IsActive)
             {
-                IsActive = false;
-				_MediaPlayer_PrevState = MediaPlayer.State;
-				_gameWindow.GameView.Pause();
-				_gameWindow.GameView.ClearFocus();
+				Activator.IsActive = false;
+				_MediaPlayer_PrevState = mMediaPlayer.State;
+				//_gameWindow.GameView.Pause();
+				mDevicePlatform.Pause();
+				//_gameWindow.GameView.ClearFocus();
+				mDevicePlatform.ClearFocus();
 				if(Game.Activity.AutoPauseAndResumeMediaPlayer)
 					mMediaPlayer.Pause();
             }

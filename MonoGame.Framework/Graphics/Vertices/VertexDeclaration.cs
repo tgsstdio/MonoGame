@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Utilities;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
-	public partial class VertexDeclaration : GraphicsResource
+	public partial class VertexDeclaration : GraphicsResource, IVertexDeclaration
 	{
 		private VertexElement[] _elements;
         private int _vertexStride;

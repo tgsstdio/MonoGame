@@ -142,13 +142,13 @@ namespace MonoGame.Platform.AndroidGL.Graphics
 		public void GenRenderbuffer(out int renderbuffer)
 		{
 			renderbuffer = 0;
-			GL.GenRenderbuffers(1, out renderbuffer);
+			GL.GenRenderbuffers(1, ref renderbuffer);
 			GraphicsExtensions.CheckGLError();
 		}
 
 		public void BindRenderbuffer(int renderbuffer)
 		{
-			GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, renderbuffer);
+			GL.BindRenderbuffer(All.Renderbuffer, renderbuffer);
 			GraphicsExtensions.CheckGLError();
 		}
 
@@ -163,26 +163,26 @@ namespace MonoGame.Platform.AndroidGL.Graphics
 			if (samples > 0 && this.GLRenderbufferStorageMultisample != null)
 				GLRenderbufferStorageMultisample(All.Renderbuffer, samples, (All)internalFormat, width, height);
 			else
-				GL.RenderbufferStorage(RenderbufferTarget.Renderbuffer, (RenderbufferInternalFormat)internalFormat, width, height);
+				GL.RenderbufferStorage(All.Renderbuffer, (All)internalFormat, width, height);
 			GraphicsExtensions.CheckGLError();
 		}
 
 		public void GenFramebuffer(out int framebuffer)
 		{
 			framebuffer = 0;
-			GL.GenFramebuffers(1, out framebuffer);
+			GL.GenFramebuffers(1, ref framebuffer);
 			GraphicsExtensions.CheckGLError();
 		}
 
 		public void BindFramebuffer(int framebuffer)
 		{
-			GL.BindFramebuffer(FramebufferTarget.Framebuffer, framebuffer);
+			GL.BindFramebuffer(All.Framebuffer, framebuffer);
 			GraphicsExtensions.CheckGLError();
 		}
 
 		public void BindReadFramebuffer(int readFramebuffer)
 		{
-			GL.BindFramebuffer((FramebufferTarget)AllReadFramebuffer, readFramebuffer);
+			GL.BindFramebuffer((All)AllReadFramebuffer, readFramebuffer);
 			GraphicsExtensions.CheckGLError();
 		}
 
@@ -212,19 +212,19 @@ namespace MonoGame.Platform.AndroidGL.Graphics
 			if (samples > 0 && this.GLFramebufferTexture2DMultisample != null)
 				this.GLFramebufferTexture2DMultisample(All.Framebuffer, (All)attachement, (All)target, texture, level, samples);
 			else
-				GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, (FramebufferSlot)attachement, (TextureTarget)target, texture, level);
+				GL.FramebufferTexture2D(All.Framebuffer, (All)attachement, (All)target, texture, level);
 			GraphicsExtensions.CheckGLError();
 		}
 
 		public void FramebufferRenderbuffer(int attachement, int renderbuffer, int level = 0)
 		{
-			GL.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, (FramebufferSlot)attachement, RenderbufferTarget.Renderbuffer, renderbuffer);
+			GL.FramebufferRenderbuffer(All.Framebuffer, (All)attachement, All.Renderbuffer, renderbuffer);
 			GraphicsExtensions.CheckGLError();
 		}
 
 		public void GenerateMipmap(int target)
 		{
-			GL.GenerateMipmap((TextureTarget)target);
+			GL.GenerateMipmap((All)target);
 			GraphicsExtensions.CheckGLError();
 		}
 
@@ -236,16 +236,16 @@ namespace MonoGame.Platform.AndroidGL.Graphics
 
 		public void CheckFramebufferStatus()
 		{
-			var status = GL.CheckFramebufferStatus(FramebufferTarget.Framebuffer);
-			if (status != FramebufferErrorCode.FramebufferComplete)
+			var status = GL.CheckFramebufferStatus(All.Framebuffer);
+			if (status != All.FramebufferComplete)
 			{
 				string message = "Framebuffer Incomplete.";
 				switch (status)
 				{
-				case FramebufferErrorCode.FramebufferIncompleteAttachment: message = "Not all framebuffer attachment points are framebuffer attachment complete."; break;
-				case FramebufferErrorCode.FramebufferIncompleteDimensions: message = "Not all attached images have the same width and height."; break;
-				case FramebufferErrorCode.FramebufferIncompleteMissingAttachment: message = "No images are attached to the framebuffer."; break;
-				case FramebufferErrorCode.FramebufferUnsupported: message = "The combination of internal formats of the attached images violates an implementation-dependent set of restrictions."; break; 
+				case All.FramebufferIncompleteAttachment: message = "Not all framebuffer attachment points are framebuffer attachment complete."; break;
+				case All.FramebufferIncompleteDimensions: message = "Not all attached images have the same width and height."; break;
+				case All.FramebufferIncompleteMissingAttachment: message = "No images are attached to the framebuffer."; break;
+				case All.FramebufferUnsupported: message = "The combination of internal formats of the attached images violates an implementation-dependent set of restrictions."; break; 
 				}
 				throw new InvalidOperationException(message);
 			}

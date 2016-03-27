@@ -7,19 +7,19 @@ using Android.Views;
 
 namespace MonoGame.Platform.AndroidGL
 {
-    internal class OrientationListener : OrientationEventListener
+	public class OrientationListener : OrientationEventListener, IOrientationListener
     {
-		private readonly ScreenReceiver mScreenReceiver;
-		private readonly AndroidGameWindow mGameWindow;
+		private readonly IScreenLock mScreenLock;
+		private readonly IAndroidGLGameWindow mGameWindow;
 		private readonly IAndroidCompatibility mCompatibility;
         /// <summary>
         /// Constructor. SensorDelay.Ui is passed to the base class as this orientation listener 
         /// is just used for flipping the screen orientation, therefore high frequency data is not required.
         /// </summary>
-		public OrientationListener(Context context, ScreenReceiver receiver, AndroidGameWindow window, IAndroidCompatibility compatibility)
+		public OrientationListener(Context context, IScreenLock screenLock, IAndroidGLGameWindow window, IAndroidCompatibility compatibility)
             : base(context, SensorDelay.Ui)
         {
-			mScreenReceiver = receiver;
+			mScreenLock = screenLock;
 			mGameWindow = window;
 			mCompatibility = compatibility;
         }
@@ -30,7 +30,7 @@ namespace MonoGame.Platform.AndroidGL
                 return;
 
             // Avoid changing orientation whilst the screen is locked
-			if (mScreenReceiver.ScreenLocked)
+			if (mScreenLock.ScreenLocked)
                 return;
 
 			var disporientation = mCompatibility.GetAbsoluteOrientation(orientation);
@@ -43,5 +43,24 @@ namespace MonoGame.Platform.AndroidGL
 				mGameWindow.SetOrientation(disporientation, true);
             }
         }
+
+		#region IOrientationListener implementation
+
+		public void On ()
+		{
+			if (this.CanDetectOrientation ())
+			{
+				this.Enable ();
+			}
+		}
+
+		public void Off ()
+		{
+			if (this.CanDetectOrientation ())
+			{
+				this.Disable ();
+			}
+		}
+		#endregion
     }
 }

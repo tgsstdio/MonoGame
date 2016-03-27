@@ -2,18 +2,11 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
-namespace Microsoft.Xna.Framework.Media
+
+namespace Microsoft.Xna.Framework.Graphics
 {
-	public interface IMediaPlayer
+	public interface IVertexDeclaration
 	{
-		void Pause ();
-
-		void Resume ();
-
-		bool IsMuted {
-			get;
-			set;
-		}		
 	}
-}
 
+}

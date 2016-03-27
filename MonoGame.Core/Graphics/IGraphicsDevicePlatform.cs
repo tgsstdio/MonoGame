@@ -30,14 +30,14 @@ namespace Microsoft.Xna.Framework.Graphics
 			T[] vertexData, int vertexOffset,
 			int numVertices, short[] indexData,
 			int indexOffset, int primitiveCount,
-			VertexDeclaration vertexDeclaration) where T : struct;
+			IVertexDeclaration vertexDeclaration) where T : struct;
 
 		void DrawUserIndexedPrimitives<T> (
 			PrimitiveType primitiveType,
 			T[] vertexData, int vertexOffset,
 			int numVertices, int[] indexData,
 			int indexOffset, int primitiveCount,
-			VertexDeclaration vertexDeclaration) where T : struct;
+			IVertexDeclaration vertexDeclaration) where T : struct;
 
 		void DrawUserIndexedPrimitives<T> (
 			PrimitiveType primitiveType,
@@ -56,7 +56,7 @@ namespace Microsoft.Xna.Framework.Graphics
 		void DrawUserPrimitives<T> (
 			PrimitiveType primitiveType,
 			T[] vertexData, int vertexOffset,
-			VertexDeclaration vertexDeclaration,
+			IVertexDeclaration vertexDeclaration,
 			int vertexCount) where T : struct;
 
 		void Clear (ClearOptions options, Vector4 vector4, float maxDepth, int i);

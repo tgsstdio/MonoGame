@@ -4,7 +4,7 @@
 	{
 		int PreferredBackBufferHeight { get; set; }
 		int PreferredBackBufferWidth { get; set; }	
-		bool IsFullScreen { get; set; }
+		//bool IsFullScreen { get; set; }
 	}
 }
 

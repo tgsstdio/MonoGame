@@ -4,8 +4,9 @@
 
 using Android.Views;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input.Touch;
 
-namespace MonoGame.Platform.Android.Input.Touch
+namespace MonoGame.Platform.AndroidGL.Input.Touch
 {
     /// <summary>
     /// Manages touch events for Android. Maps new presses to new touch Ids as per Xna WP7 incrementing touch Id behaviour. 
@@ -15,12 +16,14 @@ namespace MonoGame.Platform.Android.Input.Touch
     class AndroidTouchEventManager
     {
         readonly IGameWindow _gameWindow;
+		readonly ITouchPanel mTouchPanel;
 
         public bool Enabled { get; set; }
 
-		public AndroidTouchEventManager(IGameWindow androidGameWindow)
+		public AndroidTouchEventManager(IGameWindow androidGameWindow, ITouchPanel touchPanel)
         {
             _gameWindow = androidGameWindow;
+			mTouchPanel = touchPanel;
         }
 
         public void OnTouchEvent(MotionEvent e)
@@ -38,12 +41,12 @@ namespace MonoGame.Platform.Android.Input.Touch
                 // DOWN                
                 case MotionEventActions.Down:
                 case MotionEventActions.PointerDown:
-                    TouchPanel.AddEvent(id, TouchLocationState.Pressed, position);
+					mTouchPanel.AddEvent(id, TouchLocationState.Pressed, position);
                     break;
                 // UP                
                 case MotionEventActions.Up:
                 case MotionEventActions.PointerUp:
-                    TouchPanel.AddEvent(id, TouchLocationState.Released, position);
+					mTouchPanel.AddEvent(id, TouchLocationState.Released, position);
                     break;
                 // MOVE                
                 case MotionEventActions.Move:
@@ -53,7 +56,7 @@ namespace MonoGame.Platform.Android.Input.Touch
                         position.X = e.GetX(i);
                         position.Y = e.GetY(i);
                         UpdateTouchPosition(ref position);
-                        TouchPanel.AddEvent(id, TouchLocationState.Moved, position);
+						mTouchPanel.AddEvent(id, TouchLocationState.Moved, position);
                     }
                     break;
 
@@ -63,7 +66,7 @@ namespace MonoGame.Platform.Android.Input.Touch
                     for (int i = 0; i < e.PointerCount; i++)
                     {
                         id = e.GetPointerId(i);
-                        TouchPanel.AddEvent(id, TouchLocationState.Released, position);
+						mTouchPanel.AddEvent(id, TouchLocationState.Released, position);
                     }
                     break;
             }

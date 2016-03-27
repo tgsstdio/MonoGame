@@ -73,6 +73,11 @@ namespace MonoGame.Platform.DesktopGL
 
 		}
 
+		public void OnDeviceResetting ()
+		{
+			throw new NotImplementedException ();
+		}
+
 		private bool _isDisposed = false;
 		protected virtual void Dispose(bool disposing)
 		{
@@ -122,6 +127,11 @@ namespace MonoGame.Platform.DesktopGL
 			set;
 		}
 
+
+		public void OnDeviceReset ()
+		{
+			throw new NotImplementedException ();
+		}
 		#endregion
 
 

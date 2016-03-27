@@ -38,18 +38,13 @@
 // */
 // #endregion License
 // 
-using System;
-using System.Collections.Generic;
+using Microsoft.Xna.Framework.Input;
 
-namespace Microsoft.Xna.Framework.Input
+namespace MonoGame.Platform.AndroidGL.Input
 {
-	public interface IKeyboardListener
+	public interface IAndroidKeyboardListener : IKeyboardListener
 	{
-		void SetKeys (List<Keys> keys);
-
-		KeyboardState GetState();
-
-		[Obsolete("Use GetState() instead. In future versions this method can be removed.")]
-		KeyboardState GetState (PlayerIndex playerIndex);
+		void KeyDown (Android.Views.Keycode keyCode);
+		void KeyUp (Android.Views.Keycode keyCode);
 	}
 }

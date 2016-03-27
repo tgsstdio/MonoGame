@@ -7,6 +7,8 @@ using Android.App;
 using Android.Content;
 using Android.OS;
 using Android.Views;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGame.Platform.AndroidGL
 {
@@ -18,17 +20,29 @@ namespace MonoGame.Platform.AndroidGL
 #endif
     {
         //internal Game Game { private get; set; }
-		public AndroidGameActivity (ScreenReceiver receiver, OrientationListener orientationListener)
-		{
-			screenReceiver = receiver;
-			_orientationListener = orientationListener;
-		}
+		// REMEMBER NO CONSTRUCTOR // THIS IS THE ENTRY POINT
+//		public AndroidGameActivity (BroadcastReceiver receiver, IScreenLock screenLock, OrientationListener orientationListener, IGraphicsDeviceManager deviceManager)
+//		{
+//			_receiver = _receiver;
+//			_sr = sr;
+//			_orientationListener = orientationListener;
+//			_deviceManager = deviceManager;
+//		}
 
-        private readonly ScreenReceiver screenReceiver;
-		private OrientationListener _orientationListener;
+		//private IScreenLock mScreenLock;
+		//private BroadcastReceiver mReceiver;
+		private IGraphicsDeviceManager _deviceManager;
+		//private readonly BroadcastReceiver mBroadcastReceiver;
+		//private OrientationEventListener mOrientationEventListener;
+		private IForceFullScreenToggle mFullScreenToggle;
+		private IAndroidGLGameWindow mGameWindow;
+		private Game mGame;
+		private View mView;
 
-        public bool AutoPauseAndResumeMediaPlayer = true;
+      //  public bool AutoPauseAndResumeMediaPlayer = true;
         public bool RenderOnUIThread = true; 
+
+		readonly IBaseActivity mBasicStarter = null;
 
 		/// <summary>
 		/// OnCreate called when the activity is launched from cold or after the app
@@ -42,13 +56,9 @@ namespace MonoGame.Platform.AndroidGL
             RequestWindowFeature(WindowFeatures.NoTitle);
             base.OnCreate(savedInstanceState);
 
-			IntentFilter filter = new IntentFilter();
-		    filter.AddAction(Intent.ActionScreenOff);
-		    filter.AddAction(Intent.ActionScreenOn);
-		    filter.AddAction(Intent.ActionUserPresent);
-		    
-		    //screenReceiver = new ScreenReceiver();
-		    RegisterReceiver(screenReceiver, filter);
+			// IOC here
+
+			mBasicStarter.OnCreate ();
 
            // _orientationListener = new OrientationListener(this);
 
@@ -69,8 +79,7 @@ namespace MonoGame.Platform.AndroidGL
             if (Paused != null)
                 Paused(this, EventArgs.Empty);
 
-            if (_orientationListener.CanDetectOrientation())
-                _orientationListener.Disable();
+			mBasicStarter.OnPause ();
         }
 
         public event EventHandler Resumed;
@@ -80,26 +89,23 @@ namespace MonoGame.Platform.AndroidGL
             if (Resumed != null)
                 Resumed(this, EventArgs.Empty);
 
-            if (Game != null)
+			if (mGame != null)
             {
-                var deviceManager = (IGraphicsDeviceManager)Game.Services.GetService(typeof(IGraphicsDeviceManager));
-                if (deviceManager == null)
-                    return;
-                ((GraphicsDeviceManager)deviceManager).ForceSetFullScreen();
-                ((AndroidGameWindow)Game.Window).GameView.RequestFocus();
-                if (_orientationListener.CanDetectOrientation())
-                    _orientationListener.Enable();
+				DuringResume ();
+				mBasicStarter.OnResume ();
             }
         }
 
+		void DuringResume()
+		{
+			mFullScreenToggle.ForceSetFullScreen ();
+			mView.RequestFocus();
+		}
+
 		protected override void OnDestroy ()
 		{
-            UnregisterReceiver(screenReceiver);
-            ScreenReceiver.ScreenLocked = false;
-            _orientationListener = null;
-            if (Game != null)
-                Game.Dispose();
-            Game = null;
+			mBasicStarter.OnDestroy ();
+			mGame = null;
 			base.OnDestroy ();
 		}
     }

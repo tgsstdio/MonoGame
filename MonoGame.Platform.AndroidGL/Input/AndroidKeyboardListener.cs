@@ -46,15 +46,20 @@ using Android.Views;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework;
 
-namespace MonoGame.Platform.Android.Input
+namespace MonoGame.Platform.AndroidGL.Input
 {
-	public class AndroidKeyboardListener : IKeyboardListener
+	public class AndroidKeyboardListener : IAndroidKeyboardListener
 	{
         private List<Keys> keys = new List<Keys>();
 
         private readonly IDictionary<Keycode, Keys> KeyMap = LoadKeyMap();
 
-        internal void KeyDown(Keycode keyCode)
+		public void SetKeys (List<Keys> keys)
+		{
+			throw new NotImplementedException ();
+		}
+
+        public void KeyDown(Keycode keyCode)
         {
             Keys key;
             if (KeyMap.TryGetValue(keyCode, out key))
@@ -64,7 +69,7 @@ namespace MonoGame.Platform.Android.Input
             }
         }
 
-        internal void KeyUp(Keycode keyCode)
+		public void KeyUp(Keycode keyCode)
         {
             Keys key;
             if (KeyMap.TryGetValue(keyCode, out key))

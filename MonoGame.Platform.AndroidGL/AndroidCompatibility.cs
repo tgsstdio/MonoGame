@@ -48,7 +48,7 @@ namespace MonoGame.Platform.AndroidGL
             }
         }
 
-        internal static DisplayOrientation GetAbsoluteOrientation(int orientation)
+        public DisplayOrientation GetAbsoluteOrientation(int orientation)
         {
             // Orientation is reported by the device in degrees compared to the natural orientation
             // Some tablets have a natural landscape orientation, which we need to account for

@@ -25,7 +25,7 @@ namespace MonoGame.Platform.AndroidGL
 {
 	public class AndroidGLGraphicsDeviceManager : IGraphicsDeviceService, IGraphicsDeviceManager
 	{
-		private IBaseOpenTKGameWindow mWindow;
+		private IAndroidGLGameWindow mWindow;
 		public IGraphicsDevice GraphicsDevice { get; set; }
 		private int _preferredBackBufferHeight;
 		private int _preferredBackBufferWidth;
@@ -57,16 +57,15 @@ namespace MonoGame.Platform.AndroidGL
 //				return 800;
 //			}
 //		}
-		private ITouchPanel mTouchPanel;
-		private IOpenTKWindowResetter mWindowReset;
+		private readonly IGraphicsDeviceQuery mDeviceQuery;
+		private readonly ITouchPanel mTouchPanel;
 		private IGraphicsDevicePlatform mDevicePlatform;
 	//	private ISamplerStateCollectionPlatform mSamplerStateCollectionPlatform;
 	//	private ITextureCollectionPlatform mTextureCollectionPlatform;
 		private IGraphicsAdapterCollection mAdapters;
 		private IGraphicsDevicePreferences mDevicePreferences;
 		public AndroidGLGraphicsDeviceManager(
-			IBaseOpenTKGameWindow window,
-			IOpenTKWindowResetter windowReset,
+			IAndroidGLGameWindow window,
 			IGraphicsDevicePlatform devicePlatform,
 			//ISamplerStateCollectionPlatform samplerStateCollectionPlatform,
 			//ITextureCollectionPlatform texCollectionPlatform,
@@ -74,10 +73,10 @@ namespace MonoGame.Platform.AndroidGL
 			IPresentationParameters presentationParams,
 			IGraphicsAdapterCollection adapters,
 			IGraphicsDevicePreferences devicePreferences,
-			ITouchPanel touchPanel
+			ITouchPanel touchPanel,
+			IGraphicsDeviceQuery deviceQuery
 			)
 		{
-			mWindowReset = windowReset;
 			mDevicePlatform = devicePlatform;
 			//mSamplerStateCollectionPlatform = samplerStateCollectionPlatform;
 		//	mTextureCollectionPlatform = texCollectionPlatform;
@@ -87,6 +86,7 @@ namespace MonoGame.Platform.AndroidGL
 			mWindow = window;
 			mAdapters = adapters;
 			mTouchPanel = touchPanel;
+			mDeviceQuery = deviceQuery;
 
 			if (mAdapters.Options.Length < 1)
 			{
@@ -310,15 +310,15 @@ namespace MonoGame.Platform.AndroidGL
 
 			#if ANDROID
 			// Trigger a change in orientation in case the supported orientations have changed
-			((AndroidGameWindow)_game.Window).SetOrientation(_game.Window.CurrentOrientation, false);
+			mWindow.SetOrientation(mWindow.CurrentOrientation, false);
 			#endif
 			// Ensure the presentation parameter orientation and buffer size matches the window
-			mPresentationParameters.DisplayOrientation = _game.Window.CurrentOrientation;
+			mPresentationParameters.DisplayOrientation = mWindow.CurrentOrientation;
 
 			// Set the presentation parameters' actual buffer size to match the orientation
-			bool isLandscape = (0 != (_game.Window.CurrentOrientation & (DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight)));
-			int w = PreferredBackBufferWidth;
-			int h = PreferredBackBufferHeight;
+			bool isLandscape = (0 != (mWindow.CurrentOrientation & (DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight)));
+			int w = mDeviceQuery.PreferredBackBufferWidth;
+			int h = mDeviceQuery.PreferredBackBufferHeight;
 
 			mPresentationParameters.BackBufferWidth = isLandscape ? Math.Max(w, h) : Math.Min(w, h);
 			mPresentationParameters.BackBufferHeight = isLandscape ? Math.Min(w, h) : Math.Max(w, h);
@@ -494,13 +494,13 @@ namespace MonoGame.Platform.AndroidGL
 	#if ANDROID
 	internal void ForceSetFullScreen()
 	{
-	if (IsFullScreen)
+	if (mDeviceQuery.IsFullScreen)
 	{
-	Game.Activity.Window.ClearFlags(Android.Views.WindowManagerFlags.ForceNotFullscreen);
-	Game.Activity.Window.SetFlags(WindowManagerFlags.Fullscreen, WindowManagerFlags.Fullscreen);
+			mActivity.ClearFlags(Android.Views.WindowManagerFlags.ForceNotFullscreen);
+			mActivity.SetFlags(WindowManagerFlags.Fullscreen, WindowManagerFlags.Fullscreen);
 	}
 	else
-	Game.Activity.Window.SetFlags(WindowManagerFlags.ForceNotFullscreen, WindowManagerFlags.ForceNotFullscreen);
+			mActivity.SetFlags(WindowManagerFlags.ForceNotFullscreen, WindowManagerFlags.ForceNotFullscreen);
 	}
 	#endif
 
@@ -621,8 +621,8 @@ namespace MonoGame.Platform.AndroidGL
 	public void ResetClientBounds()
 	{
 		#if ANDROID
-		float preferredAspectRatio = (float)PreferredBackBufferWidth /
-		(float)PreferredBackBufferHeight;
+		float preferredAspectRatio = (float) mDeviceQuery.PreferredBackBufferWidth /
+			(float)mDeviceQuery.PreferredBackBufferHeight;
 		float displayAspectRatio = (float)GraphicsDevice.DisplayMode.Width / 
 		(float)GraphicsDevice.DisplayMode.Height;
 
@@ -660,13 +660,13 @@ namespace MonoGame.Platform.AndroidGL
 		}
 
 		// Ensure buffer size is reported correctly
-		_graphicsDevice.PresentationParameters.BackBufferWidth = newClientBounds.Width;
-		_graphicsDevice.PresentationParameters.BackBufferHeight = newClientBounds.Height;
+		mPresentationParameters.BackBufferWidth = newClientBounds.Width;
+		mPresentationParameters.BackBufferHeight = newClientBounds.Height;
 
 		// Set the veiwport so the (potentially) resized client bounds are drawn in the middle of the screen
 		_graphicsDevice.Viewport = new Viewport(newClientBounds.X, -newClientBounds.Y, newClientBounds.Width, newClientBounds.Height);
 
-		((AndroidGameWindow)_game.Window).ChangeClientBounds(newClientBounds);
+		mWindow.ChangeClientBounds(newClientBounds);
 
 		// Touch panel needs latest buffer size for scaling
 		mTouchPanel.DisplayWidth = newClientBounds.Width;

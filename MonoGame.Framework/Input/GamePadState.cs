@@ -14,7 +14,7 @@ namespace Microsoft.Xna.Framework.Input
     //     links to related code samples.
     //     This is implemented as a partial struct to allow for individual platforms
     //     to offer additional data without separate state queries to GamePad.
-    public partial struct GamePadState
+    public struct GamePadState
     {
         /// <summary>
         /// The default initialized gamepad state.
@@ -103,7 +103,7 @@ namespace Microsoft.Xna.Framework.Input
             DPad = dPad;
 			IsConnected = true;
 
-            PlatformConstruct();
+            //PlatformConstruct();
         }
         //
         // Summary:
@@ -134,7 +134,7 @@ namespace Microsoft.Xna.Framework.Input
         /// Define this method in platform partial classes to initialize default
         /// values for platform-specific fields.
         /// </summary>
-        partial void PlatformConstruct();
+        //partial void PlatformConstruct();
   
         /// <summary>
         /// Gets the button mask along with 'virtual buttons' like LeftThumbstickLeft.

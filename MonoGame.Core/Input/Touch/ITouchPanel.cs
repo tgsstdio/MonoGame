@@ -44,6 +44,8 @@ namespace Microsoft.Xna.Framework.Input.Touch
 {
 	public interface ITouchPanel
 	{
+		void AddEvent (int id, TouchLocationState moved, Vector2 position);
+
 		DisplayOrientation DisplayOrientation {
 			get;
 			set;

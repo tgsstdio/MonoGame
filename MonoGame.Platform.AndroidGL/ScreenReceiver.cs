@@ -5,18 +5,18 @@ using OpenTK.Platform.Android;
 
 namespace MonoGame.Platform.AndroidGL
 {
-	internal class ScreenReceiver : BroadcastReceiver
-	{	
-		public bool ScreenLocked;
-
+	public class ScreenReceiver : BroadcastReceiver
+	{
 		private readonly AndroidGameView mView;
 		private readonly IMediaPlayer mMediaPlayer;
 		private readonly KeyguardManager mKeyguard;
-		public ScreenReceiver (AndroidGameView view, IMediaPlayer mediaPlayer, KeyguardManager keyGuard)
+		private readonly IScreenLock mScreenLock;
+		public ScreenReceiver (AndroidGameView view, IMediaPlayer mediaPlayer, KeyguardManager keyGuard, IScreenLock screenLock)
 		{
 			mView = view;
 			mMediaPlayer = mediaPlayer;
 			mKeyguard = keyGuard;
+			mScreenLock = screenLock;
 		}
 
 		public override void OnReceive(Context context, Intent intent)
@@ -49,13 +49,13 @@ namespace MonoGame.Platform.AndroidGL
 
         private void OnLocked()
         {
-            ScreenLocked = true;
+			mScreenLock.ScreenLocked = true;
 			mMediaPlayer.IsMuted = true;
         }
 
         private void OnUnlocked()
         {
-            ScreenLocked = false;
+			mScreenLock.ScreenLocked = false;
 			mMediaPlayer.IsMuted = false;
 			mView.Resume();
         }
