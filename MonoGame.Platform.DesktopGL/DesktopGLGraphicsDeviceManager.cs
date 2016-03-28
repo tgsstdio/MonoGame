@@ -26,7 +26,7 @@ using Android.Views;
 
 namespace MonoGame.Platform.DesktopGL
 {
-	public class DesktopGLGraphicsDeviceManager : IGraphicsDeviceService, IGraphicsDeviceManager
+	public class DesktopGLGraphicsDeviceManager : IGraphicsDeviceManager
 	{
 		private IOpenTKGameWindow mWindow;
 		public IGraphicsDevice GraphicsDevice { get; set; }
@@ -67,6 +67,7 @@ namespace MonoGame.Platform.DesktopGL
 	//	private ITextureCollectionPlatform mTextureCollectionPlatform;
 		private IGraphicsAdapterCollection mAdapters;
 		private IGraphicsDevicePreferences mDevicePreferences;
+		private IGraphicsDeviceService mDeviceService;
 		public DesktopGLGraphicsDeviceManager(
 			IOpenTKGameWindow window,
 			IOpenTKWindowResetter windowReset,
@@ -77,7 +78,8 @@ namespace MonoGame.Platform.DesktopGL
 			IPresentationParameters presentationParams,
 			IGraphicsAdapterCollection adapters,
 			IGraphicsDevicePreferences devicePreferences,
-			ITouchPanel touchPanel
+			ITouchPanel touchPanel,
+			IGraphicsDeviceService deviceService
 			)
 		{
 			mWindowReset = windowReset;
@@ -131,7 +133,7 @@ namespace MonoGame.Platform.DesktopGL
 		{
 			Initialize();
 
-			OnDeviceCreated(EventArgs.Empty);
+			mDeviceService.OnDeviceCreated(this, EventArgs.Empty);
 		}
 
 		public bool BeginDraw()

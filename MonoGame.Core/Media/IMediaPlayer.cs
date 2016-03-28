@@ -6,6 +6,10 @@ namespace Microsoft.Xna.Framework.Media
 {
 	public interface IMediaPlayer
 	{
+		MediaState State { get; }
+		 
+		void Play(ISong song);
+
 		void Pause ();
 
 		void Resume ();

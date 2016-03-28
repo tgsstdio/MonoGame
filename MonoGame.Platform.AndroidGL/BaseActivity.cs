@@ -1,6 +1,7 @@
 ﻿using System;
 using Android.Content;
 using Android.Views;
+using Android.OS;
 
 namespace MonoGame.Platform.AndroidGL
 {
@@ -12,23 +13,37 @@ namespace MonoGame.Platform.AndroidGL
 		private readonly IBroadcastReceiverRegistry mReceiverRegistry;
 		private IOrientationListener mOrientationListener;
 		private readonly IScreenLock mScreenLock;
-		public BaseActivity (Context context, IBroadcastReceiverRegistry receiverRegistry, IOrientationListener orientation, IScreenLock screenLock)
+		private IForceFullScreenToggle mFullScreenToggle;
+		private IViewRefocuser mViewRefocuser;
+
+		public BaseActivity (
+			Context context,
+			IBroadcastReceiverRegistry receiverRegistry,
+			IOrientationListener orientation,
+			IScreenLock screenLock,
+			IForceFullScreenToggle fullScreenToggle,
+			IViewRefocuser viewRefocuser
+			)
 		{
 			mContext = context;
 			mReceiverRegistry = receiverRegistry;
 			mOrientationListener = orientation;
 			mScreenLock = screenLock;
+			mFullScreenToggle = fullScreenToggle;
+			mViewRefocuser = viewRefocuser;
 		}
 
 		#region IBaseActivity implementation
 
-		public void OnCreate ()
+		public void OnCreate (Bundle savedInstanceState)
 		{
 			mReceiverRegistry.Register ();
 		}
 
 		public void OnResume ()
 		{
+			mFullScreenToggle.ForceSetFullScreen ();
+			mViewRefocuser.Refocus();			
 			mOrientationListener.On();
 		}
 

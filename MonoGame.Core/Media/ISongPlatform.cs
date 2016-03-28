@@ -8,31 +8,31 @@ namespace Microsoft.Xna.Framework.Media
 {
 	public interface ISongPlatform
 	{
-		void SetTrackNumber (int value);
+		void PlatformSetTrackNumber (int value);
 
-		void Dispose (bool disposed);
+		void PlatformDispose (bool disposed);
 
-		IGenre GetGenre ();
+		IGenre PlatformGetGenre ();
 
-		IArtist GetArtist ();
+		IArtist PlatformGetArtist ();
 
-		IAlbum GetAlbum ();
+		IAlbum PlatformGetAlbum ();
 
-		void Initialize (string fileName);
+		void PlatformInitialize (string fileName);
 
-		int GetRating ();
+		int PlatformGetRating ();
 
-		int GetTrackNumber ();
+		int PlatformGetTrackNumber ();
 
-		TimeSpan GetDuration ();
+		TimeSpan PlatformGetDuration ();
 
-		bool IsRated ();
+		bool PlatformIsRated ();
 
-		bool IsProtected ();
+		bool PlatformIsProtected ();
 
-		string GetName ();
+		string PlatformGetName ();
 
-		int GetPlayCount ();
+		int PlatformGetPlayCount ();
 	}
 }
 

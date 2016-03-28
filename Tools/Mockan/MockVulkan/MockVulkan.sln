@@ -1,0 +1,23 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MockVulkan", "MockVulkan\MockVulkan.csproj", "{642E2601-6676-4801-8FCD-1DFE3FCB522D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoGame.Graphics.Vk", "MonoGame.Vulkan\MonoGame.Graphics.Vk.csproj", "{9F9AC448-9D17-43E5-8889-285426290891}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{642E2601-6676-4801-8FCD-1DFE3FCB522D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{642E2601-6676-4801-8FCD-1DFE3FCB522D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{642E2601-6676-4801-8FCD-1DFE3FCB522D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{642E2601-6676-4801-8FCD-1DFE3FCB522D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9F9AC448-9D17-43E5-8889-285426290891}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F9AC448-9D17-43E5-8889-285426290891}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F9AC448-9D17-43E5-8889-285426290891}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F9AC448-9D17-43E5-8889-285426290891}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

@@ -50,6 +50,11 @@ namespace Microsoft.Xna.Framework.Graphics
         event EventHandler<EventArgs> DeviceDisposing;
         event EventHandler<EventArgs> DeviceReset;
         event EventHandler<EventArgs> DeviceResetting;
+
+		void OnDeviceDisposing(object sender, EventArgs e);
+		void OnDeviceResetting(object sender, EventArgs e);
+		void OnDeviceReset(object sender, EventArgs e);
+		void OnDeviceCreated(object sender, EventArgs e);
     }
 }
 

@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <ProjectGuid>{9F9AC448-9D17-43E5-8889-285426290891}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>MonoGame.Graphics.Vk</RootNamespace>
+    <AssemblyName>MonoGame.Graphics.Vk</AssemblyName>
+    <TargetFrameworkProfile>Profile78</TargetFrameworkProfile>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>full</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Enums\Result.cs" />
+    <Compile Include="Callbacks\AllocationCallbacks.cs" />
+    <Compile Include="ReturnedOnly\LayerProperties.cs" />
+    <Compile Include="ReturnedOnly\ExtensionProperties.cs" />
+    <Compile Include="Instance\IInstance.cs" />
+    <Compile Include="Instance\DisplaySurfaceCreateInfoKHR.cs" />
+    <Compile Include="Instance\DisplayModeKHR.cs" />
+    <Compile Include="Instance\SurfaceTransformFlagBitsKHR.cs" />
+    <Compile Include="Instance\SurfaceKHR.cs" />
+    <Compile Include="Instance\Win32SurfaceCreateInfoKHR.cs" />
+    <Compile Include="Entrypoint\IEntrypoint.cs" />
+    <Compile Include="Entrypoint\ApplicationInfo.cs" />
+    <Compile Include="Entrypoint\InstanceCreateInfo.cs" />
+    <Compile Include="Instance\DebugReportCallbackCreateInfoEXT.cs" />
+    <Compile Include="Instance\DebugReportFlagBitsEXT.cs" />
+    <Compile Include="Instance\DebugReportObjectTypeEXT.cs" />
+    <Compile Include="Callbacks\InternalAllocationType.cs" />
+    <Compile Include="Callbacks\SystemAllocationScope.cs" />
+    <Compile Include="Instance\DebugReportCallbackEXT.cs" />
+    <Compile Include="PhysicalDevice\IPhysicalDevice.cs" />
+    <Compile Include="PhysicalDevice\PhysicalDeviceProperties.cs" />
+    <Compile Include="PhysicalDevice\PhysicalDeviceType.cs" />
+    <Compile Include="PhysicalDevice\PhysicalDeviceLimits.cs" />
+    <Compile Include="Core\Vec2f.cs" />
+    <Compile Include="Core\Vec3Ui.cs" />
+    <Compile Include="Core\Vec2Ui.cs" />
+    <Compile Include="Enums\SampleCountFlagBits.cs" />
+    <Compile Include="PhysicalDevice\PhysicalDeviceSparseProperties.cs" />
+    <Compile Include="PhysicalDevice\QueueFamilyProperties.cs" />
+    <Compile Include="Core\Extent3D.cs" />
+    <Compile Include="PhysicalDevice\QueueFlagBits.cs" />
+    <Compile Include="PhysicalDevice\PhysicalDeviceMemoryProperties.cs" />
+    <Compile Include="PhysicalDevice\MemoryType.cs" />
+    <Compile Include="PhysicalDevice\MemoryPropertyFlagBits.cs" />
+    <Compile Include="PhysicalDevice\MemoryHeap.cs" />
+    <Compile Include="PhysicalDevice\MemoryHeapFlagBits.cs" />
+    <Compile Include="PhysicalDevice\PhysicalDeviceFeatures.cs" />
+    <Compile Include="Enums\Format.cs" />
+    <Compile Include="PhysicalDevice\FormatProperties.cs" />
+    <Compile Include="PhysicalDevice\FormatFeatureFlagBits.cs" />
+    <Compile Include="Enums\ImageType.cs" />
+    <Compile Include="Enums\ImageTiling.cs" />
+    <Compile Include="Enums\ImageUsageFlagBits.cs" />
+    <Compile Include="Enums\ImageCreateFlagBits.cs" />
+    <Compile Include="PhysicalDevice\ImageFormatProperties.cs" />
+    <Compile Include="PhysicalDevice\DeviceCreateInfo.cs" />
+    <Compile Include="PhysicalDevice\DeviceQueueCreateInfo.cs" />
+    <Compile Include="Device\IDevice.cs" />
+    <Compile Include="PhysicalDevice\SparseImageFormatProperties.cs" />
+    <Compile Include="PhysicalDevice\SparseImageFormatFlagBits.cs" />
+    <Compile Include="PhysicalDevice\ImageAspectFlagBits.cs" />
+    <Compile Include="PhysicalDevice\DisplayPropertiesKHR.cs" />
+    <Compile Include="PhysicalDevice\DisplayKHR.cs" />
+    <Compile Include="Core\Extent2D.cs" />
+    <Compile Include="PhysicalDevice\DisplayPlanePropertiesKHR.cs" />
+    <Compile Include="PhysicalDevice\DisplayModePropertiesKHR.cs" />
+    <Compile Include="PhysicalDevice\DisplayModeParametersKHR.cs" />
+    <Compile Include="PhysicalDevice\DisplayPlaneCapabilitiesKHR.cs" />
+    <Compile Include="Core\Offset2D.cs" />
+    <Compile Include="PhysicalDevice\DisplayPlaneAlphaFlagBitsKHR.cs" />
+    <Compile Include="PhysicalDevice\SurfaceCapabilitiesKHR.cs" />
+    <Compile Include="PhysicalDevice\CompositeAlphaFlagBitsKHR.cs" />
+    <Compile Include="PhysicalDevice\SurfaceFormatKHR.cs" />
+    <Compile Include="PhysicalDevice\ColorSpaceKHR.cs" />
+    <Compile Include="PhysicalDevice\PresentModeKHR.cs" />
+    <Compile Include="Queue\IQueue.cs" />
+    <Compile Include="Device\MemoryAllocateInfo.cs" />
+    <Compile Include="Device\DeviceMemory.cs" />
+    <Compile Include="Device\MappedMemoryRange.cs" />
+    <Compile Include="Device\MemoryRequirements.cs" />
+    <Compile Include="Device\Image.cs" />
+    <Compile Include="Device\SparseImageMemoryRequirements.cs" />
+    <Compile Include="Device\FenceCreateInfo.cs" />
+    <Compile Include="Device\FenceCreateFlagBits.cs" />
+    <Compile Include="Device\Fence.cs" />
+    <Compile Include="Device\SemaphoreCreateInfo.cs" />
+    <Compile Include="Device\Semaphore.cs" />
+    <Compile Include="Device\EventCreateInfo.cs" />
+    <Compile Include="Device\Event.cs" />
+    <Compile Include="Device\QueryPoolCreateInfo.cs" />
+    <Compile Include="Device\QueryType.cs" />
+    <Compile Include="Enums\QueryPipelineStatisticFlagBits.cs" />
+    <Compile Include="Device\QueryPool.cs" />
+    <Compile Include="Device\QueryControlFlagBits.cs" />
+    <Compile Include="Device\QueryResultFlagBits.cs" />
+    <Compile Include="Device\BufferCreateInfo.cs" />
+    <Compile Include="Device\BufferCreateFlagBits.cs" />
+    <Compile Include="Enums\BufferUsageFlagBits.cs" />
+    <Compile Include="Enums\SharingMode.cs" />
+    <Compile Include="Device\BufferViewCreateInfo.cs" />
+    <Compile Include="Device\Buffer.cs" />
+    <Compile Include="Device\BufferView.cs" />
+    <Compile Include="Device\ImageCreateInfo.cs" />
+    <Compile Include="Enums\ImageLayout.cs" />
+    <Compile Include="Device\ImageSubresource.cs" />
+    <Compile Include="Device\SubresourceLayout.cs" />
+    <Compile Include="Device\ImageViewCreateInfo.cs" />
+    <Compile Include="Device\ImageViewType.cs" />
+    <Compile Include="Core\ComponentMapping.cs" />
+    <Compile Include="Enums\ComponentSwizzle.cs" />
+    <Compile Include="Device\ImageView.cs" />
+    <Compile Include="Device\ShaderModuleCreateInfo.cs" />
+    <Compile Include="Device\ImageSubresourceRange.cs" />
+    <Compile Include="Device\ShaderModule.cs" />
+    <Compile Include="Device\PipelineCacheCreateInfo.cs" />
+    <Compile Include="Device\PipelineCache.cs" />
+    <Compile Include="Device\GraphicsPipelineCreateInfo.cs" />
+    <Compile Include="Device\PipelineShaderStageCreateInfo.cs" />
+    <Compile Include="Device\PipelineCreateFlagBits.cs" />
+    <Compile Include="Device\ShaderStageFlagBits.cs" />
+    <Compile Include="Device\PipelineVertexInputStateCreateInfo.cs" />
+    <Compile Include="Device\VertexInputBindingDescription.cs" />
+    <Compile Include="Device\VertexInputRate.cs" />
+    <Compile Include="Device\PipelineInputAssemblyStateCreateInfo.cs" />
+    <Compile Include="Enums\PrimitiveTopology.cs" />
+    <Compile Include="Device\PipelineTessellationStateCreateInfo.cs" />
+    <Compile Include="Device\PipelineViewportStateCreateInfo.cs" />
+    <Compile Include="Device\Viewport.cs" />
+    <Compile Include="Core\Rect2D.cs" />
+    <Compile Include="Device\Pipeline.cs" />
+    <Compile Include="Device\PipelineRasterizationStateCreateInfo.cs" />
+    <Compile Include="Enums\PolygonMode.cs" />
+    <Compile Include="Enums\FrontFace.cs" />
+    <Compile Include="Device\CullModeFlagBits.cs" />
+    <Compile Include="Device\PipelineMultisampleStateCreateInfo.cs" />
+    <Compile Include="Device\PipelineDepthStencilStateCreateInfo.cs" />
+    <Compile Include="Enums\CompareOp.cs" />
+    <Compile Include="Device\StencilOpState.cs" />
+    <Compile Include="Enums\StencilOp.cs" />
+    <Compile Include="Device\PipelineColorBlendStateCreateInfo.cs" />
+    <Compile Include="Enums\LogicOp.cs" />
+    <Compile Include="Core\Vec4f.cs" />
+    <Compile Include="Device\PipelineColorBlendAttachmentState.cs" />
+    <Compile Include="Enums\BlendFactor.cs" />
+    <Compile Include="Enums\BlendOp.cs" />
+    <Compile Include="Device\PipelineDynamicStateCreateInfo.cs" />
+    <Compile Include="Device\DynamicState.cs" />
+    <Compile Include="Device\PipelineLayout.cs" />
+    <Compile Include="Device\RenderPass.cs" />
+    <Compile Include="Device\ComputePipelineCreateInfo.cs" />
+    <Compile Include="Device\PipelineLayoutCreateInfo.cs" />
+    <Compile Include="Device\DescriptorSetLayout.cs" />
+    <Compile Include="Device\SamplerCreateInfo.cs" />
+    <Compile Include="Enums\Filter.cs" />
+    <Compile Include="Device\Sampler.cs" />
+    <Compile Include="Device\SpecializationInfo.cs" />
+    <Compile Include="Device\SpecializationMapEntry.cs" />
+    <Compile Include="Device\VertexInputAttributeDescription.cs" />
+    <Compile Include="Device\SamplerMipmapMode.cs" />
+    <Compile Include="Device\SamplerAddressMode.cs" />
+    <Compile Include="Device\BorderColor.cs" />
+    <Compile Include="Device\PushConstantRange.cs" />
+    <Compile Include="Device\DescriptorSetLayoutCreateInfo.cs" />
+    <Compile Include="Device\DescriptorSetLayoutBinding.cs" />
+    <Compile Include="Enums\DescriptorType.cs" />
+    <Compile Include="Device\DescriptorPool.cs" />
+    <Compile Include="Device\DescriptorPoolCreateInfo.cs" />
+    <Compile Include="Device\DescriptorPoolCreateFlagBits.cs" />
+    <Compile Include="Device\DescriptorPoolSize.cs" />
+    <Compile Include="Device\DescriptorSetAllocateInfo.cs" />
+    <Compile Include="Device\DescriptorSet.cs" />
+    <Compile Include="Device\WriteDescriptorSet.cs" />
+    <Compile Include="Device\DescriptorImageInfo.cs" />
+    <Compile Include="Device\DescriptorBufferInfo.cs" />
+    <Compile Include="Device\CopyDescriptorSet.cs" />
+    <Compile Include="Device\Framebuffer.cs" />
+    <Compile Include="Device\FramebufferCreateInfo.cs" />
+    <Compile Include="Device\RenderPassCreateInfo.cs" />
+    <Compile Include="Device\AttachmentDescription.cs" />
+    <Compile Include="Device\AttachmentDescriptionFlagBits.cs" />
+    <Compile Include="Device\AttachmentLoadOp.cs" />
+    <Compile Include="Device\AttachmentStoreOp.cs" />
+    <Compile Include="Device\SubpassDescription.cs" />
+    <Compile Include="Device\PipelineBindPoint.cs" />
+    <Compile Include="Device\AttachmentReference.cs" />
+    <Compile Include="Device\SubpassDependency.cs" />
+    <Compile Include="Device\PipelineStageFlagBits.cs" />
+    <Compile Include="Enums\AccessFlagBits.cs" />
+    <Compile Include="Enums\DependencyFlagBits.cs" />
+    <Compile Include="Device\CommandPool.cs" />
+    <Compile Include="Device\CommandPoolCreateInfo.cs" />
+    <Compile Include="Device\CommandPoolCreateFlagBits.cs" />
+    <Compile Include="Device\CommandPoolResetFlagBits.cs" />
+    <Compile Include="CommandBuffer\ICommandBuffer.cs" />
+    <Compile Include="Device\CommandBufferAllocateInfo.cs" />
+    <Compile Include="Device\CommandBufferLevel.cs" />
+    <Compile Include="Device\SwapchainKHR.cs" />
+    <Compile Include="Device\SwapchainCreateInfoKHR.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
+  <ItemGroup>
+    <Folder Include="Enums\" />
+    <Folder Include="Callbacks\" />
+    <Folder Include="ReturnedOnly\" />
+    <Folder Include="Instance\" />
+    <Folder Include="Entrypoint\" />
+    <Folder Include="PhysicalDevice\" />
+    <Folder Include="Core\" />
+    <Folder Include="Device\" />
+    <Folder Include="Queue\" />
+    <Folder Include="CommandBuffer\" />
+  </ItemGroup>
+</Project>

@@ -43,7 +43,7 @@ namespace Microsoft.Xna.Framework.Input.Touch
         /// <summary>
         /// The current timestamp that we use for setting the timestamp of new TouchLocations
         /// </summary>
-        internal static TimeSpan CurrentTimestamp { get; set; }
+        internal TimeSpan CurrentTimestamp { get; set; }
 
         /// <summary>
         /// The mapping between platform specific touch ids
@@ -57,7 +57,7 @@ namespace Microsoft.Xna.Framework.Input.Touch
 
         internal readonly IGameWindow Window;
 
-		internal TouchPanelState(IGameWindow window, ITouchPanelCapabilities capabilities)
+		public TouchPanelState(IGameWindow window, ITouchPanelCapabilities capabilities)
         {
             Window = window;
 			Capabilities = capabilities;
@@ -237,7 +237,7 @@ namespace Microsoft.Xna.Framework.Input.Touch
         /// This will release all touch locations.  It should only be 
         /// called on platforms where touch state is reset all at once.
         /// </summary>
-        internal void ReleaseAllTouches()
+        public void ReleaseAllTouches()
         {
             var mostToRemove = Math.Max(_touchState.Count, _gestureState.Count);
             if (mostToRemove > 0)
@@ -343,7 +343,7 @@ namespace Microsoft.Xna.Framework.Input.Touch
         /// </summary>
         internal const float TapJitterTolerance = 35.0f;
 
-        internal static readonly TimeSpan TimeRequiredForHold = TimeSpan.FromMilliseconds(1024);
+        internal readonly TimeSpan TimeRequiredForHold = TimeSpan.FromMilliseconds(1024);
 
         /// <summary>
         /// The pinch touch locations.

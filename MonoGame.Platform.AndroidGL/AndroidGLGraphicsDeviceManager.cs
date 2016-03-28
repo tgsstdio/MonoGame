@@ -23,7 +23,7 @@ using Android.Views;
 
 namespace MonoGame.Platform.AndroidGL
 {
-	public class AndroidGLGraphicsDeviceManager : IGraphicsDeviceService, IGraphicsDeviceManager
+	public class AndroidGLGraphicsDeviceManager : IGraphicsDeviceManager
 	{
 		private IAndroidGLGameWindow mWindow;
 		public IGraphicsDevice GraphicsDevice { get; set; }
@@ -64,6 +64,8 @@ namespace MonoGame.Platform.AndroidGL
 	//	private ITextureCollectionPlatform mTextureCollectionPlatform;
 		private IGraphicsAdapterCollection mAdapters;
 		private IGraphicsDevicePreferences mDevicePreferences;
+		private readonly IGraphicsAdapter mGraphicsAdapter;
+		private readonly IGraphicsDevice mDevice;
 		public AndroidGLGraphicsDeviceManager(
 			IAndroidGLGameWindow window,
 			IGraphicsDevicePlatform devicePlatform,
@@ -74,7 +76,9 @@ namespace MonoGame.Platform.AndroidGL
 			IGraphicsAdapterCollection adapters,
 			IGraphicsDevicePreferences devicePreferences,
 			ITouchPanel touchPanel,
-			IGraphicsDeviceQuery deviceQuery
+			IGraphicsDeviceQuery deviceQuery,
+			IGraphicsAdapter graphicsAdapter,
+			IGraphicsDevice device
 			)
 		{
 			mDevicePlatform = devicePlatform;
@@ -87,6 +91,8 @@ namespace MonoGame.Platform.AndroidGL
 			mAdapters = adapters;
 			mTouchPanel = touchPanel;
 			mDeviceQuery = deviceQuery;
+			mGraphicsAdapter = graphicsAdapter;
+			mDevice = device;
 
 			if (mAdapters.Options.Length < 1)
 			{
@@ -491,19 +497,6 @@ namespace MonoGame.Platform.AndroidGL
 //		}
 //	}
 
-	#if ANDROID
-	internal void ForceSetFullScreen()
-	{
-	if (mDeviceQuery.IsFullScreen)
-	{
-			mActivity.ClearFlags(Android.Views.WindowManagerFlags.ForceNotFullscreen);
-			mActivity.SetFlags(WindowManagerFlags.Fullscreen, WindowManagerFlags.Fullscreen);
-	}
-	else
-			mActivity.SetFlags(WindowManagerFlags.ForceNotFullscreen, WindowManagerFlags.ForceNotFullscreen);
-	}
-	#endif
-
 	/// <summary>
 	/// Gets or sets the boolean which defines how window switches from windowed to fullscreen state.
 	/// "Hard" mode(true) is slow to switch, but more effecient for performance, while "soft" mode(false) is vice versa.
@@ -623,8 +616,8 @@ namespace MonoGame.Platform.AndroidGL
 		#if ANDROID
 		float preferredAspectRatio = (float) mDeviceQuery.PreferredBackBufferWidth /
 			(float)mDeviceQuery.PreferredBackBufferHeight;
-		float displayAspectRatio = (float)GraphicsDevice.DisplayMode.Width / 
-		(float)GraphicsDevice.DisplayMode.Height;
+		float displayAspectRatio = (float) mGraphicsAdapter.CurrentDisplayMode.Width / 
+			(float)mGraphicsAdapter.CurrentDisplayMode.Height;
 
 		float adjustedAspectRatio = preferredAspectRatio;
 
@@ -640,23 +633,23 @@ namespace MonoGame.Platform.AndroidGL
 		var newClientBounds = new Rectangle();
 		if (displayAspectRatio > (adjustedAspectRatio + EPSILON))
 		{
-		// Fill the entire height and reduce the width to keep aspect ratio
-		newClientBounds.Height = _graphicsDevice.DisplayMode.Height;
-		newClientBounds.Width = (int)(newClientBounds.Height * adjustedAspectRatio);
-		newClientBounds.X = (_graphicsDevice.DisplayMode.Width - newClientBounds.Width) / 2;
+			// Fill the entire height and reduce the width to keep aspect ratio
+			newClientBounds.Height = mGraphicsAdapter.CurrentDisplayMode.Height;
+			newClientBounds.Width = (int)(newClientBounds.Height * adjustedAspectRatio);
+			newClientBounds.X = (mGraphicsAdapter.CurrentDisplayMode.Width - newClientBounds.Width) / 2;
 		}
 		else if (displayAspectRatio < (adjustedAspectRatio - EPSILON))
 		{
 		// Fill the entire width and reduce the height to keep aspect ratio
-		newClientBounds.Width = _graphicsDevice.DisplayMode.Width;
+			newClientBounds.Width = mGraphicsAdapter.CurrentDisplayMode.Width;
 		newClientBounds.Height = (int)(newClientBounds.Width / adjustedAspectRatio);
-		newClientBounds.Y = (_graphicsDevice.DisplayMode.Height - newClientBounds.Height) / 2;
+			newClientBounds.Y = (mGraphicsAdapter.CurrentDisplayMode.Height - newClientBounds.Height) / 2;
 		}
 		else
 		{
-		// Set the ClientBounds to match the DisplayMode
-		newClientBounds.Width = GraphicsDevice.DisplayMode.Width;
-		newClientBounds.Height = GraphicsDevice.DisplayMode.Height;
+			// Set the ClientBounds to match the DisplayMode
+			newClientBounds.Width = mGraphicsAdapter.CurrentDisplayMode.Width;
+			newClientBounds.Height = mGraphicsAdapter.CurrentDisplayMode.Height;
 		}
 
 		// Ensure buffer size is reported correctly
@@ -664,7 +657,7 @@ namespace MonoGame.Platform.AndroidGL
 		mPresentationParameters.BackBufferHeight = newClientBounds.Height;
 
 		// Set the veiwport so the (potentially) resized client bounds are drawn in the middle of the screen
-		_graphicsDevice.Viewport = new Viewport(newClientBounds.X, -newClientBounds.Y, newClientBounds.Width, newClientBounds.Height);
+		mDevice.Viewport = new Viewport(newClientBounds.X, -newClientBounds.Y, newClientBounds.Width, newClientBounds.Height);
 
 		mWindow.ChangeClientBounds(newClientBounds);
 

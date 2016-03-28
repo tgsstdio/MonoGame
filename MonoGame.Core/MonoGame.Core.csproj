@@ -120,6 +120,40 @@
     <Compile Include="Graphics\Vertices\PrimitiveType.cs" />
     <Compile Include="Graphics\ClearOptions.cs" />
     <Compile Include="Graphics\Vertices\IVertexDeclaration.cs" />
+    <Compile Include="Input\Buttons.cs" />
+    <Compile Include="Input\GamePad.cs" />
+    <Compile Include="Input\GamePadButtons.cs" />
+    <Compile Include="Input\GamePadCapabilities.cs" />
+    <Compile Include="Input\GamePadDeadZone.cs" />
+    <Compile Include="Input\GamePadDPad.cs" />
+    <Compile Include="Input\GamePadState.cs" />
+    <Compile Include="Input\GamePadThumbSticks.cs" />
+    <Compile Include="Input\GamePadTriggers.cs" />
+    <Compile Include="Input\GamePadType.cs" />
+    <Compile Include="Input\IGamepadPlatform.cs" />
+    <Compile Include="Input\DefaultGamepadPlatform.cs" />
+    <Compile Include="PrimaryThreadLoader.cs" />
+    <Compile Include="IPrimaryThreadLoaded.cs" />
+    <Compile Include="IPrimaryThreadLoader.cs" />
+    <Compile Include="Content\NullContentManager.cs" />
+    <Compile Include="Content\IContentTypeReaderManager.cs" />
+    <Compile Include="Content\NullContentTypeReaderManager.cs" />
+    <Compile Include="GameBackbone.cs" />
+    <Compile Include="IDrawSuppressor.cs" />
+    <Compile Include="DrawSupressor.cs" />
+    <Compile Include="IGameComponent.cs" />
+    <Compile Include="GameComponentCollection.cs" />
+    <Compile Include="GameComponentCollectionEventArgs.cs" />
+    <Compile Include="LaunchParameters.cs" />
+    <Compile Include="Audio\ISoundEffectInstancePool.cs" />
+    <Compile Include="Audio\ISoundEffectInstance.cs" />
+    <Compile Include="Audio\SoundState.cs" />
+    <Compile Include="Audio\SoundEffect.cs" />
+    <Compile Include="Audio\AudioListener.cs" />
+    <Compile Include="Audio\AudioEmitter.cs" />
+    <Compile Include="Audio\ISoundEffectPlatform.cs" />
+    <Compile Include="Audio\AudioChannels.cs" />
+    <Compile Include="IThreadSleeper.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>
@@ -129,5 +163,6 @@
     <Folder Include="Media\" />
     <Folder Include="Content\" />
     <Folder Include="Graphics\Vertices\" />
+    <Folder Include="Audio\" />
   </ItemGroup>
 </Project>

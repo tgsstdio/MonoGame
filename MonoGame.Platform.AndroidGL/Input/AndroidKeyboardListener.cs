@@ -79,7 +79,7 @@ namespace MonoGame.Platform.AndroidGL.Input
             }
         }
 
-        private IDictionary<Keycode, Keys> LoadKeyMap()
+        private static IDictionary<Keycode, Keys> LoadKeyMap()
         {
             // create a map for every Keycode and default it to none so that every possible key is mapped
             var maps = Enum.GetValues(typeof (Keycode))

@@ -44,8 +44,6 @@
     <Compile Include="DryIoc\AsyncExecutionFlowScopeContext.cs" />
     <Compile Include="DryIoc\Container.cs" />
     <Compile Include="DryIoc\FactoryCompiler.cs" />
-    <Compile Include="NullContentManager.cs" />
-    <Compile Include="NullContentTypeReaderManager.cs" />
     <Compile Include="NullTextureCollectionPlatform.cs" />
     <Compile Include="MockGraphicsDevicePreferences.cs" />
     <Compile Include="NullGraphicsDeviceLogger.cs" />

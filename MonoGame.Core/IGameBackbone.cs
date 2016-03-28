@@ -8,6 +8,8 @@ namespace Microsoft.Xna.Framework
 {
 	public interface IGameBackbone : IDisposable
 	{
+		void DoInitialize();
+
 		void Tick();
 		//IGraphicsDevice GraphicsDevice { get; }
 

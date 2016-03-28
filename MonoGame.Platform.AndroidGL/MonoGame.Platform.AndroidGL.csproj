@@ -46,7 +46,6 @@
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="AndroidCompatibility.cs" />
-    <Compile Include="AndroidGameActivity.cs" />
     <Compile Include="AndroidGamePlatform.cs" />
     <Compile Include="AndroidGLGraphicsDeviceManager.cs" />
     <Compile Include="IAndroidCompatibility.cs" />
@@ -68,8 +67,6 @@
     <Compile Include="IAndroidGLGameWindow.cs" />
     <Compile Include="AndroidGLGameWindow.cs" />
     <Compile Include="Input\IAndroidKeyboardListener.cs" />
-    <Compile Include="Threading.cs" />
-    <Compile Include="IAndroidGLDevicePlatform.cs" />
     <Compile Include="IScreenLock.cs" />
     <Compile Include="BaseActivity.cs" />
     <Compile Include="IBaseActivity.cs" />
@@ -78,6 +75,14 @@
     <Compile Include="IOrientationListener.cs" />
     <Compile Include="IForceFullScreenToggle.cs" />
     <Compile Include="ForceFullScreenToggle.cs" />
+    <Compile Include="IViewRefocuser.cs" />
+    <Compile Include="ViewRefocuser.cs" />
+    <Compile Include="IBaseActivityInfo.cs" />
+    <Compile Include="BaseActivityInfo.cs" />
+    <Compile Include="AndroidGLThreading.cs" />
+    <Compile Include="Media\AndroidSong.cs" />
+    <Compile Include="Media\AndroidMediaPlayer.cs" />
+    <Compile Include="Media\IAndroidMediaPlayer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />

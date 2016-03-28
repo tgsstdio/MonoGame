@@ -113,7 +113,7 @@ namespace MonoGame.Platform.AndroidGL.Media
                                 albumList.Add(album);
                             }
 
-                            var song = new Song(album, artist, genre, titleProperty, duration, assetUri);
+							var song = new AndroidSong(album, artist, genre, titleProperty, duration, assetUri);
                             song.Album.Songs.Add(song);
                             songList.Add(song);
                         }

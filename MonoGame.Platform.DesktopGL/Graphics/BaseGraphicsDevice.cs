@@ -6,6 +6,11 @@ namespace MonoGame.Platform.DesktopGL
 {
 	public class BaseGraphicsDevice : IGraphicsDevice
 	{
+		public Viewport Viewport {
+			get;
+			set;
+		}
+
 		// FIXME: PLACEHOLDER
 		private readonly IGraphicsDevicePlatform mPlatform;
 		protected BaseGraphicsDevice (IGraphicsDevicePlatform platform, IPresentationParameters presentation, IGraphicsAdapter adapter, IWeakReferenceCollection resources)

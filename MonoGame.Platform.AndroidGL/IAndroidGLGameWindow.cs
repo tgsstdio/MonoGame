@@ -8,8 +8,6 @@ namespace MonoGame.Platform.AndroidGL
 {
 	public interface IAndroidGLGameWindow : IGameWindow
 	{
-		void ClearFlags (WindowManagerFlags forceNotFullscreen);
-
 		void SetOrientation (DisplayOrientation disporientation, bool b);
 
 		DisplayOrientation GetEffectiveSupportedOrientations ();

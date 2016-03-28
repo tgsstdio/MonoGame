@@ -21,11 +21,6 @@ namespace MonoGame.Platform.AndroidGL
 	public class AndroidGLGameWindow : GameWindow, IAndroidGLGameWindow
     {
 
-		public void ClearFlags (WindowManagerFlags forceNotFullscreen)
-		{
-			throw new NotImplementedException ();
-		}
-
         internal MonoGameAndroidGameView GameView { get; private set; }
         internal IResumeManager Resumer;
 		internal IGraphicsDeviceManager mDeviceManager;
@@ -58,17 +53,23 @@ namespace MonoGame.Platform.AndroidGL
 //        {
 //            Resumer = resumer;
 //        }
-
+		private ITouchPanel mTouchPanel;
 		private IGameBackbone mBackbone;
+		private AndroidGLThreading mThreading;
+		private IScreenLock mScreenLock;
 		public AndroidGLGameWindow(
-			AndroidGameActivity activity,
+			Context context,
 			IGraphicsDevicePlatform devicePlatform,
 			IGameBackbone backbone,
 			MonoGameAndroidGameView view,
 			IGraphicsDeviceManager deviceManager,
 			IGraphicsDeviceQuery deviceQuery,
 			IPlatformActivator activator,
-			IResumeManager resumer)
+			IResumeManager resumer,
+			ITouchPanel touchPanel,
+			AndroidGLThreading threading,
+			IScreenLock screenLock
+			)
         {
 			_devicePlatform = devicePlatform;
 			mBackbone = backbone;
@@ -77,7 +78,10 @@ namespace MonoGame.Platform.AndroidGL
 			mDeviceQuery = deviceQuery;
 			mActivator = activator;
 			Resumer = resumer;
-            Initialize(activity);
+			mTouchPanel = touchPanel;
+			mThreading = threading;
+			mScreenLock = screenLock;
+            Initialize(context);
 
             //game.Services.AddService(typeof(View), GameView);
         }
@@ -109,7 +113,7 @@ namespace MonoGame.Platform.AndroidGL
             if (!GameView.GraphicsContext.IsCurrent)
                 GameView.MakeCurrent();
 
-            Threading.Run();
+			mThreading.Run();
         }
 
         private void OnUpdateFrame(object sender, FrameEventArgs frameEventArgs)
@@ -117,17 +121,17 @@ namespace MonoGame.Platform.AndroidGL
             if (!GameView.GraphicsContext.IsCurrent)
                 GameView.MakeCurrent();
 
-            Threading.Run();
+			mThreading.Run();
 
-            if (_game != null)
+            //if (_game != null)
             {
-				if (!GameView.IsResuming && mActivator.IsActive && !mScreenReceiver.ScreenLocked) //Only call draw if an update has occured
+				if (!GameView.IsResuming && mActivator.IsActive && !mScreenLock.ScreenLocked) //Only call draw if an update has occured
                 {
 					mBackbone.Tick();
                 }
-                else if (_game.GraphicsDevice != null)
+				else if (mDeviceManager.GraphicsDevice != null)
                 {
-					devicePlatform.Clear(Color.Black);
+					mDeviceManager.GraphicsDevice.Clear(Color.Black);
                     if (GameView.IsResuming && Resumer != null)
                     {
                         Resumer.Draw();
@@ -197,7 +201,7 @@ namespace MonoGame.Platform.AndroidGL
             DisplayOrientation oldOrientation = CurrentOrientation;
 
             SetDisplayOrientation(newOrientation);
-            TouchPanel.DisplayOrientation = newOrientation;
+			mTouchPanel.DisplayOrientation = newOrientation;
 
             if (applyGraphicsChanges && oldOrientation != CurrentOrientation)
 				mDeviceManager.ApplyChanges();

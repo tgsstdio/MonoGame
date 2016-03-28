@@ -16,25 +16,38 @@ namespace MonoGame.Platform.AndroidGL
 		private IAndroidCompatibility mCompatibility;
 		private IMediaLibrary mMediaLibrary;
 		private IMediaPlayer mMediaPlayer;
-		private IAndroidDevicePlatform mDevicePlatform;
+		private readonly IGraphicsDevice mDevice;
+		private IGameBackbone mBackbone;
+		private IPrimaryThreadLoader mPrimaryThreadLoader;
+		private readonly IViewRefocuser mViewRefocuser;
+		private IBaseActivityInfo mActivityInfo;
 
 		public AndroidGamePlatform (
 			IGraphicsDeviceManager manager,
 			IPlatformActivator activator,
 
-			IAndroidDevicePlatform devicePlatform,
 			IAndroidGameActivity activity,
 			IAndroidCompatibility compatibility,
 			IAndroidGLGameWindow window,
 			IMediaPlayer mediaPlayer,
-			IMediaLibrary mediaLibrary)
+			IMediaLibrary mediaLibrary,
+			IGraphicsDevice device,
+			IGameBackbone backbone,
+			IPrimaryThreadLoader primaryThreadLoader,
+			IViewRefocuser viewRefocuser,
+			IBaseActivityInfo activityInfo
+			)
 			: base (manager, activator)
         {
 			mActivity = activity;
-			mDevicePlatform = devicePlatform;
 			mCompatibility = compatibility;
 			mMediaLibrary = mediaLibrary;
 			mMediaPlayer = mediaPlayer;
+			mDevice = device;
+			mBackbone = backbone;
+			mPrimaryThreadLoader = primaryThreadLoader;
+			mViewRefocuser = viewRefocuser;
+			mActivityInfo = activityInfo;
 
 			System.Diagnostics.Debug.Assert(mActivity != null, "Must set Game.Activity before creating the Game instance");
 			mActivity.Paused += Activity_Paused;
@@ -72,14 +85,14 @@ namespace MonoGame.Platform.AndroidGL
 
         public override void StartRunLoop()
         {
-			_gameWindow.GameView.Resume();
+			mViewRefocuser.Resume();
         }
 
         public override bool BeforeUpdate(GameTime gameTime)
         {
             if (!_initialized)
             {
-                Game.DoInitialize();
+				mBackbone.DoInitialize();
                 _initialized = true;
             }
 
@@ -88,7 +101,7 @@ namespace MonoGame.Platform.AndroidGL
 
         public override bool BeforeDraw(GameTime gameTime)
         {
-            PrimaryThreadLoader.DoLoads();
+			mPrimaryThreadLoader.DoLoads();
             return !IsPlayingVdeo;
         }
 
@@ -113,7 +126,7 @@ namespace MonoGame.Platform.AndroidGL
         {
 
             // Run it as fast as we can to allow for more response on threaded GPU resource creation
-			_gameWindow.GameView.Run();
+			mViewRefocuser.Run();
 
             return false;
         }
@@ -142,11 +155,11 @@ namespace MonoGame.Platform.AndroidGL
 			if (!Activator.IsActive)
             {
 				Activator.IsActive = true;
-				_gameWindow.GameView.Resume();
-				if(_MediaPlayer_PrevState == MediaState.Playing && Game.Activity.AutoPauseAndResumeMediaPlayer)
+				mViewRefocuser.Resume();
+				if(_MediaPlayer_PrevState == MediaState.Playing && mActivityInfo.AutoPauseAndResumeMediaPlayer)
                 	mMediaPlayer.Resume();
-				if (!_gameWindow.GameView.IsFocused)
-					_gameWindow.GameView.RequestFocus();
+				if (!mViewRefocuser.IsFocused)
+					mViewRefocuser.Refocus();
             }
         }
 
@@ -159,10 +172,10 @@ namespace MonoGame.Platform.AndroidGL
 				Activator.IsActive = false;
 				_MediaPlayer_PrevState = mMediaPlayer.State;
 				//_gameWindow.GameView.Pause();
-				mDevicePlatform.Pause();
+				mViewRefocuser.Pause();
 				//_gameWindow.GameView.ClearFocus();
-				mDevicePlatform.ClearFocus();
-				if(Game.Activity.AutoPauseAndResumeMediaPlayer)
+				mViewRefocuser.Clear();
+				if(mActivityInfo.AutoPauseAndResumeMediaPlayer)
 					mMediaPlayer.Pause();
             }
         }
@@ -183,11 +196,9 @@ namespace MonoGame.Platform.AndroidGL
         {
             try
             {
-                var device = Game.GraphicsDevice;
-                if (device != null)
-                    device.Present();
+				mDevice.Present();
 
-				_gameWindow.GameView.SwapBuffers();
+				mViewRefocuser.SwapBuffers();
             }
             catch (Exception ex)
             {

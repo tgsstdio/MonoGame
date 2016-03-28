@@ -23,7 +23,7 @@ using Android.Views;
 
 namespace Microsoft.Xna.Framework
 {
-	public class GraphicsDeviceManager : IGraphicsDeviceService, IGraphicsDeviceManager
+	public class GraphicsDeviceManager : IGraphicsDeviceManager
     {
         private GameBackbone _game;
 		private IGraphicsDevice _graphicsDevice;
@@ -50,19 +50,22 @@ namespace Microsoft.Xna.Framework
 		private ISamplerStateCollectionPlatform mSamplerStateCollectionPlatform;
 		private ITextureCollectionPlatform mTextureCollectionPlatform;
 		private IPresentationParameters mPresentationParameters;
+		private IGraphicsDeviceService mDeviceService;
 
 		public GraphicsDeviceManager(
 			GameBackbone game,
 			IGraphicsDevice graphicsDevice,
 			IGraphicsDevicePlatform devicePlatform,
 			ITextureCollectionPlatform texCollectionPlatform,
-			IPresentationParameters preferences
+			IPresentationParameters preferences,
+			IGraphicsDeviceService deviceService
 			)
         {
 			_graphicsDevice = graphicsDevice;
 			mDevicePlatform = devicePlatform;
 			mTextureCollectionPlatform = texCollectionPlatform;
 			mPresentationParameters = preferences;
+			mDeviceService = deviceService;
 
             if (game == null)
                 throw new ArgumentNullException("The game cannot be null!");
@@ -104,7 +107,7 @@ namespace Microsoft.Xna.Framework
         {
 			Initialize();
 
-            OnDeviceCreated(EventArgs.Empty);
+			mDeviceService.OnDeviceCreated(this, EventArgs.Empty);
         }
 
         public bool BeginDraw()
@@ -127,39 +130,7 @@ namespace Microsoft.Xna.Framework
 
         #region IGraphicsDeviceService Members
 
-        public event EventHandler<EventArgs> DeviceCreated;
-        public event EventHandler<EventArgs> DeviceDisposing;
-        public event EventHandler<EventArgs> DeviceReset;
-        public event EventHandler<EventArgs> DeviceResetting;
         public event EventHandler<PreparingDeviceSettingsEventArgs> PreparingDeviceSettings;
-
-        // FIXME: Why does the GraphicsDeviceManager not know enough about the
-        //        GraphicsDevice to raise these events without help?
-        internal void OnDeviceDisposing(EventArgs e)
-        {
-            Raise(DeviceDisposing, e);
-        }
-
-        // FIXME: Why does the GraphicsDeviceManager not know enough about the
-        //        GraphicsDevice to raise these events without help?
-        internal void OnDeviceResetting(EventArgs e)
-        {
-            Raise(DeviceResetting, e);
-        }
-
-        // FIXME: Why does the GraphicsDeviceManager not know enough about the
-        //        GraphicsDevice to raise these events without help?
-        internal void OnDeviceReset(EventArgs e)
-        {
-            Raise(DeviceReset, e);
-        }
-
-        // FIXME: Why does the GraphicsDeviceManager not know enough about the
-        //        GraphicsDevice to raise these events without help?
-        internal void OnDeviceCreated(EventArgs e)
-        {
-            Raise(DeviceCreated, e);
-        }
 
         private void Raise<TEventArgs>(EventHandler<TEventArgs> handler, TEventArgs e)
             where TEventArgs : EventArgs

@@ -8,6 +8,11 @@ namespace HelloCube
 	{
 		#region IGraphicsDevice implementation
 
+		public Viewport Viewport {
+			get;
+			set;
+		}
+
 		public void OnDeviceReset ()
 		{
 			throw new NotImplementedException ();

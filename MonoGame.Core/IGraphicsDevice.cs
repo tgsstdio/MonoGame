@@ -5,6 +5,11 @@ namespace Microsoft.Xna.Framework
 {
 	public interface IGraphicsDevice : IDisposable
 	{
+		Viewport Viewport {
+			get;
+			set;
+		}
+
 		void OnDeviceReset ();
 
 		IPresentationParameters PresentationParameters { get; }

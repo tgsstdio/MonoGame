@@ -14,6 +14,8 @@ using OpenTK.Platform.Android;
 using Microsoft.Xna.Framework;
 using MonoGame.Platform.AndroidGL.Input.Touch;
 using MonoGame.Platform.AndroidGL.Input;
+using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Content;
 
 namespace MonoGame.Platform.AndroidGL
 {
@@ -32,13 +34,14 @@ namespace MonoGame.Platform.AndroidGL
 		private readonly IGraphicsDeviceService mDeviceService;
 		private readonly IGraphicsDevice mGraphicsDevice;
 		private readonly IResumeManager mResumer;
+		private GamePad mGamePad;
 
         public bool IsResuming { get; private set; }
         private bool _lostContext;
 #if !OUYA
         private bool backPressed;
 #endif
-
+		private IContentManager mContentManager;
 		public MonoGameAndroidGameView(
 			Context context,
 			IAndroidGLGameWindow androidGameWindow,
@@ -50,7 +53,9 @@ namespace MonoGame.Platform.AndroidGL
 			IPlatformActivator activator,
 			IGraphicsDeviceService deviceService,
 			IGraphicsDevice graphicsDevice,
-			IResumeManager resumer
+			IResumeManager resumer,
+			IContentManager contentManager,
+			GamePad gamepad
 			)
             : base(context)
         {
@@ -64,17 +69,19 @@ namespace MonoGame.Platform.AndroidGL
 			mDeviceService = deviceService;
 			mGraphicsDevice = graphicsDevice;
 			mResumer = resumer;
+			mGamePad = gamepad;
+			mContentManager = contentManager;
         }
 
-        public bool TouchEnabled
-        {
-            get { return _touchManager.Enabled; }
-            set
-            {
-                _touchManager.Enabled = value;
-                SetOnTouchListener(value ? this : null);
-            }
-        }
+//        public bool TouchEnabled
+//        {
+//            get { return _touchManager.Enabled; }
+//            set
+//            {
+//                _touchManager.Enabled = value;
+//                SetOnTouchListener(value ? this : null);
+//            }
+//        }
 
         #region IOnTouchListener implementation
 
@@ -192,10 +199,8 @@ namespace MonoGame.Platform.AndroidGL
             Android.Util.Log.Debug("MonoGame", "MonoGameAndroidGameView Context Lost");
 
             // DeviceResetting events
-			mDeviceService.DeviceResetting(this, EventArgs.Empty);
+			mDeviceService.OnDeviceResetting(this, EventArgs.Empty);
 
-			if (mDeviceService.DeviceResetting != null)
-				mDeviceService.DeviceResetting(this, EventArgs.Empty);
             mGraphicsDevice.OnDeviceResetting();
             _lostContext = true;
         }
@@ -228,12 +233,11 @@ namespace MonoGame.Platform.AndroidGL
                         o =>
                         {
                             Android.Util.Log.Debug("MonoGame", "Begin reloading graphics content");
-                            Microsoft.Xna.Framework.Content.ContentManager.ReloadGraphicsContent();
+							mContentManager.ReloadGraphicsContent();
                             Android.Util.Log.Debug("MonoGame", "End reloading graphics content");
 
                             // DeviceReset events
-							if (mDeviceService.DeviceReset != null)
-								mDeviceService.DeviceReset(this, EventArgs.Empty);
+							mDeviceService.DeviceReset(this, EventArgs.Empty);
                             mGraphicsDevice.OnDeviceReset();
 
                             IsResuming = false;
@@ -331,7 +335,7 @@ namespace MonoGame.Platform.AndroidGL
             if (keyCode == Keycode.Back && !this.backPressed)
             {
                 this.backPressed = true;
-                GamePad.Back = true;
+                mGamePad. Back = true;
                 return true;
             }
 #endif
