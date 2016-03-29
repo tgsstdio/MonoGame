@@ -246,6 +246,16 @@
     <Compile Include="PhysicalDevice\IMgPhysicalDevice.cs" />
     <Compile Include="Queue\IMgQueue.cs" />
     <Compile Include="Instance\IMgInstance.cs" />
+    <Compile Include="Queue\MgSubmitInfo.cs" />
+    <Compile Include="Queue\MgSparseImageMemoryBind.cs" />
+    <Compile Include="Queue\MgSparseImageMemoryBindInfo.cs" />
+    <Compile Include="Queue\MgSparseMemoryBindFlagBits.cs" />
+    <Compile Include="Queue\MgSparseMemoryBind.cs" />
+    <Compile Include="Queue\MgSparseBufferMemoryBindInfo.cs" />
+    <Compile Include="Queue\MgSparseImageOpaqueMemoryBindInfo.cs" />
+    <Compile Include="Queue\MgBindSparseInfo.cs" />
+    <Compile Include="Queue\MgPresentInfoKHR.cs" />
+    <Compile Include="Queue\MgSubmitInfoWaitSemaphoreInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>
