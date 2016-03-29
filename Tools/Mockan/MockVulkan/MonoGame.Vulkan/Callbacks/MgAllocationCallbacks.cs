@@ -6,27 +6,27 @@ namespace MonoGame.Graphics
 	public delegate void PFN_vkInternalAllocationNotification(
 		IntPtr pUserData,
 		IntPtr size,
-		InternalAllocationType allocationType,
-		SystemAllocationScope allocationScope);
+		MgInternalAllocationType allocationType,
+		MgSystemAllocationScope allocationScope);
 
 	public delegate void PFN_vkInternalFreeNotification(
 		IntPtr pUserData,
 		IntPtr size,
-		InternalAllocationType allocationType,
-		SystemAllocationScope allocationScope);
+		MgInternalAllocationType allocationType,
+		MgSystemAllocationScope allocationScope);
 
 	public delegate void PFN_vkReallocationFunction(
 		IntPtr pUserData,
 		IntPtr pOriginal,
 		IntPtr size,
 		IntPtr alignment,
-		SystemAllocationScope allocationScope);
+		MgSystemAllocationScope allocationScope);
 
 	public delegate void PFN_vkAllocationFunction(
 		IntPtr pUserData,
 		IntPtr size,
 		IntPtr alignment,
-		SystemAllocationScope allocationScope);
+		MgSystemAllocationScope allocationScope);
 
 	public delegate void PFN_vkFreeFunction(
 		IntPtr pUserData,
@@ -35,8 +35,8 @@ namespace MonoGame.Graphics
 	public delegate void PFN_vkVoidFunction();
 
 	public delegate void PFN_vkDebugReportCallbackEXT(
-		DebugReportFlagBitsEXT flags,
-		DebugReportObjectTypeEXT objectType,
+		MgDebugReportFlagBitsEXT flags,
+		MgDebugReportObjectTypeEXT objectType,
 		UInt64 @object,
 		IntPtr location,
 		Int32 messageCode,
