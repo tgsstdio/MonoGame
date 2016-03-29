@@ -219,6 +219,31 @@
     <Compile Include="Device\CommandBufferLevel.cs" />
     <Compile Include="Device\SwapchainKHR.cs" />
     <Compile Include="Device\SwapchainCreateInfoKHR.cs" />
+    <Compile Include="CommandBuffer\StencilFaceFlagBits.cs" />
+    <Compile Include="CommandBuffer\CommandBufferBeginInfo.cs" />
+    <Compile Include="CommandBuffer\CommandBufferInheritanceInfo.cs" />
+    <Compile Include="CommandBuffer\CommandBufferUsageFlagBits.cs" />
+    <Compile Include="CommandBuffer\CommandBufferResetFlagBits.cs" />
+    <Compile Include="CommandBuffer\IndexType.cs" />
+    <Compile Include="CommandBuffer\BufferCopy.cs" />
+    <Compile Include="CommandBuffer\ImageCopy.cs" />
+    <Compile Include="Core\Offset3D.cs" />
+    <Compile Include="CommandBuffer\ImageSubresourceLayers.cs" />
+    <Compile Include="CommandBuffer\ImageBlit.cs" />
+    <Compile Include="CommandBuffer\BufferImageCopy.cs" />
+    <Compile Include="CommandBuffer\ClearColorValue.cs" />
+    <Compile Include="Core\Vec4Ui.cs" />
+    <Compile Include="Core\Vec4i.cs" />
+    <Compile Include="CommandBuffer\ClearDepthStencilValue.cs" />
+    <Compile Include="CommandBuffer\ClearAttachment.cs" />
+    <Compile Include="CommandBuffer\ClearValue.cs" />
+    <Compile Include="CommandBuffer\ClearRect.cs" />
+    <Compile Include="CommandBuffer\ImageResolve.cs" />
+    <Compile Include="CommandBuffer\MemoryBarrier.cs" />
+    <Compile Include="CommandBuffer\BufferMemoryBarrier.cs" />
+    <Compile Include="CommandBuffer\ImageMemoryBarrier.cs" />
+    <Compile Include="CommandBuffer\RenderPassBeginInfo.cs" />
+    <Compile Include="CommandBuffer\SubpassContents.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>
