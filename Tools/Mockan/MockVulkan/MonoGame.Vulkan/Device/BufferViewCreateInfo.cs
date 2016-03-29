@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace MonoGame.Graphics.Vk
+namespace MonoGame.Graphics
 {
-	using VkBuffer = MonoGame.Graphics.Vk.Buffer;
+	using VkBuffer = MonoGame.Graphics.Buffer;
 
 	public class BufferViewCreateInfo
 	{

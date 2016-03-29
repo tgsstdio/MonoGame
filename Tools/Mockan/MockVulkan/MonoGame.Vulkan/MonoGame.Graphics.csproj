@@ -6,7 +6,7 @@
     <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <ProjectGuid>{9F9AC448-9D17-43E5-8889-285426290891}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>MonoGame.Graphics.Vk</RootNamespace>
+    <RootNamespace>MonoGame.Graphics</RootNamespace>
     <AssemblyName>MonoGame.Graphics.Vk</AssemblyName>
     <TargetFrameworkProfile>Profile78</TargetFrameworkProfile>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
@@ -32,7 +32,6 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Enums\Result.cs" />
-    <Compile Include="Callbacks\AllocationCallbacks.cs" />
     <Compile Include="ReturnedOnly\LayerProperties.cs" />
     <Compile Include="ReturnedOnly\ExtensionProperties.cs" />
     <Compile Include="Instance\IInstance.cs" />
@@ -41,9 +40,6 @@
     <Compile Include="Instance\SurfaceTransformFlagBitsKHR.cs" />
     <Compile Include="Instance\SurfaceKHR.cs" />
     <Compile Include="Instance\Win32SurfaceCreateInfoKHR.cs" />
-    <Compile Include="Entrypoint\IEntrypoint.cs" />
-    <Compile Include="Entrypoint\ApplicationInfo.cs" />
-    <Compile Include="Entrypoint\InstanceCreateInfo.cs" />
     <Compile Include="Instance\DebugReportCallbackCreateInfoEXT.cs" />
     <Compile Include="Instance\DebugReportFlagBitsEXT.cs" />
     <Compile Include="Instance\DebugReportObjectTypeEXT.cs" />
@@ -132,7 +128,6 @@
     <Compile Include="Core\ComponentMapping.cs" />
     <Compile Include="Enums\ComponentSwizzle.cs" />
     <Compile Include="Device\ImageView.cs" />
-    <Compile Include="Device\ShaderModuleCreateInfo.cs" />
     <Compile Include="Device\ImageSubresourceRange.cs" />
     <Compile Include="Device\ShaderModule.cs" />
     <Compile Include="Device\PipelineCacheCreateInfo.cs" />
@@ -244,6 +239,11 @@
     <Compile Include="CommandBuffer\ImageMemoryBarrier.cs" />
     <Compile Include="CommandBuffer\RenderPassBeginInfo.cs" />
     <Compile Include="CommandBuffer\SubpassContents.cs" />
+    <Compile Include="Device\MgShaderModuleCreateInfo.cs" />
+    <Compile Include="Entrypoint\MgApplicationInfo.cs" />
+    <Compile Include="Entrypoint\MgInstanceCreateInfo.cs" />
+    <Compile Include="Entrypoint\IMgEntrypoint.cs" />
+    <Compile Include="Callbacks\MgAllocationCallbacks.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>

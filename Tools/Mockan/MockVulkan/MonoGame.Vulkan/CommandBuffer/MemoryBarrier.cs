@@ -1,4 +1,4 @@
-﻿namespace MonoGame.Graphics.Vk
+﻿namespace MonoGame.Graphics
 {
 	public class MemoryBarrier
 	{

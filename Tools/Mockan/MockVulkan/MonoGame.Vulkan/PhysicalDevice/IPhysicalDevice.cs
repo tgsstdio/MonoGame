@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MonoGame.Graphics.Vk
+namespace MonoGame.Graphics
 {
 	public interface IPhysicalDevice
 	{
@@ -10,7 +10,7 @@ namespace MonoGame.Graphics.Vk
 		void GetPhysicalDeviceFeatures(out PhysicalDeviceFeatures pFeatures);
 		void GetPhysicalDeviceFormatProperties(Format format, out FormatProperties pFormatProperties);
 		Result GetPhysicalDeviceImageFormatProperties(Format format, ImageType type, ImageTiling tiling, ImageUsageFlagBits usage, ImageCreateFlagBits flags, out ImageFormatProperties pImageFormatProperties);
-		Result CreateDevice(DeviceCreateInfo pCreateInfo, AllocationCallbacks allocator, out IDevice pDevice);
+		Result CreateDevice(DeviceCreateInfo pCreateInfo, MgAllocationCallbacks allocator, out IDevice pDevice);
 		Result EnumerateDeviceLayerProperties(out LayerProperties[] pProperties);
 		Result EnumerateDeviceExtensionProperties(string pLayerName, out ExtensionProperties[] pProperties);
 		void GetPhysicalDeviceSparseImageFormatProperties(Format format, ImageType type, SampleCountFlagBits samples, ImageUsageFlagBits usage, ImageTiling tiling, out SparseImageFormatProperties[] pProperties);

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MonoGame.Graphics.Vk
+namespace MonoGame.Graphics
 {
 	// DELEGATES
 	public delegate void PFN_vkInternalAllocationNotification(
@@ -44,7 +44,7 @@ namespace MonoGame.Graphics.Vk
 		String pMessage,
 		IntPtr pUserData);
 
-	public class AllocationCallbacks
+	public class MgAllocationCallbacks
 	{
 		public IntPtr UserData { get; set; }
 		public PFN_vkAllocationFunction PfnAllocation { get; set; }

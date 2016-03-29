@@ -1,6 +1,6 @@
 using System.Runtime.InteropServices;
 
-namespace MonoGame.Graphics.Vk
+namespace MonoGame.Graphics
 {
 	[StructLayout(LayoutKind.Explicit)]
 	public struct ClearValue

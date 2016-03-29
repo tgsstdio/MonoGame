@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace MonoGame.Graphics.Vk
+namespace MonoGame.Graphics
 {
-	public class ApplicationInfo
+	public class MgApplicationInfo
 	{
 		public String ApplicationName { get; set; }
 		public UInt32 ApplicationVersion { get; set; }

@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace MonoGame.Graphics.Vk
+namespace MonoGame.Graphics
 {
-	using VkImage = MonoGame.Graphics.Vk.Image;
+	using VkImage = MonoGame.Graphics.Image;
 
 	// CommandBuffer
 	public interface ICommandBuffer

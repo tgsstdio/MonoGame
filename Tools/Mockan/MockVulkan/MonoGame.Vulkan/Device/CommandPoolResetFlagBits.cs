@@ -1,6 +1,6 @@
 using System;
 
-namespace MonoGame.Graphics.Vk
+namespace MonoGame.Graphics
 {
 	[Flags] 
 	public enum CommandPoolResetFlagBits : byte

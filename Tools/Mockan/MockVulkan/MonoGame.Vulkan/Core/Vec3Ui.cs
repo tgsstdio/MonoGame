@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace MonoGame.Graphics.Vk
+namespace MonoGame.Graphics
 {
 	[StructLayout(LayoutKind.Sequential)]
 	public struct Vec3Ui

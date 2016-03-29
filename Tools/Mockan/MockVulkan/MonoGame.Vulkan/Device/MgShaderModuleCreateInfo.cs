@@ -1,11 +1,12 @@
 ﻿using System;
 using System.IO;
 
-namespace MonoGame.Graphics.Vk
+namespace MonoGame.Graphics
 {
-	public class ShaderModuleCreateInfo
+	public class MgShaderModuleCreateInfo
 	{
 		public UInt32 Flags { get; set; }
+		public UIntPtr CodeSize { get; set;}
 		public Stream Code { get; set; }
 	}
 }
