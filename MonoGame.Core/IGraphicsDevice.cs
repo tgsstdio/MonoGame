@@ -5,6 +5,8 @@ namespace Microsoft.Xna.Framework
 {
 	public interface IGraphicsDevice : IDisposable
 	{
+		void ClearToBlack ();
+
 		Viewport Viewport {
 			get;
 			set;

@@ -12,10 +12,18 @@ namespace MonoGame.Platform.AndroidGL.Media
     {
         private static readonly TimeSpan MinimumSongDuration = TimeSpan.FromSeconds(3);
 
-        internal static Context Context { get; set; }
+		internal ContentResolver mResolver;
 
         private IAlbumCollection albumCollection;
         private ISongCollection songCollection;
+
+		IAndroidAlbumArtContentResolver mArtResolver;
+
+		public AndroidMediaLibraryPlatform (ContentResolver resolver, IAndroidAlbumArtContentResolver artResolver)
+		{
+			mResolver = resolver;
+			mArtResolver = artResolver;
+		}
 
 		public void Initialize ()
 		{
@@ -32,7 +40,7 @@ namespace MonoGame.Platform.AndroidGL.Media
             List<ISong> songList = new List<ISong>();
             List<IAlbum> albumList = new List<IAlbum>();
 
-            using (var musicCursor = Context.ContentResolver.Query(MediaStore.Audio.Media.ExternalContentUri, null, null, null, null))
+			using (var musicCursor = mResolver.Query(MediaStore.Audio.Media.ExternalContentUri, null, null, null, null))
             {
                 if (musicCursor != null)
                 {
@@ -108,12 +116,13 @@ namespace MonoGame.Platform.AndroidGL.Media
                             IAlbum album;
                             if (!albums.TryGetValue(albumNameProperty, out album))
                             {
-                                album = new AndroidAlbum(new StandardSongCollection(), albumNameProperty, albumArtist, genre, albumArtUri);
+								album = new AndroidAlbum(mArtResolver, new StandardSongCollection(), albumNameProperty, albumArtist, genre, albumArtUri);
                                 albums.Add(album.Name, album);
                                 albumList.Add(album);
                             }
 
 							var song = new AndroidSong(album, artist, genre, titleProperty, duration, assetUri);
+							song.Initialize();
                             song.Album.Songs.Add(song);
                             songList.Add(song);
                         }

@@ -83,6 +83,13 @@
     <Compile Include="Media\AndroidSong.cs" />
     <Compile Include="Media\AndroidMediaPlayer.cs" />
     <Compile Include="Media\IAndroidMediaPlayer.cs" />
+    <Compile Include="Media\AndroidSongPlatform.cs" />
+    <Compile Include="Media\IAndroidSongPlayer.cs" />
+    <Compile Include="Media\AndroidSongPlayer.cs" />
+    <Compile Include="Media\IAndroidAlbumArtContentResolver.cs" />
+    <Compile Include="ScreenLock.cs" />
+    <Compile Include="IViewResumer.cs" />
+    <Compile Include="ViewResumer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />

@@ -1,16 +1,20 @@
 ﻿using OpenTK.Platform.Android;
 using MonoGame.Platform.AndroidGL.Input.Touch;
+using Android.Views;
 
 namespace MonoGame.Platform.AndroidGL
 {
 	public class ViewRefocuser : IViewRefocuser
 	{
 		private readonly AndroidGameView mGameView;
-		private IAndroidTouchEventManager mTouchManager;
-		public ViewRefocuser (AndroidGameView view, IAndroidTouchEventManager touchEventManager)
+		private readonly IAndroidTouchEventManager mTouchManager;
+		readonly View.IOnTouchListener mOnTouchListener;
+
+		public ViewRefocuser (AndroidGameView view, IAndroidTouchEventManager touchEventManager, View.IOnTouchListener onTouchListener)
 		{
 			mGameView = view;
 			mTouchManager = touchEventManager;
+			mOnTouchListener = onTouchListener;
 		}
 
 		#region IViewRefocuser implementation
@@ -54,6 +58,16 @@ namespace MonoGame.Platform.AndroidGL
 		public void MakeCurrent ()
 		{
 			mGameView.MakeCurrent ();
+		}
+
+		public bool TouchEnabled
+		{
+			get { return mTouchManager.Enabled; }
+			set
+			{
+				mTouchManager.Enabled = value;
+				mGameView.SetOnTouchListener(value ? mOnTouchListener : null);
+			}
 		}
 		#endregion
 	}

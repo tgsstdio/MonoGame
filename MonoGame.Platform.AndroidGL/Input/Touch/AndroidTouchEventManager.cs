@@ -13,7 +13,7 @@ namespace MonoGame.Platform.AndroidGL.Input.Touch
     /// This is required as Android reports touch IDs of 0 to 5, which leads to incorrect handling of touch events.
     /// Motivation and discussion: http://monogame.codeplex.com/discussions/382252
     /// </summary>
-    class AndroidTouchEventManager
+	public class AndroidTouchEventManager : IAndroidTouchEventManager
     {
         readonly IGameWindow _gameWindow;
 		readonly ITouchPanel mTouchPanel;

@@ -7,13 +7,13 @@ namespace MonoGame.Platform.AndroidGL
 {
 	public class ScreenReceiver : BroadcastReceiver
 	{
-		private readonly AndroidGameView mView;
+		private readonly IViewResumer mViewResume;
 		private readonly IMediaPlayer mMediaPlayer;
 		private readonly KeyguardManager mKeyguard;
 		private readonly IScreenLock mScreenLock;
-		public ScreenReceiver (AndroidGameView view, IMediaPlayer mediaPlayer, KeyguardManager keyGuard, IScreenLock screenLock)
+		public ScreenReceiver (IViewResumer resumer, IMediaPlayer mediaPlayer, KeyguardManager keyGuard, IScreenLock screenLock)
 		{
-			mView = view;
+			mViewResume = resumer;
 			mMediaPlayer = mediaPlayer;
 			mKeyguard = keyGuard;
 			mScreenLock = screenLock;
@@ -57,7 +57,7 @@ namespace MonoGame.Platform.AndroidGL
         {
 			mScreenLock.ScreenLocked = false;
 			mMediaPlayer.IsMuted = false;
-			mView.Resume();
+			mViewResume.Resume();
         }
     }
 }

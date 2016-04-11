@@ -96,17 +96,18 @@ namespace MonoGame.Platform.AndroidGL.Media
             }
         }
 
-		private AndroidAlbum(ISongCollection songCollection, string name, IArtist artist, IGenre genre)
+		private AndroidAlbum(IAndroidAlbumArtContentResolver artResolver, ISongCollection songCollection, string name, IArtist artist, IGenre genre)
         {
+			this.mArtResolver = artResolver;
             this.songCollection = songCollection;
             this.album = name;
             this.artist = artist;
             this.genre = genre;
         }
 
-		internal AndroidAlbum(ISongCollection songCollection, string name, IArtist artist, IGenre genre, Android.Net.Uri thumbnail)
-            : this(songCollection, name, artist, genre)
-        {
+		internal AndroidAlbum(IAndroidAlbumArtContentResolver artResolver, ISongCollection songCollection, string name, IArtist artist, IGenre genre, Android.Net.Uri thumbnail)
+			: this(artResolver, songCollection, name, artist, genre)
+        {			
             this.thumbnail = thumbnail;
         }
 
@@ -119,10 +120,12 @@ namespace MonoGame.Platform.AndroidGL.Media
 
         }
         
+		private IAndroidAlbumArtContentResolver mArtResolver;
+
         [CLSCompliant(false)]
         public Bitmap GetAlbumArt(int width = 0, int height = 0)
         {
-            var albumArt = MediaStore.Images.Media.GetBitmap(MediaLibrary.Context.ContentResolver, this.thumbnail);
+			var albumArt = mArtResolver.Resolve (this.thumbnail);
             if (width == 0 || height == 0)
                 return albumArt;
 

@@ -154,6 +154,12 @@
     <Compile Include="Audio\ISoundEffectPlatform.cs" />
     <Compile Include="Audio\AudioChannels.cs" />
     <Compile Include="IThreadSleeper.cs" />
+    <Compile Include="Media\BaseSong.cs" />
+    <Compile Include="Graphics\DefaultGraphicsDeviceQuery.cs" />
+    <Compile Include="PlatformActivator.cs" />
+    <Compile Include="Graphics\BaseGraphicsDevice.cs" />
+    <Compile Include="Graphics\GraphicsMetrics.cs" />
+    <Compile Include="Graphics\NullGraphicsDevice.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>

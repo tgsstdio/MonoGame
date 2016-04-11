@@ -9,6 +9,20 @@ namespace MonoGame.Platform.AndroidGL
 	public class NullMediaPlayer :IMediaPlayer
 	{
 		#region IMediaPlayer implementation
+
+		public void Play (ISong song)
+		{
+			throw new System.NotImplementedException ();
+		}
+
+		public bool IsRepeating {
+			get {
+				throw new System.NotImplementedException ();
+			}
+			set {
+				throw new System.NotImplementedException ();
+			}
+		}
 		public void Pause ()
 		{
 			throw new System.NotImplementedException ();

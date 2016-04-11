@@ -48,7 +48,6 @@
     <Compile Include="MockGraphicsDevicePreferences.cs" />
     <Compile Include="NullGraphicsDeviceLogger.cs" />
     <Compile Include="MockSamplerStateCollectionPlatform.cs" />
-    <Compile Include="MockGraphicsDevice.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

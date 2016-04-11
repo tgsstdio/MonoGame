@@ -6,6 +6,11 @@ namespace MonoGame.Platform.DesktopGL
 {
 	public class BaseGraphicsDevice : IGraphicsDevice
 	{
+		public void ClearToBlack ()
+		{
+			throw new NotImplementedException ();
+		}
+
 		public Viewport Viewport {
 			get;
 			set;

@@ -53,12 +53,10 @@
     <Compile Include="Desktop\DesktopGLWindowResetter.cs" />
     <Compile Include="DesktopGLExitStrategy.cs" />
     <Compile Include="IWindowExitStrategy.cs" />
-    <Compile Include="DesktopGLGraphicsDeviceQuery.cs" />
     <Compile Include="Desktop\IOpenTKWindowResetter.cs" />
     <Compile Include="Utilities\OggStream.cs" />
     <Compile Include="Graphics\DesktopGLGraphicsAdapter.cs" />
     <Compile Include="Graphics\DesktopGLGraphicsAdapterCollection.cs" />
-    <Compile Include="Graphics\BaseGraphicsDevice.cs" />
     <Compile Include="Graphics\IGraphicsDeviceLogger.cs" />
     <Compile Include="Graphics\FullGLFramebufferHelperEXT.cs" />
     <Compile Include="Graphics\FullGLFramebufferHelper.cs" />

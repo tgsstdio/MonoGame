@@ -9,6 +9,13 @@ namespace MonoGame.Platform.AndroidGL
 {
 	public interface IAndroidGameActivity
 	{
+		Android.Content.Res.Orientation ConfigurationOrientation {
+			get;
+			set;
+		}
+
+		Android.Content.PM.ScreenOrientation RequestedOrientation { set; get; }
+
 		void MoveTaskToBack (bool value);
 
 		event EventHandler Resumed;

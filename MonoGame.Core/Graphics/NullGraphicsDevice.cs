@@ -2,11 +2,16 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace HelloCube
+namespace MonoGame.Core
 {
-	public class MockGraphicsDevice : IGraphicsDevice
+	public class NullGraphicsDevice : IGraphicsDevice
 	{
 		#region IGraphicsDevice implementation
+
+		public void ClearToBlack ()
+		{
+			throw new NotImplementedException ();
+		}
 
 		public Viewport Viewport {
 			get;

@@ -13,6 +13,11 @@ namespace MonoGame.Platform.AndroidGL
 		void Refocus ();
 		void MakeCurrent();
 		void SwapBuffers ();
-		void Resume();
+		//void Resume();
+
+		bool TouchEnabled {
+			get;
+			set;
+		}
 	}
 }

@@ -26,7 +26,7 @@ namespace MonoGame.Platform.AndroidGL
     {
 		private readonly IGraphicsDeviceQuery mDeviceQuery;
         private readonly IAndroidGLGameWindow _gameWindow;
-        private readonly IGraphicsDeviceManager _game;
+        private readonly IGraphicsDeviceManager _deviceManager;
         private readonly IAndroidTouchEventManager _touchManager;
 		private readonly IScreenLock mScreenLock;
 		private readonly IAndroidKeyboardListener mKeyboard;
@@ -45,7 +45,7 @@ namespace MonoGame.Platform.AndroidGL
 		public MonoGameAndroidGameView(
 			Context context,
 			IAndroidGLGameWindow androidGameWindow,
-			IGraphicsDeviceManager game,
+			IGraphicsDeviceManager deviceManager,
 			IAndroidTouchEventManager touchManager,
 			IGraphicsDeviceQuery deviceQuery,
 			IScreenLock receiver,
@@ -60,7 +60,7 @@ namespace MonoGame.Platform.AndroidGL
             : base(context)
         {
             _gameWindow = androidGameWindow;
-			_game = game;
+			_deviceManager = deviceManager;
 			_touchManager = touchManager;
 			mDeviceQuery = deviceQuery;
 			mScreenLock = receiver;
@@ -72,16 +72,6 @@ namespace MonoGame.Platform.AndroidGL
 			mGamePad = gamepad;
 			mContentManager = contentManager;
         }
-
-//        public bool TouchEnabled
-//        {
-//            get { return _touchManager.Enabled; }
-//            set
-//            {
-//                _touchManager.Enabled = value;
-//                SetOnTouchListener(value ? this : null);
-//            }
-//        }
 
         #region IOnTouchListener implementation
 
@@ -130,10 +120,10 @@ namespace MonoGame.Platform.AndroidGL
 
             // When the game is resumed from a portrait orientation it may receive a portrait surface at first.
             // If the game does not support portrait we should ignore it because we will receive the landscape surface a moment later.
-            if (width < height && (_game.SupportedOrientations & DisplayOrientation.Portrait) == 0)
+            if (width < height && (_deviceManager.SupportedOrientations & DisplayOrientation.Portrait) == 0)
                 return;
 
-            var manager = _game;
+            var manager = _deviceManager;
             
 			mDeviceQuery.PreferredBackBufferWidth = width;
 			mDeviceQuery.PreferredBackBufferHeight = height;
@@ -148,8 +138,8 @@ namespace MonoGame.Platform.AndroidGL
             SurfaceChanged(holder, format, width, height);
             Android.Util.Log.Debug("MonoGame", "MonoGameAndroidGameView.SurfaceChanged: format = " + format + ", width = " + width + ", height = " + height);
 
-            if (_game.GraphicsDevice != null)
-                _game.ResetClientBounds();
+            if (_deviceManager.GraphicsDevice != null)
+                _deviceManager.ResetClientBounds();
         }
 
         void ISurfaceHolderCallback.SurfaceDestroyed(ISurfaceHolder holder)
@@ -221,9 +211,9 @@ namespace MonoGame.Platform.AndroidGL
             {
                 _lostContext = false;
 
-                if (_game.GraphicsDevice != null)
+                if (_deviceManager.GraphicsDevice != null)
                 {
-                    _game.GraphicsDevice.Initialize();
+                    _deviceManager.GraphicsDevice.Initialize();
 
                     IsResuming = true;
 					mResumer.LoadContent();
@@ -237,7 +227,7 @@ namespace MonoGame.Platform.AndroidGL
                             Android.Util.Log.Debug("MonoGame", "End reloading graphics content");
 
                             // DeviceReset events
-							mDeviceService.DeviceReset(this, EventArgs.Empty);
+							mDeviceService.OnDeviceReset(this, EventArgs.Empty);
                             mGraphicsDevice.OnDeviceReset();
 
                             IsResuming = false;
@@ -251,10 +241,11 @@ namespace MonoGame.Platform.AndroidGL
         {
             Android.Util.Log.Debug("MonoGame", "MonoGameAndroidGameView.CreateFrameBuffer");
 
-            ContextRenderingApi = GLVersion.ES2;
+			// TODO : not sure if need anymore
+          //  ContextRenderingApi = GLVersion.ES2;
             int depth = 0;
             int stencil = 0;
-            switch (_game.PreferredDepthStencilFormat)
+            switch (_deviceManager.PreferredDepthStencilFormat)
             {
                 case DepthFormat.Depth16:
                     depth = 16;

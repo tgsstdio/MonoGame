@@ -2,14 +2,14 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace MonoGame.Platform.DesktopGL
+namespace MonoGame.Core
 {
-	public class DesktopGLGraphicsDeviceQuery : IGraphicsDeviceQuery
+	public class DefaultGraphicsDeviceQuery : IGraphicsDeviceQuery
 	{
 		private readonly IBackBufferPreferences mBackbuffer;
 		private readonly IPresentationParameters mPresentation;
 
-		public DesktopGLGraphicsDeviceQuery (IBackBufferPreferences backbuffer, IPresentationParameters presentation)
+		public DefaultGraphicsDeviceQuery (IBackBufferPreferences backbuffer, IPresentationParameters presentation)
 		{
 			mBackbuffer = backbuffer;
 			mPresentation = presentation;

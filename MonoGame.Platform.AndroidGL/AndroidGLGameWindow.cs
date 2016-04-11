@@ -54,11 +54,16 @@ namespace MonoGame.Platform.AndroidGL
 //            Resumer = resumer;
 //        }
 		private ITouchPanel mTouchPanel;
+		private TouchPanelState mTouchPanelState;
 		private IGameBackbone mBackbone;
 		private AndroidGLThreading mThreading;
 		private IScreenLock mScreenLock;
+		private Context mContext;
+		private IAndroidGameActivity mActivity;
+
 		public AndroidGLGameWindow(
 			Context context,
+			IAndroidGameActivity activity,
 			IGraphicsDevicePlatform devicePlatform,
 			IGameBackbone backbone,
 			MonoGameAndroidGameView view,
@@ -67,10 +72,13 @@ namespace MonoGame.Platform.AndroidGL
 			IPlatformActivator activator,
 			IResumeManager resumer,
 			ITouchPanel touchPanel,
+			TouchPanelState touchPanelState,
 			AndroidGLThreading threading,
 			IScreenLock screenLock
 			)
         {
+			mContext = context;
+			mActivity = activity;
 			_devicePlatform = devicePlatform;
 			mBackbone = backbone;
 			GameView = view;
@@ -79,6 +87,7 @@ namespace MonoGame.Platform.AndroidGL
 			mActivator = activator;
 			Resumer = resumer;
 			mTouchPanel = touchPanel;
+			mTouchPanelState = touchPanelState;
 			mThreading = threading;
 			mScreenLock = screenLock;
             Initialize(context);
@@ -131,7 +140,7 @@ namespace MonoGame.Platform.AndroidGL
                 }
 				else if (mDeviceManager.GraphicsDevice != null)
                 {
-					mDeviceManager.GraphicsDevice.Clear(Color.Black);
+					mDeviceManager.GraphicsDevice.ClearToBlack();
                     if (GameView.IsResuming && Resumer != null)
                     {
                         Resumer.Draw();
@@ -341,10 +350,10 @@ namespace MonoGame.Platform.AndroidGL
                     // so we need to clear them out.
                     if (wasPortrait != requestPortrait)
                     {
-                        TouchPanelState.ReleaseAllTouches();
+						mTouchPanelState.ReleaseAllTouches();
                     }
 
-                    Game.Activity.RequestedOrientation = requestedOrientation;
+					mActivity.RequestedOrientation = requestedOrientation;
 
                     OnOrientationChanged();
                 }

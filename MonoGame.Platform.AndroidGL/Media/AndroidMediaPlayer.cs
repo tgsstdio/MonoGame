@@ -47,6 +47,15 @@ namespace MonoGame.Platform.AndroidGL.Media
 			}
 		}
 
+
+		public bool IsRepeating {
+			get {
+				throw new NotImplementedException ();
+			}
+			set {
+				throw new NotImplementedException ();
+			}
+		}
 		#endregion
 	}
 }

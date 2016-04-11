@@ -12,6 +12,7 @@ using MonoGame.Platform.DesktopGL.Input;
 using OpenTK;
 using Microsoft.Xna.Framework.Audio;
 using MonoGame.Graphics;
+using MonoGame.Core;
 
 namespace HelloCube
 {
@@ -53,7 +54,7 @@ namespace HelloCube
 
 					container.Register<IOpenTKWindowResetter, DesktopGLWindowResetter>(Reuse.Singleton);
 					container.Register<IMouseListener, DesktopGLMouseListener>(Reuse.Singleton);
-					container.Register<IGraphicsDeviceQuery, DesktopGLGraphicsDeviceQuery>(Reuse.Singleton);
+					container.Register<IGraphicsDeviceQuery, DefaultGraphicsDeviceQuery>(Reuse.Singleton);
 
 						// AUDIO
 					container.Register<IOpenALSoundController, DesktopGLOALSoundController>(Reuse.Singleton);

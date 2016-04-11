@@ -13,11 +13,11 @@ namespace  MonoGame.Platform.Android.Example
 	// the ConfigurationChanges flags set here keep the EGL context
 	// from being destroyed whenever the device is rotated or the
 	// keyboard is shown (highly recommended for all GL apps)
-	[Activity (Label = "MonoGame.Platform.Android.Example",
-		ConfigurationChanges = ConfigChanges.KeyboardHidden,
-		ScreenOrientation = ScreenOrientation.SensorLandscape,
-		MainLauncher = true,
-		Icon = "@mipmap/icon")]
+//	[Activity (Label = "MonoGame.Platform.Android.Example",
+//		ConfigurationChanges = ConfigChanges.KeyboardHidden,
+//		ScreenOrientation = ScreenOrientation.SensorLandscape,
+//		MainLauncher = true,
+//		Icon = "@mipmap/icon")]
 	public class MainActivity : Activity
 	{
 		GLView1 view;

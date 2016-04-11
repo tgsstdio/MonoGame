@@ -10,7 +10,7 @@ using Microsoft.Xna.Framework.Media;
 
 namespace MonoGame.Platform.AndroidGL.Media
 {
-	public sealed class AndroidSong : ISong, IEquatable<AndroidSong>, IDisposable
+	public sealed class AndroidSong : BaseSong
     {
 //        static Android.Media.MediaPlayer _androidPlayer;
 //        static Song _playingSong;
@@ -18,7 +18,7 @@ namespace MonoGame.Platform.AndroidGL.Media
         private IAlbum album;
         private IArtist artist;
         private IGenre genre;
-        private string name;
+		public string _name;
         private TimeSpan duration;
         private TimeSpan position;
         private Android.Net.Uri assetUri;
@@ -36,168 +36,146 @@ namespace MonoGame.Platform.AndroidGL.Media
 //            _androidPlayer.Completion += AndroidPlayer_Completion;
 //        }
 
+		private IAndroidSongPlayer mPlayer;
+		public AndroidSong (IAndroidSongPlayer player, string name) : base(name)
+		{
+			mPlayer = player;
+		}
+
 		internal AndroidSong(IAlbum album, IArtist artist, IGenre genre, string name, TimeSpan duration, Android.Net.Uri assetUri)
+			: base(name) 
         {
             this.album = album;
             this.artist = artist;
             this.genre = genre;
-            this.name = name;
+            this._name = name;
             this.duration = duration;
             this.assetUri = assetUri;
         }
 
-        private void PlatformInitialize(string fileName)
+		protected override void PlatformInitialize(string fileName)
         {
             // Nothing to do here
         }
 
-        static void AndroidPlayer_Completion(object sender, EventArgs e)
-        {
-            var playingSong = _playingSong;
-            _playingSong = null;
-
-            if (playingSong != null && playingSong.DonePlaying != null)
-                playingSong.DonePlaying(sender, e);
-        }
-
-        /// <summary>
-        /// Set the event handler for "Finished Playing". Done this way to prevent multiple bindings.
-        /// </summary>
-        internal void SetEventHandler(FinishedPlayingHandler handler)
-        {
-            if (DonePlaying != null)
-                return;
-            DonePlaying += handler;
-        }
-
-        private void PlatformDispose(bool disposing)
+		protected override void PlatformDispose(bool disposing)
         {
             // Appears to be a noOp on Android
         }
 
         internal void Play()
         {
-            // Prepare the player
-            _androidPlayer.Reset();
-
-            if (assetUri != null)
-            {
-                _androidPlayer.SetDataSource(MediaLibrary.Context, this.assetUri);
-            }
-            else
-            {
-                var afd = Game.Activity.Assets.OpenFd(_name);
-                if (afd == null)
-                    return;
-
-                _androidPlayer.SetDataSource(afd.FileDescriptor, afd.StartOffset, afd.Length);
-            }
-
-
-            _androidPlayer.Prepare();
-            _androidPlayer.Looping = MediaPlayer.IsRepeating;
-            _playingSong = this;
-
-            _androidPlayer.Start();
+			mPlayer.Play (this.assetUri, this, _name);
             _playCount++;
         }
 
         internal void Resume()
         {
-            _androidPlayer.Start();
+            //_androidPlayer.Start();
+			mPlayer.Resume();
         }
 
         internal void Pause()
         {
-            _androidPlayer.Pause();
+			mPlayer.Pause();
         }
 
-        internal void Stop()
+        public override void Stop()
         {
-            _androidPlayer.Stop();
-            _playingSong = null;
+//            _androidPlayer.Stop();
+//            _playingSong = null;
+
+			mPlayer.Stop ();
+
             _playCount = 0;
             position = TimeSpan.Zero;
         }
 
-        internal float Volume
+		protected override float PlatformGetVolume()
         {
-            get
-            {
-                return 0.0f;
-            }
+           return 0.0f;
+        }
 
-            set
-            {
-                _androidPlayer.SetVolume(value, value);
-            }
+		protected override void PlatformSetVolume(float value)
+		{				
+			mPlayer.SetVolume(value);            
         }
 
         public TimeSpan Position
         {
             get
             {
-                if (_playingSong == this && _androidPlayer.IsPlaying)
-                    position = TimeSpan.FromMilliseconds(_androidPlayer.CurrentPosition);
+				if (mPlayer.Current == this && mPlayer.IsPlaying)
+					position = TimeSpan.FromMilliseconds(mPlayer.CurrentPosition);
 
                 return position;
             }
             set
             {
-                _androidPlayer.SeekTo((int)value.TotalMilliseconds);   
+                //_androidPlayer.SeekTo((int)value.TotalMilliseconds);   
+				mPlayer.Seek((int)value.TotalMilliseconds); 
             }
         }
 
+		protected override void PlatformSetAlbum(IAlbum album)
+		{
+			throw new NotSupportedException ();
+		}
 
-        private IAlbum PlatformGetAlbum()
+		protected override IAlbum PlatformGetAlbum()
         {
             return this.album;
         }
 
-        private IArtist PlatformGetArtist()
+		protected override IArtist PlatformGetArtist()
         {
             return this.artist;
         }
 
-        private IGenre PlatformGetGenre()
+		protected override IGenre PlatformGetGenre()
         {
             return this.genre;
         }
 
-        private TimeSpan PlatformGetDuration()
+		protected override TimeSpan PlatformGetDuration()
         {
             return this.assetUri != null ? this.duration : _duration;
         }
 
-        private bool PlatformIsProtected()
+		protected override bool PlatformIsProtected()
         {
             return false;
         }
 
-        private bool PlatformIsRated()
+		protected override bool PlatformIsRated()
         {
             return false;
         }
 
-        private string PlatformGetName()
+		protected override string PlatformGetName()
         {
-            return this.assetUri != null ? this.name : Path.GetFileNameWithoutExtension(_name);
+            return this.assetUri != null ? this._name : Path.GetFileNameWithoutExtension(_name);
         }
 
-        private int PlatformGetPlayCount()
+		protected override int PlatformGetPlayCount()
         {
             return _playCount;
         }
 
-        private int PlatformGetRating()
+		protected override int PlatformGetRating()
         {
             return 0;
         }
 
-        private int PlatformGetTrackNumber()
+		protected override int PlatformGetTrackNumber()
         {
             return 0;
         }
+
+		protected override void PlatformSetTrackNumber(int value)
+		{
+			throw new NotSupportedException ();
+		}
     }
 }
 

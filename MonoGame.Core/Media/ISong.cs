@@ -7,8 +7,12 @@ using System.IO;
 
 namespace Microsoft.Xna.Framework.Media
 {
+	public delegate void FinishedPlayingHandler(object sender, EventArgs args);
+
 	public interface ISong : IDisposable
 	{
+		void Initialize();
+
 		int TrackNumber {
 			get;
 			set;
@@ -22,6 +26,12 @@ namespace Microsoft.Xna.Framework.Media
 		}
 
 		string Name { get; }
+
+		int PlayCount {
+			get;
+		}
+
+		void SongCompleted(object sender, EventArgs args);
 	}
 }
 

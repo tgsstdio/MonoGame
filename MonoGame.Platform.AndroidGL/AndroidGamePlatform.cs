@@ -22,6 +22,8 @@ namespace MonoGame.Platform.AndroidGL
 		private readonly IViewRefocuser mViewRefocuser;
 		private IBaseActivityInfo mActivityInfo;
 
+		IViewResumer mViewResumer;
+
 		public AndroidGamePlatform (
 			IGraphicsDeviceManager manager,
 			IPlatformActivator activator,
@@ -35,6 +37,7 @@ namespace MonoGame.Platform.AndroidGL
 			IGameBackbone backbone,
 			IPrimaryThreadLoader primaryThreadLoader,
 			IViewRefocuser viewRefocuser,
+			IViewResumer viewResumer,
 			IBaseActivityInfo activityInfo
 			)
 			: base (manager, activator)
@@ -47,7 +50,9 @@ namespace MonoGame.Platform.AndroidGL
 			mBackbone = backbone;
 			mPrimaryThreadLoader = primaryThreadLoader;
 			mViewRefocuser = viewRefocuser;
+			mViewResumer = viewResumer;
 			mActivityInfo = activityInfo;
+			_gameWindow = window;
 
 			System.Diagnostics.Debug.Assert(mActivity != null, "Must set Game.Activity before creating the Game instance");
 			mActivity.Paused += Activity_Paused;
@@ -85,7 +90,7 @@ namespace MonoGame.Platform.AndroidGL
 
         public override void StartRunLoop()
         {
-			mViewRefocuser.Resume();
+			mViewResumer.Resume();
         }
 
         public override bool BeforeUpdate(GameTime gameTime)
@@ -119,7 +124,7 @@ namespace MonoGame.Platform.AndroidGL
                     break;
             }
             base.BeforeInitialize();
-            _gameWindow.GameView.TouchEnabled = true;
+			mViewRefocuser.TouchEnabled = true;
         }
 
         public override bool BeforeRun()
@@ -155,7 +160,7 @@ namespace MonoGame.Platform.AndroidGL
 			if (!Activator.IsActive)
             {
 				Activator.IsActive = true;
-				mViewRefocuser.Resume();
+				mViewResumer.Resume();
 				if(_MediaPlayer_PrevState == MediaState.Playing && mActivityInfo.AutoPauseAndResumeMediaPlayer)
                 	mMediaPlayer.Resume();
 				if (!mViewRefocuser.IsFocused)

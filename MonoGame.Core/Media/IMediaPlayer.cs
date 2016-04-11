@@ -18,6 +18,11 @@ namespace Microsoft.Xna.Framework.Media
 			get;
 			set;
 		}		
+
+		bool IsRepeating {
+			get;
+			set;
+		}
 	}
 }
 
