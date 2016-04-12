@@ -140,7 +140,7 @@ namespace MonoGame.Platform.AndroidGL
                 }
 				else if (mDeviceManager.GraphicsDevice != null)
                 {
-					mDeviceManager.GraphicsDevice.ClearToBlack();
+					mDeviceManager.GraphicsDevice.Clear(Color.Black);
                     if (GameView.IsResuming && Resumer != null)
                     {
                         Resumer.Draw();

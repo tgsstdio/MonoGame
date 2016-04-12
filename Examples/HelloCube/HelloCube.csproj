@@ -36,14 +36,14 @@
     <Reference Include="OpenTK">
       <HintPath>..\..\packages\OpenTK.1.1.2225.0\lib\net20\OpenTK.dll</HintPath>
     </Reference>
+    <Reference Include="DryIoc">
+      <HintPath>..\..\packages\DryIoc.dll.2.3.0\lib\net45\DryIoc.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="HelloCubeGame.cs" />
-    <Compile Include="DryIoc\AsyncExecutionFlowScopeContext.cs" />
-    <Compile Include="DryIoc\Container.cs" />
-    <Compile Include="DryIoc\FactoryCompiler.cs" />
     <Compile Include="NullTextureCollectionPlatform.cs" />
     <Compile Include="MockGraphicsDevicePreferences.cs" />
     <Compile Include="NullGraphicsDeviceLogger.cs" />

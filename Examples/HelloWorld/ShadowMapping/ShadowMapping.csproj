@@ -36,6 +36,9 @@
     </Reference>
     <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
+    <Reference Include="DryIoc">
+      <HintPath>..\..\..\packages\DryIoc.dll.2.3.0\lib\net45\DryIoc.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />
@@ -49,9 +52,6 @@
     <Compile Include="IPivot.cs" />
     <Compile Include="ISortedRenderer.cs" />
     <Compile Include="ISortedPassHelper.cs" />
-    <Compile Include="DryIoc\AsyncExecutionFlowScopeContext.cs" />
-    <Compile Include="DryIoc\Container.cs" />
-    <Compile Include="DryIoc\FactoryCompiler.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
