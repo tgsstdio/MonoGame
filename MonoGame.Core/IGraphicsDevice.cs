@@ -3,9 +3,11 @@ using System;
 
 namespace Microsoft.Xna.Framework
 {
+	using ColorBk = Microsoft.Xna.Framework.Color;
+
 	public interface IGraphicsDevice : IDisposable
 	{
-		void ClearToBlack ();
+		void Clear (ColorBk value);
 
 		Viewport Viewport {
 			get;

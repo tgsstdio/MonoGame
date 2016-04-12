@@ -161,6 +161,7 @@
     <Compile Include="Graphics\NullGraphicsDevice.cs" />
     <Compile Include="Graphics\NullGraphicsDeviceService.cs" />
     <Compile Include="Input\IKeyboardInputListener.cs" />
+    <Compile Include="Color.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>

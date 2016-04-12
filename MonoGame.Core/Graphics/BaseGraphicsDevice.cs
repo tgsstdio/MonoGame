@@ -6,7 +6,7 @@ namespace MonoGame.Platform.DesktopGL
 {
 	public class BaseGraphicsDevice : IGraphicsDevice
 	{
-		public void ClearToBlack ()
+		public void Clear(Color value)
 		{
 			throw new NotImplementedException ();
 		}

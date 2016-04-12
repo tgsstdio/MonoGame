@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MockVulkan
+namespace Magnesium
 {
 	// UNIONS
 	public struct ClearColorValue

@@ -1,7 +1,7 @@
 ﻿
 using System;
 
-namespace MockVulkan 
+namespace Magnesium 
 {
 	// HANDLES
 	public class DeviceMemory

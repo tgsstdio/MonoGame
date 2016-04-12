@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MockVulkan", "MockVulkan\MockVulkan.csproj", "{642E2601-6676-4801-8FCD-1DFE3FCB522D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoGame.Graphics", "MonoGame.Vulkan\MonoGame.Graphics.csproj", "{9F9AC448-9D17-43E5-8889-285426290891}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Magnesium", "Magnesium\Magnesium.csproj", "{9F9AC448-9D17-43E5-8889-285426290891}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -8,7 +8,7 @@ namespace MonoGame.Core
 	{
 		#region IGraphicsDevice implementation
 
-		public void ClearToBlack ()
+		public void Clear (Color value)
 		{
 			throw new NotImplementedException ();
 		}
