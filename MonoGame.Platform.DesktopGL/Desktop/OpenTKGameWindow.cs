@@ -159,9 +159,9 @@ namespace MonoGame.Platform.DesktopGL
         #endregion
 
 		private IMouseListener mMouse;
-		private IKeyboardListener mKeyboard;
+		private IKeyboardInputListener mKeyboard;
 		private IDrawSuppressor mSuppressor;
-		public OpenTKGameWindow(IPresentationParameters parameters, INativeWindow emptyWindow, IDrawSuppressor suppressor, IMouseListener mouseListener, IKeyboardListener keyboard)
+		public OpenTKGameWindow(IPresentationParameters parameters, INativeWindow emptyWindow, IDrawSuppressor suppressor, IMouseListener mouseListener, IKeyboardInputListener keyboard)
         {
 			mSuppressor = suppressor;
 			PresentationParameters = parameters;

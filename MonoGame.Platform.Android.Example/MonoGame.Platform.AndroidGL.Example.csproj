@@ -55,7 +55,6 @@
     <Compile Include="DryIoc\Container.cs" />
     <Compile Include="NullMediaPlayer.cs" />
     <Compile Include="NullMediaLibrary.cs" />
-    <Compile Include="NullGraphicsDeviceService.cs" />
     <Compile Include="NullResumeManager.cs" />
   </ItemGroup>
   <ItemGroup>

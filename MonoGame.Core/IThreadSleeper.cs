@@ -4,7 +4,7 @@ namespace MonoGame.Core
 {
 	public interface IThreadSleeper
 	{
-		void Sleep(double time);
+		void Sleep(int time);
 	}
 }
 

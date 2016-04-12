@@ -25,7 +25,7 @@ namespace Microsoft.Xna.Framework
 {
 	public class GraphicsDeviceManager : IGraphicsDeviceManager
     {
-        private GameBackbone _game;
+        private IGameBackbone _game;
 		private IGraphicsDevice _graphicsDevice;
         private int _preferredBackBufferHeight;
         private int _preferredBackBufferWidth;
@@ -53,7 +53,7 @@ namespace Microsoft.Xna.Framework
 		private IGraphicsDeviceService mDeviceService;
 
 		public GraphicsDeviceManager(
-			GameBackbone game,
+			IGameBackbone game,
 			IGraphicsDevice graphicsDevice,
 			IGraphicsDevicePlatform devicePlatform,
 			ITextureCollectionPlatform texCollectionPlatform,

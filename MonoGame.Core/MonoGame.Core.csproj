@@ -113,7 +113,6 @@
     <Compile Include="Input\KeyboardState.cs" />
     <Compile Include="Input\KeyState.cs" />
     <Compile Include="PlayerIndex.cs" />
-    <Compile Include="Input\IKeyboardListener.cs" />
     <Compile Include="Graphics\IGraphicsDevicePlatform.cs" />
     <Compile Include="Graphics\Viewport.cs" />
     <Compile Include="Graphics\IRenderTarget.cs" />
@@ -160,6 +159,8 @@
     <Compile Include="Graphics\BaseGraphicsDevice.cs" />
     <Compile Include="Graphics\GraphicsMetrics.cs" />
     <Compile Include="Graphics\NullGraphicsDevice.cs" />
+    <Compile Include="Graphics\NullGraphicsDeviceService.cs" />
+    <Compile Include="Input\IKeyboardInputListener.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>

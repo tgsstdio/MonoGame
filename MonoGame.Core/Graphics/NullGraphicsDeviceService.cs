@@ -4,9 +4,8 @@
 using Microsoft.Xna.Framework.Graphics;
 
 
-namespace MonoGame.Platform.AndroidGL.Example
+namespace MonoGame.Core
 {
-
 	public class NullGraphicsDeviceService : IGraphicsDeviceService
 	{
 		#region IGraphicsDeviceService implementation

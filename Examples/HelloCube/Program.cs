@@ -13,6 +13,7 @@ using OpenTK;
 using Microsoft.Xna.Framework.Audio;
 using MonoGame.Graphics;
 using MonoGame.Core;
+using Microsoft.Xna.Framework.Input.Touch;
 
 namespace HelloCube
 {
@@ -29,10 +30,11 @@ namespace HelloCube
 
 					// DESKTOPGL SPECIFIC
 					container.Register<IOpenTKGameWindow, OpenTKGameWindow>(Reuse.Singleton);
-					container.RegisterMapping<Microsoft.Xna.Framework.GameWindow, IOpenTKGameWindow>();
+					container.RegisterMapping<Microsoft.Xna.Framework.IGameWindow, IOpenTKGameWindow>();
 
 					container.Register<IGamePlatform, OpenTKGamePlatform>(Reuse.Singleton);
 					container.Register<IGraphicsDeviceManager, DesktopGLGraphicsDeviceManager>(Reuse.Singleton);
+					container.Register<IGraphicsDeviceService, NullGraphicsDeviceService>(Reuse.Singleton);
 					container.Register<IPlatformActivator, PlatformActivator>(Reuse.Singleton);
 
 					container.Register<IGraphicsAdapterCollection, DesktopGLGraphicsAdapterCollection>(Reuse.Singleton);
@@ -47,6 +49,9 @@ namespace HelloCube
 					container.Register<IBackBufferPreferences, DesktopGLBackBufferPreferences>();
 					container.Register<IGraphicsDeviceLogger, MockGraphicsDeviceLogger>(Reuse.Singleton);
 					container.Register<IGLFramebufferHelperSelector, FullGLFramebufferHelperSelector>(Reuse.Singleton);
+
+					container.Register<IKeyboardInputListener, KeyboardInputListener>(Reuse.Singleton);
+					container.Register<ITouchPanel, TouchPanel>(Reuse.Singleton);
 
 					// WINDOW EXIT
 					container.Register<IDrawSuppressor, DrawSupressor>(Reuse.Singleton);
@@ -75,6 +80,8 @@ namespace HelloCube
 
 					// RUNTIME
 					container.Register<IGameBackbone, GameBackbone> (Reuse.Singleton);
+					container.Register<IThreadSleeper, SystemThreadSleeper>(Reuse.Singleton);
+
 					using (var scope = container.OpenScope ())
 					{
 						using (var window = new NativeWindow())

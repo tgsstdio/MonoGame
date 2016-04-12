@@ -42,7 +42,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace MonoGame.Platform.AndroidGL.Input
 {
-	public interface IAndroidKeyboardListener : IKeyboardListener
+	public interface IAndroidKeyboardListener : IKeyboardInputListener
 	{
 		void KeyDown (Android.Views.Keycode keyCode);
 		void KeyUp (Android.Views.Keycode keyCode);
