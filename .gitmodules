@@ -10,4 +10,5 @@
 	branch = master
 [submodule "Examples/Samples"]
 	path = Examples/Samples
-	url = D:\\MonoGame.Samples\\
+	url = https://github.com/tgsstdio/MonoGame.Samples.git
+	branch = develop
