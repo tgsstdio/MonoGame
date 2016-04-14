@@ -8,8 +8,8 @@
     <OutputType>Library</OutputType>
     <RootNamespace>MonoGame.Graphics</RootNamespace>
     <AssemblyName>MonoGame.Graphics</AssemblyName>
-    <TargetFrameworkProfile>Profile344</TargetFrameworkProfile>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Profile78</TargetFrameworkProfile>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <DebugSymbols>true</DebugSymbols>
@@ -106,6 +106,40 @@
     <Compile Include="VertexElementFormat.cs" />
     <Compile Include="IGLExtensionLookup.cs" />
     <Compile Include="IGLFramebufferHelperSelector.cs" />
+    <Compile Include="VertexElement.cs" />
+    <Compile Include="VertexDeclaration.cs" />
+    <Compile Include="IVertexType.cs" />
+    <Compile Include="VertexElementUsage.cs" />
+    <Compile Include="Utilities\Hash.cs" />
+    <Compile Include="SpriteBatch\SpriteBatch.cs" />
+    <Compile Include="SpriteBatch\SpriteBatcher.cs" />
+    <Compile Include="SpriteBatch\SpriteBatchItem.cs" />
+    <Compile Include="SpriteBatch\SpriteEffects.cs" />
+    <Compile Include="SpriteBatch\SpriteFont.cs" />
+    <Compile Include="SpriteBatch\VertexPositionColorTexture.cs" />
+    <Compile Include="SpriteBatch\ITexture2DPlatform.cs" />
+    <Compile Include="SpriteBatch\SpriteSortMode.cs" />
+    <Compile Include="SpriteBatch\Texture.cs" />
+    <Compile Include="SpriteBatch\Texture2D.cs" />
+    <Compile Include="SpriteBatch\SurfaceType.cs" />
+    <Compile Include="SpriteBatch\ITexturePlatform.cs" />
+    <Compile Include="SpriteBatch\Texture2DPlatform.cs" />
+    <Compile Include="SpriteBatch\MgTexturePlatform.cs" />
+    <Compile Include="Utilities\Format.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <ProjectReference Include="..\MonoGame.Core\MonoGame.Core.csproj">
+      <Project>{699977AD-6D8C-4E0B-ADDA-554B66002D08}</Project>
+      <Name>MonoGame.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Magnesium\Magnesium.csproj">
+      <Project>{9F9AC448-9D17-43E5-8889-285426290891}</Project>
+      <Name>Magnesium</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Utilities\" />
+    <Folder Include="SpriteBatch\" />
+  </ItemGroup>
 </Project>

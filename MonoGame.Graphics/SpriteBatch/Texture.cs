@@ -4,24 +4,28 @@
 
 using System;
 using System.Diagnostics;
-using System.Threading;
 using MonoGame.Graphics;
+using Magnesium;
+using Microsoft.Xna.Framework.Graphics;
 
-namespace Microsoft.Xna.Framework.Graphics
+namespace MonoGame.Graphics
 {
-	public abstract partial class Texture : GraphicsResource
+	public abstract partial class Texture
 	{
-		private ITexturePlatform Platform;
+		private ITexturePlatform mPlatform;
+		private Int32 _sortingKey;
+
+		internal MgImage mImage;
+		internal MgImageView mView;
+
 		protected Texture(ITexturePlatform platform)
 		{
-			Platform = platform;
+			mPlatform = platform;
+			_sortingKey = mPlatform.GenerateSortingKey ();
 		}
 
 		internal SurfaceFormat _format;
 		internal int _levelCount;
-
-        private readonly int _sortingKey = Interlocked.Increment(ref _lastSortingKey);
-        private static int _lastSortingKey;
 
         /// <summary>
         /// Gets a unique identifier of this texture for sorting purposes.
@@ -31,7 +35,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <para>The value is an implementation detail and may change between application launches or MonoGame versions.
         /// It is only guaranteed to stay consistent during application lifetime.</para>
         /// </remarks>
-        internal int SortingKey
+		internal Int32 SortingKey
         {
             get { return _sortingKey; }
         }
@@ -46,23 +50,21 @@ namespace Microsoft.Xna.Framework.Graphics
 			get { return _levelCount; }
 		}
 
-        internal static int CalculateMipLevels(int width, int height = 0, int depth = 0)
+		internal static uint CalculateMipLevels(UInt32 width, UInt32 height = 0, UInt32 depth = 0)
         {
-            int levels = 1;
-            int size = Math.Max(Math.Max(width, height), depth);
-            while (size > 1)
+			uint levels = 1u;
+			UInt32 size = Math.Max(Math.Max(width, height), depth);
+            while (size > 1u)
             {
-                size = size / 2;
+				size = size / 2u;
                 levels++;
             }
             return levels;
         }
 
-        internal int GetPitch(int width)
+		internal uint GetPitch(UInt32 width)
         {
-            Debug.Assert(width > 0, "The width is negative!");
-
-            int pitch;
+			uint pitch;
 
             switch (_format)
             {
@@ -78,7 +80,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 case SurfaceFormat.Dxt5SRgb:
                 case SurfaceFormat.RgbPvrtc4Bpp:
                 case SurfaceFormat.RgbaPvrtc4Bpp:                    
-                    pitch = ((width + 3) / 4) * _format.GetSize();
+                    pitch = ((width + 3u) / 4u) * _format.GetSize();
                     break;
 
                 default:
@@ -89,9 +91,9 @@ namespace Microsoft.Xna.Framework.Graphics
             return pitch;
         }
 
-        internal protected override void GraphicsDeviceResetting()
+        internal protected void GraphicsDeviceResetting()
         {
-            Platform.GraphicsDeviceResetting();
+			mPlatform.GraphicsDeviceResetting(mImage, mView);
         }
     }
 }

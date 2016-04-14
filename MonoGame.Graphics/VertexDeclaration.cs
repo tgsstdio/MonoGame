@@ -3,11 +3,11 @@
 // file 'LICENSE.txt', which is part of this source code package.
 
 using System;
-using Microsoft.Xna.Framework.Utilities;
+using MonoGame.Utilities;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
-	public partial class VertexDeclaration : GraphicsResource, IVertexDeclaration
+	public partial class VertexDeclaration : IVertexDeclaration
 	{
 		private VertexElement[] _elements;
         private int _vertexStride;
@@ -71,10 +71,10 @@ namespace Microsoft.Xna.Framework.Graphics
 			if (vertexType == null)
 				throw new ArgumentNullException("vertexType", "Cannot be null");
 
-            if (!ReflectionHelpers.IsValueType(vertexType))
-            {
-				throw new ArgumentException("vertexType", "Must be value type");
-			}
+//            if (!ReflectionHelpers.IsValueType(vertexType))
+//            {
+//				throw new ArgumentException("vertexType", "Must be value type");
+//			}
 
             var type = Activator.CreateInstance(vertexType) as IVertexType;
 			if (type == null)

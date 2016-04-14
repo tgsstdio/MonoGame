@@ -4,13 +4,14 @@
 
 using System;
 using System.Text;
+using MonoGame.Graphics;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
     /// <summary>
     /// Helper class for drawing text strings and sprites in one or more optimized batches.
     /// </summary>
-	public class SpriteBatch : GraphicsResource
+	public class SpriteBatch  // : GraphicsResource
 	{
         #region Private Fields
         readonly SpriteBatcher _batcher;
@@ -116,7 +117,7 @@ namespace Microsoft.Xna.Framework.Graphics
             _batcher.DrawBatch(_sortMode, _effect);
         }
 		
-		void Setup() 
+		void Setup(Viewport vp) 
         {
             var gd = GraphicsDevice;
 			gd.BlendState = _blendState;
@@ -125,8 +126,6 @@ namespace Microsoft.Xna.Framework.Graphics
 			gd.SamplerStates[0] = _samplerState;
 			
             // Setup the default sprite effect.
-			var vp = gd.Viewport;
-
 		    Matrix projection;
             Matrix.CreateOrthographicOffCenter(0, vp.Width, vp.Height, 0, -1, 0, out projection);
 #if !DIRECTX
@@ -576,6 +575,8 @@ namespace Microsoft.Xna.Framework.Graphics
             var source = new SpriteFont.CharacterSource(text);
             spriteFont.DrawInto(this, ref source, position, color, rotation, origin, scale, effects, layerDepth);
 		}
+
+		private bool IsDisposed = false;
 
         /// <summary>
         /// Immediately releases the unmanaged resources used by this object.

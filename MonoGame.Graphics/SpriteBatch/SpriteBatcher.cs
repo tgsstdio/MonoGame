@@ -40,6 +40,7 @@
 // 
 
 using System.Collections.Generic;
+using MonoGame.Graphics;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
@@ -82,7 +83,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <summary>
         /// The target graphics device.
         /// </summary>
-        private readonly GraphicsDevice _device;
+        //private readonly GraphicsDevice _device;
 
         /// <summary>
         /// Vertex index array. The values in this array never change.
@@ -91,9 +92,9 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private VertexPositionColorTexture[] _vertexArray;
 
-		public SpriteBatcher (GraphicsDevice device)
+		public SpriteBatcher ()
 		{
-            _device = device;
+           // _device = device;
 
 			_batchItemList = new List<SpriteBatchItem>(InitialBatchSize);
 			_freeBatchItemQueue = new Queue<SpriteBatchItem>(InitialBatchSize);

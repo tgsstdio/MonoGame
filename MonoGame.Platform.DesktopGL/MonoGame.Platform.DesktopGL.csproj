@@ -36,7 +36,7 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="NVorbis">
-      <HintPath>..\packages\NVorbis.0.8.4.0\lib\NVorbis.dll</HintPath>
+      <HintPath>..\Examples\Samples\packages\NVorbis.0.8.4.0\lib\NVorbis.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -82,21 +82,21 @@
     <None Include="OpenTK.dll.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MonoGame.Framework\Microsoft.Xna.Framework.csproj">
-      <Project>{6E03191C-70AE-4B0B-8782-68D377B72A0F}</Project>
-      <Name>Microsoft.Xna.Framework</Name>
+    <ProjectReference Include="..\MonoGame.Core\MonoGame.Core.csproj">
+      <Project>{699977AD-6D8C-4E0B-ADDA-554B66002D08}</Project>
+      <Name>MonoGame.Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\MonoGame.Audio.OpenAL\MonoGame.Audio.OpenAL.csproj">
       <Project>{C06188B4-0C78-42CB-B868-336EB7B6B3DF}</Project>
       <Name>MonoGame.Audio.OpenAL</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MonoGame.Framework\Microsoft.Xna.Framework.csproj">
+      <Project>{6E03191C-70AE-4B0B-8782-68D377B72A0F}</Project>
+      <Name>Microsoft.Xna.Framework</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MonoGame.Graphics\MonoGame.Graphics.csproj">
       <Project>{52C293E3-DCC5-43BE-A94F-DBE0CF44E25E}</Project>
       <Name>MonoGame.Graphics</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\MonoGame.Core\MonoGame.Core.csproj">
-      <Project>{699977AD-6D8C-4E0B-ADDA-554B66002D08}</Project>
-      <Name>MonoGame.Core</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>

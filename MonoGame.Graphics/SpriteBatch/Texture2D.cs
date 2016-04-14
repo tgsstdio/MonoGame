@@ -4,8 +4,11 @@
 
 using System;
 using System.IO;
+using MonoGame.Graphics;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
-namespace Microsoft.Xna.Framework.Graphics
+namespace MonoGame.Graphics
 {
     public partial class Texture2D : Texture
     {
@@ -23,55 +26,55 @@ namespace Microsoft.Xna.Framework.Graphics
 
 		private ITexture2DPlatform mTex2DPlatform;
 		public Texture2D(
-			ITexturePlatform platform,
+			ITexturePlatform texPlatform,
 			ITexture2DPlatform tex2DPlatform,
 			IWeakReferenceCollection owner,
 			IGraphicsCapabilities capability,
 			int width, int height)
-			: this(platform, tex2DPlatform, owner, capability, width, height, false, SurfaceFormat.Color, SurfaceType.Texture, false, 1)
+			: this(texPlatform, tex2DPlatform, owner, capability, width, height, false, SurfaceFormat.Color, SurfaceType.Texture, false, 1)
         {
         }
 
 		public Texture2D(
-			ITexturePlatform platform,
+			ITexturePlatform texPlatform,
 			ITexture2DPlatform tex2DPlatform,
 			IWeakReferenceCollection owner,
 			IGraphicsCapabilities capabilities,
 			int width, int height, bool mipmap, SurfaceFormat format)
-			: this(platform, tex2DPlatform, owner, capabilities, width, height, mipmap, format, SurfaceType.Texture, false, 1)
+			: this(texPlatform, tex2DPlatform, owner, capabilities, width, height, mipmap, format, SurfaceType.Texture, false, 1)
         {
         }
 
 		public Texture2D(
-			ITexturePlatform platform,
+			ITexturePlatform texPlatform,
 			ITexture2DPlatform tex2DPlatform,
 			IWeakReferenceCollection owner,
 			IGraphicsCapabilities capabilities,
 			int width, int height, bool mipmap, SurfaceFormat format, int arraySize)
-			: this(platform, tex2DPlatform, owner, capabilities , width, height, mipmap, format, SurfaceType.Texture, false, arraySize)
+			: this(texPlatform, tex2DPlatform, owner, capabilities , width, height, mipmap, format, SurfaceType.Texture, false, arraySize)
         {
             
         }
 
 		internal Texture2D(
-			ITexturePlatform platform,
+			ITexturePlatform texPlatform,
 			ITexture2DPlatform tex2DPlatform,
 			IWeakReferenceCollection owner,
 			IGraphicsCapabilities capabilities,
 			int width, int height, bool mipmap, SurfaceFormat format, SurfaceType type)
-			: this(platform, tex2DPlatform, owner,capabilities, width, height, mipmap, format, type, false, 1)
+			: this(texPlatform, tex2DPlatform, owner,capabilities, width, height, mipmap, format, type, false, 1)
         {
         }
 
 		private IGraphicsCapabilities mCapabilities;
 		protected Texture2D(
-			ITexturePlatform platform,
+			ITexturePlatform texPlatform,
 			ITexture2DPlatform tex2DPlatform,
 			IWeakReferenceCollection owner,
 			IGraphicsCapabilities capability,
 			int width, int height, bool mipmap,
 			SurfaceFormat format, SurfaceType type, bool shared, int arraySize)
-			: base(platform)
+			: base(texPlatform)
 		{
 			mTex2DPlatform = tex2DPlatform;
             if (owner == null)
@@ -113,7 +116,9 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        public void SetData<T>(int level, int arraySlice, Rectangle? rect, T[] data, int startIndex, int elementCount) where T : struct
+		public void SetData<T, TRectangle>(int level, int arraySlice, TRectangle? rect, T[] data, int startIndex, int elementCount)
+			where T : struct
+			where TRectangle : struct
         {
             if (data == null)
                 throw new ArgumentNullException("data");
@@ -121,10 +126,12 @@ namespace Microsoft.Xna.Framework.Graphics
 			if (arraySlice > 0 && !mCapabilities.SupportsTextureArrays)
                 throw new ArgumentException("Texture arrays are not supported on this graphics device", "arraySlice");
 
-			mTex2DPlatform.SetData<T>(level, arraySlice, rect, data, startIndex, elementCount);
+			mTex2DPlatform.SetData<T, TRectangle>(level, arraySlice, rect, data, startIndex, elementCount);
         }
 
-        public void SetData<T>(int level, Rectangle? rect, T[] data, int startIndex, int elementCount) where T : struct 
+		public void SetData<T, TRectangle>(int level, Rectangle? rect, T[] data, int startIndex, int elementCount)
+			where T : struct 
+			where TRectangle : struct
         {
             this.SetData(level, 0, rect, data, startIndex, elementCount);
         }
@@ -139,7 +146,9 @@ namespace Microsoft.Xna.Framework.Graphics
 			this.SetData(0, null, data, 0, data.Length);
         }
 
-        public void GetData<T>(int level, int arraySlice, Rectangle? rect, T[] data, int startIndex, int elementCount) where T : struct
+		public void GetData<T, TRectangle>(int level, int arraySlice, TRectangle? rect, T[] data, int startIndex, int elementCount)
+			where T : struct
+			where TRectangle : struct
         {
             if (data == null || data.Length == 0)
                 throw new ArgumentException("data cannot be null");
@@ -148,10 +157,12 @@ namespace Microsoft.Xna.Framework.Graphics
 			if (arraySlice > 0 && !mCapabilities.SupportsTextureArrays)
                 throw new ArgumentException("Texture arrays are not supported on this graphics device", "arraySlice");
 
-			mTex2DPlatform.GetData<T>(level, arraySlice, rect, data, startIndex, elementCount);
+			mTex2DPlatform.GetData<T, TRectangle>(level, arraySlice, rect, data, startIndex, elementCount);
         }
 		
-		public void GetData<T>(int level, Rectangle? rect, T[] data, int startIndex, int elementCount) where T : struct
+		public void GetData<T, TRectangle>(int level, TRectangle? rect, T[] data, int startIndex, int elementCount) 
+			where T : struct
+			where TRectangle : struct
         {
             this.GetData(level, 0, rect, data, startIndex, elementCount);
         }
