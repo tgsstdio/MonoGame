@@ -64,6 +64,9 @@ change. To the extent permitted under your local laws, the contributors exclude
 the implied warranties of merchantability, fitness for a particular purpose and
 non-infringement.
 */
+using MonoGame.Core;
+using Microsoft.Xna.Framework;
+
 #endregion License
 
 // Original code from SilverSprite Project
@@ -72,7 +75,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text;
 
-namespace Microsoft.Xna.Framework.Graphics 
+namespace MonoGame.Core
 {
 
 	public sealed class SpriteFont 

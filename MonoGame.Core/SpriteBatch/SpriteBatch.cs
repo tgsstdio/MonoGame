@@ -4,10 +4,13 @@
 
 using System;
 using System.Text;
-using MonoGame.Graphics;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework;
+using MonoGame.Core;
 
-namespace Microsoft.Xna.Framework.Graphics
+namespace MonoGame.Core
 {
+
     /// <summary>
     /// Helper class for drawing text strings and sprites in one or more optimized batches.
     /// </summary>
@@ -17,19 +20,18 @@ namespace Microsoft.Xna.Framework.Graphics
         readonly SpriteBatcher _batcher;
 
 		SpriteSortMode _sortMode;
-		BlendState _blendState;
-		SamplerState _samplerState;
-		DepthStencilState _depthStencilState; 
-		RasterizerState _rasterizerState;		
-		Effect _effect;
+		//BlendState _blendState;
+		//SamplerState _samplerState;
+		//DepthStencilState _depthStencilState; 
+		//RasterizerState _rasterizerState;		
+		//Effect _effect;
         bool _beginCalled;
 
-		Effect _spriteEffect;
-	    readonly EffectParameter _matrixTransform;
-        readonly EffectPass _spritePass;
+		//Effect _spriteEffect;
+	    //readonly EffectParameter _matrixTransform;
+       //readonly EffectPass _spritePass;
 
 		Matrix _matrix;
-		Rectangle _tempRect = new Rectangle (0,0,0,0);
 		Vector2 _texCoordTL = new Vector2 (0,0);
 		Vector2 _texCoordBR = new Vector2 (0,0);
         #endregion
@@ -39,69 +41,62 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </summary>
         /// <param name="graphicsDevice">The <see cref="GraphicsDevice"/>, which will be used for sprite rendering.</param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="graphicsDevice"/> is null.</exception>
-        public SpriteBatch (GraphicsDevice graphicsDevice)
+        public SpriteBatch ()
 		{
-			if (graphicsDevice == null)
-            {
-				throw new ArgumentNullException ("graphicsDevice", FrameworkResources.ResourceCreationWhenDeviceIsNull);
-			}	
-
-			this.GraphicsDevice = graphicsDevice;
-
             // Use a custom SpriteEffect so we can control the transformation matrix
-            _spriteEffect = new Effect(graphicsDevice, SpriteEffect.Bytecode);
-            _matrixTransform = _spriteEffect.Parameters["MatrixTransform"];
-            _spritePass = _spriteEffect.CurrentTechnique.Passes[0];
+//            _spriteEffect = new Effect(graphicsDevice, SpriteEffect.Bytecode);
+//            _matrixTransform = _spriteEffect.Parameters["MatrixTransform"];
+//            _spritePass = _spriteEffect.CurrentTechnique.Passes[0];
 
-            _batcher = new SpriteBatcher(graphicsDevice);
+            _batcher = new SpriteBatcher();
 
             _beginCalled = false;
 		}
 
-        /// <summary>
-        /// Begins a new sprite and text batch with the specified render state.
-        /// </summary>
-        /// <param name="sortMode">The drawing order for sprite and text drawing. <see cref="SpriteSortMode.Deferred"/> by default.</param>
-        /// <param name="blendState">State of the blending. Uses <see cref="BlendState.AlphaBlend"/> if null.</param>
-        /// <param name="samplerState">State of the sampler. Uses <see cref="SamplerState.LinearClamp"/> if null.</param>
-        /// <param name="depthStencilState">State of the depth-stencil buffer. Uses <see cref="DepthStencilState.None"/> if null.</param>
-        /// <param name="rasterizerState">State of the rasterization. Uses <see cref="RasterizerState.CullCounterClockwise"/> if null.</param>
-        /// <param name="effect">A custom <see cref="Effect"/> to override the default sprite effect. Uses default sprite effect if null.</param>
-        /// <param name="transformMatrix">An optional matrix used to transform the sprite geometry. Uses <see cref="Matrix.Identity"/> if null.</param>
-        /// <exception cref="InvalidOperationException">Thrown if <see cref="Begin"/> is called next time without previous <see cref="End"/>.</exception>
-        /// <remarks>This method uses optional parameters.</remarks>
-        /// <remarks>The <see cref="Begin"/> Begin should be called before drawing commands, and you cannot call it again before subsequent <see cref="End"/>.</remarks>
-        public void Begin
-        (
-             SpriteSortMode sortMode = SpriteSortMode.Deferred,
-             BlendState blendState = null,
-             SamplerState samplerState = null,
-             DepthStencilState depthStencilState = null,
-             RasterizerState rasterizerState = null,
-             Effect effect = null,
-             Matrix? transformMatrix = null
-        )
-        {
-            if (_beginCalled)
-                throw new InvalidOperationException("Begin cannot be called again until End has been successfully called.");
-
-            // defaults
-            _sortMode = sortMode;
-            _blendState = blendState ?? BlendState.AlphaBlend;
-            _samplerState = samplerState ?? SamplerState.LinearClamp;
-            _depthStencilState = depthStencilState ?? DepthStencilState.None;
-            _rasterizerState = rasterizerState ?? RasterizerState.CullCounterClockwise;
-            _effect = effect;
-            _matrix = transformMatrix ?? Matrix.Identity;
-
-            // Setup things now so a user can change them.
-            if (sortMode == SpriteSortMode.Immediate)
-            {
-                Setup();
-            }
-
-            _beginCalled = true;
-        }
+//        /// <summary>
+//        /// Begins a new sprite and text batch with the specified render state.
+//        /// </summary>
+//        /// <param name="sortMode">The drawing order for sprite and text drawing. <see cref="SpriteSortMode.Deferred"/> by default.</param>
+//        /// <param name="blendState">State of the blending. Uses <see cref="BlendState.AlphaBlend"/> if null.</param>
+//        /// <param name="samplerState">State of the sampler. Uses <see cref="SamplerState.LinearClamp"/> if null.</param>
+//        /// <param name="depthStencilState">State of the depth-stencil buffer. Uses <see cref="DepthStencilState.None"/> if null.</param>
+//        /// <param name="rasterizerState">State of the rasterization. Uses <see cref="RasterizerState.CullCounterClockwise"/> if null.</param>
+//        /// <param name="effect">A custom <see cref="Effect"/> to override the default sprite effect. Uses default sprite effect if null.</param>
+//        /// <param name="transformMatrix">An optional matrix used to transform the sprite geometry. Uses <see cref="Matrix.Identity"/> if null.</param>
+//        /// <exception cref="InvalidOperationException">Thrown if <see cref="Begin"/> is called next time without previous <see cref="End"/>.</exception>
+//        /// <remarks>This method uses optional parameters.</remarks>
+//        /// <remarks>The <see cref="Begin"/> Begin should be called before drawing commands, and you cannot call it again before subsequent <see cref="End"/>.</remarks>
+//        public void Begin
+//        (
+//             SpriteSortMode sortMode = SpriteSortMode.Deferred,
+//             BlendState blendState = null,
+//             SamplerState samplerState = null,
+//             DepthStencilState depthStencilState = null,
+//             RasterizerState rasterizerState = null,
+//             Effect effect = null,
+//             Matrix? transformMatrix = null
+//        )
+//        {
+//            if (_beginCalled)
+//                throw new InvalidOperationException("Begin cannot be called again until End has been successfully called.");
+//
+//            // defaults
+//            _sortMode = sortMode;
+//            _blendState = blendState ?? BlendState.AlphaBlend;
+//            _samplerState = samplerState ?? SamplerState.LinearClamp;
+//            _depthStencilState = depthStencilState ?? DepthStencilState.None;
+//            _rasterizerState = rasterizerState ?? RasterizerState.CullCounterClockwise;
+//            _effect = effect;
+//            _matrix = transformMatrix ?? Matrix.Identity;
+//
+//            // Setup things now so a user can change them.
+//            if (sortMode == SpriteSortMode.Immediate)
+//            {
+//                Setup();
+//            }
+//
+//            _beginCalled = true;
+//        }
 
         /// <summary>
         /// Flushes all batched text and sprites to the screen.
@@ -112,18 +107,21 @@ namespace Microsoft.Xna.Framework.Graphics
 			_beginCalled = false;
 
 			if (_sortMode != SpriteSortMode.Immediate)
-				Setup();
+			{
+				// TODO : 
+				//Setup();
+			}
             
-            _batcher.DrawBatch(_sortMode, _effect);
+        //    _batcher.DrawBatch(_sortMode, _effect);
         }
 		
 		void Setup(Viewport vp) 
         {
-            var gd = GraphicsDevice;
-			gd.BlendState = _blendState;
-			gd.DepthStencilState = _depthStencilState;
-			gd.RasterizerState = _rasterizerState;
-			gd.SamplerStates[0] = _samplerState;
+//            var gd = GraphicsDevice;
+//			gd.BlendState = _blendState;
+//			gd.DepthStencilState = _depthStencilState;
+//			gd.RasterizerState = _rasterizerState;
+//			gd.SamplerStates[0] = _samplerState;
 			
             // Setup the default sprite effect.
 		    Matrix projection;
@@ -135,8 +133,8 @@ namespace Microsoft.Xna.Framework.Graphics
 #endif
             Matrix.Multiply(ref _matrix, ref projection, out projection);
 
-            _matrixTransform.SetValue(projection);
-            _spritePass.Apply();
+            //_matrixTransform.SetValue(projection);
+            //_spritePass.Apply();
 		}
 		
         void CheckValid(Texture2D texture)
@@ -184,12 +182,12 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <remarks>This overload uses optional parameters. This overload requires only one of <paramref name="position"/> and <paramref name="destinationRectangle"/> been used.</remarks>
         public void Draw (Texture2D texture,
                 Vector2? position = null,
-                Rectangle? destinationRectangle = null,
+				Rectangle? destinationRectangle = null,
                 Rectangle? sourceRectangle = null,
                 Vector2? origin = null,
                 float rotation = 0f,
                 Vector2? scale = null,
-                Color? color = null,
+				Microsoft.Xna.Framework.Color? color = null,
                 SpriteEffects effects = SpriteEffects.None,
                 float layerDepth = 0f)
         {
@@ -294,7 +292,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 h = sourceRectangle.Value.Height * scale;
             }
 
-            DrawInternal(texture,
+			DrawInternal(texture,
                 new Vector4(position.X, position.Y, w, h),
 				sourceRectangle,
 				color,
@@ -342,7 +340,8 @@ namespace Microsoft.Xna.Framework.Graphics
 			      true);
 		}
 
-		internal void DrawInternal (Texture2D texture,
+
+		public void DrawInternal (Texture2D texture,
 			Vector4 destinationRectangle,
 			Rectangle? sourceRectangle,
 			Color color,
@@ -356,6 +355,8 @@ namespace Microsoft.Xna.Framework.Graphics
 
 			item.Depth = depth;
 			item.Texture = texture;
+
+			Rectangle _tempRect;
 
 			if (sourceRectangle.HasValue) {
 				_tempRect = sourceRectangle.Value;
@@ -405,9 +406,10 @@ namespace Microsoft.Xna.Framework.Graphics
 		{
 			if (_sortMode == SpriteSortMode.Immediate)
 			{
-				_batcher.DrawBatch(_sortMode, _effect);
+				//_batcher.DrawBatch(_sortMode, _effect);
 			}
 		}
+
 
         /// <summary>
         /// Submit a sprite for drawing in the current batch.
@@ -428,7 +430,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <param name="destinationRectangle">The drawing bounds on screen.</param>
         /// <param name="sourceRectangle">An optional region on the texture which will be rendered. If null - draws full texture.</param>
         /// <param name="color">A color mask.</param>
-		public void Draw (Texture2D texture, Rectangle destinationRectangle, Rectangle? sourceRectangle, Color color)
+		public void Draw(Texture2D texture, Rectangle destinationRectangle, Rectangle? sourceRectangle, Color color)
 		{
 			Draw (texture, destinationRectangle, sourceRectangle, color, 0, Vector2.Zero, SpriteEffects.None, 0f);
 		}
@@ -582,20 +584,20 @@ namespace Microsoft.Xna.Framework.Graphics
         /// Immediately releases the unmanaged resources used by this object.
         /// </summary>
         /// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
-        protected override void Dispose(bool disposing)
+        protected virtual void Dispose(bool disposing)
         {
-            if (!IsDisposed)
-            {
-                if (disposing)
-                {
-                    if (_spriteEffect != null)
-                    {
-                        _spriteEffect.Dispose();
-                        _spriteEffect = null;
-                    }
-                }
-            }
-            base.Dispose(disposing);
+//            if (!IsDisposed)
+//            {
+//                if (disposing)
+//                {
+//                    if (_spriteEffect != null)
+//                    {
+//                        _spriteEffect.Dispose();
+//                        _spriteEffect = null;
+//                    }
+//                }
+//            }
+//            base.Dispose(disposing);
         }
 	}
 }

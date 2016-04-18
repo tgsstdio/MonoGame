@@ -50,13 +50,5 @@
       <Project>{99F73D50-EDBB-4918-B99C-B785E9563795}</Project>
       <Name>MonoGame.Textures</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MonoGame.Content\MonoGame.Content.csproj">
-      <Project>{E44E47ED-2203-4E45-85A9-C755B10AC044}</Project>
-      <Name>MonoGame.Content</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\MonoGame.Content.Blocks\MonoGame.Content.Blocks.csproj">
-      <Project>{F218D143-486C-4018-8DAD-B970088EA505}</Project>
-      <Name>MonoGame.Content.Blocks</Name>
-    </ProjectReference>
   </ItemGroup>
 </Project>

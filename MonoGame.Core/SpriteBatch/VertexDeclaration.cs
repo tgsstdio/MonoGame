@@ -3,9 +3,9 @@
 // file 'LICENSE.txt', which is part of this source code package.
 
 using System;
-using MonoGame.Utilities;
+using Microsoft.Xna.Framework.Graphics;
 
-namespace Microsoft.Xna.Framework.Graphics
+namespace MonoGame.Core
 {
 	public partial class VertexDeclaration : IVertexDeclaration
 	{
@@ -40,7 +40,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     signature += element;
 
                 var bytes = System.Text.Encoding.UTF8.GetBytes(signature);
-                HashKey = MonoGame.Utilities.Hash.ComputeHash(bytes);
+                HashKey = MonoGame.Core.Hash.ComputeHash(bytes);
             }
         }
 

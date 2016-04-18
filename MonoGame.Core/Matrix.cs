@@ -5,6 +5,7 @@
 using System;
 using System.Diagnostics;
 using System.Runtime.Serialization;
+using MonoGame.Core;
 
 namespace Microsoft.Xna.Framework
 { 

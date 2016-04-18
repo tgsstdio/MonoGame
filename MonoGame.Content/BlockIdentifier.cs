@@ -1,8 +1,10 @@
-﻿namespace MonoGame.Content
+﻿using System;
+
+namespace MonoGame.Content
 {
 	public struct BlockIdentifier
 	{
-		public ulong BlockId {get;set;}
+		public UInt32 BlockId {get;set;}
 	}
 }
 

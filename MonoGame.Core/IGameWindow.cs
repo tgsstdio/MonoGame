@@ -5,6 +5,7 @@
 using System;
 using Microsoft.Xna.Framework.Input.Touch;
 using Microsoft.Xna.Framework.Input;
+using MonoGame.Core;
 
 namespace Microsoft.Xna.Framework
 {

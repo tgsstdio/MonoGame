@@ -1,4 +1,4 @@
-﻿namespace Microsoft.Xna.Framework.Graphics
+﻿namespace MonoGame.Core
 {
     public interface IVertexType
     {

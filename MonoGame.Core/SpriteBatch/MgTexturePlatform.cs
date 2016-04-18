@@ -5,7 +5,7 @@ using Magnesium;
 using System;
 using System.Threading;
 
-namespace MonoGame.Graphics
+namespace MonoGame.Core
 {
 	/// <summary>
 	/// For any singleton / global static variable
@@ -24,9 +24,9 @@ namespace MonoGame.Graphics
 
 		#region ITexturePlatform implementation
 
-		public void GraphicsDeviceResetting (MgImage image, MgImageView view)
+		public void GraphicsDeviceResetting (MgImage image, MgImageView view, MgSampler sampler, MgDeviceMemory deviceMemory)
 		{
-			DeleteGLTexture (image, view);
+			DeleteGLTexture (image, view, sampler, deviceMemory);
 		}
 
 		public Int32 GenerateSortingKey ()
@@ -36,10 +36,12 @@ namespace MonoGame.Graphics
 
 		#endregion
 
-		private void DeleteGLTexture(MgImage image, MgImageView view)
+		private void DeleteGLTexture(MgImage image, MgImageView view, MgSampler sampler, MgDeviceMemory deviceMemory)
         {			
 			mDevice.DestroyImageView(view, mCallbacks);
 			mDevice.DestroyImage(image, mCallbacks);
+			mDevice.DestroySampler (sampler, mCallbacks); 
+			mDevice.FreeMemory (deviceMemory, mCallbacks);
         }
     }
 }

@@ -40,9 +40,10 @@
 // 
 
 using System.Collections.Generic;
-using MonoGame.Graphics;
+using System;
+using Microsoft.Xna.Framework.Graphics;
 
-namespace Microsoft.Xna.Framework.Graphics
+namespace MonoGame.Core
 {
     /// <summary>
     /// This class handles the queueing of batch items into the GPU by creating the triangle tesselations
@@ -169,7 +170,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <param name="a"></param>
         /// <param name="b"></param>
         /// <returns>0 if they are equal, -1 or 1 if not.</returns>
-	    static int CompareTexture ( SpriteBatchItem a, SpriteBatchItem b )
+	    public Int32 CompareTexture (SpriteBatchItem a, SpriteBatchItem b )
 		{
             return a.Texture.SortingKey.CompareTo(b.Texture.SortingKey);
 		}
@@ -196,7 +197,12 @@ namespace Microsoft.Xna.Framework.Graphics
 		{
 			return b.Depth.CompareTo(a.Depth);
 		}
-		
+
+		public class Effect
+		{
+
+		}
+
         /// <summary>
         /// Sorts the batch items and then groups batch drawing into maximal allowed batch sets that do not
         /// overflow the 16 bit array indices for vertices.
@@ -228,10 +234,11 @@ namespace Microsoft.Xna.Framework.Graphics
             int batchCount = _batchItemList.Count;
 
             
-            unchecked
-            {
-                _device._graphicsMetrics._spriteCount += (ulong)batchCount;
-            }
+			// TODO : metrics
+//            unchecked
+//            {
+//                _device._graphicsMetrics._spriteCount += (ulong)batchCount;
+//            }
 
             // Iterate through the batches, doing short.MaxValue sets of vertices only.
             while(batchCount > 0)
@@ -255,11 +262,12 @@ namespace Microsoft.Xna.Framework.Graphics
                     var shouldFlush = !ReferenceEquals(item.Texture, tex);
                     if (shouldFlush)
                     {
-                        FlushVertexArray(startIndex, index, effect, tex);
+						// TODO : incomplete
+                        //FlushVertexArray(startIndex, index, effect, tex);
 
                         tex = item.Texture;
                         startIndex = index = 0;
-                        _device.Textures[0] = tex;
+                       /// _device.Textures[0] = tex;
                     }
 
                     // store the SpriteBatchItem data in our vertexArray
@@ -273,7 +281,8 @@ namespace Microsoft.Xna.Framework.Graphics
                     _freeBatchItemQueue.Enqueue(item);
                 }
                 // flush the remaining vertexArray data
-                FlushVertexArray(startIndex, index, effect, tex);
+				// TODO : incomplete
+                // FlushVertexArray(startIndex, index, effect, tex);
                 // Update our batch count to continue the process of culling down
                 // large batches
                 batchCount -= numBatchesToProcess;
@@ -288,50 +297,50 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <param name="end">End index of vertices to draw. Not used except to compute the count of vertices to draw.</param>
         /// <param name="effect">The custom effect to apply to the geometry</param>
         /// <param name="texture">The texture to draw.</param>
-        private void FlushVertexArray(int start, int end, Effect effect, Texture texture)
-        {
-            if (start == end)
-                return;
-
-            var vertexCount = end - start;
-
-            // If the effect is not null, then apply each pass and render the geometry
-            if (effect != null)
-            {
-                var passes = effect.CurrentTechnique.Passes;
-                foreach (var pass in passes)
-                {
-                    pass.Apply();
-
-                    // Whatever happens in pass.Apply, make sure the texture being drawn
-                    // ends up in Textures[0].
-                    _device.Textures[0] = texture;
-
-                    _device.DrawUserIndexedPrimitives(
-                        PrimitiveType.TriangleList,
-                        _vertexArray,
-                        0,
-                        vertexCount,
-                        _index,
-                        0,
-                        (vertexCount / 4) * 2,
-                        VertexPositionColorTexture.VertexDeclaration);
-                }
-            }
-            else
-            {
-                // If no custom effect is defined, then simply render.
-                _device.DrawUserIndexedPrimitives(
-                    PrimitiveType.TriangleList,
-                    _vertexArray,
-                    0,
-                    vertexCount,
-                    _index,
-                    0,
-                    (vertexCount / 4) * 2,
-                    VertexPositionColorTexture.VertexDeclaration);
-            }
-        }
+//        private void FlushVertexArray(int start, int end, Effect effect, Texture texture)
+//        {
+//            if (start == end)
+//                return;
+//
+//            var vertexCount = end - start;
+//
+//            // If the effect is not null, then apply each pass and render the geometry
+//            if (effect != null)
+//            {
+//                var passes = effect.CurrentTechnique.Passes;
+//                foreach (var pass in passes)
+//                {
+//                    pass.Apply();
+//
+//                    // Whatever happens in pass.Apply, make sure the texture being drawn
+//                    // ends up in Textures[0].
+//                    _device.Textures[0] = texture;
+//
+//                    _device.DrawUserIndexedPrimitives(
+//                        PrimitiveType.TriangleList,
+//                        _vertexArray,
+//                        0,
+//                        vertexCount,
+//                        _index,
+//                        0,
+//                        (vertexCount / 4) * 2,
+//                        VertexPositionColorTexture.VertexDeclaration);
+//                }
+//            }
+//            else
+//            {
+//                // If no custom effect is defined, then simply render.
+//               // _device.DrawUserIndexedPrimitives(
+//                    PrimitiveType.TriangleList,
+//                    _vertexArray,
+//                    0,
+//                    vertexCount,
+//                    _index,
+//                    0,
+//                    (vertexCount / 4) * 2,
+//                    VertexPositionColorTexture.VertexDeclaration);
+//            }
+//        }
 	}
 }
 

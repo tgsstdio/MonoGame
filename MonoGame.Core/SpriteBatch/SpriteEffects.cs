@@ -4,7 +4,7 @@
 
 using System;
 
-namespace Microsoft.Xna.Framework.Graphics
+namespace MonoGame.Core
 {
     /// <summary>
     /// Defines sprite visual options for mirroring.

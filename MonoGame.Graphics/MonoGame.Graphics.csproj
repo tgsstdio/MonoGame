@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>MonoGame.Graphics</RootNamespace>
     <AssemblyName>MonoGame.Graphics</AssemblyName>
-    <TargetFrameworkProfile>Profile78</TargetFrameworkProfile>
+    <TargetFrameworkProfile>Profile111</TargetFrameworkProfile>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
@@ -102,30 +102,8 @@
     <Compile Include="IGLFramebufferHelper.cs" />
     <Compile Include="IGraphicsCapabilitiesLookup.cs" />
     <Compile Include="GraphicsCapabilities.cs" />
-    <Compile Include="IGraphicsCapabilities.cs" />
-    <Compile Include="VertexElementFormat.cs" />
     <Compile Include="IGLExtensionLookup.cs" />
     <Compile Include="IGLFramebufferHelperSelector.cs" />
-    <Compile Include="VertexElement.cs" />
-    <Compile Include="VertexDeclaration.cs" />
-    <Compile Include="IVertexType.cs" />
-    <Compile Include="VertexElementUsage.cs" />
-    <Compile Include="Utilities\Hash.cs" />
-    <Compile Include="SpriteBatch\SpriteBatch.cs" />
-    <Compile Include="SpriteBatch\SpriteBatcher.cs" />
-    <Compile Include="SpriteBatch\SpriteBatchItem.cs" />
-    <Compile Include="SpriteBatch\SpriteEffects.cs" />
-    <Compile Include="SpriteBatch\SpriteFont.cs" />
-    <Compile Include="SpriteBatch\VertexPositionColorTexture.cs" />
-    <Compile Include="SpriteBatch\ITexture2DPlatform.cs" />
-    <Compile Include="SpriteBatch\SpriteSortMode.cs" />
-    <Compile Include="SpriteBatch\Texture.cs" />
-    <Compile Include="SpriteBatch\Texture2D.cs" />
-    <Compile Include="SpriteBatch\SurfaceType.cs" />
-    <Compile Include="SpriteBatch\ITexturePlatform.cs" />
-    <Compile Include="SpriteBatch\Texture2DPlatform.cs" />
-    <Compile Include="SpriteBatch\MgTexturePlatform.cs" />
-    <Compile Include="Utilities\Format.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -139,7 +117,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Utilities\" />
     <Folder Include="SpriteBatch\" />
   </ItemGroup>
 </Project>

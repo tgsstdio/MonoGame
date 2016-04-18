@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
 using System;
 using System.ComponentModel;
+using MonoGame.Core;
 
 namespace Microsoft.Xna.Framework {
 	public abstract class GameWindow : IGameWindow {

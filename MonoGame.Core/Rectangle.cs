@@ -5,8 +5,9 @@
 using System;
 using System.Runtime.Serialization;
 using System.Diagnostics;
+using Microsoft.Xna.Framework;
 
-namespace Microsoft.Xna.Framework
+namespace MonoGame.Core
 {
     /// <summary>
     /// Describes a 2D-rectangle. 

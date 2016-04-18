@@ -4,11 +4,11 @@
 
 using System;
 using System.IO;
-using MonoGame.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Core;
 
-namespace MonoGame.Graphics
+namespace MonoGame.Core
 {
     public partial class Texture2D : Texture
     {
@@ -77,27 +77,27 @@ namespace MonoGame.Graphics
 			: base(texPlatform)
 		{
 			mTex2DPlatform = tex2DPlatform;
-            if (owner == null)
-            {
-				throw new ArgumentNullException("owner", FrameworkResources.ResourceCreationWhenDeviceIsNull);
-            }
+//            if (owner == null)
+//            {
+//				throw new ArgumentNullException("owner", FrameworkResources.ResourceCreationWhenDeviceIsNull);
+//            }
 			mCapabilities = capability;
 
 			if (arraySize > 1 && ! mCapabilities.SupportsTextureArrays)
                 throw new ArgumentException("Texture arrays are not supported on this graphics device", "arraySize");
 
-            this.Owner = owner;
+            //this.Owner = owner;
             this.width = width;
             this.height = height;
             this._format = format;
-            this._levelCount = mipmap ? CalculateMipLevels(width, height) : 1;
+			this._levelCount = mipmap ? (UInt32) CalculateMipLevels(width, height) : 1U;
             this.ArraySize = arraySize;
 
             // Texture will be assigned by the swap chain.
 		    if (type == SurfaceType.SwapChainRenderTarget)
 		        return;
-
-			mTex2DPlatform.Construct(width, height, mipmap, format, type, shared);
+			// Add proper format
+			mTex2DPlatform.Construct(width, height, mipmap, 0, type, shared);
         }
 
         public int Width
@@ -116,9 +116,8 @@ namespace MonoGame.Graphics
             }
         }
 
-		public void SetData<T, TRectangle>(int level, int arraySlice, TRectangle? rect, T[] data, int startIndex, int elementCount)
+		public void SetData<T>(int level, int arraySlice, Rectangle? rect, T[] data, int startIndex, int elementCount)
 			where T : struct
-			where TRectangle : struct
         {
             if (data == null)
                 throw new ArgumentNullException("data");
@@ -126,12 +125,11 @@ namespace MonoGame.Graphics
 			if (arraySlice > 0 && !mCapabilities.SupportsTextureArrays)
                 throw new ArgumentException("Texture arrays are not supported on this graphics device", "arraySlice");
 
-			mTex2DPlatform.SetData<T, TRectangle>(level, arraySlice, rect, data, startIndex, elementCount);
+			mTex2DPlatform.SetData<T>(level, arraySlice, rect, data, startIndex, elementCount);
         }
 
-		public void SetData<T, TRectangle>(int level, Rectangle? rect, T[] data, int startIndex, int elementCount)
+		public void SetData<T>(int level, Rectangle? rect, T[] data, int startIndex, int elementCount)
 			where T : struct 
-			where TRectangle : struct
         {
             this.SetData(level, 0, rect, data, startIndex, elementCount);
         }
@@ -146,9 +144,8 @@ namespace MonoGame.Graphics
 			this.SetData(0, null, data, 0, data.Length);
         }
 
-		public void GetData<T, TRectangle>(int level, int arraySlice, TRectangle? rect, T[] data, int startIndex, int elementCount)
+		public void GetData<T>(int level, int arraySlice, Rectangle? rect, T[] data, int startIndex, int elementCount)
 			where T : struct
-			where TRectangle : struct
         {
             if (data == null || data.Length == 0)
                 throw new ArgumentException("data cannot be null");
@@ -157,12 +154,11 @@ namespace MonoGame.Graphics
 			if (arraySlice > 0 && !mCapabilities.SupportsTextureArrays)
                 throw new ArgumentException("Texture arrays are not supported on this graphics device", "arraySlice");
 
-			mTex2DPlatform.GetData<T, TRectangle>(level, arraySlice, rect, data, startIndex, elementCount);
+			mTex2DPlatform.GetData<T>(level, arraySlice, rect, data, startIndex, elementCount);
         }
 		
-		public void GetData<T, TRectangle>(int level, TRectangle? rect, T[] data, int startIndex, int elementCount) 
+		public void GetData<T>(int level, Rectangle? rect, T[] data, int startIndex, int elementCount) 
 			where T : struct
-			where TRectangle : struct
         {
             this.GetData(level, 0, rect, data, startIndex, elementCount);
         }
@@ -194,9 +190,9 @@ namespace MonoGame.Graphics
 
         // This method allows games that use Texture2D.FromStream 
         // to reload their textures after the GL context is lost.
-        public void Reload(Stream textureStream)
+		public void Reload(Stream textureStream, int width, int height)
         {
-			mTex2DPlatform.Reload(textureStream);
+			//mTex2DPlatform.Reload(textureStream);
         }
 
         //Converts Pixel Data from ARGB to ABGR

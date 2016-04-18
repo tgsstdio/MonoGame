@@ -1,0 +1,39 @@
+﻿using System;
+
+namespace MonoGame.Content
+{
+	public class StandardBlockLocator : IBlockLocator
+	{
+		public StandardBlockLocator ()
+		{
+		}
+
+		#region IBlockLocator implementation
+
+		public BlockIdentifier GetSource (AssetIdentifier identifier)
+		{
+			// 16 bit reserved for blocks
+			const UInt32 Front = identifier.AssetId & 0xffff0000;
+
+			// 16 bits reserved for assets in block
+			//const UInt32 Back = identifier.AssetId & 0x0000ffff;
+
+			return new BlockIdentifier{ BlockId = ReverseBits (Front)};
+		}
+
+		#endregion
+
+		private static UInt32 ReverseBits(UInt32 x)
+		{
+			// FROM HACKER'S DELIGHT
+			// Henry S. Warren Jr. pg 101
+			x = (x & 0x55555555) << 1  | (x & 0xaaaaaaaa) >> 1;
+			x = (x & 0x33333333) << 2  | (x & 0xcccccccc) >> 2;
+			x = (x & 0x0f0f0f0f) << 4  | (x & 0xf0f0f0f0) >> 4;
+			x = (x & 0x00ff00ff) << 8  | (x & 0xff00ff00) >> 8;
+			x = (x & 0x0000ffff) << 16 | (x & 0xffff0000) >> 16;
+			return x;
+		}
+	}
+}
+

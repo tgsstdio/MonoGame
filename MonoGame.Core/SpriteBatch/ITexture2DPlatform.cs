@@ -4,11 +4,11 @@
 using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Magnesium;
+using System;
 
-namespace MonoGame.Graphics
+namespace MonoGame.Core
 {
-	using Rectangle = Microsoft.Xna.Framework.Rectangle;
-
 	public interface ITexture2DPlatform
 	{
 		//Texture2D FromStream(IGraphicsDevice graphicsDevice, Stream stream);
@@ -19,13 +19,11 @@ namespace MonoGame.Graphics
 
 		void SaveAsJpeg (Stream stream, int width, int height);
 
-		void GetData<T, TRectangle> (int level, int arraySlice, TRectangle? rect, T[] data, int startIndex, int elementCount)
-			where T : struct
-			where TRectangle : struct;
+		void GetData<T> (int level, int arraySlice, Rectangle? rect, T[] data, int startIndex, int elementCount)
+			where T : struct;
 
-		void SetData<T, TRectangle> (int level, int arraySlice, TRectangle? rect, T[] data, int startIndex, int elementCount)
-			where T : struct
-			where TRectangle : struct;
+		void SetData<T> (int level, int arraySlice, Rectangle? rect, T[] data, int startIndex, int elementCount)
+			where T : struct;
 
 		void Construct (int width, int height, bool mipmap, SurfaceFormat format, SurfaceType type, bool shared);
 	}

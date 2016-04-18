@@ -3,12 +3,10 @@
 // file 'LICENSE.txt', which is part of this source code package.
 
 using System;
-using System.Diagnostics;
-using MonoGame.Graphics;
 using Magnesium;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace MonoGame.Graphics
+namespace MonoGame.Core
 {
 	public abstract partial class Texture
 	{
@@ -17,6 +15,8 @@ namespace MonoGame.Graphics
 
 		internal MgImage mImage;
 		internal MgImageView mView;
+		internal MgSampler mSampler;
+		internal MgDeviceMemory mDeviceMemory;
 
 		protected Texture(ITexturePlatform platform)
 		{
@@ -25,7 +25,7 @@ namespace MonoGame.Graphics
 		}
 
 		internal SurfaceFormat _format;
-		internal int _levelCount;
+		internal UInt32 _levelCount;
 
         /// <summary>
         /// Gets a unique identifier of this texture for sorting purposes.
@@ -45,18 +45,18 @@ namespace MonoGame.Graphics
 			get { return _format; }
 		}
 		
-		public int LevelCount
+		public UInt32 LevelCount
 		{
 			get { return _levelCount; }
 		}
 
-		internal static uint CalculateMipLevels(UInt32 width, UInt32 height = 0, UInt32 depth = 0)
+		internal static int CalculateMipLevels(int width, int height = 0, int depth = 0)
         {
-			uint levels = 1u;
-			UInt32 size = Math.Max(Math.Max(width, height), depth);
-            while (size > 1u)
+			int levels = 1;
+			int size = Math.Max(Math.Max(width, height), depth);
+            while (size > 1)
             {
-				size = size / 2u;
+				size = size / 2;
                 levels++;
             }
             return levels;
@@ -93,7 +93,7 @@ namespace MonoGame.Graphics
 
         internal protected void GraphicsDeviceResetting()
         {
-			mPlatform.GraphicsDeviceResetting(mImage, mView);
+			mPlatform.GraphicsDeviceResetting(mImage, mView, mSampler, mDeviceMemory);
         }
     }
 }

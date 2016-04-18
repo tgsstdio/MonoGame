@@ -1,8 +1,10 @@
-﻿namespace MonoGame.Content
+﻿using System;
+
+namespace MonoGame.Content
 {
 	public struct AssetIdentifier
 	{
-		public ulong AssetId { get; set; }
+		public UInt32 AssetId { get; set; }
 	}
 }
 

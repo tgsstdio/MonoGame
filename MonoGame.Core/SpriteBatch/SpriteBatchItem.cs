@@ -1,7 +1,6 @@
-using System;
-using MonoGame.Graphics;
+using Microsoft.Xna.Framework;
 
-namespace Microsoft.Xna.Framework.Graphics
+namespace MonoGame.Core
 {
 	internal class SpriteBatchItem
 	{

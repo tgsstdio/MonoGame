@@ -1,7 +1,6 @@
-using System;
-using MonoGame.Graphics;
+using MonoGame.Core;
 
-namespace Microsoft.Xna.Framework.Graphics
+namespace MonoGame.Core
 {
     public struct VertexElement
     {

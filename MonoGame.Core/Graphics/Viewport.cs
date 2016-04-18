@@ -4,6 +4,7 @@
 
 using System;
 using System.Runtime.Serialization;
+using MonoGame.Core;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
