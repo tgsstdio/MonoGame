@@ -1,4 +1,6 @@
-﻿namespace Microsoft.Xna.Framework.Graphics
+﻿using MonoGame.Core;
+
+namespace Microsoft.Xna.Framework.Graphics
 {
     /// <summary>
     /// Helper class which ensures we only lookup a vertex 

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework;
+using MonoGame.Core;
 using MonoGame.Graphics;
 
 #if OPENGL

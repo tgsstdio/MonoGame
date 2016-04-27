@@ -64,7 +64,13 @@ namespace Microsoft.Xna.Framework.Audio
         /// <param name="audioEngine">Instance of the AudioEngine to associate this wave bank with.</param>
         /// <param name="nonStreamingWaveBankFilename">Path to the .xwb file to load.</param>
         /// <remarks>This constructor immediately loads all wave data into memory at once.</remarks>
-        public WaveBank(AudioEngine audioEngine, string nonStreamingWaveBankFilename)
+		public WaveBank(
+			AudioEngine audioEngine,
+			BinaryReader reader,
+			IADPCMSoundEffectInitializer adpcmInitializer,
+			IWMASoundEffectInitializer wmaInitializer,
+			IPCMSoundEffectInitializer pcmInitializer
+		)
         {
             //XWB PARSING
             //Adapted from MonoXNA
@@ -85,18 +91,6 @@ namespace Microsoft.Xna.Framework.Audio
 
             int wavebank_offset = 0;
 
-            nonStreamingWaveBankFilename = FileHelpers.NormalizeFilePathSeparators(nonStreamingWaveBankFilename);
-
-#if !ANDROID
-            BinaryReader reader = new BinaryReader(TitleContainer.OpenStream(nonStreamingWaveBankFilename));
-#else 
-			Stream stream = Game.Activity.Assets.Open(nonStreamingWaveBankFilename);
-			MemoryStream ms = new MemoryStream();
-			stream.CopyTo( ms );
-			stream.Close();
-			ms.Position = 0;
-			BinaryReader reader = new BinaryReader(ms);
-#endif
 			reader.ReadBytes(4);
 
             wavebankheader.Version = reader.ReadInt32();
@@ -308,21 +302,8 @@ namespace Microsoft.Xna.Framework.Audio
                 if (codec == MiniFormatTag_PCM) {
                     
                     //write PCM data into a wav
-#if DIRECTX
-                    
-                    // TODO: Wouldn't storing a SoundEffectInstance like this
-                    // result in the "parent" SoundEffect being garbage collected?
-                    
-					SharpDX.Multimedia.WaveFormat waveFormat = new SharpDX.Multimedia.WaveFormat(rate, chans);
-                    var sfx = new SoundEffect(audiodata, 0, audiodata.Length, rate, (AudioChannels)chans, wavebankentry.LoopRegion.Offset, wavebankentry.LoopRegion.Length)
-                        {
-                            _format = waveFormat
-                        };
+					_sounds[current_entry] = pcmInitializer.LoadEffect(audiodata, rate, chans, wavebankentry.LoopRegion.Offset,  wavebankentry.LoopRegion.Length);
 
-					_sounds[current_entry] = sfx;
-#else
-                    _sounds[current_entry] = new SoundEffect(audiodata, rate, (AudioChannels)chans);
-#endif
                 } else if (codec == MiniForamtTag_WMA) { //WMA or xWMA (or XMA2)
                     byte[] wmaSig = {0x30, 0x26, 0xb2, 0x75, 0x8e, 0x66, 0xcf, 0x11, 0xa6, 0xd9, 0x0, 0xaa, 0x0, 0x62, 0xce, 0x6c};
                     
@@ -358,26 +339,7 @@ namespace Microsoft.Xna.Framework.Audio
                     
                     if (isWma || isM4a) {
                         //WMA data can sometimes be played directly
-#if DIRECTX
-                        throw new NotImplementedException();
-#elif !WINRT
-                        //hack - NSSound can't play non-wav from data, we have to give a filename
-                        string filename = Path.GetTempFileName();
-                        if (isWma) {
-                            filename = filename.Replace(".tmp", ".wma");
-                        } else if (isM4a) {
-                            filename = filename.Replace(".tmp", ".m4a");
-                        }
-                        using (var audioFile = File.Create(filename))
-                        {
-                            audioFile.Write(audiodata, 0, audiodata.Length);
-                            audioFile.Seek(0, SeekOrigin.Begin);
-       
-                            _sounds[current_entry] = SoundEffect.FromStream(audioFile);
-                        }
-#else
-						throw new NotImplementedException();
-#endif
+						_sounds[current_entry] = wmaInitializer.LoadEffect(audiodata, isWma, isM4a);
                     } else {
                         //An xWMA or XMA2 file. Can't be played atm :(
                         throw new NotImplementedException();
@@ -385,22 +347,18 @@ namespace Microsoft.Xna.Framework.Audio
                 } 
                 else if (codec == MiniFormatTag_ADPCM) 
                 {
-#if DIRECTX
-                    _sounds[current_entry] = new SoundEffect(audiodata, rate, (AudioChannels)chans)
-                    {
-                        _format = new SharpDX.Multimedia.WaveFormatAdpcm(rate, chans, align)
-                    };
-#else
-                    using (var dataStream = new MemoryStream(audiodata)) {
-                        using (var source = new BinaryReader(dataStream)) {
-                            _sounds[current_entry] = new SoundEffect(
-                                MSADPCMToPCM.MSADPCM_TO_PCM(source, (short) chans, (short) align),
-                                rate,
-                                (AudioChannels)chans
-                            );
-                        }
-                    }
-#endif
+					_sounds[current_entry] = adpcmInitializer.LoadEffect(audiodata, rate, chans, align);
+
+//                    using (var dataStream = new MemoryStream(audiodata)) {
+//                        using (var source = new BinaryReader(dataStream)) {
+//                            _sounds[current_entry] = new SoundEffect(
+//                                MSADPCMToPCM.MSADPCM_TO_PCM(source, (short) chans, (short) align),
+//                                rate,
+//                                (AudioChannels)chans
+//                            );
+//                        }
+//                    }
+
                 } 
                 else {
                     throw new NotImplementedException();
@@ -420,8 +378,14 @@ namespace Microsoft.Xna.Framework.Audio
         /// <para>Note that packetsize is in sectors, which is 2048 bytes.</para>
         /// <para>AudioEngine.Update() must be called at least once before using data from a streaming wave bank.</para>
         /// </remarks>
-		public WaveBank(AudioEngine audioEngine, string streamingWaveBankFilename, int offset, short packetsize)
-			: this(audioEngine, streamingWaveBankFilename)
+		public WaveBank(
+			AudioEngine audioEngine, 
+			BinaryReader reader,
+			IADPCMSoundEffectInitializer adpcmInitializer,
+			IWMASoundEffectInitializer wmaInitializer,
+			IPCMSoundEffectInitializer pcmInitializer,
+			int offset, short packetsize)
+			: this(audioEngine, reader, adpcmInitializer, wmaInitializer, pcmInitializer)
 		{
 			if (offset != 0) {
 				throw new NotImplementedException();

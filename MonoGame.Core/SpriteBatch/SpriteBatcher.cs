@@ -246,7 +246,7 @@ namespace MonoGame.Core
                 // setup the vertexArray array
                 var startIndex = 0;
                 var index = 0;
-                Texture2D tex = null;
+                ITexture2D tex = null;
 
                 int numBatchesToProcess = batchCount;
                 if (numBatchesToProcess > MaxBatchSize)
@@ -259,7 +259,7 @@ namespace MonoGame.Core
                 {
                     SpriteBatchItem item = _batchItemList[batchIndex];
                     // if the texture changed, we need to flush and bind the new texture
-                    var shouldFlush = !ReferenceEquals(item.Texture, tex);
+                    bool shouldFlush = !ReferenceEquals(item.Texture, tex);
                     if (shouldFlush)
                     {
 						// TODO : incomplete

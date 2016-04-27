@@ -1,8 +1,8 @@
 ﻿using System;
 using System.IO;
 using System.Collections.Generic;
-using MonoGame.Content.Blocks;
 using MonoGame.Content;
+using MonoGame.Content.Blocks;
 
 namespace MonoGame.Textures.Ktx
 {

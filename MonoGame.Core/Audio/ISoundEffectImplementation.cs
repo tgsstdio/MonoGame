@@ -5,7 +5,7 @@ using System.IO;
 
 namespace Microsoft.Xna.Framework.Audio
 {
-	public interface ISoundEffectPlatform
+	public interface ISoundEffectImplementation
 	{
 		void Dispose (bool disposing);
 

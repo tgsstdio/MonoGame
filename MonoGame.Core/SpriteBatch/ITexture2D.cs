@@ -1,6 +1,4 @@
-﻿using System;
-using System.IO;
-using Microsoft.Xna.Framework.Graphics;
+﻿using System.IO;
 
 namespace MonoGame.Core
 {

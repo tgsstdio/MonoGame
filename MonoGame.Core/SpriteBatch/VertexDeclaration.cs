@@ -57,6 +57,7 @@ namespace MonoGame.Core
 			return max;
 		}
 
+		/// TODO : Remove Activator 
         /// <summary>
         /// Returns the VertexDeclaration for Type.
         /// </summary>
@@ -66,7 +67,7 @@ namespace MonoGame.Core
         /// Prefer to use VertexDeclarationCache when the declaration lookup
         /// can be performed with a templated type.
         /// </remarks>
-		internal static VertexDeclaration FromType(Type vertexType)
+		public static VertexDeclaration FromType(Type vertexType)
 		{
 			if (vertexType == null)
 				throw new ArgumentNullException("vertexType", "Cannot be null");

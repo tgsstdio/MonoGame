@@ -3,13 +3,11 @@
 // file 'LICENSE.txt', which is part of this source code package.
 
 using System;
-using System.IO;
-using System.Runtime.InteropServices;
-using MonoGame.Graphics;
+using MonoGame.Core;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
-	public partial class Texture3D : Texture
+	public partial class Texture3D : ITexture
 	{
         private int _width;
         private int _height;

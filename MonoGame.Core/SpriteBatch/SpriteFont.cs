@@ -88,7 +88,7 @@ namespace MonoGame.Core
 
 		private readonly Dictionary<char, Glyph> _glyphs;
 		
-		private readonly Texture2D _texture;
+		private readonly ITexture2D _texture;
 
 		class CharComparer: IEqualityComparer<char>
 		{
@@ -106,7 +106,7 @@ namespace MonoGame.Core
 		}
 
 		internal SpriteFont (
-			Texture2D texture, List<Rectangle> glyphBounds, List<Rectangle> cropping, List<char> characters,
+			ITexture2D texture, List<Rectangle> glyphBounds, List<Rectangle> cropping, List<char> characters,
 			int lineSpacing, float spacing, List<Vector3> kerning, char? defaultCharacter)
 		{
 			Characters = new ReadOnlyCollection<char>(characters.ToArray());
@@ -139,7 +139,7 @@ namespace MonoGame.Core
         /// Gets the texture that this SpriteFont draws from.
         /// </summary>
         /// <remarks>Can be used to implement custom rendering of a SpriteFont</remarks>
-        public Texture2D Texture { get { return _texture; } }
+        public ITexture2D Texture { get { return _texture; } }
 
         /// <summary>
         /// Returns a copy of the dictionary containing the glyphs in this SpriteFont.

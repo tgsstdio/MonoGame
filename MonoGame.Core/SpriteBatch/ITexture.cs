@@ -7,7 +7,7 @@ namespace MonoGame.Core
 	{
 		Int32 SortingKey { get; }
 		SurfaceFormat Format { get; }
-		UInt32 LevelCount { get; }
+		Int32 LevelCount { get; }
 		void GraphicsDeviceResetting ();		
 	}
 }

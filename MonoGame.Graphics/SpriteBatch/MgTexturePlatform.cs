@@ -5,12 +5,12 @@ using Magnesium;
 using System;
 using System.Threading;
 
-namespace MonoGame.Core
+namespace MonoGame.Graphics
 {
 	/// <summary>
 	/// For any singleton / global static variable
 	/// </summary>
-	public class MgTexturePlatform : ITexturePlatform
+	public class MgTexturePlatform : IMgTexturePlatform
     {
 		readonly IMgDevice mDevice;
 		readonly MgAllocationCallbacks mCallbacks;

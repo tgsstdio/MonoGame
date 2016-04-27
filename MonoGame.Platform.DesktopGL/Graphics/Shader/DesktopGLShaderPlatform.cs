@@ -3,6 +3,7 @@
 using System;
 using System.IO;
 using MonoGame.Platform.DesktopGL.Graphics;
+using MonoGame.Core;
 
 #if MONOMAC
 using MonoMac.OpenGL;
@@ -49,7 +50,7 @@ namespace MonoGame.Platform.DesktopGL.Graphics
 
 		public bool GenerateHashKey (byte[] shaderBytecode, out int hashKey)
 		{
-			hashKey = MonoGame.Utilities.Hash.ComputeHash(shaderBytecode);
+			hashKey = MonoGame.Core.Hash.ComputeHash(shaderBytecode);
 			return true;
 		}
 

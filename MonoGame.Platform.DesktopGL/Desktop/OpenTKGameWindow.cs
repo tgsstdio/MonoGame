@@ -58,7 +58,7 @@ using Microsoft.Xna.Framework;
 
 namespace MonoGame.Platform.DesktopGL
 {
-	using Rectangle = Microsoft.Xna.Framework.Rectangle;
+	using Rectangle = MonoGame.Core.Rectangle;
 
 	public class OpenTKGameWindow : Microsoft.Xna.Framework.GameWindow, IOpenTKGameWindow
     {
@@ -92,7 +92,7 @@ namespace MonoGame.Platform.DesktopGL
 
 		public override string ScreenDeviceName { get { return window.Title; } }
 
-		public override Microsoft.Xna.Framework.Rectangle ClientBounds { get { return mClientBounds; } }
+		public override Rectangle ClientBounds { get { return mClientBounds; } }
 
         // TODO: this is buggy on linux - report to opentk team
 		public override bool AllowUserResizing

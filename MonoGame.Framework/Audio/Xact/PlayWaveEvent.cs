@@ -40,7 +40,7 @@ namespace Microsoft.Xna.Framework.Audio
         private int _wavIndex;
         private int _loopIndex;
 
-        private SoundEffectInstance _wav;
+        private ISoundEffectInstance _wav;
 
         public PlayWaveEvent(   XactClip clip, float timeStamp, float randomOffset, SoundBank soundBank,
                                 int[] waveBanks, int[] tracks, byte[] weights, int totalWeights,

@@ -7,7 +7,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input.Touch;
 using MonoGame.Platform.DesktopGL;
-using MonoGame.Graphics;
 using MonoGame.Platform.DesktopGL.Graphics;
 
 #if MONOMAC
@@ -15,7 +14,6 @@ using MonoMac.OpenGL;
 #elif GLES
 using OpenTK.Graphics.ES20;
 #elif OPENGL
-using OpenTK.Graphics.OpenGL;
 #elif WINDOWS_STOREAPP || WINDOWS_UAP
 using Windows.UI.Xaml.Controls;
 #endif

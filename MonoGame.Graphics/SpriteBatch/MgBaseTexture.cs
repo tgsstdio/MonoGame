@@ -5,12 +5,13 @@
 using System;
 using Magnesium;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Core;
 
-namespace MonoGame.Core
+namespace MonoGame.Graphics
 {
-	public abstract partial class Texture
+	public abstract class MgBaseTexture
 	{
-		private ITexturePlatform mPlatform;
+		private readonly IMgTexturePlatform mPlatform;
 		private Int32 _sortingKey;
 
 		internal MgImage mImage;
@@ -18,14 +19,14 @@ namespace MonoGame.Core
 		internal MgSampler mSampler;
 		internal MgDeviceMemory mDeviceMemory;
 
-		protected Texture(ITexturePlatform platform)
+		protected MgBaseTexture(IMgTexturePlatform platform)
 		{
 			mPlatform = platform;
 			_sortingKey = mPlatform.GenerateSortingKey ();
 		}
 
 		internal SurfaceFormat _format;
-		internal UInt32 _levelCount;
+		internal Int32 _levelCount;
 
         /// <summary>
         /// Gets a unique identifier of this texture for sorting purposes.
@@ -35,7 +36,7 @@ namespace MonoGame.Core
         /// <para>The value is an implementation detail and may change between application launches or MonoGame versions.
         /// It is only guaranteed to stay consistent during application lifetime.</para>
         /// </remarks>
-		internal Int32 SortingKey
+		public Int32 SortingKey
         {
             get { return _sortingKey; }
         }
@@ -45,7 +46,7 @@ namespace MonoGame.Core
 			get { return _format; }
 		}
 		
-		public UInt32 LevelCount
+		public Int32 LevelCount
 		{
 			get { return _levelCount; }
 		}
@@ -91,7 +92,7 @@ namespace MonoGame.Core
             return pitch;
         }
 
-        internal protected void GraphicsDeviceResetting()
+        public void GraphicsDeviceResetting()
         {
 			mPlatform.GraphicsDeviceResetting(mImage, mView, mSampler, mDeviceMemory);
         }

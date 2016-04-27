@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>MonoGame.Core</RootNamespace>
     <AssemblyName>MonoGame.Core</AssemblyName>
-    <TargetFrameworkProfile>Profile111</TargetFrameworkProfile>
+    <TargetFrameworkProfile>Profile259</TargetFrameworkProfile>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -150,7 +150,6 @@
     <Compile Include="Audio\SoundEffect.cs" />
     <Compile Include="Audio\AudioListener.cs" />
     <Compile Include="Audio\AudioEmitter.cs" />
-    <Compile Include="Audio\ISoundEffectPlatform.cs" />
     <Compile Include="Audio\AudioChannels.cs" />
     <Compile Include="IThreadSleeper.cs" />
     <Compile Include="Media\BaseSong.cs" />
@@ -164,30 +163,27 @@
     <Compile Include="Color.cs" />
     <Compile Include="SpriteBatch\SpriteBatch.cs" />
     <Compile Include="SpriteBatch\SpriteSortMode.cs" />
-    <Compile Include="SpriteBatch\ITexturePlatform.cs" />
     <Compile Include="SpriteBatch\ITexture2DPlatform.cs" />
-    <Compile Include="SpriteBatch\MgTexturePlatform.cs" />
     <Compile Include="SpriteBatch\SpriteBatcher.cs" />
     <Compile Include="SpriteBatch\SpriteBatchItem.cs" />
     <Compile Include="SpriteBatch\SpriteEffects.cs" />
     <Compile Include="SpriteBatch\SpriteFont.cs" />
     <Compile Include="SpriteBatch\SurfaceType.cs" />
-    <Compile Include="SpriteBatch\Texture.cs" />
-    <Compile Include="SpriteBatch\Texture2D.cs" />
-    <Compile Include="SpriteBatch\Texture2DPlatform.cs" />
     <Compile Include="SpriteBatch\VertexPositionColorTexture.cs" />
     <Compile Include="SpriteBatch\IVertexType.cs" />
     <Compile Include="SpriteBatch\VertexDeclaration.cs" />
-    <Compile Include="SpriteBatch\Utilities\Hash.cs" />
     <Compile Include="SpriteBatch\VertexElement.cs" />
     <Compile Include="SpriteBatch\VertexElementFormat.cs" />
     <Compile Include="SpriteBatch\VertexElementUsage.cs" />
     <Compile Include="Graphics\IGraphicsCapabilities.cs" />
-    <Compile Include="SpriteBatch\Utilities\FormatExtensions.cs" />
     <Compile Include="SpriteBatch\ITexture2D.cs" />
     <Compile Include="SpriteBatch\ITexture.cs" />
     <Compile Include="SpriteBatch\ITexture2DLoader.cs" />
-    <Compile Include="SpriteBatch\MgTexture2DLoader.cs" />
+    <Compile Include="ITitleContainer.cs" />
+    <Compile Include="Audio\ISoundEffectImplementation.cs" />
+    <Compile Include="Audio\ISoundEffectImplementationFactory.cs" />
+    <Compile Include="SpriteBatch\Utilities\FormatExtensions.cs" />
+    <Compile Include="Utilities\Hash.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>
@@ -200,6 +196,7 @@
     <Folder Include="Audio\" />
     <Folder Include="SpriteBatch\" />
     <Folder Include="SpriteBatch\Utilities\" />
+    <Folder Include="Utilities\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Magnesium\Magnesium.csproj">

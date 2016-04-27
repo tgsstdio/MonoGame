@@ -4,12 +4,10 @@ namespace Microsoft.Xna.Framework.Audio
 {
 	public class SoundPlayer : ISoundPlayer
 	{
-		private readonly ISoundEffectPlatform mEffectPlatform;
 		private readonly ISoundEffectInstancePool mPool;
 		private readonly ISoundEffectInstancePlatform mEffectInstance;
-		public SoundPlayer (ISoundEffectPlatform effect, ISoundEffectInstancePlatform effectInstance, ISoundEffectInstancePool pool)
+		public SoundPlayer (ISoundEffectInstancePlatform effectInstance, ISoundEffectInstancePool pool)
 		{
-			mEffectPlatform = effect;
 			mEffectInstance = effectInstance;
 			mPool = pool;
 		}
@@ -63,14 +61,14 @@ namespace Microsoft.Xna.Framework.Audio
 		/// <summary>
 		/// Returns a sound effect instance from the pool or null if none are available.
 		/// </summary>
-		internal ISoundEffectInstance GetPooledInstance(bool forXAct, SoundEffect effect)
+		public ISoundEffectInstance GetPooledInstance(bool forXAct, SoundEffect effect)
 		{
 			if (!mPool.SoundsAvailable)
 				return null;
 
 			var inst = mPool.GetInstance(forXAct);
 			inst.Effect = effect;
-			mEffectPlatform.SetupInstance(inst);
+			effect.Platform.SetupInstance(inst);
 
 			return inst;
 		}

@@ -137,7 +137,7 @@ namespace MonoGame.Core
             //_spritePass.Apply();
 		}
 		
-        void CheckValid(Texture2D texture)
+        void CheckValid(ITexture2D texture)
         {
             if (texture == null)
                 throw new ArgumentNullException("texture");
@@ -180,7 +180,7 @@ namespace MonoGame.Core
         /// <param name="layerDepth">An optional depth of the layer of this sprite. 0 by default.</param>
         /// <exception cref="InvalidOperationException">Throwns if both <paramref name="position"/> and <paramref name="destinationRectangle"/> been used.</exception>
         /// <remarks>This overload uses optional parameters. This overload requires only one of <paramref name="position"/> and <paramref name="destinationRectangle"/> been used.</remarks>
-        public void Draw (Texture2D texture,
+        public void Draw (ITexture2D texture,
                 Vector2? position = null,
 				Rectangle? destinationRectangle = null,
                 Rectangle? sourceRectangle = null,
@@ -229,7 +229,7 @@ namespace MonoGame.Core
         /// <param name="scale">A scaling of this sprite.</param>
         /// <param name="effects">Modificators for drawing. Can be combined.</param>
         /// <param name="layerDepth">A depth of the layer of this sprite.</param>
-		public void Draw (Texture2D texture,
+		public void Draw (ITexture2D texture,
 				Vector2 position,
 				Rectangle? sourceRectangle,
 				Color color,
@@ -272,7 +272,7 @@ namespace MonoGame.Core
         /// <param name="scale">A scaling of this sprite.</param>
         /// <param name="effects">Modificators for drawing. Can be combined.</param>
         /// <param name="layerDepth">A depth of the layer of this sprite.</param>
-		public void Draw (Texture2D texture,
+		public void Draw (ITexture2D texture,
 				Vector2 position,
 				Rectangle? sourceRectangle,
 				Color color,
@@ -314,7 +314,7 @@ namespace MonoGame.Core
         /// <param name="origin">Center of the rotation. 0,0 by default.</param>
         /// <param name="effects">Modificators for drawing. Can be combined.</param>
         /// <param name="layerDepth">A depth of the layer of this sprite.</param>
-		public void Draw (Texture2D texture,
+		public void Draw (ITexture2D texture,
 			Rectangle destinationRectangle,
 			Rectangle? sourceRectangle,
 			Color color,
@@ -341,7 +341,7 @@ namespace MonoGame.Core
 		}
 
 
-		public void DrawInternal (Texture2D texture,
+		public void DrawInternal (ITexture2D texture,
 			Vector4 destinationRectangle,
 			Rectangle? sourceRectangle,
 			Color color,
@@ -418,7 +418,7 @@ namespace MonoGame.Core
         /// <param name="position">The drawing location on screen.</param>
         /// <param name="sourceRectangle">An optional region on the texture which will be rendered. If null - draws full texture.</param>
         /// <param name="color">A color mask.</param>
-		public void Draw (Texture2D texture, Vector2 position, Rectangle? sourceRectangle, Color color)
+		public void Draw (ITexture2D texture, Vector2 position, Rectangle? sourceRectangle, Color color)
 		{
 			Draw (texture, position, sourceRectangle, color, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
 		}
@@ -430,7 +430,7 @@ namespace MonoGame.Core
         /// <param name="destinationRectangle">The drawing bounds on screen.</param>
         /// <param name="sourceRectangle">An optional region on the texture which will be rendered. If null - draws full texture.</param>
         /// <param name="color">A color mask.</param>
-		public void Draw(Texture2D texture, Rectangle destinationRectangle, Rectangle? sourceRectangle, Color color)
+		public void Draw(ITexture2D texture, Rectangle destinationRectangle, Rectangle? sourceRectangle, Color color)
 		{
 			Draw (texture, destinationRectangle, sourceRectangle, color, 0, Vector2.Zero, SpriteEffects.None, 0f);
 		}
@@ -441,7 +441,7 @@ namespace MonoGame.Core
         /// <param name="texture">A texture.</param>
         /// <param name="position">The drawing location on screen.</param>
         /// <param name="color">A color mask.</param>
-		public void Draw (Texture2D texture, Vector2 position, Color color)
+		public void Draw (ITexture2D texture, Vector2 position, Color color)
 		{
 			Draw (texture, position, null, color);
 		}
@@ -452,7 +452,7 @@ namespace MonoGame.Core
         /// <param name="texture">A texture.</param>
         /// <param name="destinationRectangle">The drawing bounds on screen.</param>
         /// <param name="color">A color mask.</param>
-        public void Draw(Texture2D texture, Rectangle destinationRectangle, Color color)
+        public void Draw(ITexture2D texture, Rectangle destinationRectangle, Color color)
 		{
             Draw(texture, destinationRectangle, null, color);
 		}

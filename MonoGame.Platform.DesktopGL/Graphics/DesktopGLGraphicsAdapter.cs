@@ -5,7 +5,6 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Graphics;
 
 namespace MonoGame.Platform.DesktopGL.Graphics
 {

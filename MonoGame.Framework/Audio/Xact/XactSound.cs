@@ -18,7 +18,7 @@ namespace Microsoft.Xna.Framework.Audio
         private readonly uint _categoryID;
         private readonly SoundBank _soundBank;
 
-        private SoundEffectInstance _wave;
+        private ISoundEffectInstance _wave;
 
         private float _cueVolume;
 

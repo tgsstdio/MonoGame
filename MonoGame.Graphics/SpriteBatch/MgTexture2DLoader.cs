@@ -1,6 +1,8 @@
 ﻿using System;
+using MonoGame.Core;
+using MonoGame.Content;
 
-namespace MonoGame.Core
+namespace MonoGame.Graphics
 {
 	public class MgTexture2DLoader : ITexture2DLoader
 	{
@@ -10,7 +12,7 @@ namespace MonoGame.Core
 
 		#region ITexture2DLoader implementation
 
-		public ITexture2D Load (MonoGame.Content.AssetIdentifier assetId)
+		public ITexture2D Load (AssetIdentifier assetId)
 		{
 			throw new NotImplementedException ();
 		}

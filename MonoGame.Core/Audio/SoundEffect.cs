@@ -37,12 +37,12 @@ namespace Microsoft.Xna.Framework.Audio
 
         #region Public Constructors
 
-		public ISoundEffectPlatform Platform { get; private set; }
+		public ISoundEffectImplementation Platform { get; private set; }
 		/// <param name = "platform">Platform for device</param>
         /// <param name="buffer">Buffer containing PCM wave data.</param>
         /// <param name="sampleRate">Sample rate, in Hertz (Hz)</param>
         /// <param name="channels">Number of channels (mono or stereo).</param>
-		public SoundEffect(ISoundEffectPlatform platform, byte[] buffer, int sampleRate, AudioChannels channels)
+		public SoundEffect(ISoundEffectImplementation platform, byte[] buffer, int sampleRate, AudioChannels channels)
         {
 			Platform = platform;
             _duration = GetSampleDuration(buffer.Length, sampleRate, channels);
@@ -59,7 +59,7 @@ namespace Microsoft.Xna.Framework.Audio
         /// <param name="loopStart">The position, in samples, where the audio should begin looping.</param>
         /// <param name="loopLength">The duration, in samples, that audio should loop over.</param>
         /// <remarks>Use SoundEffect.GetSampleDuration() to convert time to samples.</remarks>
-		public SoundEffect(ISoundEffectPlatform platform, byte[] buffer, int offset, int count, int sampleRate, AudioChannels channels, int loopStart, int loopLength)
+		public SoundEffect(ISoundEffectImplementation platform, byte[] buffer, int offset, int count, int sampleRate, AudioChannels channels, int loopStart, int loopLength)
         {
 			Platform = platform;
             _duration = GetSampleDuration(count, sampleRate, channels);
@@ -103,10 +103,11 @@ namespace Microsoft.Xna.Framework.Audio
         /// <summary>
         /// Creates a SoundEffect object based on the specified data stream.
         /// </summary>
+		/// <param name = "platform"></param>
         /// <param name="s">Stream object containing PCM wave data.</param>
         /// <returns>A new SoundEffect object.</returns>
         /// <remarks>The Stream object must point to the head of a valid PCM wave file. Also, this wave file must be in the RIFF bitstream format.</remarks>
-        public static SoundEffect FromStream(Stream s)
+		public SoundEffect(ISoundEffectImplementation platform, Stream s)
         {
             if (s == null)
                 throw new ArgumentNullException();
@@ -119,12 +120,8 @@ namespace Microsoft.Xna.Framework.Audio
               Can only be mono or stereo
               Must be 8 or 16 bit
               Sample rate must be between 8,000 Hz and 48,000 Hz*/
-
-            var sfx = new SoundEffect();
-
-            sfx.Platform.LoadAudioStream(s);
-
-            return sfx;
+			Platform = platform;
+			Platform.LoadAudioStream(s);
         }
 
         /// <summary>

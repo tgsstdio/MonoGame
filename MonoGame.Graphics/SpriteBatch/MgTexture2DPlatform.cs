@@ -19,7 +19,7 @@ using System.Diagnostics;
 
 namespace MonoGame.Core
 {
-	public partial class Texture2DPlatform : ITexture2DPlatform
+	public partial class MgTexture2DPlatform : ITexture2DPlatform
     {		
 
 		// Load all available mip levels into linear textures
@@ -134,7 +134,7 @@ namespace MonoGame.Core
 		private IMgDevice mDevice;
 		private IMgCommandBuffer mSetupCmdBuffer;
 		private MgAllocationCallbacks mCallbacks;
-		public Texture2DPlatform (
+		public MgTexture2DPlatform (
 			IMgPhysicalDevice physicalDevice,
 			IMgDevice device, 
 			IMgCommandBuffer setupCmdBuffer,
@@ -685,7 +685,7 @@ namespace MonoGame.Core
 #endif
         }
 
-        public Texture2D PlatformFromStream(Stream stream)
+        public ITexture2D PlatformFromStream(Stream stream)
         {		
 
 #if IOS || MONOMAC
@@ -991,7 +991,7 @@ namespace MonoGame.Core
 
         // This method allows games that use Texture2D.FromStream 
         // to reload their textures after the GL context is lost.
-        public void Reload(Stream textureStream, MgImage image, MgImageView view)
+        public void Reload(Stream textureStream)
         {
 			//GenerateGLTextureIfRequired(image);
             FillTextureFromStream(textureStream);

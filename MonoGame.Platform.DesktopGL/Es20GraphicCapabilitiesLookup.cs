@@ -1,6 +1,6 @@
-﻿using MonoGame.Graphics;
-using MonoGame.Platform.DesktopGL.Graphics;
+﻿using MonoGame.Platform.DesktopGL.Graphics;
 using OpenTK.Graphics.ES20;
+using MonoGame.Graphics;
 
 namespace MonoGame.Platform.DesktopGL
 {

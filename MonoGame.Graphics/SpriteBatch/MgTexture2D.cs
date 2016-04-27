@@ -8,9 +8,9 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Core;
 
-namespace MonoGame.Core
+namespace MonoGame.Graphics
 {
-    public partial class Texture2D : Texture
+	public partial class MgTexture2D : MgBaseTexture, ITexture2D
     {
 		internal int width;
 		internal int height;
@@ -25,8 +25,8 @@ namespace MonoGame.Core
         }
 
 		private ITexture2DPlatform mTex2DPlatform;
-		public Texture2D(
-			ITexturePlatform texPlatform,
+		public MgTexture2D(
+			IMgTexturePlatform texPlatform,
 			ITexture2DPlatform tex2DPlatform,
 			IWeakReferenceCollection owner,
 			IGraphicsCapabilities capability,
@@ -35,8 +35,8 @@ namespace MonoGame.Core
         {
         }
 
-		public Texture2D(
-			ITexturePlatform texPlatform,
+		public MgTexture2D(
+			IMgTexturePlatform texPlatform,
 			ITexture2DPlatform tex2DPlatform,
 			IWeakReferenceCollection owner,
 			IGraphicsCapabilities capabilities,
@@ -45,8 +45,8 @@ namespace MonoGame.Core
         {
         }
 
-		public Texture2D(
-			ITexturePlatform texPlatform,
+		public MgTexture2D(
+			IMgTexturePlatform texPlatform,
 			ITexture2DPlatform tex2DPlatform,
 			IWeakReferenceCollection owner,
 			IGraphicsCapabilities capabilities,
@@ -56,8 +56,8 @@ namespace MonoGame.Core
             
         }
 
-		internal Texture2D(
-			ITexturePlatform texPlatform,
+		internal MgTexture2D(
+			IMgTexturePlatform texPlatform,
 			ITexture2DPlatform tex2DPlatform,
 			IWeakReferenceCollection owner,
 			IGraphicsCapabilities capabilities,
@@ -67,8 +67,8 @@ namespace MonoGame.Core
         }
 
 		private IGraphicsCapabilities mCapabilities;
-		protected Texture2D(
-			ITexturePlatform texPlatform,
+		protected MgTexture2D(
+			IMgTexturePlatform texPlatform,
 			ITexture2DPlatform tex2DPlatform,
 			IWeakReferenceCollection owner,
 			IGraphicsCapabilities capability,
@@ -90,7 +90,7 @@ namespace MonoGame.Core
             this.width = width;
             this.height = height;
             this._format = format;
-			this._levelCount = mipmap ? (UInt32) CalculateMipLevels(width, height) : 1U;
+			this._levelCount = mipmap ? CalculateMipLevels(width, height) : 1;
             this.ArraySize = arraySize;
 
             // Texture will be assigned by the swap chain.
@@ -190,7 +190,7 @@ namespace MonoGame.Core
 
         // This method allows games that use Texture2D.FromStream 
         // to reload their textures after the GL context is lost.
-		public void Reload(Stream textureStream, int width, int height)
+		public void Reload(Stream textureStream)
         {
 			//mTex2DPlatform.Reload(textureStream);
         }

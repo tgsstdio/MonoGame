@@ -1,6 +1,7 @@
 ﻿using System;
 using MonoGame.Graphics;
 using MonoGame.Platform.DesktopGL.Graphics;
+using MonoGame.Core;
 
 namespace MonoGame.Platform.DesktopGL
 {

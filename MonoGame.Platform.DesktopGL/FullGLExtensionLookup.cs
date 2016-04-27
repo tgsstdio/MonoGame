@@ -2,6 +2,7 @@
 using MonoGame.Graphics;
 using System.Collections.Specialized;
 using OpenTK.Graphics.OpenGL;
+using MonoGame.Graphics;
 
 namespace MonoGame.Platform.DesktopGL.Graphics
 {

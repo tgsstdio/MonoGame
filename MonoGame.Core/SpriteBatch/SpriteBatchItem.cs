@@ -4,7 +4,7 @@ namespace MonoGame.Core
 {
 	internal class SpriteBatchItem
 	{
-		public Texture2D Texture;
+		public ITexture2D Texture;
 		public float Depth;
 
         public VertexPositionColorTexture vertexTL;

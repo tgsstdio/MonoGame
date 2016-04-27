@@ -4,6 +4,7 @@
 
 using System;
 using System.Runtime.InteropServices;
+using MonoGame.Core;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
@@ -28,9 +29,9 @@ namespace Microsoft.Xna.Framework.Graphics
             this.VertexCount = vertexCount;
             this.BufferUsage = bufferUsage;
 
-            // Make sure the graphics device is assigned in the vertex declaration.
-			if (vertexDeclaration.Owner != owner)
-				vertexDeclaration.Owner = owner;
+//            // Make sure the graphics device is assigned in the vertex declaration.
+//			if (vertexDeclaration.Owner != owner)
+//				vertexDeclaration.Owner = owner;
 
             _isDynamic = dynamic;
 

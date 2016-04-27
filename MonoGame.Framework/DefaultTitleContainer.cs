@@ -16,9 +16,9 @@ using Microsoft.Xna.Framework.Utilities;
 
 namespace Microsoft.Xna.Framework
 {
-    public static class TitleContainer
+    public class DefaultTitleContainer : ITitleContainer
     {
-        static TitleContainer() 
+        public DefaultTitleContainer() 
         {
 #if WINDOWS || DESKTOPGL
             Location = AppDomain.CurrentDomain.BaseDirectory;
@@ -36,7 +36,7 @@ namespace Microsoft.Xna.Framework
 #endif
         }
 
-        static internal string Location { get; private set; }
+        public string Location { get; private set; }
 #if IOS
         static internal bool SupportRetina { get; private set; }
         static internal int RetinaScale { get; private set; }
@@ -68,7 +68,7 @@ namespace Microsoft.Xna.Framework
         /// </summary>
         /// <param name="name">The filepath relative to the title storage area.</param>
         /// <returns>A open stream or null if the file is not found.</returns>
-        public static Stream OpenStream(string name)
+        public Stream OpenStream(string name)
         {
             // Normalize the file path.
             var safeName = GetFilename(name);
@@ -110,7 +110,7 @@ namespace Microsoft.Xna.Framework
         // TODO: This is just path normalization.  Remove this
         // and replace it with a proper utility function.  I'm sure
         // this same logic is duplicated all over the code base.
-        internal static string GetFilename(string name)
+        public string GetFilename(string name)
         {
             return FileHelpers.NormalizeFilePathSeparators(new Uri("file:///" + name).LocalPath.Substring(1));
         }

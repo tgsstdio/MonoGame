@@ -1,5 +1,5 @@
-﻿using Microsoft.Xna.Framework;
-using OpenTK.Platform;
+﻿using OpenTK.Platform;
+using MonoGame.Core;
 
 namespace MonoGame.Platform.DesktopGL
 {

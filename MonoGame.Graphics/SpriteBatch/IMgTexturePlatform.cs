@@ -4,9 +4,9 @@
 using System;
 using Magnesium;
 
-namespace MonoGame.Core
+namespace MonoGame.Graphics
 {
-	public interface ITexturePlatform
+	public interface IMgTexturePlatform
 	{
 		void GraphicsDeviceResetting (
 			MgImage image,
