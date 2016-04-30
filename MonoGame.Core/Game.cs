@@ -17,6 +17,24 @@ namespace Microsoft.Xna.Framework
 		private static readonly Action<IUpdateable, GameTime> UpdateAction =
 			(updateable, gameTime) => updateable.Update(gameTime);
 
+		public SortingFilteringCollection<IDrawable> Drawables =
+			new SortingFilteringCollection<IDrawable>(
+				d => d.Visible,
+				(d, handler) => d.VisibleChanged += handler,
+				(d, handler) => d.VisibleChanged -= handler,
+				(d1 ,d2) => Comparer<int>.Default.Compare(d1.DrawOrder, d2.DrawOrder),
+				(d, handler) => d.DrawOrderChanged += handler,
+				(d, handler) => d.DrawOrderChanged -= handler);
+
+		private static readonly Action<IDrawable, GameTime> DrawAction =
+			(drawable, gameTime) => drawable.Draw(gameTime);
+
+		public virtual void Draw(GameTime gameTime)
+		{
+
+			Drawables.ForEachFilteredItem(DrawAction, gameTime);
+		}
+
 		public virtual void Update(GameTime gameTime)
 		{
 			Updateables.ForEachFilteredItem(UpdateAction, gameTime);

@@ -1,5 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 using System;
+using Magnesium;
 
 namespace MonoGame.Graphics
 {
@@ -7,13 +8,13 @@ namespace MonoGame.Graphics
 	public struct BlendState : IEquatable<BlendState>, IComparable<BlendState>
 	{
 		//	public BlendStateBitFlags Flags {get;set;}
-		public BlendFunction ColorBlendFunction {get;set;}
-		public BlendFunction AlphaBlendFunction {get;set;}
+		public MgBlendOp ColorBlendFunction {get;set;}
+		public MgBlendOp AlphaBlendFunction {get;set;}
 
-		public Blend ColorSourceBlend {get;set;}
-		public Blend ColorDestinationBlend {get;set;}
-		public Blend AlphaSourceBlend {get;set;}
-		public Blend AlphaDestinationBlend {get;set;}
+		public MgBlendFactor ColorSourceBlend {get;set;}
+		public MgBlendFactor ColorDestinationBlend {get;set;}
+		public MgBlendFactor AlphaSourceBlend {get;set;}
+		public MgBlendFactor AlphaDestinationBlend {get;set;}
 
 		#region IEquatable implementation
 		public bool Equals (BlendState other)

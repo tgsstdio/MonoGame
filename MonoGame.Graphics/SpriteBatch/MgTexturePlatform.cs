@@ -14,7 +14,6 @@ namespace MonoGame.Graphics
     {
 		readonly IMgDevice mDevice;
 		readonly MgAllocationCallbacks mCallbacks;
-		private Int32 _lastSortingKey;
 
 		public MgTexturePlatform (IMgDevice device, MgAllocationCallbacks callbacks)
 		{
@@ -27,11 +26,6 @@ namespace MonoGame.Graphics
 		public void GraphicsDeviceResetting (MgImage image, MgImageView view, MgSampler sampler, MgDeviceMemory deviceMemory)
 		{
 			DeleteGLTexture (image, view, sampler, deviceMemory);
-		}
-
-		public Int32 GenerateSortingKey ()
-		{
-			return Interlocked.Increment(ref _lastSortingKey);
 		}
 
 		#endregion

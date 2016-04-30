@@ -117,106 +117,105 @@ namespace Microsoft.Xna.Framework.Audio
 		) {
 			// We write to output when reading the PCM data, then we convert
 			// it back to a short array at the end.
-			MemoryStream output = new MemoryStream();
-			BinaryWriter pcmOut = new BinaryWriter(output);
+			using (MemoryStream output = new MemoryStream())
+			using (BinaryWriter pcmOut = new BinaryWriter(output))
+			{
 
-			// We'll be using this to get each sample from the blocks.
-			byte[] nibbleBlock = new byte[2];
+				// We'll be using this to get each sample from the blocks.
+				byte[] nibbleBlock = new byte[2];
 
-			// Assuming the whole stream is what we want.
-			long fileLength = Source.BaseStream.Length - blockAlign;
+				// Assuming the whole stream is what we want.
+				long fileLength = Source.BaseStream.Length - blockAlign;
 
-			// Mono or Stereo?
-			if (numChannels == 1) {
-				// Read to the end of the file.
-				while (Source.BaseStream.Position <= fileLength) {
-					// Read block preamble
-					byte predictor = Source.ReadByte();
-					short delta = Source.ReadInt16();
-					short sample_1 = Source.ReadInt16();
-					short sample_2 = Source.ReadInt16();
+				// Mono or Stereo?
+				if (numChannels == 1) {
+					// Read to the end of the file.
+					while (Source.BaseStream.Position <= fileLength) {
+						// Read block preamble
+						byte predictor = Source.ReadByte();
+						short delta = Source.ReadInt16();
+						short sample_1 = Source.ReadInt16();
+						short sample_2 = Source.ReadInt16();
 
-					// Send the initial samples straight to PCM out.
-					pcmOut.Write(sample_2);
-					pcmOut.Write(sample_1);
+						// Send the initial samples straight to PCM out.
+						pcmOut.Write(sample_2);
+						pcmOut.Write(sample_1);
 
-					// Go through the bytes in this MSADPCM block.
-					for (int bytes = 0; bytes < (blockAlign + 15); bytes++) {
-						// Each sample is one half of a nibbleBlock.
-						getNibbleBlock(Source.ReadByte(), nibbleBlock);
-						for (int i = 0; i < 2; i++) {
+						// Go through the bytes in this MSADPCM block.
+						for (int bytes = 0; bytes < (blockAlign + 15); bytes++) {
+							// Each sample is one half of a nibbleBlock.
+							getNibbleBlock(Source.ReadByte(), nibbleBlock);
+							for (int i = 0; i < 2; i++) {
+								pcmOut.Write(
+									calculateSample(
+										nibbleBlock[i],
+										predictor,
+										ref sample_1,
+										ref sample_2,
+										ref delta
+									)
+								);
+							}
+						}
+					}
+				} else if (numChannels == 2) {
+					// Read to the end of the file.
+					while (Source.BaseStream.Position <= fileLength) {
+						// Read block preamble
+						byte l_predictor = Source.ReadByte();
+						byte r_predictor = Source.ReadByte();
+						short l_delta = Source.ReadInt16();
+						short r_delta = Source.ReadInt16();
+						short l_sample_1 = Source.ReadInt16();
+						short r_sample_1 = Source.ReadInt16();
+						short l_sample_2 = Source.ReadInt16();
+						short r_sample_2 = Source.ReadInt16();
+
+						// Send the initial samples straight to PCM out.
+						pcmOut.Write(l_sample_2);
+						pcmOut.Write(r_sample_2);
+						pcmOut.Write(l_sample_1);
+						pcmOut.Write(r_sample_1);
+
+						// Go through the bytes in this MSADPCM block.
+						for (int bytes = 0; bytes < ((blockAlign + 15) * 2); bytes++) {
+							// Each block carries one left/right sample.
+							getNibbleBlock(Source.ReadByte(), nibbleBlock);
+
+							// Left channel...
 							pcmOut.Write(
 								calculateSample(
-									nibbleBlock[i],
-									predictor,
-									ref sample_1,
-									ref sample_2,
-									ref delta
+									nibbleBlock[0],
+									l_predictor,
+									ref l_sample_1,
+									ref l_sample_2,
+									ref l_delta
+								)
+							);
+
+							// Right channel...
+							pcmOut.Write(
+								calculateSample(
+									nibbleBlock[1],
+									r_predictor,
+									ref r_sample_1,
+									ref r_sample_2,
+									ref r_delta
 								)
 							);
 						}
 					}
+				} else {
+					// TODO : throw exception or find console.writeline
+					// System.Console.WriteLine("MSADPCM WAVEDATA IS NOT MONO OR STEREO!");
+					return null;
 				}
-			} else if (numChannels == 2) {
-				// Read to the end of the file.
-				while (Source.BaseStream.Position <= fileLength) {
-					// Read block preamble
-					byte l_predictor = Source.ReadByte();
-					byte r_predictor = Source.ReadByte();
-					short l_delta = Source.ReadInt16();
-					short r_delta = Source.ReadInt16();
-					short l_sample_1 = Source.ReadInt16();
-					short r_sample_1 = Source.ReadInt16();
-					short l_sample_2 = Source.ReadInt16();
-					short r_sample_2 = Source.ReadInt16();
 
-					// Send the initial samples straight to PCM out.
-					pcmOut.Write(l_sample_2);
-					pcmOut.Write(r_sample_2);
-					pcmOut.Write(l_sample_1);
-					pcmOut.Write(r_sample_1);
-
-					// Go through the bytes in this MSADPCM block.
-					for (int bytes = 0; bytes < ((blockAlign + 15) * 2); bytes++) {
-						// Each block carries one left/right sample.
-						getNibbleBlock(Source.ReadByte(), nibbleBlock);
-
-						// Left channel...
-						pcmOut.Write(
-							calculateSample(
-								nibbleBlock[0],
-								l_predictor,
-								ref l_sample_1,
-								ref l_sample_2,
-								ref l_delta
-							)
-						);
-
-						// Right channel...
-						pcmOut.Write(
-							calculateSample(
-								nibbleBlock[1],
-								r_predictor,
-								ref r_sample_1,
-								ref r_sample_2,
-								ref r_delta
-							)
-						);
-					}
-				}
-			} else {
-				System.Console.WriteLine("MSADPCM WAVEDATA IS NOT MONO OR STEREO!");
-				pcmOut.Close();
-				output.Close();
-				return null;
+				// Return the array.
+				return output.ToArray();
 			}
 
-			// We're done writing PCM data...
-			pcmOut.Close();
-			output.Close();
 
-			// Return the array.
-			return output.ToArray();
 		}
 	}
 }

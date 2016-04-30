@@ -6,7 +6,7 @@ using System;
 
 namespace Microsoft.Xna.Framework.Media
 {
-	public partial class MediaLibrary : IMediaLibrary, IDisposable
+	public partial class MediaLibrary : IMediaLibrary
 	{
 		public IAlbumCollection Albums { get { return mPlatform.GetAlbums();  } }
         //public ArtistCollection Artists { get; private set; }
@@ -20,11 +20,6 @@ namespace Microsoft.Xna.Framework.Media
 		public MediaLibrary(IMediaLibraryPlatform platform)
 		{
 			mPlatform = platform;
-#if WINDOWS_PHONE
-			// TODO : should go into mPlatform.Initialize()
-			// Load it automaticall on Windows Phone because it has no cost and people might expect the same behaviour as WP7
-            PlatformLoad(null);
-#endif
 			mPlatform.Initialize ();
 		}
 
@@ -32,15 +27,15 @@ namespace Microsoft.Xna.Framework.Media
         /// Load the contents of MediaLibrary. This blocking call might take up to a few minutes depending on the platform and the size of the user's music library.
         /// </summary>
         /// <param name="progressCallback">Callback that reports back the progress of the music library loading in percents (0-100).</param>
-        public void Load(Action<int> progressCallback = null)
+        public void Load(Action<int> progressCallback)
 	    {
 			mPlatform.Load(progressCallback);
 	    }
 		
-		public MediaLibrary(MediaSource mediaSource)
-		{
-            throw new NotSupportedException("Initializing from MediaSource is not supported");
-		}
+//		public MediaLibrary(MediaSource mediaSource)
+//		{
+//            throw new NotSupportedException("Initializing from MediaSource is not supported");
+//		}
 		
 		public void Dispose()
 		{

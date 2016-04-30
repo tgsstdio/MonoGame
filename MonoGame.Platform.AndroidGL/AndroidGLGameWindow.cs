@@ -10,6 +10,7 @@ using Microsoft.Xna.Framework.Input.Touch;
 using Microsoft.Xna.Framework;
 using OpenTK;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Core;
 
 #if OUYA
 using Microsoft.Xna.Framework.Input;

@@ -16,6 +16,7 @@ using MonoGame.Platform.AndroidGL.Input.Touch;
 using MonoGame.Platform.AndroidGL.Input;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Content;
+using MonoGame.Core;
 
 namespace MonoGame.Platform.AndroidGL
 {

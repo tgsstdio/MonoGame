@@ -1,4 +1,5 @@
 ﻿using OpenTK.Graphics.OpenGL;
+using Magnesium;
 
 namespace MonoGame.Graphics.AZDO
 {
@@ -12,8 +13,8 @@ namespace MonoGame.Graphics.AZDO
 		{
 			DisableStencilBuffer ();
 			SetStencilWriteMask (~0);
-			SetStencilFunction (CompareFunction.Always, ~0, int.MaxValue);
-			SetStencilOperation (StencilOperation.Keep, StencilOperation.Keep, StencilOperation.Keep);
+			SetStencilFunction (MgCompareOp.ALWAYS, ~0, int.MaxValue);
+			SetStencilOperation (MgStencilOp.KEEP, MgStencilOp.KEEP, MgStencilOp.KEEP);
 		}
 
 		public void EnableStencilBuffer()
@@ -40,7 +41,7 @@ namespace MonoGame.Graphics.AZDO
 			GL.StencilMask(mask);
 		}
 
-		public void SetFrontFaceCullStencilFunction (CompareFunction func, int referenceStencil, int stencilMask)
+		public void SetFrontFaceCullStencilFunction (MgCompareOp func, int referenceStencil, int stencilMask)
 		{
 			var cullFaceModeFront = StencilFace.Front;
 			GL.StencilFuncSeparate (
@@ -50,7 +51,7 @@ namespace MonoGame.Graphics.AZDO
 				stencilMask);
 		}
 
-		public void SetBackFaceCullStencilFunction(CompareFunction func, int referenceStencil, int stencilMask)
+		public void SetBackFaceCullStencilFunction(MgCompareOp func, int referenceStencil, int stencilMask)
 		{
 			var cullFaceModeBack = StencilFace.Back;					
 			GL.StencilFuncSeparate (
@@ -60,25 +61,25 @@ namespace MonoGame.Graphics.AZDO
 				stencilMask);
 		}
 
-		private static GLStencilFunction GetStencilFunc(CompareFunction function)
+		private static GLStencilFunction GetStencilFunc(MgCompareOp function)
 		{
 			switch (function)
 			{
-			case CompareFunction.Always: 
+			case MgCompareOp.ALWAYS: 
 				return GLStencilFunction.Always;
-			case CompareFunction.Equal:
+			case MgCompareOp.EQUAL:
 				return GLStencilFunction.Equal;
-			case CompareFunction.Greater:
+			case MgCompareOp.GREATER:
 				return GLStencilFunction.Greater;
-			case CompareFunction.GreaterEqual:
+			case MgCompareOp.GREATER_OR_EQUAL:
 				return GLStencilFunction.Gequal;
-			case CompareFunction.Less:
+			case MgCompareOp.LESS:
 				return GLStencilFunction.Less;
-			case CompareFunction.LessEqual:
+			case MgCompareOp.LESS_OR_EQUAL:
 				return GLStencilFunction.Lequal;
-			case CompareFunction.Never:
+			case MgCompareOp.NEVER:
 				return GLStencilFunction.Never;
-			case CompareFunction.NotEqual:
+			case MgCompareOp.NOT_EQUAL:
 				return GLStencilFunction.Notequal;
 			default:
 				return GLStencilFunction.Always;
@@ -86,9 +87,9 @@ namespace MonoGame.Graphics.AZDO
 		}
 
 		public void SetFrontFaceStencilOperation(
-			StencilOperation stencilFail,
-			StencilOperation stencilDepthBufferFail,
-			StencilOperation stencilPass)
+			MgStencilOp stencilFail,
+			MgStencilOp stencilDepthBufferFail,
+			MgStencilOp stencilPass)
 		{
 			var stencilFaceFront = StencilFace.Front;					
 			GL.StencilOpSeparate(stencilFaceFront, GetStencilOp(stencilFail),
@@ -97,9 +98,9 @@ namespace MonoGame.Graphics.AZDO
 		}
 
 		public void SetBackFaceStencilOperation(
-			StencilOperation counterClockwiseStencilFail,
-			StencilOperation counterClockwiseStencilDepthBufferFail,
-			StencilOperation counterClockwiseStencilPass)
+			MgStencilOp counterClockwiseStencilFail,
+			MgStencilOp counterClockwiseStencilDepthBufferFail,
+			MgStencilOp counterClockwiseStencilPass)
 		{
 			var stencilFaceBack = StencilFace.Back;					
 			GL.StencilOpSeparate(stencilFaceBack, GetStencilOp(counterClockwiseStencilFail),
@@ -108,7 +109,7 @@ namespace MonoGame.Graphics.AZDO
 		}
 
 		public void SetStencilFunction(
-			CompareFunction stencilFunction,
+			MgCompareOp stencilFunction,
 			int referenceStencil,
 			int stencilMask)
 		{
@@ -119,34 +120,34 @@ namespace MonoGame.Graphics.AZDO
 		}
 
 		public void SetStencilOperation(
-			StencilOperation stencilFail,
-			StencilOperation stencilDepthBufferFail,
-			StencilOperation stencilPass)
+			MgStencilOp stencilFail,
+			MgStencilOp stencilDepthBufferFail,
+			MgStencilOp stencilPass)
 		{
 			GL.StencilOp (GetStencilOp(stencilFail),
 				GetStencilOp(stencilDepthBufferFail),
 				GetStencilOp(stencilPass));
 		}
 
-		private static StencilOp GetStencilOp(StencilOperation operation)
+		private static StencilOp GetStencilOp(MgStencilOp operation)
 		{
 			switch (operation)
 			{
-			case StencilOperation.Keep:
+			case MgStencilOp.KEEP:
 				return StencilOp.Keep;
-			case StencilOperation.Decrement:
+			case MgStencilOp.DECREMENT_AND_WRAP:
 				return StencilOp.DecrWrap;
-			case StencilOperation.DecrementSaturation:
+			case MgStencilOp.DECREMENT_AND_CLAMP:
 				return StencilOp.Decr;
-			case StencilOperation.IncrementSaturation:
+			case MgStencilOp.INCREMENT_AND_CLAMP:
 				return StencilOp.Incr;
-			case StencilOperation.Increment:
+			case MgStencilOp.INCREMENT_AND_WRAP:
 				return StencilOp.IncrWrap;
-			case StencilOperation.Invert:
+			case MgStencilOp.INVERT:
 				return StencilOp.Invert;
-			case StencilOperation.Replace:
+			case MgStencilOp.REPLACE:
 				return StencilOp.Replace;
-			case StencilOperation.Zero:
+			case MgStencilOp.ZERO:
 				return StencilOp.Zero;
 			default:
 				return StencilOp.Keep;

@@ -82,23 +82,11 @@ using System.Runtime.Remoting.Messaging;
 namespace Microsoft.Xna.Framework.Storage
 {
 	
-	// The delegate must have the same signature as the method
-	// it will call asynchronously.
-	public delegate StorageDevice ShowSelectorAsynchronousShow (PlayerIndex player, int sizeInBytes, int directoryCount);
-	// The MonoTouch AOT cannot deal with nullable types in a delegate (or
-	// at least not the straightforward implementation), so we define two
-	// delegate types.
-	public delegate StorageDevice ShowSelectorAsynchronousShowNoPlayer (int sizeInBytes, int directoryCount);
-
-	// The delegate must have the same signature as the method
-	// it will call asynchronously.
-	public delegate StorageContainer OpenContainerAsynchronous (string displayName);
-	
     /// <summary>
     /// Exposes a storage device for storing user data.
     /// </summary>
     /// <remarks>MSDN documentation contains related conceptual article: http://msdn.microsoft.com/en-us/library/bb200105.aspx</remarks>
-	public sealed class StorageDevice
+	public sealed class StorageDevice : IStorageDevice
 	{
 		
 		PlayerIndex? player;
@@ -106,7 +94,7 @@ namespace Microsoft.Xna.Framework.Storage
 		int directoryCount;
         private int DirectoryCount { get { return this.directoryCount; } }
 
-		StorageContainer storageContainer;
+		BaseStorageContainer storageContainer;
 		
         /// <summary>
         /// Creates a new <see cref="StorageDevice"/> instance.
@@ -275,9 +263,29 @@ namespace Microsoft.Xna.Framework.Storage
         }
 	
 		// Private method to handle the creation of the StorageDevice
-		private StorageContainer Open (string displayName) 
+		private IStorageContainer Open (string displayName) 
 		{
-			storageContainer = new StorageContainer(this, displayName, this.player);
+			// From the examples the root is based on MyDocuments folder
+			#if WINDOWS_STOREAPP || WINDOWS_UAP
+						var saved = "";
+			#elif MONOMAC
+			            // We already have a SaveData folder on Mac/Linux.
+			            var saved = StorageDevice.StorageRoot;
+			#elif DESKTOPGL
+			            string saved = "";
+			            if(CurrentPlatform.OS == OS.Linux)
+			                saved = StorageDevice.StorageRoot;
+			            else if(CurrentPlatform.OS == OS.Windows)
+			                saved = Path.Combine(StorageDevice.StorageRoot, "SavedGames");
+			            else
+			                throw new Exception("Unexpected platform!");
+			#else
+						var root = StorageDevice.StorageRoot;
+						var saved = Path.Combine(root,"SavedGames");
+			#endif
+
+			storageContainer = new BaseStorageContainer(saved, displayName, this.player);
+			storageContainer.Initialize (displayName, this.player);
 			return storageContainer;
 		}
 
@@ -455,11 +463,11 @@ namespace Microsoft.Xna.Framework.Storage
         // Parameters:
         //   result:
         //     The IAsyncResult returned from BeginOpenContainer.
-        public StorageContainer EndOpenContainer (IAsyncResult result)
+		public IStorageContainer EndOpenContainer (IAsyncResult result)
 		{
 
 #if !WINDOWS_PHONE81 && !ANDROID && !IOS && !NETFX_CORE && !WINDOWS_PHONE
-            StorageContainer returnValue = null;
+            IStorageContainer returnValue = null;
             try
             {
 #if WINRT
@@ -518,7 +526,7 @@ namespace Microsoft.Xna.Framework.Storage
 		// Parameters:
 		//   result:
 		//     The IAsyncResult returned from BeginShowSelector.
-		public static StorageDevice EndShowSelector (IAsyncResult result) 
+		public static IStorageDevice EndShowSelector (IAsyncResult result) 
 		{
 
 #if !WINDOWS_PHONE81 && !ANDROID && !IOS && !NETFX_CORE && !WINDOWS_PHONE

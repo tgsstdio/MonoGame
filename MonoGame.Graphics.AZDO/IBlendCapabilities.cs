@@ -1,4 +1,6 @@
-﻿namespace MonoGame.Graphics.AZDO
+﻿using Magnesium;
+
+namespace MonoGame.Graphics.AZDO
 {
 	public interface IBlendCapabilities
 	{	
@@ -11,10 +13,10 @@
 		void SetColorMask (DrawItemBitFlags colorMask);
 
 		void ApplyBlendSeparateFunction (
-			Blend colorSource,
-			Blend colorDest,
-			Blend alphaSource,
-			Blend alphaDest);
+			MgBlendFactor colorSource,
+			MgBlendFactor colorDest,
+			MgBlendFactor alphaSource,
+			MgBlendFactor alphaDest);
 	}
 }
 

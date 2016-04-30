@@ -26,55 +26,60 @@ namespace MonoGame.Graphics
 
 		private ITexture2DPlatform mTex2DPlatform;
 		public MgTexture2D(
+			Int32 sortingKey,
 			IMgTexturePlatform texPlatform,
 			ITexture2DPlatform tex2DPlatform,
 			IWeakReferenceCollection owner,
 			IGraphicsCapabilities capability,
 			int width, int height)
-			: this(texPlatform, tex2DPlatform, owner, capability, width, height, false, SurfaceFormat.Color, SurfaceType.Texture, false, 1)
+			: this(sortingKey, texPlatform, tex2DPlatform, owner, capability, width, height, false, SurfaceFormat.Color, SurfaceType.Texture, false, 1)
         {
         }
 
 		public MgTexture2D(
+			Int32 sortingKey,
 			IMgTexturePlatform texPlatform,
 			ITexture2DPlatform tex2DPlatform,
 			IWeakReferenceCollection owner,
 			IGraphicsCapabilities capabilities,
 			int width, int height, bool mipmap, SurfaceFormat format)
-			: this(texPlatform, tex2DPlatform, owner, capabilities, width, height, mipmap, format, SurfaceType.Texture, false, 1)
+			: this(sortingKey, texPlatform, tex2DPlatform, owner, capabilities, width, height, mipmap, format, SurfaceType.Texture, false, 1)
         {
         }
 
 		public MgTexture2D(
+			Int32 sortingKey,			
 			IMgTexturePlatform texPlatform,
 			ITexture2DPlatform tex2DPlatform,
 			IWeakReferenceCollection owner,
 			IGraphicsCapabilities capabilities,
 			int width, int height, bool mipmap, SurfaceFormat format, int arraySize)
-			: this(texPlatform, tex2DPlatform, owner, capabilities , width, height, mipmap, format, SurfaceType.Texture, false, arraySize)
+			: this(sortingKey, texPlatform, tex2DPlatform, owner, capabilities , width, height, mipmap, format, SurfaceType.Texture, false, arraySize)
         {
             
         }
 
 		internal MgTexture2D(
+			Int32 sortingKey,
 			IMgTexturePlatform texPlatform,
 			ITexture2DPlatform tex2DPlatform,
 			IWeakReferenceCollection owner,
 			IGraphicsCapabilities capabilities,
 			int width, int height, bool mipmap, SurfaceFormat format, SurfaceType type)
-			: this(texPlatform, tex2DPlatform, owner,capabilities, width, height, mipmap, format, type, false, 1)
+			: this(sortingKey, texPlatform, tex2DPlatform, owner,capabilities, width, height, mipmap, format, type, false, 1)
         {
         }
 
 		private IGraphicsCapabilities mCapabilities;
 		protected MgTexture2D(
+			Int32 sortingKey,
 			IMgTexturePlatform texPlatform,
 			ITexture2DPlatform tex2DPlatform,
 			IWeakReferenceCollection owner,
 			IGraphicsCapabilities capability,
 			int width, int height, bool mipmap,
 			SurfaceFormat format, SurfaceType type, bool shared, int arraySize)
-			: base(texPlatform)
+			: base(sortingKey, texPlatform)
 		{
 			mTex2DPlatform = tex2DPlatform;
 //            if (owner == null)

@@ -1,4 +1,6 @@
-﻿namespace MonoGame.Graphics.AZDO
+﻿using Magnesium;
+
+namespace MonoGame.Graphics.AZDO
 {
 	public interface IStencilCapabilities
 	{
@@ -8,28 +10,28 @@
 		bool IsStencilBufferEnabled { get; }
 		void SetStencilWriteMask(int mask);
 
-		void SetFrontFaceCullStencilFunction (CompareFunction func, int referenceStencil, int stencilMask);
-		void SetBackFaceCullStencilFunction(CompareFunction func, int referenceStencil, int stencilMask);
+		void SetFrontFaceCullStencilFunction (MgCompareOp func, int referenceStencil, int stencilMask);
+		void SetBackFaceCullStencilFunction(MgCompareOp func, int referenceStencil, int stencilMask);
 
 		void SetFrontFaceStencilOperation(
-			StencilOperation stencilFail,
-			StencilOperation stencilDepthBufferFail,
-			StencilOperation stencilPass);
+			MgStencilOp stencilFail,
+			MgStencilOp stencilDepthBufferFail,
+			MgStencilOp stencilPass);
 
 		void SetBackFaceStencilOperation(
-			StencilOperation stencilFail,
-			StencilOperation stencilDepthBufferFail,
-			StencilOperation stencilPass);
+			MgStencilOp stencilFail,
+			MgStencilOp stencilDepthBufferFail,
+			MgStencilOp stencilPass);
 
 		void SetStencilFunction(
-			CompareFunction stencilFunction,
+			MgCompareOp stencilFunction,
 			int referenceStencil,
 			int stencilMask);
 
 		void SetStencilOperation(
-			StencilOperation stencilFail,
-			StencilOperation stencilDepthBufferFail,
-			StencilOperation stencilPass);
+			MgStencilOp stencilFail,
+			MgStencilOp stencilDepthBufferFail,
+			MgStencilOp stencilPass);
 	}
 }
 

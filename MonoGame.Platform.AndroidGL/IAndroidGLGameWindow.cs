@@ -3,6 +3,7 @@
 // file 'LICENSE.txt', which is part of this source code package.
 using Microsoft.Xna.Framework;
 using Android.Views;
+using MonoGame.Core;
 
 namespace MonoGame.Platform.AndroidGL
 {

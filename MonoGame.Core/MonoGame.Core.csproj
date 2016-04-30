@@ -184,6 +184,33 @@
     <Compile Include="Audio\ISoundEffectImplementationFactory.cs" />
     <Compile Include="SpriteBatch\Utilities\FormatExtensions.cs" />
     <Compile Include="Utilities\Hash.cs" />
+    <Compile Include="Audio\Xact\AudioCategory.cs" />
+    <Compile Include="Audio\Xact\AudioEngine.cs" />
+    <Compile Include="Audio\Xact\AudioStopOptions.cs" />
+    <Compile Include="Audio\Xact\ClipEvent.cs" />
+    <Compile Include="Audio\Xact\Cue.cs" />
+    <Compile Include="Audio\Xact\DefaultADPCMSoundEffectInitializer.cs" />
+    <Compile Include="Audio\Xact\DefaultPCMSoundEffectInitializer.cs" />
+    <Compile Include="Audio\Xact\IADPCMSoundEffectInitializer.cs" />
+    <Compile Include="Audio\Xact\IPCMSoundEffectInitializer.cs" />
+    <Compile Include="Audio\Xact\IWMASoundEffectInitializer.cs" />
+    <Compile Include="Audio\Xact\MSADPCMToPCM.cs" />
+    <Compile Include="Audio\Xact\NullWMASoundEffectInitializer.cs" />
+    <Compile Include="Audio\Xact\PlayWaveEvent.cs" />
+    <Compile Include="Audio\Xact\SoundBank.cs" />
+    <Compile Include="Audio\Xact\VolumeEvent.cs" />
+    <Compile Include="Audio\Xact\WaveBank.cs" />
+    <Compile Include="Audio\Xact\XactClip.cs" />
+    <Compile Include="Audio\Xact\XactHelpers.cs" />
+    <Compile Include="Audio\Xact\XactSound.cs" />
+    <Compile Include="Audio\ISoundPlayer.cs" />
+    <Compile Include="Audio\SoundPlayer.cs" />
+    <Compile Include="Audio\ISoundEffectInstancePlatform.cs" />
+    <Compile Include="SpriteBatch\ITextureSortingKeyGenerator.cs" />
+    <Compile Include="SpriteBatch\DefaultTextureSortingKeyGenerator.cs" />
+    <Compile Include="Media\MediaLibrary.cs" />
+    <Compile Include="Media\MediaSourceType.cs" />
+    <Compile Include="Media\MediaSource.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>
@@ -197,6 +224,7 @@
     <Folder Include="SpriteBatch\" />
     <Folder Include="SpriteBatch\Utilities\" />
     <Folder Include="Utilities\" />
+    <Folder Include="Audio\Xact\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Magnesium\Magnesium.csproj">

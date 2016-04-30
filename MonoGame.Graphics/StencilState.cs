@@ -1,5 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 using System;
+using Magnesium;
 
 namespace MonoGame.Graphics
 {
@@ -10,15 +11,15 @@ namespace MonoGame.Graphics
 		public int StencilMask {get;set;}
 		public int ReferenceStencil { get; set; }
 		public int StencilWriteMask {get;set;}
-		public CompareFunction StencilFunction { get; set; }
-		public StencilOperation StencilPass { get; set; }
-		public StencilOperation StencilFail {get;set;}
-		public StencilOperation StencilDepthBufferFail { get; set; }
+		public MgCompareOp StencilFunction { get; set; }
+		public MgStencilOp StencilPass { get; set; }
+		public MgStencilOp StencilFail {get;set;}
+		public MgStencilOp StencilDepthBufferFail { get; set; }
 
-		public CompareFunction CounterClockwiseStencilFunction { get; set; }
-		public StencilOperation CounterClockwiseStencilPass { get; set; }
-		public StencilOperation CounterClockwiseStencilFail {get;set;}
-		public StencilOperation CounterClockwiseStencilDepthBufferFail { get; set; }
+		public MgCompareOp CounterClockwiseStencilFunction { get; set; }
+		public MgStencilOp CounterClockwiseStencilPass { get; set; }
+		public MgStencilOp CounterClockwiseStencilFail {get;set;}
+		public MgStencilOp CounterClockwiseStencilDepthBufferFail { get; set; }
 
 		//	public DepthStencilBitFlags Flags { get; set; }
 

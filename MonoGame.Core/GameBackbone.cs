@@ -27,15 +27,6 @@ namespace Microsoft.Xna.Framework
         private IContentManager _content;
         internal IGamePlatform Platform;
 
-        private SortingFilteringCollection<IDrawable> _drawables =
-            new SortingFilteringCollection<IDrawable>(
-                d => d.Visible,
-                (d, handler) => d.VisibleChanged += handler,
-                (d, handler) => d.VisibleChanged -= handler,
-                (d1 ,d2) => Comparer<int>.Default.Compare(d1.DrawOrder, d2.DrawOrder),
-                (d, handler) => d.DrawOrderChanged += handler,
-                (d, handler) => d.DrawOrderChanged -= handler);
-
         //private IGraphicsDeviceManager _graphicsDeviceManager;
       //  private IGraphicsDeviceService _graphicsDeviceService;
 
@@ -581,15 +572,6 @@ namespace Microsoft.Xna.Framework
         //    }
         }
 
-        private static readonly Action<IDrawable, GameTime> DrawAction =
-            (drawable, gameTime) => drawable.Draw(gameTime);
-
-        protected virtual void Draw(GameTime gameTime)
-        {
-
-            _drawables.ForEachFilteredItem(DrawAction, gameTime);
-        }
-
         protected virtual void OnExiting(object sender, EventArgs args)
         {
             Raise(Exiting, args);
@@ -703,7 +685,7 @@ namespace Microsoft.Xna.Framework
             // http://stackoverflow.com/questions/4235439/xna-3-1-to-4-0-requires-constant-redraw-or-will-display-a-purple-screen
             if (Platform.BeforeDraw(gameTime) && Instance.BeginDraw())
             {
-                Draw(gameTime);
+                Instance.Draw(gameTime);
                 DoEndDraw();
             }
         }
@@ -775,7 +757,7 @@ namespace Microsoft.Xna.Framework
         private void DecategorizeComponents()
         {
             Instance.Updateables.Clear();
-            _drawables.Clear();
+            Instance.Drawables.Clear();
         }
 
         private void CategorizeComponent(IGameComponent component)
@@ -783,7 +765,7 @@ namespace Microsoft.Xna.Framework
             if (component is IUpdateable)
                 Instance.Updateables.Add((IUpdateable)component);
             if (component is IDrawable)
-                _drawables.Add((IDrawable)component);
+                Instance.Drawables.Add((IDrawable)component);
         }
 
         // FIXME: I am open to a better name for this method.  It does the
@@ -793,7 +775,7 @@ namespace Microsoft.Xna.Framework
             if (component is IUpdateable)
 				Instance.Updateables.Remove((IUpdateable)component);
             if (component is IDrawable)
-                _drawables.Remove((IDrawable)component);
+                Instance.Drawables.Remove((IDrawable)component);
         }
 
         private void Raise<TEventArgs>(EventHandler<TEventArgs> handler, TEventArgs e)

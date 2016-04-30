@@ -8,6 +8,8 @@ namespace Microsoft.Xna.Framework.Content
 {
 	public interface IContentManager: IDisposable
 	{
+		string RootDirectory { get; set; }
+
 		void ReloadGraphicsContent ();
 
 		void Unload ();

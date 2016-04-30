@@ -8,5 +8,17 @@ namespace MonoGame.Platform.AndroidGL
 {
 	public class NullMediaLibrary : IMediaLibrary
 	{
+		#region IMediaLibrary implementation
+		public void Load (System.Action<int> progressCallback)
+		{
+			throw new System.NotImplementedException ();
+		}
+		#endregion
+		#region IDisposable implementation
+		public void Dispose ()
+		{
+			throw new System.NotImplementedException ();
+		}
+		#endregion
 	}
 }

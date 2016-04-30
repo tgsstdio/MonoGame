@@ -5,6 +5,7 @@
 using Android.Views;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input.Touch;
+using MonoGame.Core;
 
 namespace MonoGame.Platform.AndroidGL.Input.Touch
 {

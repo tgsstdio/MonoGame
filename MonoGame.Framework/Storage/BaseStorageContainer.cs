@@ -42,46 +42,8 @@ purpose and non-infringement.
 // C:\Program Files (x86)\Microsoft XNA\XNA Game Studio\v4.0\References\Windows\x86\Microsoft.Xna.Framework.Storage.dll
 #endregion
 using Microsoft.Xna.Framework;
-using MonoGame.Utilities;
 using System;
 using System.IO;
-#if WINDOWS_STOREAPP || WINDOWS_UAP
-using Windows.Storage;
-using System.Linq;
-using Windows.Storage.Search;
-#endif
-
-#if WINDOWS_STOREAPP
-namespace System.IO
-{
-    public enum FileMode
-    {
-        CreateNew = 1,
-        Create = 2,
-        Open = 3,
-        OpenOrCreate = 4,
-        Truncate = 5,
-        Append = 6,
-    }
-
-    public enum FileAccess
-    {
-        Read = 1,
-        Write = 2,
-        ReadWrite = 3,
-    }
-
-    public enum FileShare
-    {
-        None = 0,
-        Read = 1,
-        Write = 2,
-        ReadWrite = 3,
-        Delete = 4,
-        Inheritable = 0x10,
-    }
-}
-#endif
 
 namespace Microsoft.Xna.Framework.Storage
 {
@@ -97,45 +59,31 @@ namespace Microsoft.Xna.Framework.Storage
     /// Contains a logical collection of files used for user-data storage.
     /// </summary>			
     /// <remarks>MSDN documentation contains related conceptual article: http://msdn.microsoft.com/en-us/library/bb200105.aspx#ID4EDB</remarks>
-	public class StorageContainer : IDisposable
+	public abstract class BaseStorageContainer : IStorageContainer
 	{
-		internal readonly string _storagePath;
-		private readonly StorageDevice _device;
-		private readonly string _name;
+		internal string _storagePath;
+		//private readonly StorageDevice _device;
+		private string _name;
+
+		private string mBasePath;
+		protected BaseStorageContainer(string basePath)
+		{
+			mBasePath = basePath;
+		}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Microsoft.Xna.Framework.Storage.StorageContainer"/> class.
 		/// </summary>
-		/// <param name='device'>The attached storage-device.</param>
         /// <param name='name'> name.</param>
 		/// <param name='playerIndex'>The player index of the player to save the data.</param>
-		internal StorageContainer(StorageDevice device, string name, PlayerIndex? playerIndex)
+		public void Initialize(string name, PlayerIndex? playerIndex)
 		{
 			if (string.IsNullOrEmpty(name))
 				throw new ArgumentNullException("A title name has to be provided in parameter name.");			
 
-			_device = device;
 			_name = name;
 
-			// From the examples the root is based on MyDocuments folder
-#if WINDOWS_STOREAPP || WINDOWS_UAP
-			var saved = "";
-#elif MONOMAC
-            // We already have a SaveData folder on Mac/Linux.
-            var saved = StorageDevice.StorageRoot;
-#elif DESKTOPGL
-            string saved = "";
-            if(CurrentPlatform.OS == OS.Linux)
-                saved = StorageDevice.StorageRoot;
-            else if(CurrentPlatform.OS == OS.Windows)
-                saved = Path.Combine(StorageDevice.StorageRoot, "SavedGames");
-            else
-                throw new Exception("Unexpected platform!");
-#else
-			var root = StorageDevice.StorageRoot;
-			var saved = Path.Combine(root,"SavedGames");
-#endif
-            _storagePath = Path.Combine(saved, name);
+			_storagePath = Path.Combine(mBasePath, name);
 			
 			var playerSave = string.Empty;
 			if (playerIndex.HasValue) {
@@ -146,7 +94,7 @@ namespace Microsoft.Xna.Framework.Storage
 				_storagePath = Path.Combine(_storagePath, "Player" + (int)playerIndex);
 
             // Create the "device" if need be
-            CreateDirectoryAbsolute(_storagePath);
+            PlatformCreateDirectoryAbsolute(_storagePath);
         }
 		
         /// <summary>
@@ -161,13 +109,13 @@ namespace Microsoft.Xna.Framework.Storage
         /// </summary>
 		public bool IsDisposed { get; private set; }
 
-        /// <summary>
-        /// Returns the <see cref="StorageDevice"/> that holds logical files for the container.
-        /// </summary>
-		public StorageDevice StorageDevice { 
-			
-			get {return _device; }
-		}
+//        /// <summary>
+//        /// Returns the <see cref="StorageDevice"/> that holds logical files for the container.
+//        /// </summary>
+//		public StorageDevice StorageDevice { 
+//			
+//			get {return _device; }
+//		}
 
 		// TODO: Implement the Disposing function.  Find sample first
 
@@ -194,23 +142,12 @@ namespace Microsoft.Xna.Framework.Storage
 			var dirPath = Path.Combine(_storagePath, directory);
 
             // Now let's try to create it
-            CreateDirectoryAbsolute(dirPath);
+            PlatformCreateDirectoryAbsolute(dirPath);
 		}
+	
+		protected abstract void PlatformCreateDirectoryAbsolute (string dirPath);
 
-        private void CreateDirectoryAbsolute(string path)
-        {
-			// Now let's try to create it
-#if WINDOWS_STOREAPP || WINDOWS_UAP
-			var folder = ApplicationData.Current.LocalFolder;
-            var task = folder.CreateFolderAsync(path, CreationCollisionOption.OpenIfExists);
-            task.AsTask().Wait();
-#else
-            if (!Directory.Exists(path))
-            {
-                Directory.CreateDirectory(path);
-            }
-#endif
-        }
+		protected abstract Stream PlatformCreateFile (string filePath); 
 
 	    /// <summary>
         /// Creates a file in the storage-container.
@@ -225,16 +162,11 @@ namespace Microsoft.Xna.Framework.Storage
 			// relative so combine with our path
 			var filePath= Path.Combine(_storagePath, file);
 
-#if WINDOWS_STOREAPP || WINDOWS_UAP
-			var folder = ApplicationData.Current.LocalFolder;
-            var awaiter = folder.OpenStreamForWriteAsync(filePath, CreationCollisionOption.ReplaceExisting).GetAwaiter();
-            return awaiter.GetResult();
-#else
-            // return A new file with read/write access.
-			return File.Create(filePath);				
-#endif			
+			return PlatformCreateFile (filePath);
 		}		
-		
+
+		protected abstract void PlatformDeleteDirectory(string dirPath);
+
         /// <summary>
         /// Deletes specified directory for the storage-container.
         /// </summary>
@@ -248,14 +180,10 @@ namespace Microsoft.Xna.Framework.Storage
 			var dirPath = Path.Combine(_storagePath, directory);
 
 			// Now let's try to delete itd
-#if WINDOWS_STOREAPP || WINDOWS_UAP
-			var folder = ApplicationData.Current.LocalFolder;
-            var deleteFolder = folder.GetFolderAsync(dirPath).AsTask().GetAwaiter().GetResult();
-            deleteFolder.DeleteAsync().AsTask().Wait();
-#else
-            Directory.Delete(dirPath);
-#endif
-        }		
+			PlatformDeleteDirectory(dirPath);
+        }	
+
+		protected abstract void PlatformDeleteFile (string filePath);
 		
         /// <summary>
         /// Deletes a file from the storage-container.
@@ -269,16 +197,10 @@ namespace Microsoft.Xna.Framework.Storage
 			// relative so combine with our path
 			var filePath= Path.Combine(_storagePath, file);
 
-#if WINDOWS_STOREAPP || WINDOWS_UAP
-			var folder = ApplicationData.Current.LocalFolder;
-            var deleteFile = folder.GetFileAsync(filePath).AsTask().GetAwaiter().GetResult();
-            deleteFile.DeleteAsync().AsTask().Wait();
-#else
-            // Now let's try to delete it
-			File.Delete(filePath);		
-#endif
+			PlatformDeleteFile (filePath);
         }
 				
+		protected abstract bool PlatformDirectoryExists(string dirPath);
 
         /// <summary>
         /// Returns true if specified path exists in the storage-container, false otherwise.
@@ -293,21 +215,7 @@ namespace Microsoft.Xna.Framework.Storage
 			// relative so combine with our path
 			var dirPath = Path.Combine(_storagePath, directory);
 
-#if WINDOWS_STOREAPP || WINDOWS_UAP
-			var folder = ApplicationData.Current.LocalFolder;
-
-            try
-            {
-                var result = folder.GetFolderAsync(dirPath).GetResults();
-            return result != null;
-            }
-            catch
-            {
-                return false;
-            }
-#else            
-            return Directory.Exists(dirPath);
-#endif
+			return PlatformDirectoryExists (dirPath);
 		}	
 			
         /// <summary>
@@ -319,7 +227,9 @@ namespace Microsoft.Xna.Framework.Storage
 			// Fill this in when we figure out what we should be disposing
 			IsDisposed = true;
 		}	
-			
+
+		protected abstract bool PlatformFileExists (string filePath);
+
         /// <summary>
         /// Returns true if the specified file exists in the storage-container, false otherwise.
         /// </summary>
@@ -333,37 +243,18 @@ namespace Microsoft.Xna.Framework.Storage
 			// relative so combine with our path
 			var filePath= Path.Combine(_storagePath, file);
 
-#if WINDOWS_STOREAPP || WINDOWS_UAP
-			var folder = ApplicationData.Current.LocalFolder;
-            // GetFile returns an exception if the file doesn't exist, so we catch it here and return the boolean.
-            try
-            {
-                var existsFile = folder.GetFileAsync(filePath).GetAwaiter().GetResult();
-                return existsFile != null;
-            }
-            catch
-            {
-                return false;
-            }
-#else
-            // return A new file with read/write access.
-			return File.Exists(filePath);		
-#endif
+			return PlatformFileExists (filePath);
         }			
 	
+		protected abstract string[] PlatformGetDirectoryNames (string storagePath);
+
         /// <summary>
         /// Returns list of directory names in the storage-container.
         /// </summary>
         /// <returns>List of directory names.</returns>
 		public string[] GetDirectoryNames ()
         {
-#if WINDOWS_STOREAPP || WINDOWS_UAP
-			var folder = ApplicationData.Current.LocalFolder;
-            var results = folder.GetFoldersAsync().AsTask().GetAwaiter().GetResult();
-            return results.Select<StorageFolder, string>(e => e.Name).ToArray();
-#else
-            return Directory.GetDirectories(_storagePath);
-#endif
+			return PlatformGetDirectoryNames (_storagePath);
 		}				
 
         /*
@@ -378,20 +269,18 @@ namespace Microsoft.Xna.Framework.Storage
 		}
         */
 
+		protected abstract string[] PlatformGetFileNames (string storagePath);
+
         /// <summary>
         /// Returns list of file names in the storage-container.
         /// </summary>
         /// <returns>List of file names.</returns>
 		public string[] GetFileNames ()
         {
-#if WINDOWS_STOREAPP || WINDOWS_UAP
-			var folder = ApplicationData.Current.LocalFolder;
-            var results = folder.GetFilesAsync().AsTask().GetAwaiter().GetResult();
-            return results.Select<StorageFile, string>(e => e.Name).ToArray();
-#else
-            return Directory.GetFiles(_storagePath);
-#endif
-		}				
+			return PlatformGetFileNames (_storagePath);			
+		}	
+
+		protected abstract string[] PlatformGetFileNames (string storagePath, string searchPattern);
 
         /// <summary>
         /// Returns list of file names with given search pattern.
@@ -403,15 +292,7 @@ namespace Microsoft.Xna.Framework.Storage
 			if (string.IsNullOrEmpty(searchPattern))
 				throw new ArgumentNullException("Parameter searchPattern must contain a value.");
 
-#if WINDOWS_STOREAPP || WINDOWS_UAP
-            var folder = ApplicationData.Current.LocalFolder;
-            var options = new QueryOptions( CommonFileQuery.DefaultQuery, new [] { searchPattern } );
-            var query = folder.CreateFileQueryWithOptions(options);
-            var files = query.GetFilesAsync().AsTask().GetAwaiter().GetResult();
-            return files.Select<StorageFile, string>(e => e.Name).ToArray();
-#else
-			return Directory.GetFiles(_storagePath, searchPattern);
-#endif
+			return PlatformGetFileNames (_storagePath, searchPattern);
         }				
 
 
@@ -421,9 +302,9 @@ namespace Microsoft.Xna.Framework.Storage
         /// <param name="file">Relative path of the file.</param>
         /// <param name="fileMode"><see cref="FileMode"/> that specifies how the file is opened.</param>
         /// <returns><see cref="Stream"/> object for the opened file.</returns>
-		public Stream OpenFile (string file, FileMode fileMode)
+		public Stream OpenFile (string file, StorageFileMode fileMode)
 		{
-			return OpenFile(file, fileMode, FileAccess.ReadWrite, FileShare.ReadWrite);
+			return OpenFile(file, fileMode, StorageFileAccess.ReadWrite, StorageFileShare.ReadWrite);
 		}				
 
         /// <summary>
@@ -433,10 +314,12 @@ namespace Microsoft.Xna.Framework.Storage
         /// <param name="fileMode"><see cref="FileMode"/> that specifies how the file is opened.</param>
         /// <param name="fileAccess"><see cref="FileAccess"/> that specifies access mode.</param>
         /// <returns><see cref="Stream"/> object for the opened file.</returns>
-        public Stream OpenFile (string file, FileMode fileMode, FileAccess fileAccess)
+        public Stream OpenFile (string file, StorageFileMode fileMode, StorageFileAccess fileAccess)
 		{
-			return OpenFile(file, fileMode, fileAccess, FileShare.ReadWrite);
+			return OpenFile(file, fileMode, fileAccess, StorageFileShare.ReadWrite);
 		}				
+
+		protected abstract Stream PlatformOpenFile (string filePath, StorageFileMode fileMode, StorageFileAccess fileAccess, StorageFileShare fileShare);
 
         /// <summary>
         /// Opens a file contained in storage-container.
@@ -446,7 +329,7 @@ namespace Microsoft.Xna.Framework.Storage
         /// <param name="fileAccess"><see cref="FileAccess"/> that specifies access mode.</param>
         /// <param name="fileShare">A bitwise combination of <see cref="FileShare"/> enumeration values that specifies access modes for other stream objects.</param>
         /// <returns><see cref="Stream"/> object for the opened file.</returns>
-        public Stream OpenFile (string file, FileMode fileMode, FileAccess fileAccess, FileShare fileShare)
+        public Stream OpenFile (string file, StorageFileMode fileMode, StorageFileAccess fileAccess, StorageFileShare fileShare)
 		{
 			if (string.IsNullOrEmpty(file))
 				throw new ArgumentNullException("Parameter file must contain a value.");
@@ -454,38 +337,7 @@ namespace Microsoft.Xna.Framework.Storage
 			// relative so combine with our path
 			var filePath= Path.Combine(_storagePath, file);
 
-#if WINDOWS_STOREAPP || WINDOWS_UAP
-			var folder = ApplicationData.Current.LocalFolder;
-            if (fileMode == FileMode.Create || fileMode == FileMode.CreateNew)
-            {
-                return folder.OpenStreamForWriteAsync(filePath, CreationCollisionOption.ReplaceExisting).GetAwaiter().GetResult();
-            }
-            else if (fileMode == FileMode.OpenOrCreate)
-            {
-                if (fileAccess == FileAccess.Read && FileExists(file))
-                    return folder.OpenStreamForReadAsync(filePath).GetAwaiter().GetResult();
-                else
-                {
-                    // Not using OpenStreamForReadAsync because the stream position is placed at the end of the file, instead of the beginning
-                    var f = folder.CreateFileAsync(filePath, CreationCollisionOption.OpenIfExists).AsTask().GetAwaiter().GetResult();
-                    return f.OpenAsync(FileAccessMode.ReadWrite).AsTask().GetAwaiter().GetResult().AsStream();
-                }
-            }
-            else if (fileMode == FileMode.Truncate)
-            {
-                return folder.OpenStreamForWriteAsync(filePath, CreationCollisionOption.ReplaceExisting).GetAwaiter().GetResult();
-            }
-            else
-            {
-                //if (fileMode == FileMode.Append)
-                // Not using OpenStreamForReadAsync because the stream position is placed at the end of the file, instead of the beginning
-                folder.CreateFileAsync(filePath, CreationCollisionOption.OpenIfExists).AsTask().GetAwaiter().GetResult().OpenAsync(FileAccessMode.ReadWrite).AsTask().GetAwaiter().GetResult().AsStream();
-                var f = folder.CreateFileAsync(filePath, CreationCollisionOption.OpenIfExists).AsTask().GetAwaiter().GetResult();
-                return f.OpenAsync(FileAccessMode.ReadWrite).AsTask().GetAwaiter().GetResult().AsStream();
-            }
-#else
-            return File.Open(filePath, fileMode, fileAccess, fileShare);
-#endif
+			return PlatformOpenFile (filePath, fileMode, fileAccess, fileShare);
         }				
 	}
 }

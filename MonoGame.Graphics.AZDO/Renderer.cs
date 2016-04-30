@@ -1,5 +1,6 @@
 ﻿using System;
 using OpenTK.Graphics.OpenGL;
+using Magnesium;
 
 namespace MonoGame.Graphics.AZDO
 {
@@ -29,10 +30,10 @@ namespace MonoGame.Graphics.AZDO
 			var pastBlend = previous.BlendValues;
 			var nextBlend = next.BlendValues;
 
-			var blendEnabled = !(nextBlend.ColorSourceBlend == Blend.One && 
-				nextBlend.ColorDestinationBlend == Blend.Zero &&
-				nextBlend.AlphaSourceBlend == Blend.One &&
-				nextBlend.AlphaDestinationBlend == Blend.Zero);
+			bool blendEnabled = !(nextBlend.ColorSourceBlend == MgBlendFactor.ONE && 
+				nextBlend.ColorDestinationBlend == MgBlendFactor.ZERO &&
+				nextBlend.AlphaSourceBlend == MgBlendFactor.ONE &&
+				nextBlend.AlphaDestinationBlend == MgBlendFactor.ZERO);
 
 			if (blendEnabled != mBlend.IsEnabled)
 			{

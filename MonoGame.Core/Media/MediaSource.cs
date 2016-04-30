@@ -36,14 +36,15 @@ namespace Microsoft.Xna.Framework.Media
             }
         }
 	
-		public static IList<MediaSource> GetAvailableMediaSources()
-        {
-#if IOS
-			MediaSource[] result = { new MediaSource(UIDevice.CurrentDevice.SystemName, MediaSourceType.LocalDevice) };
-#else
-			MediaSource[] result = { new MediaSource("DummpMediaSource", MediaSourceType.LocalDevice) };
-#endif
-			return result;
-        }
+		// TODO : when in use, refactor it
+//		public static IList<MediaSource> GetAvailableMediaSources()
+//        {
+//#if IOS
+//			MediaSource[] result = { new MediaSource(UIDevice.CurrentDevice.SystemName, MediaSourceType.LocalDevice) };
+//#else
+//			MediaSource[] result = { new MediaSource("DummpMediaSource", MediaSourceType.LocalDevice) };
+//#endif
+//			return result;
+//        }
     }
 }

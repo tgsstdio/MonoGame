@@ -9,7 +9,7 @@ using MonoGame.Core;
 
 namespace MonoGame.Graphics
 {
-	public abstract class MgBaseTexture
+	public abstract class MgBaseTexture : ITexture
 	{
 		private readonly IMgTexturePlatform mPlatform;
 		private Int32 _sortingKey;
@@ -19,10 +19,10 @@ namespace MonoGame.Graphics
 		internal MgSampler mSampler;
 		internal MgDeviceMemory mDeviceMemory;
 
-		protected MgBaseTexture(IMgTexturePlatform platform)
+		protected MgBaseTexture(Int32 key, IMgTexturePlatform platform)
 		{
 			mPlatform = platform;
-			_sortingKey = mPlatform.GenerateSortingKey ();
+			_sortingKey = key;
 		}
 
 		internal SurfaceFormat _format;

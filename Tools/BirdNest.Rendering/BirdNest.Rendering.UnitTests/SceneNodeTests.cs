@@ -8,7 +8,7 @@ namespace BirdNest.Rendering.UnitTests
 	[TestFixture]
 	public class SceneNodeTests
 	{
-		static SceneNode GenerateNode (ulong blockId, ulong instanceId)
+		static SceneNode GenerateNode (UInt32 blockId, ulong instanceId)
 		{
 			var model = new ObjectModelInfo ();
 			model.Asset = new AssetInfo ();

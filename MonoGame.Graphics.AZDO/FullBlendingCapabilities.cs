@@ -1,4 +1,5 @@
 ﻿using OpenTK.Graphics.OpenGL;
+using Magnesium;
 
 namespace MonoGame.Graphics.AZDO
 {
@@ -6,38 +7,38 @@ namespace MonoGame.Graphics.AZDO
 	{
 		#region IBlendCapabilities implementation
 
-		private static BlendingFactorDest GetBlendFactorDest (Blend blend)
+		private static BlendingFactorDest GetBlendFactorDest (MgBlendFactor blend)
 		{
 			switch (blend) {
-			case Blend.DestinationAlpha:
+			case MgBlendFactor.DST_ALPHA:
 				return BlendingFactorDest.DstAlpha;
 				//			case Blend.DestinationColor:
 				//				return BlendingFactorDest.DstColor;
-			case Blend.InverseDestinationAlpha:
+			case MgBlendFactor.ONE_MINUS_DST_ALPHA:
 				return BlendingFactorDest.OneMinusDstAlpha;
 				//			case Blend.InverseDestinationColor:
 				//				return BlendingFactorDest.OneMinusDstColor;
-			case Blend.InverseSourceAlpha:
+			case MgBlendFactor.ONE_MINUS_SRC_ALPHA:
 				return BlendingFactorDest.OneMinusSrcAlpha;
-			case Blend.InverseSourceColor:
+			case MgBlendFactor.ONE_MINUS_SRC_COLOR:
 				#if MONOMAC || WINDOWS
 				return (BlendingFactorDest)All.OneMinusSrcColor;
 				#else
 				return BlendingFactorDest.OneMinusSrcColor;
 				#endif
-			case Blend.One:
+			case MgBlendFactor.ONE:
 				return BlendingFactorDest.One;
-			case Blend.SourceAlpha:
+			case MgBlendFactor.SRC_ALPHA:
 				return BlendingFactorDest.SrcAlpha;
 				//			case Blend.SourceAlphaSaturation:
 				//				return BlendingFactorDest.SrcAlphaSaturate;
-			case Blend.SourceColor:
+			case MgBlendFactor.SRC_COLOR:
 				#if MONOMAC || WINDOWS
 				return (BlendingFactorDest)All.SrcColor;
 				#else
 				return BlendingFactorDest.SrcColor;
 				#endif
-			case Blend.Zero:
+			case MgBlendFactor.ZERO:
 				return BlendingFactorDest.Zero;
 			default:
 				return BlendingFactorDest.One;
@@ -75,45 +76,45 @@ namespace MonoGame.Graphics.AZDO
 				(colorMask & DrawItemBitFlags.AlphaColorWriteChannel) != 0);
 		}
 
-		private BlendingFactorSrc GetBlendFactorSrc (Blend blend)
+		private BlendingFactorSrc GetBlendFactorSrc (MgBlendFactor blend)
 		{
 			switch (blend) {
-			case Blend.DestinationAlpha:
+			case MgBlendFactor.DST_ALPHA:
 				return BlendingFactorSrc.DstAlpha;
-			case Blend.DestinationColor:
+			case MgBlendFactor.DST_COLOR:
 				return BlendingFactorSrc.DstColor;
-			case Blend.InverseDestinationAlpha:
+			case MgBlendFactor.ONE_MINUS_DST_ALPHA:
 				return BlendingFactorSrc.OneMinusDstAlpha;
-			case Blend.InverseDestinationColor:
+			case MgBlendFactor.ONE_MINUS_DST_COLOR:
 				return BlendingFactorSrc.OneMinusDstColor;
-			case Blend.InverseSourceAlpha:
+			case MgBlendFactor.ONE_MINUS_SRC_ALPHA:
 				return BlendingFactorSrc.OneMinusSrcAlpha;
-			case Blend.InverseSourceColor:
+			case MgBlendFactor.ONE_MINUS_SRC_COLOR:
 				#if MONOMAC || WINDOWS || DESKTOPGL
 				return (BlendingFactorSrc)All.OneMinusSrcColor;
 				#else
 				return BlendingFactorSrc.OneMinusSrcColor;
 				#endif
-			case Blend.One:
+			case MgBlendFactor.ONE:
 				return BlendingFactorSrc.One;
-			case Blend.SourceAlpha:
+			case MgBlendFactor.SRC_ALPHA:
 				return BlendingFactorSrc.SrcAlpha;
-			case Blend.SourceAlphaSaturation:
+			case MgBlendFactor.SRC_ALPHA_SATURATE:
 				return BlendingFactorSrc.SrcAlphaSaturate;
-			case Blend.SourceColor:
+			case MgBlendFactor.SRC_COLOR:
 				#if MONOMAC || WINDOWS || DESKTOPGL
 				return (BlendingFactorSrc)All.SrcColor;
 				#else
 				return BlendingFactorSrc.SrcColor;
 				#endif
-			case Blend.Zero:
+			case MgBlendFactor.ZERO:
 				return BlendingFactorSrc.Zero;
 			default:
 				return BlendingFactorSrc.One;
 			}
 		}
 
-		public void ApplyBlendSeparateFunction (Blend colorSource, Blend colorDest, Blend alphaSource, Blend alphaDest)
+		public void ApplyBlendSeparateFunction (MgBlendFactor colorSource, MgBlendFactor colorDest, MgBlendFactor alphaSource, MgBlendFactor alphaDest)
 		{
 			GL.BlendFuncSeparate(
 				GetBlendFactorSrc(colorSource),

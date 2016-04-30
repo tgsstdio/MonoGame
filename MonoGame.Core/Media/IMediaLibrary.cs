@@ -6,9 +6,9 @@ using System;
 
 namespace Microsoft.Xna.Framework.Media
 {
-	public interface IMediaLibrary
+	public interface IMediaLibrary : IDisposable
 	{
-		
+		void Load (Action<int> progressCallback);
 	}
 }
 
