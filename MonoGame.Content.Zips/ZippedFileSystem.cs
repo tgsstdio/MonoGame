@@ -1,19 +1,60 @@
 ﻿using System.IO;
 using System.Collections.Generic;
 using System.IO.Compression;
-using MonoGame.Content.Blocks;
+using Microsoft.Xna.Framework;
+using System;
 
 namespace MonoGame.Content.Zips
 {
 	public class ZippedFileSystem : IFileSystem
 	{
-		public string Path { get; private set; }
-		private IAssetLocator mLocator;
-		public ZippedFileSystem (IAssetLocator locator, string folder)
+		private ITitleContainer mTitleContainer;
+		private readonly Dictionary<uint, ZippedBlockEntry> mBlocks;
+		public ZippedFileSystem (ITitleContainer container)
 		{
-			Path = folder;
-			mLocator = locator;
+			mBlocks = new Dictionary<uint, ZippedBlockEntry> ();
+			mTitleContainer = container;
 		}
+
+		~ZippedFileSystem()
+		{
+			Dispose (false);
+		}
+
+		public void Dispose ()
+		{
+			Dispose (true);
+			GC.SuppressFinalize (this);
+		}
+
+		void ReleaseUnmanagedResources ()
+		{
+	
+		}
+
+		void ReleaseManagedResources ()
+		{
+			
+		}
+
+		private bool mDisposed = false;
+		protected virtual void Dispose(bool dispose)
+		{
+			if (mDisposed)
+			{
+				return;
+			}
+
+			ReleaseUnmanagedResources();
+
+			if (dispose)
+			{
+				ReleaseManagedResources ();
+			}
+
+			mDisposed = true;
+		}
+
 
 		#region IFileSystem implementation
 
@@ -21,10 +62,9 @@ namespace MonoGame.Content.Zips
 		{
 			public BlockIdentifier Id;
 			public string Path;
-			public string BlockFile;
 		}
 
-		private Dictionary<ulong, ZippedBlockEntry> mBlocks;
+
 		public bool Register (BlockIdentifier identifier)
 		{
 			// already
@@ -33,46 +73,23 @@ namespace MonoGame.Content.Zips
 				return true;
 			}
 
-			string dirPath = System.IO.Path.Combine (Path, identifier.BlockId.ToString());
+			string dirPath = identifier.BlockId.ToString();
 
-			if (!Directory.Exists (dirPath))
-			{
-				return false;
-			}
-
-			//string blockFile = System.IO.Path.Combine (dirPath, );
-			string zipFile = GetBlockFileName (identifier);
+			string zipFile = GetZipFileName (identifier);
 			string fullPath = System.IO.Path.Combine (dirPath, zipFile);
-
-			if (!File.Exists (fullPath))
-			{
-				return false;
-			}
 
 			var archive = new ZippedBlockEntry();
 			archive.Id = identifier;
 			archive.Path = fullPath;
-			archive.BlockFile = mLocator.Serializer.GetBlockPath (identifier);
 
-			using (var fs = File.OpenRead(fullPath))
-			using (var zip = new ZipArchive (fs))
-			using (var stream = zip.GetEntry(archive.BlockFile).Open())
-			{
-				mLocator.Scan (stream);
-			}
+			mBlocks.Add (identifier.BlockId, archive);
 
 			return true;
 		}
 
-		private static string GetBlockFileName (BlockIdentifier identifier)
+		private static string GetZipFileName (BlockIdentifier identifier)
 		{
 			return identifier.BlockId + ".zip";
-		}
-
-		public void Initialise (string path)
-		{
-			mBlocks = new Dictionary<ulong, ZippedBlockEntry> ();
-			Path = path;
 		}
 
 		public bool IsRegistered (BlockIdentifier identifier)
@@ -88,7 +105,7 @@ namespace MonoGame.Content.Zips
 				throw new KeyNotFoundException ();
 			}
 
-			return new ZipArchive (File.OpenRead (found.Path), ZipArchiveMode.Read, false).GetEntry (path).Open ();
+			return new ZipArchive (mTitleContainer.OpenStream(found.Path), ZipArchiveMode.Read, false).GetEntry (path).Open ();
 		}
 		#endregion
 	}

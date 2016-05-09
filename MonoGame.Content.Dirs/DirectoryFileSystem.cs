@@ -1,15 +1,55 @@
 ﻿using System.IO;
 using System.Collections.Generic;
 using MonoGame.Content.Blocks;
+using System;
+using Microsoft.Xna.Framework;
 
 namespace MonoGame.Content.Dirs
 {
 	public class DirectoryFileSystem : IFileSystem
 	{
-		private IAssetLocator mLocator;
-		public DirectoryFileSystem (IAssetLocator serializer)
+		private ITitleContainer mContainer;
+		public DirectoryFileSystem (ITitleContainer container)
 		{
-			mLocator = serializer;
+			mContainer = container;
+			mBlocks = new Dictionary<uint, DirectoryBlockEntry> ();
+		}
+
+		~DirectoryFileSystem()
+		{
+			Dispose (false);
+		}
+
+		public void Dispose ()
+		{
+			Dispose (true);
+			GC.SuppressFinalize(this);
+		}
+
+		protected virtual void ReleaseUnmanagedResources ()
+		{
+
+		}
+
+		protected virtual void ReleaseManagedResources ()
+		{
+
+		}
+
+		private bool mDisposed = false;
+		protected virtual void Dispose(bool dispose)
+		{
+			if (mDisposed)
+				return;
+
+			ReleaseUnmanagedResources ();
+
+			if (dispose)
+			{
+				ReleaseManagedResources ();
+			}
+
+			mDisposed = true;
 		}
 
 		private class DirectoryBlockEntry
@@ -28,21 +68,13 @@ namespace MonoGame.Content.Dirs
 			}
 
 			string fullPath = System.IO.Path.Combine (found.Path, path);
-			return File.OpenRead (fullPath);
+			return mContainer.OpenStream(fullPath);
 		}
-
-		public string Path {get; private set;}
-
-		private Dictionary<ulong, DirectoryBlockEntry> mBlocks;
-		public void Initialise (string path)
-		{
-			Path = path;
-			mBlocks = new Dictionary<ulong, DirectoryBlockEntry> ();
-		}
+		private readonly Dictionary<uint, DirectoryBlockEntry> mBlocks;
 
 		public bool Register (BlockIdentifier identifier)
 		{
-			string dirPath = System.IO.Path.Combine (Path, identifier.BlockId.ToString());
+			string dirPath = identifier.BlockId.ToString();
 
 			if (!Directory.Exists (dirPath))
 			{
@@ -52,14 +84,9 @@ namespace MonoGame.Content.Dirs
 			var archive = new DirectoryBlockEntry();
 			archive.Id = identifier;
 			archive.Path = dirPath;
-			archive.BlockFile = System.IO.Path.Combine (dirPath, mLocator.Serializer.GetBlockPath (identifier));
+			archive.BlockFile = dirPath;
 
 			mBlocks.Add (archive.Id.BlockId, archive);
-
-			using (var fs = File.OpenRead(archive.BlockFile))
-			{
-				mLocator.Scan (fs);
-			}
 			return true;
 		}
 

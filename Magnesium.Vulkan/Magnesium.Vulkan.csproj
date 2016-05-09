@@ -3,10 +3,12 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{9D3DE491-E6D0-4D12-9A2D-D31B23D7D71D}</ProjectGuid>
+    <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <ProjectGuid>{EF4DAAA3-9492-466E-9A10-3065BCAA6FDB}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>MonoGame.Content.Dirs</RootNamespace>
-    <AssemblyName>BirdNest.MonoGame.FileSystem.Dirs</AssemblyName>
+    <RootNamespace>Magnesium.Vulkan</RootNamespace>
+    <AssemblyName>Magnesium.Vulkan</AssemblyName>
+    <TargetFrameworkProfile>Profile111</TargetFrameworkProfile>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -28,25 +30,18 @@
     <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System" />
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="DirectoryFileSystem.cs" />
+    <Compile Include="VkEntrypoint.cs" />
+    <Compile Include="VkInstance.cs" />
   </ItemGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>
-    <ProjectReference Include="..\MonoGame.Content\MonoGame.Content.csproj">
-      <Project>{E44E47ED-2203-4E45-85A9-C755B10AC044}</Project>
-      <Name>MonoGame.Content</Name>
+    <ProjectReference Include="..\Magnesium\Magnesium.csproj">
+      <Project>{9F9AC448-9D17-43E5-8889-285426290891}</Project>
+      <Name>Magnesium</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MonoGame.Content.Blocks\MonoGame.Content.Blocks.csproj">
-      <Project>{F218D143-486C-4018-8DAD-B970088EA505}</Project>
-      <Name>MonoGame.Content.Blocks</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\MonoGame.Core\MonoGame.Core.csproj">
-      <Project>{699977AD-6D8C-4E0B-ADDA-554B66002D08}</Project>
-      <Name>MonoGame.Core</Name>
-    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="mscorlib" />
   </ItemGroup>
 </Project>

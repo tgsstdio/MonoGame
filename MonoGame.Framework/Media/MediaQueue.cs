@@ -12,7 +12,7 @@ using System.Collections.Generic;
 
 namespace Microsoft.Xna.Framework.Media
 {
-	public sealed class MediaQueue
+	public sealed class MediaQueue : IMediaQueue
 	{
         List<ISong> songs = new List<ISong>();
 		private int _activeSongIndex = -1;
@@ -72,7 +72,7 @@ namespace Microsoft.Xna.Framework.Media
 		    }
 		}
 
-        internal int Count
+        public int Count
         {
             get
             {
@@ -84,16 +84,13 @@ namespace Microsoft.Xna.Framework.Media
             }
         }
 
-        public ISong this[int index]
+		public ISong At(int index)
         {
-            get
-            {
 #if WINDOWS_PHONE
                 if (mediaQueue != null)
                     return new Song(mediaQueue[index]);
 #endif
-                return songs[index];
-            }
+        	return songs[index];
         }
 
 		internal IEnumerable<ISong> Songs
@@ -104,7 +101,7 @@ namespace Microsoft.Xna.Framework.Media
             }
         }
 
-		internal ISong GetNextSong(int direction, bool shuffle)
+		public ISong GetNextSong(int direction, bool shuffle)
 		{
 			if (shuffle)
 				_activeSongIndex = random.Next(songs.Count);
@@ -114,7 +111,7 @@ namespace Microsoft.Xna.Framework.Media
 			return songs[_activeSongIndex];
 		}
 		
-		internal void Clear()
+		public void Clear()
 		{
 			ISong song;
 			for(; songs.Count > 0; )
@@ -136,7 +133,7 @@ namespace Microsoft.Xna.Framework.Media
         }
 #endif
 
-		internal void Add(ISong song)
+		public void Add(ISong song)
         {
             songs.Add(song);
         }

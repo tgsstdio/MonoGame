@@ -16,7 +16,7 @@ namespace Microsoft.Xna.Framework.Media
 		private bool _isMuted;
         private bool _isRepeating;
         private bool _isShuffled;
-		private readonly MediaQueue _queue = new MediaQueue();
+		private readonly IMediaQueue _queue;
 
 #if WINDOWS_PHONE
         // PlayingInternal should default to true to be to work with the user's default playing music
@@ -27,15 +27,16 @@ namespace Microsoft.Xna.Framework.Media
         public event EventHandler<EventArgs> MediaStateChanged;
 
 		private IMediaPlayerPlatform mPlatform;
-        public MediaPlayer(IMediaPlayerPlatform platform)
+		public MediaPlayer(IMediaPlayerPlatform platform, IMediaQueue queue)
         {
 			mPlatform = platform;
+			_queue = queue;
 			mPlatform.Initialize();
         }
 
         #region Properties
 
-        public MediaQueue Queue { get { return _queue; } }
+        public IMediaQueue Queue { get { return _queue; } }
 
 		public bool IsMuted
         {
@@ -121,7 +122,7 @@ namespace Microsoft.Xna.Framework.Media
 		/// </summary>
         public void Play(ISong song)
         {
-            var previousSong = _queue.Count > 0 ? _queue[0] : null;
+			ISong previousSong = _queue.Count > 0 ? _queue.At(0) : null;
             _queue.Clear();
             _numSongsInQueuePlayed = 0;
             _queue.Add(song);

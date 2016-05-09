@@ -39,6 +39,8 @@
     <Compile Include="IExtensionChecker.cs" />
     <Compile Include="IBlockLocator.cs" />
     <Compile Include="StandardBlockLocator.cs" />
+    <Compile Include="ContentStreamer.cs" />
+    <Compile Include="IContentStreamer.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
 </Project>
