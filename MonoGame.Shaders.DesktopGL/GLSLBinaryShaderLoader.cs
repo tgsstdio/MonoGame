@@ -5,7 +5,7 @@ using MonoGame.Content.Blocks;
 
 namespace MonoGame.Shaders.GLSL.DesktopGL
 {
-	public class GLBinaryShaderLoader : IShaderLoader
+	public class GLBinaryShaderLoader
 	{
 		private readonly IFileSystem mFileSystem;
 		private readonly IShaderInfoLookup mLookup;		
@@ -16,6 +16,15 @@ namespace MonoGame.Shaders.GLSL.DesktopGL
 			mLookup = lookup;
 			mRegistry = registry;
 		}
+
+		#region IGLShaderModuleLoader implementation
+
+		public int Compile (Stream s)
+		{
+			throw new System.NotImplementedException ();
+		}
+
+		#endregion
 
 		#region IShaderLoader implementation
 

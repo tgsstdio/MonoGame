@@ -1,16 +1,16 @@
 ﻿namespace MonoGame.Graphics
 {
-	public class PremutationSelector : IEffectVariantCollection
+	public class PremutationSelector : IEffectPipelineCollection
 	{
-		private readonly EffectShaderVariant[] mVariants;		
-		public PremutationSelector (EffectShaderVariant[] variants)
+		private readonly EffectPipeline[] mVariants;		
+		public PremutationSelector (EffectPipeline[] variants)
 		{
 			mVariants = variants;
 		}
 
 		#region IEffectVariantCollection implementation
 
-		public bool TryGetValue (ushort options, out EffectShaderVariant result)
+		public bool TryGetValue (ushort options, out EffectPipeline result)
 		{
 			for (int i = 0; i < mVariants.Length; ++i)
 			{

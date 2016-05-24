@@ -1,16 +1,16 @@
 ﻿namespace MonoGame.Graphics
 { 
-	public class EffectVariantArray : IEffectVariantCollection
+	public class EffectVariantArray : IEffectPipelineCollection
 	{
-		private readonly EffectShaderVariant[] mVariants;
-		public EffectVariantArray (EffectShaderVariant[] variants)
+		private readonly EffectPipeline[] mVariants;
+		public EffectVariantArray (EffectPipeline[] variants)
 		{
 			mVariants = variants;
 		}
 
 		#region IEffectVariantCollection implementation
 
-		public bool TryGetValue (ushort options, out EffectShaderVariant result)
+		public bool TryGetValue (ushort options, out EffectPipeline result)
 		{
 			if (options >= mVariants.Length)
 			{

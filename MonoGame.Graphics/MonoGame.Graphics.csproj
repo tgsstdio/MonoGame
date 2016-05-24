@@ -58,15 +58,12 @@
     <Compile Include="ImageTarget.cs" />
     <Compile Include="EffectPass.cs" />
     <Compile Include="Effect.cs" />
-    <Compile Include="EffectShaderVariant.cs" />
     <Compile Include="GPUResourceList.cs" />
     <Compile Include="IResourceList.cs" />
     <Compile Include="DrawItemBitFlags.cs" />
     <Compile Include="ClearState.cs" />
     <Compile Include="DrawState.cs" />
     <Compile Include="IEffectCache.cs" />
-    <Compile Include="IEffectVariantCollection.cs" />
-    <Compile Include="EffectVariantDictionary.cs" />
     <Compile Include="EffectVariantArray.cs" />
     <Compile Include="PremutationSelector.cs" />
     <Compile Include="ResourceListKey.cs" />
@@ -96,6 +93,9 @@
     <Compile Include="SpriteBatch\IMgTexturePlatform.cs" />
     <Compile Include="SpriteBatch\MgBaseTexture.cs" />
     <Compile Include="SpriteBatch\MgTexture2D.cs" />
+    <Compile Include="EffectPipeline.cs" />
+    <Compile Include="EffectPipelineDictionary.cs" />
+    <Compile Include="IEffectPipelineCollection.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>

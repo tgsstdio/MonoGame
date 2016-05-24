@@ -3,7 +3,7 @@ using MonoGame.Content.Blocks;
 
 namespace MonoGame.Shaders.GLSL.DesktopGL
 {
-	public class GLSLTextShaderLoader : IShaderLoader
+	public class GLSLTextShaderLoader
 	{
 		private readonly IFileSystem mFileSystem;
 		private readonly IShaderInfoLookup mLookup;
@@ -17,13 +17,13 @@ namespace MonoGame.Shaders.GLSL.DesktopGL
 
 		#region IShaderLoader implementation
 
-		public ShaderProgram Load (AssetIdentifier identifier)
+		public GLShaderProgram Load (AssetIdentifier identifier)
 		{	
 			// 
-			ShaderProgram existingProgram;
+			GLShaderProgram existingProgram;
 			if (mRegistry.TryGetValue (identifier, out existingProgram))
 			{				
-				var result = new ShaderProgram{ Identifier = identifier};				
+				var result = new GLShaderProgram{ Identifier = identifier};				
 				result.ProgramID = existingProgram.ProgramID;
 				result.Block = existingProgram.Block;
 				result.IsLoaded = true;

@@ -40,7 +40,7 @@ namespace ShadowMapping
 				using (var scope = container.OpenScope ())
 				{
 					var fs = container.Resolve<IFileSystem> ();
-					fs.Initialise ("Media");
+					//fs.Initialise ("Media");
 
 					using (var range = container.Resolve<IRenderTargetRange>())
 					using (var game = container.Resolve<GameWorld> ())

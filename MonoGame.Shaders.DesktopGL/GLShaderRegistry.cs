@@ -8,12 +8,12 @@ namespace MonoGame.Shaders.GLSL.DesktopGL
 {
 	public class GLShaderRegistry : IShaderRegistry
 	{
-		private readonly Dictionary<ulong, ShaderProgram> mPrograms;
+		private readonly Dictionary<ulong, GLShaderProgram> mPrograms;
 		private readonly IAssetManager mAssetManager;
 		public GLShaderRegistry (IAssetManager manager)
 		{
 			mAssetManager = manager;
-			mPrograms = new Dictionary<ulong, ShaderProgram> ();
+			mPrograms = new Dictionary<ulong, GLShaderProgram> ();
 		}
 
 		~GLShaderRegistry()
@@ -51,18 +51,18 @@ namespace MonoGame.Shaders.GLSL.DesktopGL
 
 		#region IShaderRegistry implementation
 
-		public bool TryGetValue (AssetIdentifier identifier, out ShaderProgram result)
+		public bool TryGetValue (AssetIdentifier identifier, out GLShaderProgram result)
 		{
 			return mPrograms.TryGetValue (identifier.AssetId, out result);
 		}
 
-		public void Add (AssetInfo key, ShaderProgram program)
+		public void Add (AssetInfo key, GLShaderProgram program)
 		{
 			mAssetManager.Add (key);
 			mPrograms.Add (key.Identifier.AssetId, program);
 		}
 
-		public void Remove (ShaderProgram program)
+		public void Remove (GLShaderProgram program)
 		{
 			mPrograms.Remove (program.Identifier.AssetId);
 			mAssetManager.Remove (program.Identifier);

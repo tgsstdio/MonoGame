@@ -9,6 +9,7 @@ namespace MonoGame.Content
 		//void Initialise(string path);
 		bool Register(BlockIdentifier id);
 		bool IsRegistered(BlockIdentifier id);
+		bool Exists (BlockIdentifier blockId, string path);
 		Stream OpenStream(BlockIdentifier id, string path);
 	}
 }

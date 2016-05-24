@@ -71,6 +71,7 @@
     <Compile Include="Graphics\Es20GLFramebufferHelper.cs" />
     <Compile Include="FullGLSpecificGraphicsCapabilitiesLookup.cs" />
     <Compile Include="Desktop\IOpenTKGameWindow.cs" />
+    <Compile Include="DesktopGLTitleContainer.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

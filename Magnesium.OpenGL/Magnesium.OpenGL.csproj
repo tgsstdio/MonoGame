@@ -29,6 +29,11 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="OpenTK">
+      <HintPath>..\Examples\Samples\packages\OpenTK.1.1.2225.0\lib\net20\OpenTK.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -36,6 +41,21 @@
     <Compile Include="GLInstance.cs" />
     <Compile Include="GLPhysicalDevice.cs" />
     <Compile Include="GLDevice.cs" />
+    <Compile Include="GLSLTextShader.cs" />
+    <Compile Include="GLPipelineLayout.cs" />
+    <Compile Include="GLSampler.cs" />
+    <Compile Include="GLUniformBinding.cs" />
+    <Compile Include="GLDescriptorSetLayout.cs" />
+    <Compile Include="GLDescriptorSet.cs" />
+    <Compile Include="GLDescriptorPool.cs" />
+    <Compile Include="GLImageView.cs" />
+    <Compile Include="GLImage.cs" />
+    <Compile Include="GLGraphicsPipeline.cs" />
+    <Compile Include="GLProgramUniformBinder.cs" />
+    <Compile Include="GLVariableBind.cs" />
+    <Compile Include="GLCommandPool.cs" />
+    <Compile Include="GLCommandBuffer.cs" />
+    <Compile Include="GLQueue.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -43,5 +63,9 @@
       <Project>{9F9AC448-9D17-43E5-8889-285426290891}</Project>
       <Name>Magnesium</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="OpenTK.dll.config" />
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>

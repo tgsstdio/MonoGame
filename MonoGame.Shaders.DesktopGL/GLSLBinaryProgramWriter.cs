@@ -24,7 +24,7 @@ namespace MonoGame.Shaders.GLSL.DesktopGL
 			mBuffer = new byte[mBufferSize];
 		}
 
-		public void WriteBinary (ShaderProgram program)
+		public void WriteBinary (GLShaderProgram program)
 		{
 			int length;
 			BinaryFormat format;

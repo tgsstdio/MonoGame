@@ -4,7 +4,7 @@ namespace MonoGame.Content
 {
 	public interface IContentStreamer
 	{
-		Stream LoadContent (AssetIdentifier assetId, string extension);
+		Stream LoadContent (AssetIdentifier assetId, string[] extensions);
 	}
 }
 

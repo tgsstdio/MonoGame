@@ -8,7 +8,7 @@ namespace MonoGame.Shaders.GLSL.DesktopGL
 {
 	public class GLSLTextShaderManager
 	{
-		private static int CompileShader(ShaderType type, string fileContents, string shaderPrefix)
+		public static int CompileShader(ShaderType type, string fileContents, string shaderPrefix)
 		{			
 			int retVal = GL.CreateShader(type);
 			//string includePath = ".";

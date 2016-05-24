@@ -42,13 +42,14 @@
     <Compile Include="GLSLBinaryShaderLoader.cs" />
     <Compile Include="GLSLTextShaderLoader.cs" />
     <Compile Include="GLSLTextShaderManager.cs" />
+    <Compile Include="GLShaderProgram.cs" />
+    <Compile Include="TextShaderModuleLoader.cs" />
+    <Compile Include="IShaderRegistry.cs" />
+    <Compile Include="IBinaryShaderProgramWriter.cs" />
+    <Compile Include="IShaderInfoLookup.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <ProjectReference Include="..\MonoGame.Content.Graphics\MonoGame.Shaders.csproj">
-      <Project>{2F0797E0-AA35-4C38-9CE0-0055A3E41C64}</Project>
-      <Name>MonoGame.Shaders</Name>
-    </ProjectReference>
     <ProjectReference Include="..\MonoGame.Content\MonoGame.Content.csproj">
       <Project>{E44E47ED-2203-4E45-85A9-C755B10AC044}</Project>
       <Name>MonoGame.Content</Name>
@@ -56,6 +57,18 @@
     <ProjectReference Include="..\MonoGame.Content.Blocks\MonoGame.Content.Blocks.csproj">
       <Project>{F218D143-486C-4018-8DAD-B970088EA505}</Project>
       <Name>MonoGame.Content.Blocks</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MonoGame.Graphics\MonoGame.Graphics.csproj">
+      <Project>{52C293E3-DCC5-43BE-A94F-DBE0CF44E25E}</Project>
+      <Name>MonoGame.Graphics</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Magnesium.OpenGL\Magnesium.OpenGL.csproj">
+      <Project>{156D7F9D-1243-4EDB-9E45-24FAF2F40A4C}</Project>
+      <Name>Magnesium.OpenGL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Magnesium\Magnesium.csproj">
+      <Project>{9F9AC448-9D17-43E5-8889-285426290891}</Project>
+      <Name>Magnesium</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

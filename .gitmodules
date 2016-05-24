@@ -12,3 +12,6 @@
 	path = Examples/Samples
 	url = https://github.com/tgsstdio/MonoGame.Samples.git
 	branch = develop
+[submodule "FreeImageNET-PCL"]
+	path = FreeImageNET-PCL
+	url = ../FreeImageNET-PCL

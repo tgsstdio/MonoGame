@@ -8,6 +8,7 @@ namespace Microsoft.Xna.Framework
 	public interface ITitleContainer
 	{
 		string Location { get; }
+		bool Exists (string name);
 		Stream OpenStream(string name);
 	}
 }

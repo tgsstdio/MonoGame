@@ -150,7 +150,7 @@ namespace MonoGame.Graphics
 					throw new ArgumentNullException(paramName : "ShaderOptions", message : "Value in DrawItem not supplied");
 				}
 
-				EffectShaderVariant variant;
+				EffectPipeline variant;
 				// TODO : filter based on vertex format AND options
 				var permutations = expectedPass.Variants;
 

@@ -13,17 +13,27 @@ namespace MonoGame.Content
 			mFileSystem = fileSystem;
 		}
 
-		public Stream LoadContent(AssetIdentifier assetId, string extension)
+		public Stream LoadContent(AssetIdentifier assetId, string[] extensions)
 		{
 			var blockId = mLocator.GetSource (assetId);
-			var path = mLocator.GetLocalPath (assetId) + extension;
 
-			if (!mFileSystem.IsRegistered (blockId))
+			foreach (var ext in extensions)
 			{
-				mFileSystem.Register (blockId);
+				var path = mLocator.GetLocalPath (assetId) + ext;
+
+				if (mFileSystem.Exists (blockId, path))
+				{
+					if (!mFileSystem.IsRegistered (blockId))
+					{
+						mFileSystem.Register (blockId);
+					}
+
+					return mFileSystem.OpenStream (blockId, path);
+				}
 			}
 
-			return mFileSystem.OpenStream (blockId, path);
+			// IF REACHES HERE
+			throw new Exception ("Stream not found.");
 		}
 	}
 }

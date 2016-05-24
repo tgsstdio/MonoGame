@@ -4,7 +4,7 @@
 	{
 		public DrawItem Item { get; set; }
 		public EffectPass Pass {get;set;}
-		public EffectShaderVariant Variant {get;set;}
+		public EffectPipeline Variant {get;set;}
 	}
 }
 

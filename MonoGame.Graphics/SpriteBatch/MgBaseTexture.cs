@@ -15,8 +15,8 @@ namespace MonoGame.Graphics
 		private Int32 _sortingKey;
 
 		internal MgImage mImage;
-		internal MgImageView mView;
-		internal MgSampler mSampler;
+		internal IMgImageView mView;
+		internal IMgSampler mSampler;
 		internal MgDeviceMemory mDeviceMemory;
 
 		protected MgBaseTexture(Int32 key, IMgTexturePlatform platform)

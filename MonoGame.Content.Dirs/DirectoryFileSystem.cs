@@ -94,6 +94,12 @@ namespace MonoGame.Content.Dirs
 		{
 			return mBlocks.ContainsKey (identifier.BlockId);
 		}
+
+		public bool Exists (BlockIdentifier blockId, string path)
+		{
+			string fullPath = System.IO.Path.Combine (blockId.BlockId.ToString(), path);
+			return mContainer.Exists (fullPath);
+		}
 	}
 }
 

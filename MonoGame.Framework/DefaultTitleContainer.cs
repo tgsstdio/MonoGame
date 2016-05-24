@@ -16,7 +16,7 @@ using Microsoft.Xna.Framework.Utilities;
 
 namespace Microsoft.Xna.Framework
 {
-    public class DefaultTitleContainer : ITitleContainer
+	public class DefaultTitleContainer : ITitleContainer
     {
         public DefaultTitleContainer() 
         {
@@ -106,6 +106,26 @@ namespace Microsoft.Xna.Framework
             return File.OpenRead(absolutePath);
 #endif
         }
+
+		public bool Exists (string name)
+		{
+			#if WINDOWS_STOREAPP || WINDOWS_UAP
+			var folder = ApplicationData.Current.LocalFolder;
+			// GetFile returns an exception if the file doesn't exist, so we catch it here and return the boolean.
+			try
+			{
+			var existsFile = folder.GetFileAsync(name).GetAwaiter().GetResult();
+			return existsFile != null;
+			}
+			catch
+			{
+			return false;
+			}
+			#else
+			// return A new file with read/write access.
+			return File.Exists(name);		
+			#endif	
+		}
 
         // TODO: This is just path normalization.  Remove this
         // and replace it with a proper utility function.  I'm sure

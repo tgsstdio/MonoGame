@@ -8,9 +8,9 @@ namespace MonoGame.Graphics
 	public interface IMgTexturePlatform
 	{
 		void GraphicsDeviceResetting (
-			MgImage image,
-			MgImageView view,
-			MgSampler sampler,
+			IMgImage image,
+			IMgImageView view,
+			IMgSampler sampler,
 			MgDeviceMemory deviceMemory);
 	}
 }

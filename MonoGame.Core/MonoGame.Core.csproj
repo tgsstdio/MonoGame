@@ -211,6 +211,8 @@
     <Compile Include="Media\MediaLibrary.cs" />
     <Compile Include="Media\MediaSourceType.cs" />
     <Compile Include="Media\MediaSource.cs" />
+    <Compile Include="BaseTitleContainer.cs" />
+    <Compile Include="SpriteBatch\VertexPositionColor.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>

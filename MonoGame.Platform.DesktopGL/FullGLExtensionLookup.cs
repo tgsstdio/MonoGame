@@ -1,6 +1,4 @@
-﻿using System;
-using MonoGame.Graphics;
-using System.Collections.Specialized;
+﻿using System.Collections.Specialized;
 using OpenTK.Graphics.OpenGL;
 using MonoGame.Graphics;
 
