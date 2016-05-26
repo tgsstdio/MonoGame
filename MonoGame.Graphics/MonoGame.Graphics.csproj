@@ -60,7 +60,6 @@
     <Compile Include="Effect.cs" />
     <Compile Include="GPUResourceList.cs" />
     <Compile Include="IResourceList.cs" />
-    <Compile Include="DrawItemBitFlags.cs" />
     <Compile Include="ClearState.cs" />
     <Compile Include="DrawState.cs" />
     <Compile Include="IEffectCache.cs" />
@@ -73,11 +72,8 @@
     <Compile Include="ObjectModel.cs" />
     <Compile Include="IRenderSlotCache.cs" />
     <Compile Include="RenderSlot.cs" />
-    <Compile Include="IConstantBufferCollection.cs" />
-    <Compile Include="IConstantBuffer.cs" />
     <Compile Include="DefaultRenderSlotCache.cs" />
     <Compile Include="IMeshBuffer.cs" />
-    <Compile Include="ISyncObject.cs" />
     <Compile Include="DrawItemCompilerOutput.cs" />
     <Compile Include="DrawMode.cs" />
     <Compile Include="IGPUSyncObject.cs" />
@@ -96,6 +92,10 @@
     <Compile Include="EffectPipeline.cs" />
     <Compile Include="EffectPipelineDictionary.cs" />
     <Compile Include="IEffectPipelineCollection.cs" />
+    <Compile Include="ISyncObject.cs" />
+    <Compile Include="IConstantBufferCollection.cs" />
+    <Compile Include="IConstantBuffer.cs" />
+    <Compile Include="DrawItemBitFlags.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>

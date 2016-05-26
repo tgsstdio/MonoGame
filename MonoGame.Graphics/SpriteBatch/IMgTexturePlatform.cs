@@ -11,7 +11,7 @@ namespace MonoGame.Graphics
 			IMgImage image,
 			IMgImageView view,
 			IMgSampler sampler,
-			MgDeviceMemory deviceMemory);
+			IMgDeviceMemory deviceMemory);
 	}
 }
 

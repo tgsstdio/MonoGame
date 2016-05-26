@@ -14,10 +14,10 @@ namespace MonoGame.Graphics
 		private readonly IMgTexturePlatform mPlatform;
 		private Int32 _sortingKey;
 
-		internal MgImage mImage;
+		internal IMgImage mImage;
 		internal IMgImageView mView;
 		internal IMgSampler mSampler;
-		internal MgDeviceMemory mDeviceMemory;
+		internal IMgDeviceMemory mDeviceMemory;
 
 		protected MgBaseTexture(Int32 key, IMgTexturePlatform platform)
 		{

@@ -1,7 +1,7 @@
 ﻿using System;
 using OpenTK.Graphics.ES30;
 
-namespace MonoGame.Graphics.AZDO
+namespace Magnesium.OpenGL
 {
 	public class FullDepthCapabilities : IDepthCapabilities
 	{
@@ -10,7 +10,7 @@ namespace MonoGame.Graphics.AZDO
 		public void Initialise ()
 		{
 			EnableDepthBuffer ();
-			SetDepthBufferFunc (CompareFunction.Less);
+			SetDepthBufferFunc (MgCompareOp.LESS);
 			SetDepthMask(true);
 		}
 
@@ -33,31 +33,31 @@ namespace MonoGame.Graphics.AZDO
 			mIsDepthBufferEnabled = false;
 		}
 
-		private static DepthFunction GetDepthFunction(CompareFunction compare)
+		private static DepthFunction GetDepthFunction(MgCompareOp compare)
 		{
 			switch (compare)
 			{
 			default:
-			case CompareFunction.Always:
+			case MgCompareOp.ALWAYS:
 				return DepthFunction.Always;
-			case CompareFunction.Equal:
+			case MgCompareOp.EQUAL:
 				return DepthFunction.Equal;
-			case CompareFunction.Greater:
+			case MgCompareOp.GREATER:
 				return DepthFunction.Greater;
-			case CompareFunction.GreaterEqual:
+			case MgCompareOp.GREATER_OR_EQUAL:
 				return DepthFunction.Gequal;
-			case CompareFunction.Less:
+			case MgCompareOp.LESS:
 				return DepthFunction.Less;
-			case CompareFunction.LessEqual:
+			case MgCompareOp.LESS_OR_EQUAL:
 				return DepthFunction.Lequal;
-			case CompareFunction.Never:
+			case MgCompareOp.NEVER:
 				return DepthFunction.Never;
-			case CompareFunction.NotEqual:
+			case MgCompareOp.NOT_EQUAL:
 				return DepthFunction.Notequal;
 			}
 		}
 
-		public void SetDepthBufferFunc(CompareFunction func)
+		public void SetDepthBufferFunc(MgCompareOp func)
 		{
 			GL.DepthFunc (GetDepthFunction (func));
 		}

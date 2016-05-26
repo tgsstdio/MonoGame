@@ -1,7 +1,7 @@
 ﻿using System;
 using OpenTK.Graphics.OpenGL;
 
-namespace MonoGame.Graphics.AZDO
+namespace Magnesium.OpenGL
 {
 	public class FullRasterizerCapabilities : IRasterizerCapabilities
 	{

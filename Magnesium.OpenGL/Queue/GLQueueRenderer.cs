@@ -1,17 +1,17 @@
 ﻿using System;
-using OpenTK.Graphics.OpenGL;
 using Magnesium;
 
-namespace MonoGame.Graphics.AZDO
+namespace Magnesium.OpenGL
 {
-	public class Renderer
+	public class GLQueueRenderer : IGLQueueRenderer
 	{
-		private IBlendCapabilities mBlend;
-		private IStencilCapabilities mStencil;
-		private IRasterizerCapabilities mRaster;
-		private IDepthCapabilities mDepth;
+		private readonly IBlendCapabilities mBlend;
+		private readonly IStencilCapabilities mStencil;
+		private readonly IRasterizerCapabilities mRaster;
+		private readonly IDepthCapabilities mDepth;
 		private readonly IShaderProgramCache mCache;
-		public Renderer (IBlendCapabilities blend, IStencilCapabilities stencil, IRasterizerCapabilities raster, IDepthCapabilities depth, IShaderProgramCache cache)
+
+		public GLQueueRenderer (IBlendCapabilities blend, IStencilCapabilities stencil, IRasterizerCapabilities raster, IDepthCapabilities depth, IShaderProgramCache cache)
 		{
 			mCache = cache;
 			mBlend = blend;
@@ -23,9 +23,9 @@ namespace MonoGame.Graphics.AZDO
 
 		public IConstantBufferCollection mBuffers;
 
-		public DrawItem mPreviousItem;
+		public GLQueueDrawItem mPreviousItem;
 
-		private void ApplyBlendChanges (DrawItem previous, DrawItem next)
+		private void ApplyBlendChanges (GLQueueDrawItem previous, GLQueueDrawItem next)
 		{
 			var pastBlend = previous.BlendValues;
 			var nextBlend = next.BlendValues;
@@ -52,10 +52,10 @@ namespace MonoGame.Graphics.AZDO
 					nextBlend.AlphaDestinationBlend);
 			}
 
-			var writeMask = DrawItemBitFlags.RedColorWriteChannel
-				| DrawItemBitFlags.GreenColorWriteChannel
-				| DrawItemBitFlags.BlueColorWriteChannel
-				| DrawItemBitFlags.AlphaColorWriteChannel; 
+			var writeMask = QueueDrawItemBitFlags.RedColorWriteChannel
+				| QueueDrawItemBitFlags.GreenColorWriteChannel
+				| QueueDrawItemBitFlags.BlueColorWriteChannel
+				| QueueDrawItemBitFlags.AlphaColorWriteChannel; 
 
 			var pastColourMask = writeMask & previous.Flags;
 			var nextColourMask = writeMask & next.Flags;
@@ -66,7 +66,7 @@ namespace MonoGame.Graphics.AZDO
 			}
 		}
 
-		private void ApplyStencilChanges (DrawItem previous, DrawItem next)
+		private void ApplyStencilChanges (GLQueueDrawItem previous, GLQueueDrawItem next)
 		{
 			var pastStencil = previous.StencilValues;
 			var nextStencil = next.StencilValues;
@@ -76,7 +76,7 @@ namespace MonoGame.Graphics.AZDO
 				mStencil.SetStencilWriteMask (nextStencil.StencilWriteMask);
 			}
 
-			var newStencilEnabled = (next.Flags & DrawItemBitFlags.StencilEnabled);
+			var newStencilEnabled = (next.Flags & QueueDrawItemBitFlags.StencilEnabled);
 			if (mStencil.IsStencilBufferEnabled != (newStencilEnabled != 0))
 			{
 				if (mStencil.IsStencilBufferEnabled)
@@ -91,8 +91,8 @@ namespace MonoGame.Graphics.AZDO
 
 			// TODO : Stencil operations
 			// set function
-			bool pastTwoSided = (previous.Flags & DrawItemBitFlags.TwoSidedStencilMode) > 0;
-			bool nextTwoSided = (previous.Flags & DrawItemBitFlags.TwoSidedStencilMode) > 0;
+			bool pastTwoSided = (previous.Flags & QueueDrawItemBitFlags.TwoSidedStencilMode) > 0;
+			bool nextTwoSided = (previous.Flags & QueueDrawItemBitFlags.TwoSidedStencilMode) > 0;
 
 			if (nextTwoSided)
 			{
@@ -166,10 +166,10 @@ namespace MonoGame.Graphics.AZDO
 			}
 		}
 
-		private static bool ChangesFoundInDepth(DrawItem previous, DrawItem next)
+		private static bool ChangesFoundInDepth(GLQueueDrawItem previous, GLQueueDrawItem next)
 		{
-			var mask = DrawItemBitFlags.DepthBufferEnabled
-			           | DrawItemBitFlags.DepthBufferWriteEnabled;
+			var mask = QueueDrawItemBitFlags.DepthBufferEnabled
+			           | QueueDrawItemBitFlags.DepthBufferWriteEnabled;
 
 			var pastFlags = mask & previous.Flags;
 			var nextFlags = mask & next.Flags;
@@ -177,10 +177,10 @@ namespace MonoGame.Graphics.AZDO
 			return (pastFlags != nextFlags);
 		}
 
-		private static bool ChangesFoundInStencil (DrawItem previous, DrawItem next)
+		private static bool ChangesFoundInStencil (GLQueueDrawItem previous, GLQueueDrawItem next)
 		{
-			var mask = DrawItemBitFlags.StencilEnabled
-			           | DrawItemBitFlags.TwoSidedStencilMode;
+			var mask = QueueDrawItemBitFlags.StencilEnabled
+			           | QueueDrawItemBitFlags.TwoSidedStencilMode;
 
 			var pastFlags = mask & previous.Flags;
 			var nextFlags = mask & next.Flags;
@@ -188,12 +188,12 @@ namespace MonoGame.Graphics.AZDO
 			return (pastFlags != nextFlags) || (!(previous.StencilValues.Equals(next.StencilValues)));
 		}
 
-		private static bool ChangesFoundInBlend(DrawItem previous, DrawItem next)
+		private static bool ChangesFoundInBlend(GLQueueDrawItem previous, GLQueueDrawItem next)
 		{
-			var mask = DrawItemBitFlags.RedColorWriteChannel
-				| DrawItemBitFlags.GreenColorWriteChannel
-				| DrawItemBitFlags.BlueColorWriteChannel
-				| DrawItemBitFlags.AlphaColorWriteChannel;
+			var mask = QueueDrawItemBitFlags.RedColorWriteChannel
+				| QueueDrawItemBitFlags.GreenColorWriteChannel
+				| QueueDrawItemBitFlags.BlueColorWriteChannel
+				| QueueDrawItemBitFlags.AlphaColorWriteChannel;
 
 					var pastFlags = mask & previous.Flags;
 					var nextFlags = mask & next.Flags;
@@ -209,13 +209,13 @@ namespace MonoGame.Graphics.AZDO
 			mDepth.Initialise ();
 		}
 
-		private static bool ChangesFoundInRasterization(DrawItem previous, DrawItem next)
+		private static bool ChangesFoundInRasterization(GLQueueDrawItem previous, GLQueueDrawItem next)
 		{
-			var mask = DrawItemBitFlags.CullBackFaces
-				| DrawItemBitFlags.CullFrontFaces
-				| DrawItemBitFlags.CullingEnabled
-				| DrawItemBitFlags.ScissorTestEnabled
-				| DrawItemBitFlags.UseCounterClockwiseWindings;
+			var mask = QueueDrawItemBitFlags.CullBackFaces
+				| QueueDrawItemBitFlags.CullFrontFaces
+				| QueueDrawItemBitFlags.CullingEnabled
+				| QueueDrawItemBitFlags.ScissorTestEnabled
+				| QueueDrawItemBitFlags.UseCounterClockwiseWindings;
 
 			var pastFlags = mask & previous.Flags;
 			var nextFlags = mask & next.Flags;
@@ -223,9 +223,9 @@ namespace MonoGame.Graphics.AZDO
 			return (pastFlags != nextFlags) || !(previous.RasterizerValues.Equals (next.RasterizerValues));
 		}
 
-		private void ApplyRasterizationChanges(DrawItem previous, DrawItem next)
+		private void ApplyRasterizationChanges(GLQueueDrawItem previous, GLQueueDrawItem next)
 		{
-			var mask = DrawItemBitFlags.CullingEnabled;
+			var mask = QueueDrawItemBitFlags.CullingEnabled;
 			if ((previous.Flags & mask) != (next.Flags & mask))
 			{
 				if (mRaster.CullingEnabled)
@@ -239,15 +239,15 @@ namespace MonoGame.Graphics.AZDO
 			}
 
 			// culling facing face
-			mask = DrawItemBitFlags.CullFrontFaces | DrawItemBitFlags.CullBackFaces;
+			mask = QueueDrawItemBitFlags.CullFrontFaces | QueueDrawItemBitFlags.CullBackFaces;
 			if ((previous.Flags & mask) != (next.Flags & mask))
 			{
 				mRaster.SetCullingMode (
-					(next.Flags & DrawItemBitFlags.CullFrontFaces) > 0 
-					, (next.Flags & DrawItemBitFlags.CullBackFaces) > 0 );
+					(next.Flags & QueueDrawItemBitFlags.CullFrontFaces) > 0 
+					, (next.Flags & QueueDrawItemBitFlags.CullBackFaces) > 0 );
 			}
 
-			mask = DrawItemBitFlags.ScissorTestEnabled;
+			mask = QueueDrawItemBitFlags.ScissorTestEnabled;
 			if ((previous.Flags & mask) != (next.Flags & mask))
 			{
 				if (mRaster.ScissorTestEnabled)
@@ -260,7 +260,7 @@ namespace MonoGame.Graphics.AZDO
 				}
 			}
 
-			mask = DrawItemBitFlags.UseCounterClockwiseWindings;
+			mask = QueueDrawItemBitFlags.UseCounterClockwiseWindings;
 			var nextMaskValue = (next.Flags & mask);
 			if ((previous.Flags & mask) != nextMaskValue)
 			{
@@ -286,9 +286,9 @@ namespace MonoGame.Graphics.AZDO
 			}
 		}
 
-		private void ApplyDepthChanges (DrawItem previous, DrawItem next)
+		private void ApplyDepthChanges (GLQueueDrawItem previous, GLQueueDrawItem next)
 		{
-			var enabled = (next.Flags & DrawItemBitFlags.DepthBufferEnabled) != 0;
+			var enabled = (next.Flags & QueueDrawItemBitFlags.DepthBufferEnabled) != 0;
 
 			if (mDepth.IsDepthBufferEnabled != enabled)
 			{
@@ -302,8 +302,8 @@ namespace MonoGame.Graphics.AZDO
 				}
 			}
 
-			var oldDepthWrite = (previous.Flags & DrawItemBitFlags.DepthBufferWriteEnabled);
-			var newDepthWrite = (next.Flags & DrawItemBitFlags.DepthBufferWriteEnabled);
+			var oldDepthWrite = (previous.Flags & QueueDrawItemBitFlags.DepthBufferWriteEnabled);
+			var newDepthWrite = (next.Flags & QueueDrawItemBitFlags.DepthBufferWriteEnabled);
 
 			var pastDepth = previous.DepthValues;
 			var nextDepth = next.DepthValues;
@@ -319,7 +319,7 @@ namespace MonoGame.Graphics.AZDO
 			}
 		}
 
-		public void Render(DrawItem[] items)
+		public void Render(GLQueueDrawItem[] items)
 		{
 			var pastState = mPreviousItem;
 			foreach (var nextState in items)
@@ -352,7 +352,7 @@ namespace MonoGame.Graphics.AZDO
 			}
 		}
 
-		public void CheckProgram(DrawItem nextState)
+		public void CheckProgram(GLQueueDrawItem nextState)
 		{
 			// bind program
 			if (mCache.ProgramIndex != nextState.ProgramIndex)

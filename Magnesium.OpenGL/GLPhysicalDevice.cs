@@ -1,9 +1,61 @@
 using System;
+using OpenTK.Graphics.OpenGL;
 
 namespace Magnesium.OpenGL
 {
+	public enum GLMemoryBufferType : int 
+	{
+		SSBO = 0,
+		INDIRECT,
+		VERTEX, 
+		INDEX,
+	}
+
+	public static class GLMemoryBufferExtensions 
+	{
+		public static BufferTarget GetBufferTarget(this GLMemoryBufferType bufferType)
+		{
+			switch(bufferType)
+			{
+			case GLMemoryBufferType.SSBO:
+				return BufferTarget.ShaderStorageBuffer;
+			case GLMemoryBufferType.INDEX:
+				return BufferTarget.ElementArrayBuffer;
+			case GLMemoryBufferType.VERTEX:
+				return BufferTarget.ArrayBuffer;
+			case GLMemoryBufferType.INDIRECT:
+				return BufferTarget.DrawIndirectBuffer;
+			default:
+				throw new NotSupportedException ();
+			}
+		}
+
+		public static uint GetMask(this GLMemoryBufferType bufferType)
+		{
+			switch(bufferType)
+			{
+			case GLMemoryBufferType.SSBO:
+				return 1 << 0;
+			case GLMemoryBufferType.INDIRECT:
+				return 1 << 1;
+			case GLMemoryBufferType.VERTEX:
+				return 1 << 2;
+			case GLMemoryBufferType.INDEX:
+				return 1 << 3;
+			default:
+				throw new NotSupportedException ();
+			}
+		}
+	}
+
 	public class GLPhysicalDevice : IMgPhysicalDevice
 	{
+		private readonly IGLQueueRenderer mRenderer;
+		public GLPhysicalDevice (IGLQueueRenderer renderer)
+		{
+			mRenderer = renderer;
+		}
+
 		#region IMgPhysicalDevice implementation
 		public void GetPhysicalDeviceProperties (out MgPhysicalDeviceProperties pProperties)
 		{
@@ -15,7 +67,25 @@ namespace Magnesium.OpenGL
 		}
 		public void GetPhysicalDeviceMemoryProperties (out MgPhysicalDeviceMemoryProperties pMemoryProperties)
 		{
-			throw new NotImplementedException ();
+			// TODO : overwrite here to shift memory based on which type
+			// 0 : buffer based 
+			// 1 : host defined (for INDIRECT)
+			pMemoryProperties = new MgPhysicalDeviceMemoryProperties();
+			var slots = new MgMemoryType[2];
+
+			const MgMemoryPropertyFlagBits allOn = 
+				MgMemoryPropertyFlagBits.DEVICE_LOCAL_BIT |
+				MgMemoryPropertyFlagBits.HOST_CACHED_BIT | 
+				MgMemoryPropertyFlagBits.HOST_COHERENT_BIT | 
+				MgMemoryPropertyFlagBits.LAZILY_ALLOCATED_BIT | 
+				MgMemoryPropertyFlagBits.HOST_VISIBLE_BIT;
+
+			slots [(int) GLMemoryBufferType.SSBO] = new MgMemoryType{ PropertyFlags = allOn};
+			slots [(int) GLMemoryBufferType.INDIRECT] = new MgMemoryType{ PropertyFlags = allOn };
+			slots [(int) GLMemoryBufferType.VERTEX] = new MgMemoryType{ PropertyFlags = allOn };
+			slots [(int) GLMemoryBufferType.INDEX] = new MgMemoryType{ PropertyFlags = allOn };
+
+			pMemoryProperties.MemoryTypes = slots;
 		}
 		public void GetPhysicalDeviceFeatures (out MgPhysicalDeviceFeatures pFeatures)
 		{
@@ -31,7 +101,7 @@ namespace Magnesium.OpenGL
 		}
 		public Result CreateDevice (MgDeviceCreateInfo pCreateInfo, MgAllocationCallbacks allocator, out IMgDevice pDevice)
 		{
-			pDevice = new GLDevice ();
+			pDevice = new GLDevice (mRenderer);
 			return Result.SUCCESS;
 		}
 		public Result EnumerateDeviceLayerProperties (out MgLayerProperties[] pProperties)

@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using OpenTK.Graphics.OpenGL;
 using System.IO;
-using System.Collections.Concurrent;
 
 namespace Magnesium.OpenGL
 {
@@ -11,36 +10,48 @@ namespace Magnesium.OpenGL
 		#region IMgDevice implementation
 		public PFN_vkVoidFunction GetDeviceProcAddr (string pName)
 		{
-			throw new NotImplementedException ();
+			throw new NotImplementedException ();		
 		}
+
 		public void DestroyDevice (MgAllocationCallbacks allocator)
 		{
-			throw new NotImplementedException ();
+
 		}
+
+		public GLDevice (IGLQueueRenderer renderer)
+		{
+			mQueues = new GLQueue[1];
+			mQueues [0] = new GLQueue (renderer);
+		}
+
+		private GLQueue[] mQueues;
 		public void GetDeviceQueue (uint queueFamilyIndex, uint queueIndex, out IMgQueue pQueue)
 		{
-			throw new NotImplementedException ();
+			pQueue = mQueues [0];
 		}
+
 		public Result DeviceWaitIdle ()
 		{
-			throw new NotImplementedException ();
+			return Result.SUCCESS;
 		}
-		public Result AllocateMemory (MgMemoryAllocateInfo pAllocateInfo, MgAllocationCallbacks allocator, out MgDeviceMemory pMemory)
+
+		public Result AllocateMemory (MgMemoryAllocateInfo pAllocateInfo, MgAllocationCallbacks allocator, out IMgDeviceMemory pMemory)
 		{
-			throw new NotImplementedException ();
+			pMemory = new GLDeviceMemory (pAllocateInfo);
+			return Result.SUCCESS;
 		}
-		public void FreeMemory (MgDeviceMemory memory, MgAllocationCallbacks allocator)
-		{
-			throw new NotImplementedException ();
-		}
-		public Result MapMemory (MgDeviceMemory memory, ulong offset, ulong size, uint flags, out IntPtr ppData)
-		{
-			throw new NotImplementedException ();
-		}
-		public void UnmapMemory (MgDeviceMemory memory)
-		{
-			throw new NotImplementedException ();
-		}
+//		public void FreeMemory (IMgDeviceMemory memory, MgAllocationCallbacks allocator)
+//		{
+//			throw new NotImplementedException ();
+//		}
+//		public Result MapMemory (IMgDeviceMemory memory, ulong offset, ulong size, uint flags, out IntPtr ppData)
+//		{
+//			throw new NotImplementedException ();
+//		}
+//		public void UnmapMemory (IMgDeviceMemory memory)
+//		{
+//			throw new NotImplementedException ();
+//		}
 		public Result FlushMappedMemoryRanges (MgMappedMemoryRange[] pMemoryRanges)
 		{
 			throw new NotImplementedException ();
@@ -49,23 +60,27 @@ namespace Magnesium.OpenGL
 		{
 			throw new NotImplementedException ();
 		}
-		public void GetDeviceMemoryCommitment (MgDeviceMemory memory, ref ulong pCommittedMemoryInBytes)
+		public void GetDeviceMemoryCommitment (IMgDeviceMemory memory, ref ulong pCommittedMemoryInBytes)
 		{
 			throw new NotImplementedException ();
 		}
-		public void GetBufferMemoryRequirements (MgBuffer buffer, out MgMemoryRequirements pMemoryRequirements)
+		public void GetBufferMemoryRequirements (IMgBuffer buffer, out MgMemoryRequirements pMemoryRequirements)
 		{
-			throw new NotImplementedException ();
+			var internalBuffer = buffer as GLIndirectBuffer;
+			if (internalBuffer == null)
+			{
+				throw new ArgumentException ("buffer");
+			}
+
+			pMemoryRequirements = new MgMemoryRequirements ();
+			pMemoryRequirements.MemoryTypeBits = internalBuffer.MemoryBufferType.GetMask();
 		}
-		public Result BindBufferMemory (MgBuffer buffer, MgDeviceMemory memory, ulong memoryOffset)
-		{
-			throw new NotImplementedException ();
-		}
+
 		public void GetImageMemoryRequirements (IMgImage image, out MgMemoryRequirements memoryRequirements)
 		{
 			throw new NotImplementedException ();
 		}
-		public Result BindImageMemory (IMgImage image, MgDeviceMemory memory, ulong memoryOffset)
+		public Result BindImageMemory (IMgImage image, IMgDeviceMemory memory, ulong memoryOffset)
 		{
 			throw new NotImplementedException ();
 		}
@@ -93,11 +108,11 @@ namespace Magnesium.OpenGL
 		{
 			throw new NotImplementedException ();
 		}
-		public Result CreateSemaphore (MgSemaphoreCreateInfo pCreateInfo, MgAllocationCallbacks allocator, out MgSemaphore pSemaphore)
+		public Result CreateSemaphore (MgSemaphoreCreateInfo pCreateInfo, MgAllocationCallbacks allocator, out IMgSemaphore pSemaphore)
 		{
 			throw new NotImplementedException ();
 		}
-		public void DestroySemaphore (MgSemaphore semaphore, MgAllocationCallbacks allocator)
+		public void DestroySemaphore (IMgSemaphore semaphore, MgAllocationCallbacks allocator)
 		{
 			throw new NotImplementedException ();
 		}
@@ -133,14 +148,15 @@ namespace Magnesium.OpenGL
 		{
 			throw new NotImplementedException ();
 		}
-		public Result CreateBuffer (MgBufferCreateInfo pCreateInfo, MgAllocationCallbacks allocator, out MgBuffer pBuffer)
+		public Result CreateBuffer (MgBufferCreateInfo pCreateInfo, MgAllocationCallbacks allocator, out IMgBuffer pBuffer)
 		{
-			throw new NotImplementedException ();
+			pBuffer = new GLIndirectBuffer (pCreateInfo);
+			return Result.SUCCESS;
 		}
-		public void DestroyBuffer (MgBuffer buffer, MgAllocationCallbacks allocator)
-		{
-			throw new NotImplementedException ();
-		}
+//		public void DestroyBuffer (IMgBuffer buffer, MgAllocationCallbacks allocator)
+//		{
+//			throw new NotImplementedException ();
+//		}
 		public Result CreateBufferView (MgBufferViewCreateInfo pCreateInfo, MgAllocationCallbacks allocator, out MgBufferView pView)
 		{
 			throw new NotImplementedException ();
@@ -798,8 +814,7 @@ namespace Magnesium.OpenGL
 
 		public Result CreateDescriptorPool (MgDescriptorPoolCreateInfo pCreateInfo, MgAllocationCallbacks allocator, out IMgDescriptorPool pDescriptorPool)
 		{
-			var pool = new GLDescriptorPool ((int) pCreateInfo.MaxSets);
-			pDescriptorPool = pool;
+			pDescriptorPool = new GLDescriptorPool ((int) pCreateInfo.MaxSets);
 			return Result.SUCCESS;
 		}
 
@@ -986,7 +1001,7 @@ namespace Magnesium.OpenGL
 		{
 			throw new NotImplementedException ();
 		}
-		public Result AcquireNextImageKHR (MgSwapchainKHR swapchain, ulong timeout, MgSemaphore semaphore, MgFence fence, out uint pImageIndex)
+		public Result AcquireNextImageKHR (MgSwapchainKHR swapchain, ulong timeout, IMgSemaphore semaphore, MgFence fence, out uint pImageIndex)
 		{
 			throw new NotImplementedException ();
 		}

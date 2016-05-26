@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MonoGame.Graphics.AZDO
+namespace Magnesium.OpenGL
 {
 	public interface IDepthCapabilities
 	{
@@ -10,7 +10,7 @@ namespace MonoGame.Graphics.AZDO
 		void EnableDepthBuffer();
 		void DisableDepthBuffer();
 
-		void SetDepthBufferFunc(CompareFunction func);
+		void SetDepthBufferFunc(MgCompareOp func);
 		void SetDepthMask (bool isMaskOn);
 
 		void SetClipControl(bool usingLowerLeftCorner, bool zeroToOneRange);

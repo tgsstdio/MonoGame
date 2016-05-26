@@ -23,19 +23,19 @@ namespace MonoGame.Graphics
 
 		#region ITexturePlatform implementation
 
-		public void GraphicsDeviceResetting (MgImage image, IMgImageView view, IMgSampler sampler, MgDeviceMemory deviceMemory)
+		public void GraphicsDeviceResetting (IMgImage image, IMgImageView view, IMgSampler sampler, IMgDeviceMemory deviceMemory)
 		{
 			DeleteGLTexture (image, view, sampler, deviceMemory);
 		}
 
 		#endregion
 
-		private void DeleteGLTexture(MgImage image, IMgImageView view, IMgSampler sampler, MgDeviceMemory deviceMemory)
+		private void DeleteGLTexture(IMgImage image, IMgImageView view, IMgSampler sampler, IMgDeviceMemory deviceMemory)
         {			
-			mDevice.DestroyImageView(view, mCallbacks);
-			mDevice.DestroyImage(image, mCallbacks);
-			mDevice.DestroySampler (sampler, mCallbacks); 
-			mDevice.FreeMemory (deviceMemory, mCallbacks);
+			view.DestroyImageView(mDevice, mCallbacks);
+			image.DestroyImage(mDevice, mCallbacks);
+			sampler.DestroySampler(mDevice, mCallbacks); 
+			deviceMemory.FreeMemory(mDevice, mCallbacks);
         }
     }
 }

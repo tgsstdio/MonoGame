@@ -5,193 +5,22 @@ namespace Magnesium.OpenGL
 {
 	public class GLCommandBuffer : IMgCommandBuffer
 	{
-		public class GLDrawCommand
-		{
-			public GLRenderPassCommand RenderPass { get; set; }
-		}
-
-		public class GLViewportParameter
-		{
-			public int first;
-			public int count;
-			public float[] values;
-		}
-
-		public class GLDescriptorSetParameter
-		{
-			public uint[] dynamicOffsets {
-				get;
-				set;
-			}
-
-			public uint firstSet {
-				get;
-				set;
-			}
-
-			public MgPipelineBindPoint bindpoint {
-				get;
-				set;
-			}
-		}
-
-		public class GLScissorParameter
-		{
-			public uint count {
-				get;
-				set;
-			}
-
-			public uint index;
-			// MULTIPLES OF 4
-			public float[] values;
-		}
-
-		public class GLDrawRepository
-		{
-			public GLDrawRepository ()
-			{
-				GraphicsPipelines = new List<GLGraphicsPipeline>();
-				Viewports = new List<GLViewportParameter>();
-				DescriptorSets = new List<GLDescriptorSetParameter>();
-			}
-
-			public List<GLGraphicsPipeline> GraphicsPipelines { get; private set; }
-			public List<GLViewportParameter> Viewports { get; private set; }
-			public List<GLDescriptorSetParameter> DescriptorSets { get; private set; }
-			public List<GLScissorParameter> Scissors {get; private set;}
-
-			public void Clear ()
-			{
-				GraphicsPipelines.Clear ();
-				Viewports.Clear ();
-				DescriptorSets.Clear ();
-				Scissors.Clear ();
-
-				// clear nullable fields
-				Reference = null;
-				ReferenceFace = null;
-				WriteFace = null;
-				WriteMask = null;
-				CompareMask = null;
-				CompareFace = null;
-				MinDepthBounds = null;
-				MaxDepthBounds = null;
-				DepthBiasConstantFactor = null;
-				DepthBiasClamp = null;
-				LineWidth = null;
-			}
-
-			#region Nullable fields 
-
-			public uint? Reference {
-				get;
-				set;
-			}
-
-			public MgStencilFaceFlagBits? ReferenceFace {
-				get;
-				set;
-			}
-
-			public MgStencilFaceFlagBits? WriteFace {
-				get;
-				set;
-			}
-
-			public uint? WriteMask {
-				get;
-				set;
-			}
-
-			public uint? CompareMask {
-				get;
-				set;
-			}
-
-			public MgStencilFaceFlagBits? CompareFace {
-				get;
-				set;
-			}
-
-			public float? MinDepthBounds {
-				get;
-				set;
-			}
-
-			public float? MaxDepthBounds {
-				get;
-				set;
-			}
-
-			public float? DepthBiasConstantFactor {
-				get;
-				set;
-			}
-
-			public float? DepthBiasClamp {
-				get;
-				set;
-			}
-
-			public float DepthBiasSlopeFactor {
-				get;
-				set;
-			}
-
-			public float? LineWidth {
-				get;
-				set;
-			}
-
-			#endregion
-		}
-
-		public class GLComputeCommand
-		{
-			public IMgPipeline Pipeline {
-				get;
-				set;
-			}
-		}
-
-		public class GLRenderPassCommand
-		{
-			public MgSubpassContents Contents {
-				get;
-				set;
-			}
-
-			public MgClearValue[] ClearValues {
-				get;
-				set;
-			}
-
-			public MgRenderPass Origin {
-				get;
-				set;
-			}
-
-			public GLDrawCommand[] DrawCommands;
-			public GLComputeCommand[] ComputeCommands;
-		}
-
 		private bool mIsRecording;
 		private bool mIsExecutable;
 		private bool mResetOnBegin;
 
-		private GLDrawCommand mIncompleteDrawCommand;
-		private GLComputeCommand mIncompleteComputeCommand;
-		private GLRenderPassCommand mIncompleteRenderPass;
-		private List<GLRenderPassCommand> mRenderPasses = new List<GLRenderPassCommand>();
+		private GLCmdComputeCommand mIncompleteComputeCommand;
+		private GLCmdRenderPassCommand mIncompleteRenderPass;
+		private List<GLCmdRenderPassCommand> mRenderPasses = new List<GLCmdRenderPassCommand>();
+		private List<GLCmdDrawCommand> mIncompleteDraws = new List<GLCmdDrawCommand>();
 
-		private GLDrawRepository mRepository;
+		private GLCmdBufferRepository mRepository;
 		public GLCommandBuffer (bool resetOnBegin)
 		{
 			mIsRecording = false;
 			mIsExecutable = false;
 			mResetOnBegin = resetOnBegin;
-			mRepository = new GLDrawRepository();
+			mRepository = new GLCmdBufferRepository();
 		}
 
 		#region IMgCommandBuffer implementation
@@ -200,12 +29,7 @@ namespace Magnesium.OpenGL
 		{
 			if (mResetOnBegin)
 			{
-				mIncompleteRenderPass = null;
-				mIncompleteDrawCommand = null;
-				mIncompleteComputeCommand = null;
-				mRepository.Clear ();
-
-				mRenderPasses.Clear ();
+				ResetAllData ();
 			}
 
 			mIsRecording = true;
@@ -217,12 +41,25 @@ namespace Magnesium.OpenGL
 		{
 			mIsRecording = false;
 			mIsExecutable = true;
+
+			// Generate commands here
+
 			return Result.SUCCESS;
+		}
+
+		void ResetAllData ()
+		{
+			mIncompleteRenderPass = null;
+			mIncompleteComputeCommand = null;
+			mRepository.Clear ();
+			mRenderPasses.Clear ();
+			mIncompleteDraws.Clear ();
 		}
 
 		public Result ResetCommandBuffer (MgCommandBufferResetFlagBits flags)
 		{
-			throw new NotImplementedException ();
+			ResetAllData ();
+			return Result.SUCCESS;
 		}
 
 		public void CmdBindPipeline (MgPipelineBindPoint pipelineBindPoint, IMgPipeline pipeline)
@@ -239,7 +76,7 @@ namespace Magnesium.OpenGL
 
 		public void CmdSetViewport (uint firstViewport, uint viewportCount, MgViewport[] pViewports)
 		{
-			var param = new GLViewportParameter ();
+			var param = new GLCmdViewportParameter ();
 
 			param.first = (int)firstViewport;
 			param.values = new float[4 * viewportCount];
@@ -257,7 +94,7 @@ namespace Magnesium.OpenGL
 
 		public void CmdSetScissor (uint firstScissor, uint scissorCount, MgRect2D[] pScissors)
 		{
-			var param = new GLScissorParameter ();
+			var param = new GLCmdScissorParameter ();
 
 			param.index = firstScissor;
 			param.count = scissorCount;
@@ -288,7 +125,7 @@ namespace Magnesium.OpenGL
 
 		public void CmdSetBlendConstants (float[] blendConstants)
 		{
-			throw new NotImplementedException ();
+			mRepository.BlendConstants = blendConstants;
 		}
 
 		public void CmdSetDepthBounds (float minDepthBounds, float maxDepthBounds)
@@ -323,41 +160,146 @@ namespace Magnesium.OpenGL
 			MgDescriptorSet[] pDescriptorSets,
 			uint[] pDynamicOffsets)
 		{
-			var parameter = new GLDescriptorSetParameter ();
+			var parameter = new GLCmdDescriptorSetParameter ();		
 			parameter.bindpoint = pipelineBindPoint;
 			parameter.firstSet = firstSet;
 			parameter.dynamicOffsets = pDynamicOffsets;
 			mRepository.DescriptorSets.Add (parameter);
 		}
 
-		public void CmdBindIndexBuffer (MgBuffer buffer, ulong offset, MgIndexType indexType)
+		public void CmdBindIndexBuffer (IMgBuffer buffer, ulong offset, MgIndexType indexType)
 		{
-			throw new NotImplementedException ();
+			var param = new GLCmdIndexBufferParameter ();
+			param.buffer = buffer;
+			param.offset = offset;
+			param.indexType = indexType;
+			mRepository.IndexBuffers.Add (param);
 		}
 
-		public void CmdBindVertexBuffers (uint firstBinding, uint bindingCount, MgBuffer[] pBuffers, ulong[] pOffsets)
+		public void CmdBindVertexBuffers (uint firstBinding, uint bindingCount, IMgBuffer[] pBuffers, ulong[] pOffsets)
 		{
-			throw new NotImplementedException ();
+			var param = new GLCmdVertexBufferParameter ();
+			param.firstBinding = firstBinding;
+			param.bindingCount = bindingCount;
+			param.pBuffers = pBuffers;
+			param.pOffsets = pOffsets;
+			mRepository.VertexBuffers.Add (param);
 		}
 
 		public void CmdDraw (uint vertexCount, uint instanceCount, uint firstVertex, uint firstInstance)
 		{
+			//void glDrawArraysInstancedBaseInstance(GLenum mode​, GLint first​, GLsizei count​, GLsizei primcount​, GLuint baseinstance​);
 			//mDrawCommands.Add (mIncompleteDrawCommand);
+			// first => firstVertex
+			// count => vertexCount
+			// primcount => instanceCount Specifies the number of instances of the indexed geometry that should be drawn.
+			// baseinstance => firstInstance Specifies the base instance for use in fetching instanced vertex attributes.
+
+			var command = new GLCmdDrawCommand ();
+			command.CommandType = GLCmdDrawCommand.DrawType.Draw;
+			command.vertexCount = vertexCount;
+			command.instanceCount = instanceCount;
+			command.firstVertex = firstVertex;
+			command.firstInstance = firstInstance;
+
+			mRepository.MapRepositoryFields (ref command);
+
+			mIncompleteDraws.Add (command);
 		}
 
 		public void CmdDrawIndexed (uint indexCount, uint instanceCount, uint firstIndex, int vertexOffset, uint firstInstance)
 		{
+			// void glDrawElementsInstancedBaseVertex(GLenum mode​, GLsizei count​, GLenum type​, GLvoid *indices​, GLsizei primcount​, GLint basevertex​);
+			// count => indexCount Specifies the number of elements to be rendered. (divide by elements)
+			// indices => firstIndex Specifies a byte offset (cast to a pointer type) (multiple by data size)
+			// primcount => instanceCount Specifies the number of instances of the indexed geometry that should be drawn.
+			// basevertex => vertexOffset Specifies a constant that should be added to each element of indices​ when chosing elements from the enabled vertex arrays.
+				// TODO : need to handle negetive offset
 			//mDrawCommands.Add (mIncompleteDrawCommand);
+
+			var command = new GLCmdDrawCommand ();
+			command.CommandType = GLCmdDrawCommand.DrawType.DrawIndexed;
+			command.indexCount = indexCount;
+			command.instanceCount = instanceCount;
+			command.firstIndex = firstIndex;
+			command.vertexOffset = vertexOffset;
+			command.firstInstance = firstInstance;
+
+			mRepository.MapRepositoryFields (ref command);
+
+			mIncompleteDraws.Add (command);
 		}
 
-		public void CmdDrawIndirect (MgBuffer buffer, ulong offset, uint drawCount, uint stride)
+		public void CmdDrawIndirect (IMgBuffer buffer, ulong offset, uint drawCount, uint stride)
 		{
+			// ARB_multi_draw_indirect
+//			typedef struct VkDrawIndirectCommand {
+//				uint32_t    vertexCount;
+//				uint32_t    instanceCount; 
+//				uint32_t    firstVertex; 
+//				uint32_t    firstInstance;
+//			} VkDrawIndirectCommand;
+			// glMultiDrawArraysIndirect 
+			//void glMultiDrawArraysIndirect(GLenum mode​, const void *indirect​, GLsizei drawcount​, GLsizei stride​);
+			// indirect => buffer + offset IntPtr
+			// drawCount => drawCount
+			// stride => stride
+//			typedef  struct {
+//				uint  count;
+//				uint  instanceCount;
+//				uint  first;
+//				uint  baseInstance;
+//			} DrawArraysIndirectCommand;
 			//mDrawCommands.Add (mIncompleteDrawCommand);
+
+			var command = new GLCmdDrawCommand ();
+			command.CommandType = GLCmdDrawCommand.DrawType.DrawIndirect;
+			command.offset = offset;
+			command.drawCount = drawCount;
+			command.stride = stride;
+
+			mRepository.MapRepositoryFields (ref command);
+
+			mIncompleteDraws.Add (command);
 		}
 
-		public void CmdDrawIndexedIndirect (MgBuffer buffer, ulong offset, uint drawCount, uint stride)
+		public void CmdDrawIndexedIndirect (IMgBuffer buffer, ulong offset, uint drawCount, uint stride)
 		{
+//			typedef struct VkDrawIndexedIndirectCommand {
+//				uint32_t    indexCount;
+//				uint32_t    instanceCount;
+//				uint32_t    firstIndex;
+//				int32_t     vertexOffset;
+//				uint32_t    firstInstance;
+//			} VkDrawIndexedIndirectCommand;
+			// void glMultiDrawElementsIndirect(GLenum mode​, GLenum type​, const void *indirect​, GLsizei drawcount​, GLsizei stride​);
+			// indirect  => buffer + offset (IntPtr)
+			// drawcount => drawcount
+			// stride => stride
+//			glDrawElementsInstancedBaseVertexBaseInstance(mode,
+//				cmd->count,
+//				type,
+//				cmd->firstIndex * size-of-type,
+//				cmd->instanceCount,
+//				cmd->baseVertex,
+//				cmd->baseInstance);
+//			typedef  struct {
+//				uint  count;
+//				uint  instanceCount;
+//				uint  firstIndex;
+//				uint  baseVertex; // TODO: negetive index
+//				uint  baseInstance;
+//			} DrawElementsIndirectCommand;
 			//mDrawCommands.Add (mIncompleteDrawCommand);
+			var command = new GLCmdDrawCommand ();
+			command.CommandType = GLCmdDrawCommand.DrawType.DrawIndexedIndirect;
+			command.offset = offset;
+			command.drawCount = drawCount;
+			command.stride = stride;
+
+			mRepository.MapRepositoryFields (ref command);
+
+			mIncompleteDraws.Add (command);
 		}
 
 		public void CmdDispatch (uint x, uint y, uint z)
@@ -365,12 +307,12 @@ namespace Magnesium.OpenGL
 			throw new NotImplementedException ();
 		}
 
-		public void CmdDispatchIndirect (MgBuffer buffer, ulong offset)
+		public void CmdDispatchIndirect (IMgBuffer buffer, ulong offset)
 		{
 			throw new NotImplementedException ();
 		}
 
-		public void CmdCopyBuffer (MgBuffer srcBuffer, MgBuffer dstBuffer, MgBufferCopy[] pRegions)
+		public void CmdCopyBuffer (IMgBuffer srcBuffer, IMgBuffer dstBuffer, MgBufferCopy[] pRegions)
 		{
 			throw new NotImplementedException ();
 		}
@@ -385,22 +327,22 @@ namespace Magnesium.OpenGL
 			throw new NotImplementedException ();
 		}
 
-		public void CmdCopyBufferToImage (MgBuffer srcBuffer, IMgImage dstImage, MgImageLayout dstImageLayout, MgBufferImageCopy[] pRegions)
+		public void CmdCopyBufferToImage (IMgBuffer srcBuffer, IMgImage dstImage, MgImageLayout dstImageLayout, MgBufferImageCopy[] pRegions)
 		{
 			throw new NotImplementedException ();
 		}
 
-		public void CmdCopyImageToBuffer (IMgImage srcImage, MgImageLayout srcImageLayout, MgBuffer dstBuffer, MgBufferImageCopy[] pRegions)
+		public void CmdCopyImageToBuffer (IMgImage srcImage, MgImageLayout srcImageLayout, IMgBuffer dstBuffer, MgBufferImageCopy[] pRegions)
 		{
 			throw new NotImplementedException ();
 		}
 
-		public void CmdUpdateBuffer (MgBuffer dstBuffer, ulong dstOffset, UIntPtr dataSize, IntPtr pData)
+		public void CmdUpdateBuffer (IMgBuffer dstBuffer, ulong dstOffset, UIntPtr dataSize, IntPtr pData)
 		{
 			throw new NotImplementedException ();
 		}
 
-		public void CmdFillBuffer (MgBuffer dstBuffer, ulong dstOffset, ulong size, uint data)
+		public void CmdFillBuffer (IMgBuffer dstBuffer, ulong dstOffset, ulong size, uint data)
 		{
 			throw new NotImplementedException ();
 		}
@@ -465,7 +407,7 @@ namespace Magnesium.OpenGL
 			throw new NotImplementedException ();
 		}
 
-		public void CmdCopyQueryPoolResults (MgQueryPool queryPool, uint firstQuery, uint queryCount, MgBuffer dstBuffer, ulong dstOffset, ulong stride, MgQueryResultFlagBits flags)
+		public void CmdCopyQueryPoolResults (MgQueryPool queryPool, uint firstQuery, uint queryCount, IMgBuffer dstBuffer, ulong dstOffset, ulong stride, MgQueryResultFlagBits flags)
 		{
 			throw new NotImplementedException ();
 		}
@@ -477,7 +419,7 @@ namespace Magnesium.OpenGL
 
 		public void CmdBeginRenderPass (MgRenderPassBeginInfo pRenderPassBegin, MgSubpassContents contents)
 		{
-			mIncompleteRenderPass = new GLRenderPassCommand ();
+			mIncompleteRenderPass = new GLCmdRenderPassCommand ();
 			mIncompleteRenderPass.Origin = pRenderPassBegin.RenderPass;
 			mIncompleteRenderPass.ClearValues = pRenderPassBegin.ClearValues;
 			mIncompleteRenderPass.Contents = contents;

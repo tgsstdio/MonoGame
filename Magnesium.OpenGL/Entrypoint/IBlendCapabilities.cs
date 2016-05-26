@@ -1,6 +1,6 @@
 ﻿using Magnesium;
 
-namespace MonoGame.Graphics.AZDO
+namespace Magnesium.OpenGL
 {
 	public interface IBlendCapabilities
 	{	
@@ -10,7 +10,7 @@ namespace MonoGame.Graphics.AZDO
 
 		void EnableBlending (bool value);
 
-		void SetColorMask (DrawItemBitFlags colorMask);
+		void SetColorMask (QueueDrawItemBitFlags colorMask);
 
 		void ApplyBlendSeparateFunction (
 			MgBlendFactor colorSource,

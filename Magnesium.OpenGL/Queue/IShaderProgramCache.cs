@@ -1,4 +1,4 @@
-namespace MonoGame.Graphics.AZDO
+namespace Magnesium.OpenGL
 {
 	public interface IShaderProgramCache
 	{

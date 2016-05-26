@@ -1,6 +1,6 @@
 using System;
 
-namespace MonoGame.Graphics.AZDO
+namespace Magnesium.OpenGL
 {
 	public interface IShaderProgram : IDisposable
 	{

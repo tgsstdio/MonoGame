@@ -1,7 +1,7 @@
 ﻿using OpenTK.Graphics.OpenGL;
 using Magnesium;
 
-namespace MonoGame.Graphics.AZDO
+namespace Magnesium.OpenGL
 {
 	public class FullBlendingCapabilities : IBlendCapabilities
 	{
@@ -67,13 +67,13 @@ namespace MonoGame.Graphics.AZDO
 			mIsEnabled = blendEnabled;
 		}
 
-		public void SetColorMask (DrawItemBitFlags colorMask)
+		public void SetColorMask (QueueDrawItemBitFlags colorMask)
 		{
 			GL.ColorMask (
-				(colorMask & DrawItemBitFlags.RedColorWriteChannel) != 0,
-				(colorMask & DrawItemBitFlags.GreenColorWriteChannel) != 0,
-				(colorMask & DrawItemBitFlags.BlueColorWriteChannel) != 0,
-				(colorMask & DrawItemBitFlags.AlphaColorWriteChannel) != 0);
+				(colorMask & QueueDrawItemBitFlags.RedColorWriteChannel) != 0,
+				(colorMask & QueueDrawItemBitFlags.GreenColorWriteChannel) != 0,
+				(colorMask & QueueDrawItemBitFlags.BlueColorWriteChannel) != 0,
+				(colorMask & QueueDrawItemBitFlags.AlphaColorWriteChannel) != 0);
 		}
 
 		private BlendingFactorSrc GetBlendFactorSrc (MgBlendFactor blend)

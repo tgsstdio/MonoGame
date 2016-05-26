@@ -1,18 +1,18 @@
 ﻿using System;
 using OpenTK.Graphics.OpenGL;
 
-namespace MonoGame.Graphics.AZDO
+namespace Magnesium.OpenGL
 {
 	/// <summary>
 	/// Graphic implementation of sync object.
 	/// </summary>
-	public class FullSyncObject : ISyncObject, IDisposable
+	public class GLQueueSemaphore : IMgSemaphore, ISyncObject
 	{
 		public int Index {get;set;}
 		public IntPtr ObjectPtr {get;set;}
 		public float Timeout {get;set;}
 
-		public FullSyncObject ()
+		public GLQueueSemaphore ()
 		{
 			TotalBlockingWaits = 0;
 			ObjectPtr = IntPtr.Zero;
@@ -28,10 +28,12 @@ namespace MonoGame.Graphics.AZDO
 			}
 		}
 
+		private uint mNonblockCount;
 		public void BeginSync()
 		{
 			ObjectPtr = GL.FenceSync (SyncCondition.SyncGpuCommandsComplete, 0);
 			IsWaiting = true;
+			mNonblockCount = 0;
 		}
 
 		private bool NonBlockingWait ()
@@ -66,20 +68,21 @@ namespace MonoGame.Graphics.AZDO
 				}
 				++times;
 			}
-			while (times < NoOfRetries);
+			while (times < BlockingRetries);
 
 			++TotalFailures;
 			// still waiting
 			return true;
 		}
 
-		#region IDisposable implementation
+		#region IMgSemaphore implementation
 
-		public void Dispose ()
+		public void DestroySemaphore (IMgDevice device, MgAllocationCallbacks allocator)
 		{
 			if (ObjectPtr != IntPtr.Zero)
 			{
 				GL.DeleteSync (ObjectPtr);
+				ObjectPtr = IntPtr.Zero;
 			}
 		}
 
@@ -92,7 +95,7 @@ namespace MonoGame.Graphics.AZDO
 			private set;
 		}
 
-		public int NoOfRetries {
+		public uint BlockingRetries {
 			get;
 			set;
 		}
@@ -103,13 +106,18 @@ namespace MonoGame.Graphics.AZDO
 			{
 				bool needBlocking = NonBlockingWait ();
 
-				IsWaiting = needBlocking && BlockingWait ();
+				if (mNonblockCount >= NonBlockingRetries)
+				{
+					IsWaiting = needBlocking && BlockingWait ();
+				}
+				else
+				{
+					++mNonblockCount;
+				}
 			}
 
 			return !(IsWaiting);
 		}
-
-
 
 		public long Duration {
 			get;
@@ -126,6 +134,11 @@ namespace MonoGame.Graphics.AZDO
 			private set;
 		}
 
+
+		public uint NonBlockingRetries {
+			get;
+			set;
+		}
 		#endregion
 	}
 }

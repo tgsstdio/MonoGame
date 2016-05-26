@@ -4,11 +4,14 @@ namespace Magnesium.OpenGL
 {
 	public class GLInstance : IMgInstance
 	{
-		private GLPhysicalDevice[] mPhysicalDevices = new GLPhysicalDevice[1];
-		public GLInstance ()
+		private readonly IGLQueueRenderer mRenderer;
+		public GLInstance (IGLQueueRenderer renderer)
 		{
-			
+			mPhysicalDevices = new GLPhysicalDevice[1];
+			mPhysicalDevices[0] = new GLPhysicalDevice(mRenderer);
 		}
+
+		private GLPhysicalDevice[] mPhysicalDevices;
 
 		#region IMgInstance implementation
 		public void DestroyInstance (MgAllocationCallbacks allocator)

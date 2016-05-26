@@ -1,13 +1,12 @@
 ﻿using System;
 
-namespace MonoGame.Graphics.AZDO
+namespace Magnesium.OpenGL
 {
 	public abstract class FullShaderProgram : IShaderProgram
 	{
-		private ShaderProgram mProgram;
-		protected FullShaderProgram (ShaderProgram program)
+		protected FullShaderProgram ()
 		{
-			mProgram = program;
+			
 		}
 
 		public abstract void SetUniformIndex (byte index);

@@ -1,6 +1,6 @@
 ﻿using Magnesium;
 
-namespace MonoGame.Graphics.AZDO
+namespace Magnesium.OpenGL
 {
 	public interface IStencilCapabilities
 	{

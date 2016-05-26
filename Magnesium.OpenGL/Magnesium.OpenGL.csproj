@@ -37,7 +37,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="GLEntrypoint.cs" />
     <Compile Include="GLInstance.cs" />
     <Compile Include="GLPhysicalDevice.cs" />
     <Compile Include="GLDevice.cs" />
@@ -54,8 +53,49 @@
     <Compile Include="GLProgramUniformBinder.cs" />
     <Compile Include="GLVariableBind.cs" />
     <Compile Include="GLCommandPool.cs" />
-    <Compile Include="GLCommandBuffer.cs" />
-    <Compile Include="GLQueue.cs" />
+    <Compile Include="GLIndirectBuffer.cs" />
+    <Compile Include="GLDeviceMemory.cs" />
+    <Compile Include="CommandBuffer\GLCommandBuffer.cs" />
+    <Compile Include="CommandBuffer\GLCmdBufferStore.cs" />
+    <Compile Include="CommandBuffer\GLCmdBufferRepository.cs" />
+    <Compile Include="CommandBuffer\GLCmdVertexBufferParameter.cs" />
+    <Compile Include="CommandBuffer\GLCmdIndexBufferParameter.cs" />
+    <Compile Include="CommandBuffer\GLCmdViewportParameter.cs" />
+    <Compile Include="CommandBuffer\GLCmdDescriptorSetParameter.cs" />
+    <Compile Include="CommandBuffer\GLCmdScissorParameter.cs" />
+    <Compile Include="CommandBuffer\GLCmdRenderPassCommand.cs" />
+    <Compile Include="CommandBuffer\GLCmdComputeCommand.cs" />
+    <Compile Include="CommandBuffer\GLCmdDrawCommand.cs" />
+    <Compile Include="Queue\GLQueue.cs" />
+    <Compile Include="Queue\IShaderProgram.cs" />
+    <Compile Include="Queue\FullShaderProgram.cs" />
+    <Compile Include="Queue\IShaderProgramCache.cs" />
+    <Compile Include="Queue\IConstantBufferCollection.cs" />
+    <Compile Include="Queue\IConstantBuffer.cs" />
+    <Compile Include="Queue\DrawState.cs" />
+    <Compile Include="Queue\GLQueueBlendState.cs" />
+    <Compile Include="Queue\GLQueueDepthState.cs" />
+    <Compile Include="Queue\GLQueueStencilState.cs" />
+    <Compile Include="Queue\GLQueueRenderer.cs" />
+    <Compile Include="Queue\GLQueueRasterizerState.cs" />
+    <Compile Include="Queue\GLQueueDrawItem.cs" />
+    <Compile Include="Entrypoint\GLEntrypoint.cs" />
+    <Compile Include="Entrypoint\IRasterizerCapabilities.cs" />
+    <Compile Include="Entrypoint\IDepthCapabilities.cs" />
+    <Compile Include="Entrypoint\IStencilCapabilities.cs" />
+    <Compile Include="Entrypoint\IBlendCapabilities.cs" />
+    <Compile Include="Entrypoint\IGLQueueRenderer.cs" />
+    <Compile Include="Queue\IGPUSyncObject.cs" />
+    <Compile Include="Queue\ISyncObject.cs" />
+    <Compile Include="Queue\QueueDrawItemBitFlags.cs" />
+    <Compile Include="Entrypoint\FullBlendingCapabilities.cs" />
+    <Compile Include="Entrypoint\FullRasterizerCapabilities.cs" />
+    <Compile Include="Entrypoint\FullStencilCapabilities.cs" />
+    <Compile Include="Entrypoint\FullDepthCapabilities.cs" />
+    <Compile Include="Queue\GLQueueSemaphore.cs" />
+    <Compile Include="Queue\GLQueueFence.cs" />
+    <Compile Include="Queue\GLQueueSubmission.cs" />
+    <Compile Include="Queue\GLQueueSubmitOrder.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -67,5 +107,10 @@
   <ItemGroup>
     <None Include="OpenTK.dll.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="CommandBuffer\" />
+    <Folder Include="Queue\" />
+    <Folder Include="Entrypoint\" />
   </ItemGroup>
 </Project>

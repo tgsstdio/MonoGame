@@ -1,7 +1,7 @@
 ﻿using OpenTK.Graphics.OpenGL;
 using Magnesium;
 
-namespace MonoGame.Graphics.AZDO
+namespace Magnesium.OpenGL
 {
 	using GLStencilFunction = OpenTK.Graphics.OpenGL.StencilFunction;
 

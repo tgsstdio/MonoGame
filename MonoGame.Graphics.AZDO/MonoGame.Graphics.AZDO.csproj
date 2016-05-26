@@ -38,22 +38,10 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Mesh.cs" />
-    <Compile Include="Renderer.cs" />
-    <Compile Include="IBlendCapabilities.cs" />
-    <Compile Include="FullBlendingCapabilities.cs" />
-    <Compile Include="IRasterizerCapabilities.cs" />
-    <Compile Include="FullRasterizerCapabilities.cs" />
-    <Compile Include="FullStencilCapabilities.cs" />
-    <Compile Include="IStencilCapabilities.cs" />
-    <Compile Include="IDepthCapabilities.cs" />
-    <Compile Include="FullDepthCapabilities.cs" />
     <Compile Include="ShaderStorageBufferBinder.cs" />
     <Compile Include="ConstantBufferCollection.cs" />
     <Compile Include="FullShaderStorageBuffer.cs" />
     <Compile Include="IShaderStorageBuffer.cs" />
-    <Compile Include="IShaderProgram.cs" />
-    <Compile Include="FullShaderProgram.cs" />
-    <Compile Include="IShaderProgramCache.cs" />
     <Compile Include="Composer.cs" />
     <Compile Include="ObjectModelSceneNode.cs" />
     <Compile Include="DrawItemOffset.cs" />
@@ -64,7 +52,6 @@
     <Compile Include="IMeshBufferCache.cs" />
     <Compile Include="IVertexBufferObject.cs" />
     <Compile Include="FullVertexBufferObject.cs" />
-    <Compile Include="FullSyncObject.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

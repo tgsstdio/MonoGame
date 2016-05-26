@@ -4,11 +4,17 @@ namespace Magnesium.OpenGL
 {
 	public class GLEntrypoint : IMgEntrypoint
 	{
+		private readonly IGLQueueRenderer mRenderer;
+		public GLEntrypoint(IGLQueueRenderer renderer)
+		{
+			mRenderer = renderer;
+		}
+
 		#region IMgEntrypoint implementation
 
 		public Result CreateInstance (MgInstanceCreateInfo createInfo, MgAllocationCallbacks allocator, out IMgInstance instance)
 		{
-			instance = new GLInstance ();
+			instance = new GLInstance (mRenderer);
 			return Result.SUCCESS;
 		}
 
@@ -23,8 +29,6 @@ namespace Magnesium.OpenGL
 		}
 
 		#endregion
-
-
 	}
 }
 
