@@ -96,6 +96,10 @@
     <Compile Include="Queue\GLQueueFence.cs" />
     <Compile Include="Queue\GLQueueSubmission.cs" />
     <Compile Include="Queue\GLQueueSubmitOrder.cs" />
+    <Compile Include="Queue\IGLQueueFence.cs" />
+    <Compile Include="Queue\IGLSemaphoreGenerator.cs" />
+    <Compile Include="IGLQueue.cs" />
+    <Compile Include="Queue\IGLSemaphore.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

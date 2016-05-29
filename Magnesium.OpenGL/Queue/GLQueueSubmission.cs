@@ -9,24 +9,30 @@ namespace Magnesium.OpenGL
 		{
 			Key = key;
 			Waits = new List<ISyncObject> ();
-			foreach (var signal in sub.WaitSemaphores)
+			if (sub.WaitSemaphores != null)
 			{
-				var semaphore = signal.WaitSemaphore as ISyncObject;
-				if (semaphore != null)
+				foreach (var signal in sub.WaitSemaphores)
 				{
-					Waits.Add (semaphore);
+					var semaphore = signal.WaitSemaphore as ISyncObject;
+					if (semaphore != null)
+					{
+						Waits.Add (semaphore);
+					}
 				}
 			}
 
 			Signals = new List<ISyncObject> ();
-			foreach (var signal in sub.SignalSemaphores)
+			if (sub.SignalSemaphores != null)
 			{
-				var semaphore = signal as ISyncObject;
-				if (semaphore != null)
+				foreach (var signal in sub.SignalSemaphores)
 				{
-					Signals.Add (semaphore);
+					var semaphore = signal as ISyncObject;
+					if (semaphore != null)
+					{
+						Signals.Add (semaphore);
+					}
 				}
-			}	
+			}
 		}
 		public List<ISyncObject> Waits { get;set; }
 

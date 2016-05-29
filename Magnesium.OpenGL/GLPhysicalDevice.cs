@@ -50,10 +50,10 @@ namespace Magnesium.OpenGL
 
 	public class GLPhysicalDevice : IMgPhysicalDevice
 	{
-		private readonly IGLQueueRenderer mRenderer;
-		public GLPhysicalDevice (IGLQueueRenderer renderer)
+		private readonly GLDevice mDevice;
+		public GLPhysicalDevice (IGLQueue queue)
 		{
-			mRenderer = renderer;
+			mDevice = new GLDevice (queue);
 		}
 
 		#region IMgPhysicalDevice implementation
@@ -101,7 +101,9 @@ namespace Magnesium.OpenGL
 		}
 		public Result CreateDevice (MgDeviceCreateInfo pCreateInfo, MgAllocationCallbacks allocator, out IMgDevice pDevice)
 		{
-			pDevice = new GLDevice (mRenderer);
+			// USING SINGLE DEVICE & SINGLE QUEUE 
+				// SHOULD BE 
+			pDevice = mDevice;
 			return Result.SUCCESS;
 		}
 		public Result EnumerateDeviceLayerProperties (out MgLayerProperties[] pProperties)

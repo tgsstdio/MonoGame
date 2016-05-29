@@ -6,7 +6,7 @@ namespace Magnesium.OpenGL
 	{
 		public uint Key;
 		public Dictionary<uint, ISyncObject> Submissions { get;set; }
-		public GLQueueFence Fence { get; set; }
+		public IGLQueueFence Fence { get; set; }
 	}
 }
 

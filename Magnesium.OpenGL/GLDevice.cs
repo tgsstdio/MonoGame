@@ -18,16 +18,15 @@ namespace Magnesium.OpenGL
 
 		}
 
-		public GLDevice (IGLQueueRenderer renderer)
+		private IGLQueue mQueue;
+		public GLDevice (IGLQueue queue)
 		{
-			mQueues = new GLQueue[1];
-			mQueues [0] = new GLQueue (renderer);
+			mQueue = queue;
 		}
 
-		private GLQueue[] mQueues;
 		public void GetDeviceQueue (uint queueFamilyIndex, uint queueIndex, out IMgQueue pQueue)
 		{
-			pQueue = mQueues [0];
+			pQueue = mQueue;
 		}
 
 		public Result DeviceWaitIdle ()
@@ -88,23 +87,23 @@ namespace Magnesium.OpenGL
 		{
 			throw new NotImplementedException ();
 		}
-		public Result CreateFence (MgFenceCreateInfo pCreateInfo, MgAllocationCallbacks allocator, out MgFence fence)
+		public Result CreateFence (MgFenceCreateInfo pCreateInfo, MgAllocationCallbacks allocator, out IMgFence fence)
 		{
 			throw new NotImplementedException ();
 		}
-		public void DestroyFence (MgFence fence, MgAllocationCallbacks allocator)
+//		public void DestroyFence (MgFence fence, MgAllocationCallbacks allocator)
+//		{
+//			throw new NotImplementedException ();
+//		}
+		public Result ResetFences (IMgFence[] pFences)
 		{
 			throw new NotImplementedException ();
 		}
-		public Result ResetFences (MgFence[] pFences)
+		public Result GetFenceStatus (IMgFence fence)
 		{
 			throw new NotImplementedException ();
 		}
-		public Result GetFenceStatus (MgFence fence)
-		{
-			throw new NotImplementedException ();
-		}
-		public Result WaitForFences (MgFence[] pFences, bool waitAll, ulong timeout)
+		public Result WaitForFences (IMgFence[] pFences, bool waitAll, ulong timeout)
 		{
 			throw new NotImplementedException ();
 		}
@@ -1001,7 +1000,7 @@ namespace Magnesium.OpenGL
 		{
 			throw new NotImplementedException ();
 		}
-		public Result AcquireNextImageKHR (MgSwapchainKHR swapchain, ulong timeout, IMgSemaphore semaphore, MgFence fence, out uint pImageIndex)
+		public Result AcquireNextImageKHR (MgSwapchainKHR swapchain, ulong timeout, IMgSemaphore semaphore, IMgFence fence, out uint pImageIndex)
 		{
 			throw new NotImplementedException ();
 		}

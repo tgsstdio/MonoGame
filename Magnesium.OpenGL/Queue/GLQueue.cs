@@ -1,39 +1,79 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Collections.Concurrent;
 
 namespace Magnesium.OpenGL
 {
-	public class GLQueue : IMgQueue
+	public class GLQueue : IGLQueue
 	{
 		private IGLQueueRenderer mRenderer;
-		public GLQueue (IGLQueueRenderer renderer)
+		private IGLSemaphoreGenerator mSignalModule;
+
+		~GLQueue()
+		{
+			Dispose (false);
+		}
+
+		public void Dispose ()
+		{
+			Dispose (true);
+			GC.SuppressFinalize (this);
+		}
+
+		private bool mIsDisposed = false;
+		protected virtual void Dispose(bool dispose)
+		{
+			if (mIsDisposed)
+				return;			
+
+			foreach (var order in mOrders.Values)
+			{
+				foreach (var submission in order.Submissions.Values)
+				{
+					// RESET ALL FENCES CURRENTLY ATTACHED
+					submission.Reset ();
+				}
+			}
+
+			mIsDisposed = true;
+		}
+
+		public GLQueue (IGLQueueRenderer renderer, IGLSemaphoreGenerator generator)
 		{
 			mRenderer = renderer;
+			mSignalModule = generator;
 		}
 
 		#region IMgQueue implementation
-		private Dictionary<uint, GLQueueSubmission> mRequests = new Dictionary<uint, GLQueueSubmission>();
+		private Dictionary<uint, GLQueueSubmission> mSubmissions = new Dictionary<uint, GLQueueSubmission>();
 		private Dictionary<uint, GLQueueSubmitOrder> mOrders = new Dictionary<uint, GLQueueSubmitOrder>();
 
-		public Result QueueSubmit (MgSubmitInfo[] pSubmits, MgFence fence)
+		public Result QueueSubmit (MgSubmitInfo[] pSubmits, IMgFence fence)
 		{
 			if (pSubmits == null)
-				return Result.SUCCESS;
+			{				
+				var internalFence = fence as IGLQueueFence;
+				if (internalFence != null)
+				{
+					var result = QueueWaitIdle ();
+					internalFence.Signal ();
+					return result;
+				}
+				else
+				{
+					return Result.SUCCESS;
+				}
+			}
 
 			var submissions = new List<GLQueueSubmission> ();
 
-			uint key = (uint)mRequests.Keys.Count;
+			uint key = (uint)mSubmissions.Keys.Count;
 			foreach (var sub in pSubmits)
 			{
-				submissions.Add (new GLQueueSubmission (key, sub));
+				var submit = new GLQueueSubmission (key, sub);
+				submit.OrderFence = mSignalModule.Generate ();
+				submissions.Add (submit);
 				++key;
-			}
-
-			foreach (var sub in submissions)
-			{
-				mRequests.Add (sub.Key, sub);
+				mSubmissions.Add (submit.Key, submit);
 			}
 
 			if (fence != null)
@@ -41,11 +81,11 @@ namespace Magnesium.OpenGL
 				var order = new GLQueueSubmitOrder ();
 				order.Key = (uint)mOrders.Keys.Count;
 				order.Submissions = new Dictionary<uint, ISyncObject> ();
-				order.Fence = fence as GLQueueFence;
+				order.Fence = fence as IGLQueueFence;
 				foreach (var sub in submissions)
 				{
 					order.Submissions.Add (key, sub.OrderFence);
-					mRequests.Add (sub.Key, sub);
+					mSubmissions.Add (sub.Key, sub);
 				}
 			}
 
@@ -55,7 +95,7 @@ namespace Magnesium.OpenGL
 		void PerformRequests (uint key)
 		{
 			GLQueueSubmission request;
-			if (mRequests.TryGetValue (key, out request))
+			if (mSubmissions.TryGetValue (key, out request))
 			{
 				int requirements = request.Waits.Count;
 				int checks = 0;
@@ -80,7 +120,7 @@ namespace Magnesium.OpenGL
 						request.OrderFence.Reset ();
 						request.OrderFence.BeginSync ();
 					}
-					mRequests.Remove (key);
+					mSubmissions.Remove (key);
 				}
 			}
 		}
@@ -89,7 +129,9 @@ namespace Magnesium.OpenGL
 		{
 			do
 			{
-				var requestKeys = mRequests.Keys;
+				var requestKeys = new uint[mSubmissions.Keys.Count];
+				mSubmissions.Keys.CopyTo(requestKeys, 0);
+
 				foreach(var key in requestKeys)
 				{
 					PerformRequests (key);
@@ -101,7 +143,9 @@ namespace Magnesium.OpenGL
 					GLQueueSubmitOrder order;
 					if (mOrders.TryGetValue(orderKey, out order))
 					{
-						var submissionKeys = order.Submissions.Keys;
+						var submissionKeys = new uint[order.Submissions.Keys.Count];
+						order.Submissions.Keys.CopyTo(submissionKeys, 0);
+
 						foreach (uint key in submissionKeys)
 						{
 							ISyncObject signal;
@@ -123,12 +167,17 @@ namespace Magnesium.OpenGL
 					}
 				}
 
-			} while (mRequests.Keys.Count > 0 || mOrders.Keys.Count > 0);
+			} while (!IsEmpty());
 
 			return Result.SUCCESS;
 		}
 
-		public Result QueueBindSparse (MgBindSparseInfo[] pBindInfo, MgFence fence)
+		public bool IsEmpty ()
+		{
+			return (mSubmissions.Keys.Count == 0 && mOrders.Keys.Count == 0);
+		}
+
+		public Result QueueBindSparse (MgBindSparseInfo[] pBindInfo, IMgFence fence)
 		{
 			throw new NotImplementedException ();
 		}

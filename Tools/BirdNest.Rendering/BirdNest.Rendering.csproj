@@ -71,9 +71,5 @@
       <Project>{F218D143-486C-4018-8DAD-B970088EA505}</Project>
       <Name>MonoGame.Content.Blocks</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\MonoGame.Content.Graphics\MonoGame.Shaders.csproj">
-      <Project>{2F0797E0-AA35-4C38-9CE0-0055A3E41C64}</Project>
-      <Name>MonoGame.Shaders</Name>
-    </ProjectReference>
   </ItemGroup>
 </Project>
