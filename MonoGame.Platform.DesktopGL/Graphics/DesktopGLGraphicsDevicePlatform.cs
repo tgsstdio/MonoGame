@@ -16,6 +16,7 @@ namespace MonoGame.Platform.DesktopGL
 		private readonly IGLFramebufferHelperSelector mSelector;
 		private readonly IGLDevicePlatform mGLPlatform;
 		private IPresentationParameters mPresentation;
+		private IOpenTKDeviceQuery mDeviceQuery;
 
 		public DesktopGLGraphicsDevicePlatform 
 		(
@@ -26,6 +27,7 @@ namespace MonoGame.Platform.DesktopGL
 			,IGLExtensionLookup extensions
 			,IGLFramebufferHelperSelector selector
 			,IGLDevicePlatform glPlatform
+			,IOpenTKDeviceQuery deviceQuery
 			,IPresentationParameters presentation
 		)
 		{
@@ -36,6 +38,7 @@ namespace MonoGame.Platform.DesktopGL
 			mSelector = selector;
 			mGLPlatform = glPlatform;
 			mPresentation = presentation;
+			mDeviceQuery = deviceQuery;
 		}
 
 		internal IGraphicsContext Context { get; private set; }
@@ -52,7 +55,7 @@ namespace MonoGame.Platform.DesktopGL
 
 			if (Context == null || Context.IsDisposed)
 			{
-				var color = mPresentation.BackBufferFormat.GetColorFormat();
+				var color = mDeviceQuery.GetColorFormat(mPresentation.BackBufferFormat);
 				var depth =
 					mPresentation.DepthStencilFormat == DepthFormat.None ? 0 :
 					mPresentation.DepthStencilFormat == DepthFormat.Depth16 ? 16 :
@@ -90,7 +93,7 @@ namespace MonoGame.Platform.DesktopGL
 			}
 			Context.MakeCurrent(wnd);
 			(Context as IGraphicsContextInternal).LoadAll();
-			Context.SwapInterval = GraphicsExtensions.GetSwapInterval(mPresentation.PresentationInterval);
+			Context.SwapInterval = mDeviceQuery.GetSwapInterval(mPresentation.PresentationInterval);
 
 			// TODO : background threading 
 			// Provide the graphics context for background loading

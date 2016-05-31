@@ -1,4 +1,5 @@
 ﻿using OpenTK.Graphics.OpenGL;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGame.Platform.DesktopGL.Graphics
 {

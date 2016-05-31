@@ -61,6 +61,7 @@ namespace MonoGame.Platform.DesktopGL
 		private ITouchPanel mTouchPanel;
 		private IOpenTKWindowResetter mWindowReset;
 		private IGraphicsDevicePlatform mDevicePlatform;
+		private IOpenTKDeviceQuery mDeviceQuery;
 	//	private ISamplerStateCollectionPlatform mSamplerStateCollectionPlatform;
 	//	private ITextureCollectionPlatform mTextureCollectionPlatform;
 		private IGraphicsAdapterCollection mAdapters;
@@ -70,6 +71,7 @@ namespace MonoGame.Platform.DesktopGL
 			IOpenTKGameWindow window,
 			IOpenTKWindowResetter windowReset,
 			IGraphicsDevicePlatform devicePlatform,
+			IOpenTKDeviceQuery deviceQuery,
 			//ISamplerStateCollectionPlatform samplerStateCollectionPlatform,
 			//ITextureCollectionPlatform texCollectionPlatform,
 			IBackBufferPreferences backBufferPreferences,
@@ -82,6 +84,7 @@ namespace MonoGame.Platform.DesktopGL
 		{
 			mWindowReset = windowReset;
 			mDevicePlatform = devicePlatform;
+			mDeviceQuery = deviceQuery;
 			//mSamplerStateCollectionPlatform = samplerStateCollectionPlatform;
 		//	mTextureCollectionPlatform = texCollectionPlatform;
 			mPresentationParameters = presentationParams;
@@ -90,6 +93,7 @@ namespace MonoGame.Platform.DesktopGL
 			mWindow = window;
 			mAdapters = adapters;
 			mTouchPanel = touchPanel;
+			mDeviceService = deviceService;
 
 			if (mAdapters.Options.Length < 1)
 			{
@@ -305,7 +309,7 @@ namespace MonoGame.Platform.DesktopGL
 		//See GetSwapInterval for more details
 		int swapInterval;
 		if (_synchronizedWithVerticalRetrace)
-			swapInterval = GraphicsExtensions.GetSwapInterval(mPresentationParameters.PresentationInterval);
+			swapInterval = mDeviceQuery.GetSwapInterval(mPresentationParameters.PresentationInterval);
 		else
 			swapInterval = 0;
 			
@@ -441,9 +445,9 @@ namespace MonoGame.Platform.DesktopGL
 		// GraphicsDevice.DeviceReset event... we need to get 
 		// those working.
 		//
-		mTouchPanel.DisplayWidth = GraphicsDevice.PresentationParameters.BackBufferWidth;
-		mTouchPanel.DisplayHeight = GraphicsDevice.PresentationParameters.BackBufferHeight;
-		mTouchPanel.DisplayOrientation = GraphicsDevice.PresentationParameters.DisplayOrientation;
+		mTouchPanel.DisplayWidth = mPresentationParameters.BackBufferWidth;
+		mTouchPanel.DisplayHeight = mPresentationParameters.BackBufferHeight;
+		mTouchPanel.DisplayOrientation = mPresentationParameters.DisplayOrientation;
 	}
 
 //	public void ToggleFullScreen()

@@ -59,11 +59,16 @@ namespace Magnesium.OpenGL
 		#region IMgPhysicalDevice implementation
 		public void GetPhysicalDeviceProperties (out MgPhysicalDeviceProperties pProperties)
 		{
-			throw new NotImplementedException ();
+			pProperties = new MgPhysicalDeviceProperties ();
 		}
 		public void GetPhysicalDeviceQueueFamilyProperties (out MgQueueFamilyProperties[] pQueueFamilyProperties)
 		{
-			throw new NotImplementedException ();
+			// ONE QUEUE FOR ALL
+			pQueueFamilyProperties = new [] {
+				new MgQueueFamilyProperties {					
+					QueueFlags = MgQueueFlagBits.GRAPHICS_BIT | MgQueueFlagBits.COMPUTE_BIT,
+				}
+			};
 		}
 		public void GetPhysicalDeviceMemoryProperties (out MgPhysicalDeviceMemoryProperties pMemoryProperties)
 		{
@@ -71,7 +76,7 @@ namespace Magnesium.OpenGL
 			// 0 : buffer based 
 			// 1 : host defined (for INDIRECT)
 			pMemoryProperties = new MgPhysicalDeviceMemoryProperties();
-			var slots = new MgMemoryType[2];
+			var slots = new MgMemoryType[4];
 
 			const MgMemoryPropertyFlagBits allOn = 
 				MgMemoryPropertyFlagBits.DEVICE_LOCAL_BIT |
@@ -89,7 +94,7 @@ namespace Magnesium.OpenGL
 		}
 		public void GetPhysicalDeviceFeatures (out MgPhysicalDeviceFeatures pFeatures)
 		{
-			throw new NotImplementedException ();
+			pFeatures = new MgPhysicalDeviceFeatures ();
 		}
 		public void GetPhysicalDeviceFormatProperties (MgFormat format, out MgFormatProperties pFormatProperties)
 		{
@@ -138,19 +143,19 @@ namespace Magnesium.OpenGL
 		{
 			throw new NotImplementedException ();
 		}
-		public Result GetPhysicalDeviceSurfaceSupportKHR (uint queueFamilyIndex, MgSurfaceKHR surface, ref bool pSupported)
+		public Result GetPhysicalDeviceSurfaceSupportKHR (uint queueFamilyIndex, IMgSurfaceKHR surface, ref bool pSupported)
 		{
 			throw new NotImplementedException ();
 		}
-		public Result GetPhysicalDeviceSurfaceCapabilitiesKHR (MgSurfaceKHR surface, out MgSurfaceCapabilitiesKHR pSurfaceCapabilities)
+		public Result GetPhysicalDeviceSurfaceCapabilitiesKHR (IMgSurfaceKHR surface, out MgSurfaceCapabilitiesKHR pSurfaceCapabilities)
 		{
 			throw new NotImplementedException ();
 		}
-		public Result GetPhysicalDeviceSurfaceFormatsKHR (MgSurfaceKHR surface, out MgSurfaceFormatKHR[] pSurfaceFormats)
+		public Result GetPhysicalDeviceSurfaceFormatsKHR (IMgSurfaceKHR surface, out MgSurfaceFormatKHR[] pSurfaceFormats)
 		{
 			throw new NotImplementedException ();
 		}
-		public Result GetPhysicalDeviceSurfacePresentModesKHR (MgSurfaceKHR surface, out MgPresentModeKHR[] pPresentModes)
+		public Result GetPhysicalDeviceSurfacePresentModesKHR (IMgSurfaceKHR surface, out MgPresentModeKHR[] pPresentModes)
 		{
 			throw new NotImplementedException ();
 		}

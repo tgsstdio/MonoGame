@@ -56,10 +56,6 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <ProjectReference Include="..\BirdNest.Rendering.csproj">
-      <Project>{E3FE7233-1F10-4A28-A1F0-EDA3600B144F}</Project>
-      <Name>BirdNest.Rendering</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\MonoGame.Content\MonoGame.Content.csproj">
       <Project>{E44E47ED-2203-4E45-85A9-C755B10AC044}</Project>
       <Name>MonoGame.Content</Name>
@@ -67,10 +63,6 @@
     <ProjectReference Include="..\..\..\MonoGame.Content.Blocks\MonoGame.Content.Blocks.csproj">
       <Project>{F218D143-486C-4018-8DAD-B970088EA505}</Project>
       <Name>MonoGame.Content.Blocks</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\MonoGame.Content.Graphics\MonoGame.Shaders.csproj">
-      <Project>{2F0797E0-AA35-4C38-9CE0-0055A3E41C64}</Project>
-      <Name>MonoGame.Shaders</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

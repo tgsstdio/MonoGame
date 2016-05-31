@@ -59,10 +59,6 @@
     <None Include="OpenTK.dll.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\BirdNest.MonoGame\BirdNest.MonoGame.csproj">
-      <Project>{A978C860-F0DB-4B9F-88AA-E0F002F0312B}</Project>
-      <Name>BirdNest.MonoGame</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\MonoGame.Textures\MonoGame.Textures.csproj">
       <Project>{99F73D50-EDBB-4918-B99C-B785E9563795}</Project>
       <Name>MonoGame.Textures</Name>
@@ -82,14 +78,6 @@
     <ProjectReference Include="..\..\..\MonoGame.Content.Blocks\MonoGame.Content.Blocks.csproj">
       <Project>{F218D143-486C-4018-8DAD-B970088EA505}</Project>
       <Name>MonoGame.Content.Blocks</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\MonoGame.Content.Graphics\MonoGame.Shaders.csproj">
-      <Project>{2F0797E0-AA35-4C38-9CE0-0055A3E41C64}</Project>
-      <Name>MonoGame.Shaders</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\MonoGame.Shaders.DesktopGL\MonoGame.Shaders.GLSL.DesktopGL.csproj">
-      <Project>{493A4D32-B054-47D5-8C2D-E79BFA01206B}</Project>
-      <Name>MonoGame.Shaders.GLSL.DesktopGL</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -27,7 +27,7 @@ namespace MonoGame.Core
 		}
 		public void OnDeviceCreated (object sender, System.EventArgs e)
 		{
-			throw new System.NotImplementedException ();
+	
 		}
 		public Microsoft.Xna.Framework.IGraphicsDevice GraphicsDevice {
 			get {

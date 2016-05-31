@@ -18,7 +18,6 @@ namespace Magnesium.OpenGL
 			mStencil = stencil;
 			mRaster = raster;
 			mDepth =  depth;
-			SetDefault ();
 		}
 
 		public IConstantBufferCollection mBuffers;

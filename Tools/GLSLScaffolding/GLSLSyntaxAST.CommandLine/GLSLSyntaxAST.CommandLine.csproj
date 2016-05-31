@@ -117,10 +117,6 @@
       <Project>{ED65DE39-181D-4C06-9BA9-6B568614652B}</Project>
       <Name>GLSLSyntaxAST.Preprocessor</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\BirdNest.MonoGame\BirdNest.MonoGame.csproj">
-      <Project>{A978C860-F0DB-4B9F-88AA-E0F002F0312B}</Project>
-      <Name>BirdNest.MonoGame</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="OpenTK.dll.config" />

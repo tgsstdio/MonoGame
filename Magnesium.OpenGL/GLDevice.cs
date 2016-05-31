@@ -984,23 +984,23 @@ namespace Magnesium.OpenGL
 		{
 			throw new NotImplementedException ();
 		}
-		public Result CreateSharedSwapchainsKHR (MgSwapchainCreateInfoKHR[] pCreateInfos, MgAllocationCallbacks allocator, out MgSwapchainKHR[] pSwapchains)
+		public Result CreateSharedSwapchainsKHR (MgSwapchainCreateInfoKHR[] pCreateInfos, MgAllocationCallbacks allocator, out IMgSwapchainKHR[] pSwapchains)
 		{
 			throw new NotImplementedException ();
 		}
-		public Result CreateSwapchainKHR (MgSwapchainCreateInfoKHR pCreateInfo, MgAllocationCallbacks allocator, out MgSwapchainKHR pSwapchain)
+		public Result CreateSwapchainKHR (MgSwapchainCreateInfoKHR pCreateInfo, MgAllocationCallbacks allocator, out IMgSwapchainKHR pSwapchain)
 		{
 			throw new NotImplementedException ();
 		}
-		public void DestroySwapchainKHR (MgSwapchainKHR swapchain, MgAllocationCallbacks allocator)
+		public void DestroySwapchainKHR (IMgSwapchainKHR swapchain, MgAllocationCallbacks allocator)
 		{
 			throw new NotImplementedException ();
 		}
-		public Result GetSwapchainImagesKHR (MgSwapchainKHR swapchain, out IMgImage[] pSwapchainImages)
+		public Result GetSwapchainImagesKHR (IMgSwapchainKHR swapchain, out IMgImage[] pSwapchainImages)
 		{
 			throw new NotImplementedException ();
 		}
-		public Result AcquireNextImageKHR (MgSwapchainKHR swapchain, ulong timeout, IMgSemaphore semaphore, IMgFence fence, out uint pImageIndex)
+		public Result AcquireNextImageKHR (IMgSwapchainKHR swapchain, ulong timeout, IMgSemaphore semaphore, IMgFence fence, out uint pImageIndex)
 		{
 			throw new NotImplementedException ();
 		}

@@ -17,6 +17,7 @@ namespace MonoGame.Platform.DesktopGL.Input
 		}
 
 		private MouseState _defaultState = new MouseState();
+		private MouseState mLastState;
 		#region IMouseListener implementation
 
 		private readonly INativeWindow mSource;
@@ -30,7 +31,7 @@ namespace MonoGame.Platform.DesktopGL.Input
 			var state = OpenTK.Input.Mouse.GetCursorState();
 
 			var internalWindow = window as OpenTKGameWindow;
-			var result = window.LastMouseState;
+			var result = mLastState;
 			if (internalWindow != null)
 			{
 				var pc = internalWindow.Window.PointToClient (new System.Drawing.Point (state.X, state.Y));
@@ -48,8 +49,8 @@ namespace MonoGame.Platform.DesktopGL.Input
 				// OpenTK scales 1 click = 1.0 delta, so make that match
 				result.ScrollWheelValue = (int)(state.Scroll.Y * 120);
 			}
-			window.LastMouseState = result;
-			return window.LastMouseState;
+			mLastState = result;
+			return mLastState;
 		}
 
 		public MouseState GetNativeState (IGameWindow window)
@@ -76,7 +77,7 @@ namespace MonoGame.Platform.DesktopGL.Input
 				// OpenTK scales 1 click = 1.0 delta, so make that match
 				result.ScrollWheelValue = (int)(state.Scroll.Y * 120);
 			}
-			window.LastMouseState = result;
+			mLastState = result;
 			return result;
 		}
 
@@ -93,10 +94,10 @@ namespace MonoGame.Platform.DesktopGL.Input
 
 		public void UpdateStatePosition (int x, int y)
 		{
-			var result = PrimaryWindow.LastMouseState;
+			var result = mLastState;
 			result.X = x;
 			result.Y = y;
-			PrimaryWindow.LastMouseState = result;
+			mLastState = result;
 		}
 
 		public IntPtr WindowHandle {

@@ -72,6 +72,8 @@
     <Compile Include="FullGLSpecificGraphicsCapabilitiesLookup.cs" />
     <Compile Include="Desktop\IOpenTKGameWindow.cs" />
     <Compile Include="DesktopGLTitleContainer.cs" />
+    <Compile Include="Graphics\IOpenTKDeviceQuery.cs" />
+    <Compile Include="Graphics\OpenTKDeviceQuery.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

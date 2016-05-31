@@ -107,6 +107,22 @@ namespace MonoGame.Content.Zips
 
 			return new ZipArchive (mTitleContainer.OpenStream(found.Path), ZipArchiveMode.Read, false).GetEntry (path).Open ();
 		}
+
+		public bool Exists (BlockIdentifier blockId, string path)
+		{
+			ZippedBlockEntry found = null;
+			if (!mBlocks.TryGetValue (blockId.BlockId, out found))
+			{
+				throw new KeyNotFoundException ();
+			}
+
+			using (var zip = new ZipArchive (mTitleContainer.OpenStream (found.Path), ZipArchiveMode.Read, false))
+			{
+				// NEED TO HANDLE DUPLICATES YOURSELF
+				return (zip.GetEntry(path) != null);
+			}
+		}
+
 		#endregion
 	}
 }

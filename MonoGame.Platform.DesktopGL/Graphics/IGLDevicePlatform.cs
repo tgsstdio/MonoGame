@@ -1,3 +1,5 @@
+using Microsoft.Xna.Framework.Graphics;
+
 namespace MonoGame.Platform.DesktopGL
 {
 	public interface IGLDevicePlatform

@@ -29,15 +29,15 @@ namespace Magnesium.OpenGL
 			throw new NotImplementedException ();
 		}
 
-		public Result CreateDisplayPlaneSurfaceKHR (MgDisplaySurfaceCreateInfoKHR createInfo, MgAllocationCallbacks allocator, out MgSurfaceKHR pSurface)
+		public Result CreateDisplayPlaneSurfaceKHR (MgDisplaySurfaceCreateInfoKHR createInfo, MgAllocationCallbacks allocator, out IMgSurfaceKHR pSurface)
 		{
 			throw new NotImplementedException ();
 		}
-		public void DestroySurfaceKHR (MgSurfaceKHR surface, MgAllocationCallbacks allocator)
+		public void DestroySurfaceKHR (IMgSurfaceKHR surface, MgAllocationCallbacks allocator)
 		{
 			throw new NotImplementedException ();
 		}
-		public Result CreateWin32SurfaceKHR (MgWin32SurfaceCreateInfoKHR pCreateInfo, MgAllocationCallbacks allocator, out MgSurfaceKHR pSurface)
+		public Result CreateWin32SurfaceKHR (MgWin32SurfaceCreateInfoKHR pCreateInfo, MgAllocationCallbacks allocator, out IMgSurfaceKHR pSurface)
 		{
 			throw new NotImplementedException ();
 		}

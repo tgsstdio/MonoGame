@@ -26,12 +26,12 @@ namespace Microsoft.Xna.Framework
 		void EndScreenDeviceChange (string screenDeviceName, int clientWidth, int clientHeight);
 		void EndScreenDeviceChange (string screenDeviceName);
 		void SetSupportedOrientations (DisplayOrientation orientations);
-		ITouchListener Touch { get; }
+		//ITouchListener Touch { get; }
 		//MouseState MouseState { get; }
-		MouseState LastMouseState {
-			get;
-			set;
-		}
+//		MouseState LastMouseState {
+//			get;
+//			set;
+//		}
 	}
 
 }

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProjectGuid>{D81FEC34-8818-443E-B2BE-5E951B0F6CC5}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>HelloMagnesium</RootNamespace>
+    <AssemblyName>HelloMagnesium</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Externalconsole>true</Externalconsole>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <DebugType>full</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Externalconsole>true</Externalconsole>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="DryIoc">
+      <HintPath>..\..\packages\DryIoc.dll.2.3.0\lib\net45\DryIoc.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenTK">
+      <HintPath>..\..\packages\OpenTK.1.1.2225.0\lib\net20\OpenTK.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="NullGraphicsDeviceLogger.cs" />
+    <Compile Include="MockGraphicsDevicePreferences.cs" />
+    <Compile Include="MockSamplerStateCollectionPlatform.cs" />
+    <Compile Include="NullTextureCollectionPlatform.cs" />
+    <Compile Include="HelloMagnesiumGame.cs" />
+    <Compile Include="MagnesiumGraphicsDevicePlatform.cs" />
+    <Compile Include="IMgDeviceQuery.cs" />
+    <Compile Include="MgDeviceQuery.cs" />
+    <Compile Include="ISwapchain.cs" />
+    <Compile Include="Win32Swapchain.cs" />
+    <Compile Include="IMgImageTools.cs" />
+    <Compile Include="MgImageTools.cs" />
+    <Compile Include="MockShaderProgramCache.cs" />
+    <Compile Include="MockGLSemaphoreGenerator.cs" />
+    <Compile Include="MockTouchListener.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <ProjectReference Include="..\..\Magnesium.OpenGL\Magnesium.OpenGL.csproj">
+      <Project>{156D7F9D-1243-4EDB-9E45-24FAF2F40A4C}</Project>
+      <Name>Magnesium.OpenGL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\MonoGame.Platform.DesktopGL\MonoGame.Platform.DesktopGL.csproj">
+      <Project>{B512C831-4562-447E-9F99-C66F86B1279F}</Project>
+      <Name>MonoGame.Platform.DesktopGL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\MonoGame.Core\MonoGame.Core.csproj">
+      <Project>{699977AD-6D8C-4E0B-ADDA-554B66002D08}</Project>
+      <Name>MonoGame.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\MonoGame.Graphics\MonoGame.Graphics.csproj">
+      <Project>{52C293E3-DCC5-43BE-A94F-DBE0CF44E25E}</Project>
+      <Name>MonoGame.Graphics</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\MonoGame.Audio.OpenAL\MonoGame.Audio.OpenAL.csproj">
+      <Project>{C06188B4-0C78-42CB-B868-336EB7B6B3DF}</Project>
+      <Name>MonoGame.Audio.OpenAL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\MonoGame.Framework\Microsoft.Xna.Framework.csproj">
+      <Project>{6E03191C-70AE-4B0B-8782-68D377B72A0F}</Project>
+      <Name>Microsoft.Xna.Framework</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\MonoGame.Audio.OpenAL.DesktopGL\MonoGame.Audio.OpenAL.DesktopGL.csproj">
+      <Project>{D68E983C-FA4D-418A-8353-43C4CDE75B23}</Project>
+      <Name>MonoGame.Audio.OpenAL.DesktopGL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Magnesium\Magnesium.csproj">
+      <Project>{9F9AC448-9D17-43E5-8889-285426290891}</Project>
+      <Name>Magnesium</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+    <None Include="OpenTK.dll.config" />
+  </ItemGroup>
+</Project>

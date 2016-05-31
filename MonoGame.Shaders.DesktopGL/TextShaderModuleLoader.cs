@@ -15,7 +15,6 @@ namespace MonoGame.Shaders.GLSL.DesktopGL
 			using (var sr = new StreamReader (info.Code))
 			{			
 				ShaderType type = null;
-				info.
 
 				string fileContents = sr.ReadToEnd ();
 				return GLSLTextShaderManager.CompileShader(type, fileContents, string.Empty);
