@@ -4,7 +4,7 @@ namespace MonoGame.Graphics
 {
 	public interface IGLExtensionLookup
 	{
-		void Initialise();
+		void Initialize();
 
 		bool HasExtension (string extension);
 	}

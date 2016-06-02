@@ -108,9 +108,9 @@ namespace MonoGame.Platform.DesktopGL
 //			}
 			Context.MakeCurrent(wnd);
 
-			mExtensions.Initialise();
+			mExtensions.Initialize();
 
-			mGLPlatform.Initialise ();
+			mGLPlatform.Initialize ();
 			MaxTextureSlots = mGLPlatform.MaxTextureSlots;
 			MaxVertexAttributes = mGLPlatform.MaxVertexAttributes;
 			_maxTextureSize = mGLPlatform.MaxTextureSize;

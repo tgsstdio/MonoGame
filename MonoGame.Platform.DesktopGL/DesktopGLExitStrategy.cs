@@ -13,7 +13,7 @@ namespace MonoGame.Platform.DesktopGL
 			mPlatform = platform;
 		}
 
-		public void Initialise()
+		public void Initialize()
 		{
 			mSuppression.AddBeforeExit (mPlatform.Exit);
 		}

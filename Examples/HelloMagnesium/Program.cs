@@ -89,7 +89,9 @@ namespace HelloMagnesium
 					container.Register<IThreadSleeper, SystemThreadSleeper>(Reuse.Singleton);
 
 					// MAGNESIUM
+					container.Register<IMagnesiumDriver, MagnesiumDriver>(Reuse.Singleton);
 					container.Register<IMgEntrypoint, Magnesium.OpenGL.GLEntrypoint>(Reuse.Singleton);
+					container.Register<IMgPresentationLayer, Win32PresentationLayer>(Reuse.Singleton);
 					container.Register<Magnesium.OpenGL.IGLQueue, Magnesium.OpenGL.GLQueue>(Reuse.Singleton);
 					container.Register<Magnesium.OpenGL.IGLQueueRenderer, Magnesium.OpenGL.GLQueueRenderer>(Reuse.Singleton);
 
@@ -105,32 +107,45 @@ namespace HelloMagnesium
 					using (var scope = container.OpenScope ())
 					{
 						using (var window = new NativeWindow())
+						using (var driver = container.Resolve<IMagnesiumDriver>())								
 						{							
 							container.RegisterInstance<INativeWindow>(window);
+							driver.Initialize(new MgApplicationInfo{
+								ApplicationName = "HelloMagnesium",
+								ApplicationVersion = 1,
+								EngineName = "MonoGame",
+								EngineVersion = 1,
+								ApiVersion = 1,
+							});
 
-							using (var audioContext = container.Resolve<IOpenALSoundContext>())
-							using (var manager = container.Resolve<IGraphicsDeviceManager>())
+							using (var device = driver.CreateGraphicsDevice())
+							using (var partition = device.Queues[0].CreatePartition())
 							{
-								manager.CreateDevice();
-								using (var platform = container.Resolve<IGraphicsDevicePlatform>())
+								container.RegisterInstance<IMgThreadPartition>(partition);							
+								using (var audioContext = container.Resolve<IOpenALSoundContext>())														
+								using (var manager = container.Resolve<IGraphicsDeviceManager>())
 								{
-									audioContext.Initialise();
+									manager.CreateDevice();
 
-									platform.Setup();
-
-									var capabilities = container.Resolve<IGraphicsCapabilities>();
-									capabilities.Initialise();
-
-									platform.Initialize();
-
-									using (var backbone = container.Resolve<IGameBackbone> ())
+									using (var platform = container.Resolve<IGraphicsDevicePlatform>())						
 									{
-										var exitStrategy = container.Resolve<IWindowExitStrategy>();
-										exitStrategy.Initialise();
+										audioContext.Initialize();
 
-										backbone.Run ();
+										platform.Setup();
+
+										var capabilities = container.Resolve<IGraphicsCapabilities>();
+										capabilities.Initialize();
+
+										platform.Initialize();
+
+										using (var backbone = container.Resolve<IGameBackbone> ())
+										{
+											var exitStrategy = container.Resolve<IWindowExitStrategy>();
+											exitStrategy.Initialize();
+
+											backbone.Run ();
+										}								
 									}
-
 								}
 							}
 						}

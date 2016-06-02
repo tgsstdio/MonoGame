@@ -7,8 +7,18 @@ using System.Collections.Generic;
 
 namespace Microsoft.Xna.Framework.Input.Touch
 {
-    public class TouchPanelState
+	public class TouchPanelState : ITouchListener
     {
+		public GestureSample GetGestumeSample ()
+		{
+			return GestureList.Dequeue();
+		}
+
+//		public TouchPanelState GetPanelState ()
+//		{
+//			throw new NotImplementedException ();
+//		}
+
         /// <summary>
         /// The reserved touchId for all mouse touch points.
         /// </summary>
@@ -152,12 +162,12 @@ namespace Microsoft.Xna.Framework.Input.Touch
             return result;
         }
 
-        internal void AddEvent(int id, TouchLocationState state, Vector2 position)
+        public void AddEvent(int id, TouchLocationState state, Vector2 position)
         {
             AddEvent(id, state, position, false);
         }
 
-        internal void AddEvent(int id, TouchLocationState state, Vector2 position, bool isMouse)
+		public void AddEvent(int id, TouchLocationState state, Vector2 position, bool isMouse)
         {
             // Different platforms return different touch identifiers
             // based on the specifics of their implementation and the

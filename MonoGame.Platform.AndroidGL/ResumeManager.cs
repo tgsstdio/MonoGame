@@ -49,7 +49,7 @@ namespace MonoGame.Platform.AndroidGL
     /// A default implementation of IResumeManager. Loads a user specified
     /// image file (eg png) and draws it the middle of the screen.
     /// 
-    /// Example usage in Game.Initialise():
+    /// Example usage in Game.Initialize():
     /// 
     /// #if ANDROID
     ///    this.Window.SetResumer(new ResumeManager(this.Services, 

@@ -22,7 +22,7 @@ namespace MonoGame.Audio.OpenAL.DesktopGL
 			}
 		}
 		private Exception _SoundInitException;
-		public bool Initialise ()
+		public bool Initialize ()
 		{
 			try
 			{

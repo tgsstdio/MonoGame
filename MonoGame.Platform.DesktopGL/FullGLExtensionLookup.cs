@@ -12,7 +12,7 @@ namespace MonoGame.Platform.DesktopGL.Graphics
 			Extensions = new StringCollection();
 		}
 
-		public void Initialise()
+		public void Initialize()
 		{
 			Extensions.Clear ();
 

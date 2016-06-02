@@ -51,13 +51,24 @@
     <Compile Include="MagnesiumGraphicsDevicePlatform.cs" />
     <Compile Include="IMgDeviceQuery.cs" />
     <Compile Include="MgDeviceQuery.cs" />
-    <Compile Include="ISwapchain.cs" />
     <Compile Include="Win32Swapchain.cs" />
     <Compile Include="IMgImageTools.cs" />
     <Compile Include="MgImageTools.cs" />
     <Compile Include="MockShaderProgramCache.cs" />
     <Compile Include="MockGLSemaphoreGenerator.cs" />
     <Compile Include="MockTouchListener.cs" />
+    <Compile Include="MgGraphicsDevice.cs" />
+    <Compile Include="IMgThreadPartition.cs" />
+    <Compile Include="MgThreadPartition.cs" />
+    <Compile Include="IMgQueueInfo.cs" />
+    <Compile Include="IMgSwapchain.cs" />
+    <Compile Include="IMgPresentationLayer.cs" />
+    <Compile Include="Win32PresentationLayer.cs" />
+    <Compile Include="IMagnesiumDriver.cs" />
+    <Compile Include="MagnesiumDriver.cs" />
+    <Compile Include="MgQueueAllocation.cs" />
+    <Compile Include="MgQueueInfo.cs" />
+    <Compile Include="IMgLogicalDevice.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

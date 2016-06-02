@@ -7,7 +7,7 @@ namespace Magnesium.OpenGL
 	{
 		#region IDepthCapabilities implementation
 
-		public void Initialise ()
+		public void Initialize ()
 		{
 			EnableDepthBuffer ();
 			SetDepthBufferFunc (MgCompareOp.LESS);

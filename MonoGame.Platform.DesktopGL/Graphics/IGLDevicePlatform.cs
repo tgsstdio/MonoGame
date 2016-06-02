@@ -4,7 +4,7 @@ namespace MonoGame.Platform.DesktopGL
 {
 	public interface IGLDevicePlatform
 	{
-		void Initialise();
+		void Initialize();
 		void AfterApplyRenderTargets(int renderCount);
 
 		int MaxVertexAttributes {

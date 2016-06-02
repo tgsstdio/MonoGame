@@ -26,7 +26,7 @@ namespace Magnesium.OpenGL
 			get;
 		}
 
-		void Initialise();
+		void Initialize();
 	}
 }
 

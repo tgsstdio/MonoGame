@@ -202,10 +202,10 @@ namespace Magnesium.OpenGL
 
 		public void SetDefault()
 		{			
-			mBlend.Initialise ();
-			mStencil.Initialise ();
-			mRaster.Initialise ();
-			mDepth.Initialise ();
+			mBlend.Initialize ();
+			mStencil.Initialize ();
+			mRaster.Initialize ();
+			mDepth.Initialize ();
 		}
 
 		private static bool ChangesFoundInRasterization(GLQueueDrawItem previous, GLQueueDrawItem next)

@@ -75,7 +75,7 @@ namespace Magnesium.OpenGL
 			mCullingEnabled = false;
 		}
 
-		public void Initialise ()
+		public void Initialize ()
 		{
 			EnableScissorTest ();
 			DisableCulling ();

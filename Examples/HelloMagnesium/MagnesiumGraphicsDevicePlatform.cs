@@ -12,7 +12,6 @@ namespace HelloMagnesium
 	public class MagnesiumGraphicsDevicePlatform : IGraphicsDevicePlatform
 	{
 		private readonly IOpenTKGameWindow mWindow;
-		private readonly IMgEntrypoint mEntrypoint;
 		private readonly IGraphicsDevicePreferences mDevicePreferences;
 		private readonly IGraphicsDeviceLogger mLogger;
 		private IPresentationParameters mPresentation;
@@ -29,7 +28,6 @@ namespace HelloMagnesium
 		(
 			// IMPLEMENTATION BELOW
 			IOpenTKGameWindow window
-			,IMgEntrypoint entrypoint
 			,IMgDeviceQuery deviceQuery
 			,IGraphicsDevicePreferences devicePreferences
 			,IGraphicsDeviceLogger logger
@@ -40,10 +38,12 @@ namespace HelloMagnesium
 
 			,IGLExtensionLookup extensions
 			,IGLDevicePlatform glPlatform
+
+			,IMgThreadPartition partition
+			,IMgPresentationLayer layer
 		)
 		{
 			mWindow = window;
-			mEntrypoint = entrypoint;
 			mDevicePreferences = devicePreferences;
 			mDeviceQuery = deviceQuery;
 			mLogger = logger;
@@ -114,72 +114,23 @@ namespace HelloMagnesium
 			//			}
 			Context.MakeCurrent (wnd);
 
-			mExtensions.Initialise();
+			mExtensions.Initialize();
 
-			mGLPlatform.Initialise ();
+			mGLPlatform.Initialize ();
 		}
 
-		private IMgInstance mInstance;
-		private IMgPhysicalDevice mGPU;
 		public void Setup ()
 		{
 			SetupContext ();
 
-			SetupMagnesium ();
+			//SetupMagnesium ();
 		}
 
 		void SetupMagnesium ()
 		{
-			var applicationInfo = new MgApplicationInfo {
-				ApiVersion = 1,
-				ApplicationName = "Test",
-				ApplicationVersion = 0,
-				EngineName = "MonoGame",
-				EngineVersion = 1,
-			};
-			var instanceCreateInfo = new MgInstanceCreateInfo {
-				ApplicationInfo = applicationInfo,
-			// TODO : DEBUGGING LAYERS
-			};
-			Result errorCode = mEntrypoint.CreateInstance (instanceCreateInfo, null, out mInstance);
-			Debug.Assert (errorCode == Result.SUCCESS);
-			IMgPhysicalDevice[] physicalDevices;
-			errorCode = mInstance.EnumeratePhysicalDevices (out physicalDevices);
-			Debug.Assert (errorCode == Result.SUCCESS);
-			if (physicalDevices != null && physicalDevices.Length > 0)
-			{
-				/* For cube demo we just grab the first physical device */mGPU = physicalDevices [0];
-			}
-			// Find a queue that supports graphics operations
-			uint graphicsQueueIndex = 0;
-			MgQueueFamilyProperties[] queueProps;
-			mGPU.GetPhysicalDeviceQueueFamilyProperties (out queueProps);
-			Debug.Assert (queueProps != null);
-			Debug.Assert (queueProps.Length >= 1);
-			for (uint i = 0; i < queueProps.Length; ++i)
-			{
-				// Find a queue that supports gfx
-				if ((queueProps [i].QueueFlags & MgQueueFlagBits.GRAPHICS_BIT) == MgQueueFlagBits.GRAPHICS_BIT)
-				{
-					graphicsQueueIndex = i;
-					break;
-				}
-			}
-			IMgDevice device = CreateDevice (mGPU, graphicsQueueIndex);
-			// Store properties (including limits) and features of the phyiscal device
-			// So examples can check against them and see if a feature is actually supported
-			MgPhysicalDeviceProperties mDeviceProperties;
-			mGPU.GetPhysicalDeviceProperties (out mDeviceProperties);
-			MgPhysicalDeviceFeatures mDeviceFeature;
-			mGPU.GetPhysicalDeviceFeatures (out mDeviceFeature);
-			// Gather physical device memory properties
-			mGPU.GetPhysicalDeviceMemoryProperties (out mDeviceMemoryProperties);
-			// Get the graphics queue
-			IMgQueue mQueue;
-			device.GetDeviceQueue (graphicsQueueIndex, 0, out mQueue);
 			var depthStencil = mDeviceQuery.GetDepthStencilFormat (mPresentation.DepthStencilFormat);
 			IMgCommandBuffer setupCmdBuffer = null;
-			SetupDepthStencil (device, setupCmdBuffer, depthStencil);
+			//SetupDepthStencil (device, setupCmdBuffer, depthStencil);
 		}
 
 		static IMgDevice CreateDevice (IMgPhysicalDevice gpu, uint graphicsQueueIndex)

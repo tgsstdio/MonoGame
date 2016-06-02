@@ -4,7 +4,7 @@ namespace Magnesium.OpenGL
 {
 	public interface IDepthCapabilities
 	{
-		void Initialise();
+		void Initialize();
 
 		bool IsDepthBufferEnabled { get; }		
 		void EnableDepthBuffer();

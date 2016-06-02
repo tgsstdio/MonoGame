@@ -63,10 +63,10 @@ namespace Microsoft.Xna.Framework.Input.Touch
 			return mListener.GetState();
         }
 
-        public TouchPanelState GetState(IGameWindow window)
-        {
-			return mListener.GetPanelState();
-        }
+//        public TouchPanelState GetState(IGameWindow window)
+//        {
+//			return mListener.GetPanelState();
+//        }
 
         public ITouchPanelCapabilities GetCapabilities()
         {

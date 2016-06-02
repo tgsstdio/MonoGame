@@ -4,5 +4,9 @@ namespace HelloMagnesium
 {
 	public class HelloMagnesiumGame : Game
 	{
+		public HelloMagnesiumGame(IGraphicsDeviceManager manager)
+		{
+			
+		}
 	}
 }

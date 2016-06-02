@@ -588,7 +588,7 @@ namespace MonoGame.Textures.Ktx
 //							mipmap.Data);
 //					}
 				}
-				texPage.Initialise(mipmap.Common);
+				texPage.Initialize(mipmap.Common);
 				mipmap.GLError = mPlatform.GetError ();
 
 				// Renderion is returning INVALID_VALUE. Oops!!

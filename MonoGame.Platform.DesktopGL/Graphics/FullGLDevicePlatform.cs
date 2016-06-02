@@ -7,7 +7,7 @@ namespace MonoGame.Platform.DesktopGL.Graphics
 	{
 		private DrawBuffersEnum[] _drawBuffers;
 
-		public void Initialise ()
+		public void Initialize ()
 		{
 			int maxTextures = 16;
 			GL.GetInteger(GetPName.MaxTextureImageUnits, out maxTextures);

@@ -52,7 +52,7 @@ namespace Magnesium.OpenGL
 			}
 		}
 
-		public void Initialise ()
+		public void Initialize ()
 		{
 			EnableBlending (false);
 			SetColorMask (0);

@@ -14,11 +14,10 @@ namespace Microsoft.Xna.Framework.Input.Touch
 
 		GestureSample GetGestumeSample ();
 
-		TouchPanelState GetPanelState ();
+		//TouchPanelState GetPanelState ();
 
 		bool IsGestureAvailable {
 			get;
-			set;
 		}
 
 		bool EnableMouseTouchPoint {

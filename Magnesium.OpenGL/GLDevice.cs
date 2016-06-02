@@ -77,7 +77,7 @@ namespace Magnesium.OpenGL
 
 		public void GetImageMemoryRequirements (IMgImage image, out MgMemoryRequirements memoryRequirements)
 		{
-			throw new NotImplementedException ();
+			memoryRequirements = new MgMemoryRequirements ();
 		}
 		public Result BindImageMemory (IMgImage image, IMgDeviceMemory memory, ulong memoryOffset)
 		{

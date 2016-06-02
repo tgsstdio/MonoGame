@@ -4,7 +4,7 @@ namespace Magnesium.OpenGL
 {
 	public interface IStencilCapabilities
 	{
-		void Initialise ();
+		void Initialize ();
 		void EnableStencilBuffer();
 		void DisableStencilBuffer();
 		bool IsStencilBufferEnabled { get; }

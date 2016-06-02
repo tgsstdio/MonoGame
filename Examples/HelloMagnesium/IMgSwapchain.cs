@@ -6,10 +6,9 @@ namespace HelloMagnesium
 
 	// CODE taken from vulkanswapchain.hpp by Sascha Willems 2016 (licensed under the MIT license)	
 	// 
-	public interface ISwapchain : IDisposable
+	public interface IMgSwapchain : IDisposable
 	{
-		void Setup(IMgInstance instance, IMgPhysicalDevice physicalDevice, IMgDevice device);
-		uint Initialise();
+		void Setup();
 		void Create(IMgCommandBuffer cmd, UInt32 width, UInt32 height);
 	}
 }

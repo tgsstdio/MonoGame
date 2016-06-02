@@ -6,7 +6,7 @@ namespace Magnesium.OpenGL
 	{	
 		bool IsEnabled { get; }
 
-		void Initialise();
+		void Initialize();
 
 		void EnableBlending (bool value);
 

@@ -6,116 +6,25 @@ using System.Diagnostics;
 namespace HelloMagnesium
 {
 	// CODE taken from vulkanswapchain.hpp by Sascha Willems 2016 (licensed under the MIT license)	
-	public class Win32Swapchain : ISwapchain
+	public class Win32Swapchain : IMgSwapchain
 	{
-		private IOpenTKGameWindow mWindow;
-		private IMgImageTools mImageTools;
-		public Win32Swapchain (IOpenTKGameWindow window, IMgImageTools imageTools)
+		private readonly IMgImageTools mImageTools;
+		private readonly IMgThreadPartition mPartition;
+		private readonly IMgPresentationLayer mLayer;
+		public Win32Swapchain (IMgPresentationLayer layer, IMgThreadPartition partition, IMgImageTools imageTools)
 		{
-			mWindow = window;
+			mLayer = layer;
+			mPartition = partition;
 			mImageTools = imageTools;
 		}
 
 		#region ISwapchain implementation
-		private IMgInstance mInstance;
-		private IMgPhysicalDevice mPhysicalDevice;
-		private IMgDevice mDevice;
-		public void Setup (IMgInstance instance, IMgPhysicalDevice physicalDevice, IMgDevice device)
+
+		public void Setup ()
 		{
-			mInstance = instance;
-			mPhysicalDevice = physicalDevice;
-			mDevice = device;
-		}
-
-		private IMgSurfaceKHR mSurface;
-
-		Result GenerateSurface ()
-		{
-			var createInfo = new MgWin32SurfaceCreateInfoKHR {
-				// DOUBLE CHECK 
-				Hinstance = Process.GetCurrentProcess ().Handle,
-				Hwnd = mWindow.GetWindowInfo ().Handle,
-			};
-			var err = mInstance.CreateWin32SurfaceKHR (createInfo, null, out mSurface);
-			Debug.Assert (err == Result.SUCCESS);
-			return err;
-		}
-
-		public uint Initialise ()
-		{
-			var err = GenerateSurface ();
-
-			// Get available queue family properties
-			MgQueueFamilyProperties[] queueProps;
-			mPhysicalDevice.GetPhysicalDeviceQueueFamilyProperties(out queueProps);
-
-			bool[] supportsPresent = new bool[queueProps.Length];
-
-			// Iterate over each queue to learn whether it supports presenting:
-			for (UInt32 i = 0; i < queueProps.Length; ++i)
-			{
-				mPhysicalDevice.GetPhysicalDeviceSurfaceSupportKHR(i, mSurface, ref supportsPresent[i]);
-			}
-
-			// Search for a graphics and a present queue in the array of queue
-			// families, try to find one that supports both
-			UInt32 graphicsQueueNodeIndex = UInt32.MaxValue;
-			UInt32 presentQueueNodeIndex = UInt32.MaxValue;
-			for (UInt32 i = 0; i < queueProps.Length; i++)
-			{
-				var queue = queueProps[i];
-
-				if ((queue.QueueFlags & MgQueueFlagBits.GRAPHICS_BIT) != 0)
-				{
-					if (graphicsQueueNodeIndex == UInt32.MaxValue)
-					{
-						graphicsQueueNodeIndex = i;
-					}
-
-					if (supportsPresent[i])
-					{
-						graphicsQueueNodeIndex = i;
-						presentQueueNodeIndex = i;
-						break;
-					}
-				}
-			}
-
-			if (presentQueueNodeIndex == UInt32.MaxValue)
-			{
-				// If didn't find a queue that supports both graphics and present, then
-				// find a separate present queue.
-				for (UInt32 i = 0; i < queueProps.Length; ++i)
-				{
-					if (supportsPresent[i])
-					{
-						presentQueueNodeIndex = i;
-						break;
-					}
-				}
-			}
-
-			// Generate error if could not find both a graphics and a present queue
-			if (graphicsQueueNodeIndex == UInt32.MaxValue ||
-				presentQueueNodeIndex == UInt32.MaxValue)
-			{
-				throw new Exception("Swapchain Initialization Failure - Could not find a graphics and a present queue");
-			}
-
-			// VERBATIM from cube.c
-			// TODO: Add support for separate queues, including presentation,
-			//       synchronization, and appropriate tracking for QueueSubmit.
-			// NOTE: While it is possible for an application to use a separate graphics
-			//       and a present queues, this demo program assumes it is only using
-			//       one:
-			if (graphicsQueueNodeIndex != presentQueueNodeIndex)
-			{
-				throw new Exception("Swapchain Initialization Failure - Could not find a common graphics and a present queue");
-			}
-
 			// Get the list of VkFormat's that are supported:
 			MgSurfaceFormatKHR[] surfFormats;
-			err = mPhysicalDevice.GetPhysicalDeviceSurfaceFormatsKHR(mSurface, out surfFormats);
+			var err = mPartition.PhysicalDevice.GetPhysicalDeviceSurfaceFormatsKHR(mLayer.Surface, out surfFormats);
 			Debug.Assert(err == Result.SUCCESS);
 
 			// If the format list includes just one entry of VK_FORMAT_UNDEFINED,
@@ -131,8 +40,6 @@ namespace HelloMagnesium
 				mFormat = surfFormats[0].Format;
 			}
 			mColorSpace = surfFormats[0].ColorSpace;
-
-			return graphicsQueueNodeIndex;
 		}
 		private MgFormat mFormat;
 		private MgColorSpaceKHR mColorSpace;
@@ -151,17 +58,17 @@ namespace HelloMagnesium
 
 			// Get physical device surface properties and formats
 			MgSurfaceCapabilitiesKHR surfCaps;
-			err = mPhysicalDevice.GetPhysicalDeviceSurfaceCapabilitiesKHR(mSurface, out surfCaps);
+			err = mPartition.PhysicalDevice.GetPhysicalDeviceSurfaceCapabilitiesKHR(mLayer.Surface, out surfCaps);
 			Debug.Assert(err == Result.SUCCESS);
 
 			// Get available present modes
 			MgPresentModeKHR[] presentModes;
-			err = mPhysicalDevice.GetPhysicalDeviceSurfacePresentModesKHR(mSurface, out presentModes);
+			err = mPartition.PhysicalDevice.GetPhysicalDeviceSurfacePresentModesKHR(mLayer.Surface, out presentModes);
 			Debug.Assert(err == Result.SUCCESS);
 
 			var swapchainExtent = new MgExtent2D {};
 			// width and height are either both -1, or both not -1.
-			if (surfCaps.CurrentExtent.Width == -1)
+			if ((int) surfCaps.CurrentExtent.Width == -1)
 			{
 				// If the surface size is undefined, the size is set to
 				// the size of the images requested.
@@ -208,8 +115,8 @@ namespace HelloMagnesium
 				preTransform = surfCaps.CurrentTransform;
 			}
 
-			MgSwapchainCreateInfoKHR swapchainCI = new MgSwapchainCreateInfoKHR {
-				Surface = mSurface,
+			var swapchainCI = new MgSwapchainCreateInfoKHR {
+				Surface = mLayer.Surface,
 				MinImageCount = desiredNumberOfSwapchainImages,
 				ImageFormat = mFormat,
 				ImageColorSpace = mColorSpace,
@@ -225,7 +132,7 @@ namespace HelloMagnesium
 				CompositeAlpha = MgCompositeAlphaFlagBitsKHR.OPAQUE_BIT_KHR,
 			};
 
-			err = mDevice.CreateSwapchainKHR(swapchainCI, null, out mSwapChain);
+			err = mPartition.Device.CreateSwapchainKHR(swapchainCI, null, out mSwapChain);
 			Debug.Assert(err == Result.SUCCESS);
 
 			// If an existing swap chain is re-created, destroy the old swap chain
@@ -234,13 +141,13 @@ namespace HelloMagnesium
 			{ 
 				for (uint i = 0; i < mImageCount; i++)
 				{
-					mBuffers[i].view.DestroyImageView(mDevice, null);
+					mBuffers[i].View.DestroyImageView(mPartition.Device, null);
 				}
-				oldSwapchain.DestroySwapchainKHR(mDevice, null);
+				oldSwapchain.DestroySwapchainKHR(mPartition.Device, null);
 			}
 
 			// Get the swap chain images
-			err = mDevice.GetSwapchainImagesKHR(mSwapChain, out mImages);
+			err = mPartition.Device.GetSwapchainImagesKHR(mSwapChain, out mImages);
 			Debug.Assert(err == Result.SUCCESS);
 
 			// Get the swap chain buffers containing the image and imageview
@@ -270,19 +177,19 @@ namespace HelloMagnesium
 					Flags = 0,
 				};
 
-				buffer.image = mImages[i];
+				buffer.Image = mImages[i];
 
 				// Transform images from initial (undefined) to present layout
 				mImageTools.SetImageLayout(
 					cmd, 
-					buffer.image, 
+					buffer.Image, 
 					MgImageAspectFlagBits.COLOR_BIT, 
 					MgImageLayout.UNDEFINED, 
 					MgImageLayout.PRESENT_SRC_KHR);
 
-				colorAttachmentView.Image = buffer.image;
+				colorAttachmentView.Image = buffer.Image;
 
-				err = mDevice.CreateImageView(colorAttachmentView, null, out buffer.view);
+				err = mPartition.Device.CreateImageView(colorAttachmentView, null, out buffer.View);
 				Debug.Assert(err == Result.SUCCESS);
 
 				mBuffers [i] = buffer;
@@ -309,19 +216,17 @@ namespace HelloMagnesium
 
 			for (uint i = 0; i < mImageCount; i++)
 			{
-				mBuffers[i].view.DestroyImageView(mDevice, null);
+				mBuffers[i].View.DestroyImageView(mPartition.Device, null);
 			}
-			mSwapChain.DestroySwapchainKHR(mDevice, null);
-			mSurface.DestroySurfaceKHR(mInstance, null);
+			mSwapChain.DestroySwapchainKHR(mPartition.Device, null);
 
 			mIsDisposed = true;
 		}
 
-
 		private class SwapChainBuffer
 		{
-			public IMgImage image;
-			public IMgImageView view;
+			public IMgImage Image;
+			public IMgImageView View;
 		}
 
 		private IMgImage[] mImages;

@@ -5,7 +5,7 @@ namespace MonoGame.Audio.OpenAL
 	public interface IOpenALSoundContext : IDisposable
 	{
 		IntPtr Device { get; }		
-		bool Initialise();
+		bool Initialize();
 
 		/// <summary>
 		/// Checks the error state of the OpenAL driver. If a value that is not AlcError.NoError

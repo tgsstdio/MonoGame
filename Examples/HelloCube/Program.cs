@@ -91,19 +91,19 @@ namespace HelloCube
 							using (var audioContext = container.Resolve<IOpenALSoundContext>())
 							using (var platform = container.Resolve<IGraphicsDevicePlatform>())
 							{
-								audioContext.Initialise();
+								audioContext.Initialize();
 
 								platform.Setup();
 
 								var capabilities = container.Resolve<IGraphicsCapabilities>();
-								capabilities.Initialise();
+								capabilities.Initialize();
 
 								platform.Initialize();
 
 								using (var backbone = container.Resolve<IGameBackbone> ())
 								{
 									var exitStrategy = container.Resolve<IWindowExitStrategy>();
-									exitStrategy.Initialise();
+									exitStrategy.Initialize();
 
 									backbone.Run ();
 								}

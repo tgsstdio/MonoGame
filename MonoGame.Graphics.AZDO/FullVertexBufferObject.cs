@@ -10,17 +10,17 @@ namespace MonoGame.Graphics.AZDO
 			ArrayId = GL.GenVertexArray();			
 		}
 
-		protected abstract void InitialiseBuffers ();
+		protected abstract void InitializeBuffers ();
 		protected abstract void BindBuffersManually(int programID);
 		protected abstract void ReleaseManagedResources ();
 
 		public int ArrayId { get; private set; }
 		public int ElementBufferId { get; private set; }
 
-		public void Initialise(int elementBuffer)
+		public void Initialize(int elementBuffer)
 		{
 			GL.BindVertexArray (ArrayId);
-			InitialiseBuffers ();
+			InitializeBuffers ();
 			ElementBufferId = elementBuffer;
 			GL.BindBuffer (BufferTarget.ElementArrayBuffer, ElementBufferId);
 			GL.BindVertexArray (0);

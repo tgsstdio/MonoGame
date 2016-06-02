@@ -109,7 +109,7 @@ namespace MonoGame.Graphics
 
 		public bool SupportsVertexTextures { get; private set; }
 
-		public void Initialise()
+		public void Initialize()
         {
 			SupportsNonPowerOfTwo = mLookup.SupportsNonPowerOfTwo();
 

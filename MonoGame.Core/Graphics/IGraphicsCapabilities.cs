@@ -6,7 +6,7 @@ namespace MonoGame.Core
 {
 	public interface IGraphicsCapabilities
 	{
-		void Initialise();
+		void Initialize();
 
 		/// <summary>
 		/// Whether the device fully supports non power-of-two textures, including

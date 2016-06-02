@@ -11,10 +11,10 @@ namespace MonoGame.Platform.AndroidGL.Graphics
 		public AndroidGLGraphicsAdapter (View view)
 		{
 			mView = view;
-			InitialiseSupportedModes ();
+			InitializeSupportedModes ();
 		}
 
-		private void InitialiseSupportedModes()
+		private void InitializeSupportedModes()
 		{
 			var modes = new List<DisplayMode>(new[] { CurrentDisplayMode});
 			SupportedDisplayModes = new DisplayModeCollection(modes);

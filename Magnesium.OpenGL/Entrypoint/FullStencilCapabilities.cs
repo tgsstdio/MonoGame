@@ -9,7 +9,7 @@ namespace Magnesium.OpenGL
 	{
 		#region IDepthStencilCapabilities implementation
 
-		public void Initialise ()
+		public void Initialize ()
 		{
 			DisableStencilBuffer ();
 			SetStencilWriteMask (~0);

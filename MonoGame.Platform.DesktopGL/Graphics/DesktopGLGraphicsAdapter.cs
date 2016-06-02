@@ -14,10 +14,10 @@ namespace MonoGame.Platform.DesktopGL.Graphics
         
 		public DesktopGLGraphicsAdapter ()
 		{
-			InitialiseSupportedModes ();
+			InitializeSupportedModes ();
 		}
 
-		private void InitialiseSupportedModes()
+		private void InitializeSupportedModes()
 		{
 			var modes = new List<DisplayMode>(new[] { CurrentDisplayMode, });
 

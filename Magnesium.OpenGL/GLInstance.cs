@@ -15,7 +15,7 @@ namespace Magnesium.OpenGL
 		#region IMgInstance implementation
 		public void DestroyInstance (MgAllocationCallbacks allocator)
 		{
-			throw new NotImplementedException ();		
+	
 		}
 
 		public Result EnumeratePhysicalDevices (out IMgPhysicalDevice[] physicalDevices)

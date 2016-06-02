@@ -6,7 +6,7 @@ namespace MonoGame.Content
 	public interface IFileSystem : IDisposable
 	{
 		//string Path {get;}
-		//void Initialise(string path);
+		//void Initialize(string path);
 		bool Register(BlockIdentifier id);
 		bool IsRegistered(BlockIdentifier id);
 		bool Exists (BlockIdentifier blockId, string path);
