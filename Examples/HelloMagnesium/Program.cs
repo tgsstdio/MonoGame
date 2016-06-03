@@ -89,7 +89,7 @@ namespace HelloMagnesium
 					container.Register<IThreadSleeper, SystemThreadSleeper>(Reuse.Singleton);
 
 					// MAGNESIUM
-					container.Register<IMagnesiumDriver, MagnesiumDriver>(Reuse.Singleton);
+					container.Register<IMgDriver, MgDriver>(Reuse.Singleton);
 					container.Register<IMgEntrypoint, Magnesium.OpenGL.GLEntrypoint>(Reuse.Singleton);
 					container.Register<IMgPresentationLayer, Win32PresentationLayer>(Reuse.Singleton);
 					container.Register<Magnesium.OpenGL.IGLQueue, Magnesium.OpenGL.GLQueue>(Reuse.Singleton);
@@ -107,7 +107,7 @@ namespace HelloMagnesium
 					using (var scope = container.OpenScope ())
 					{
 						using (var window = new NativeWindow())
-						using (var driver = container.Resolve<IMagnesiumDriver>())								
+						using (var driver = container.Resolve<IMgDriver>())								
 						{							
 							container.RegisterInstance<INativeWindow>(window);
 							driver.Initialize(new MgApplicationInfo{

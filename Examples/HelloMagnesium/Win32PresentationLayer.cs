@@ -6,9 +6,9 @@ namespace HelloMagnesium
 {
 	public class Win32PresentationLayer : IMgPresentationLayer
 	{
-		private readonly IMagnesiumDriver mPlatform;
+		private readonly IMgDriver mPlatform;
 		private readonly INativeWindow mWindow;
-		public Win32PresentationLayer (IMagnesiumDriver platform, INativeWindow window)
+		public Win32PresentationLayer (IMgDriver platform, INativeWindow window)
 		{
 			mPlatform = platform;
 			mWindow = window;
