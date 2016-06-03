@@ -594,9 +594,8 @@ namespace Magnesium.OpenGL
 //			mImageViews [imageView.Key].Destroy ();
 //		}
 
-		class GLShaderModule
+		class GLShaderModule : IMgShaderModule
 		{
-			public MgShaderModule Handle { get; set; }
 			public int? ShaderId { get; set; }
 			public MgShaderModuleCreateInfo Info { get; set; }
 
@@ -608,25 +607,42 @@ namespace Magnesium.OpenGL
 					ShaderId = null;
 				}
 			}
+
+			#region IMgShaderModule implementation
+			private bool mIsDisposed = false;
+			public void DestroyShaderModule (IMgDevice device, MgAllocationCallbacks allocator)
+			{
+				if (mIsDisposed)
+					return;
+
+				if (ShaderId.HasValue)
+				{
+					GL.DeleteShader(ShaderId.Value);
+					ShaderId = null;
+				}
+
+				mIsDisposed = true;
+			}
+
+			#endregion
 		}
-		private List<GLShaderModule> mShaderModules = new List<GLShaderModule>();
-		public Result CreateShaderModule (MgShaderModuleCreateInfo pCreateInfo, MgAllocationCallbacks allocator, out MgShaderModule pShaderModule)
+		//private List<GLShaderModule> mShaderModules = new List<GLShaderModule>();
+		public Result CreateShaderModule (MgShaderModuleCreateInfo pCreateInfo, MgAllocationCallbacks allocator, out IMgShaderModule pShaderModule)
 		{
 			var result = new GLShaderModule { 
-				Handle = new MgShaderModule{ Key = mShaderModules.Count },
 				Info = pCreateInfo,
 				ShaderId = null,
 			};
 
-			mShaderModules.Add (result);
-			pShaderModule = result.Handle;
+			//mShaderModules.Add (result);
+			pShaderModule = result;
 			return Result.SUCCESS;
 		}
 
-		public void DestroyShaderModule (MgShaderModule shaderModule, MgAllocationCallbacks allocator)
-		{
-			mShaderModules[shaderModule.Key].Destroy();
-		}
+//		public void DestroyShaderModule (IMgShaderModule shaderModule, MgAllocationCallbacks allocator)
+//		{
+//			mShaderModules[shaderModule.Key].Destroy();
+//		}
 
 		public Result CreatePipelineCache (MgPipelineCacheCreateInfo pCreateInfo, MgAllocationCallbacks allocator, out IMgPipelineCache pPipelineCache)
 		{
@@ -668,8 +684,8 @@ namespace Magnesium.OpenGL
 				{
 					shaderType = ShaderType.GeometryShader;
 				}
-				var module = mShaderModules [stage.Module.Key];
-				if (module.ShaderId.HasValue)
+				var module = stage.Module as GLShaderModule;
+				if (module != null &&  module.ShaderId.HasValue)
 				{
 					modules.Add (module.ShaderId.Value);
 				}
