@@ -7,16 +7,16 @@ namespace MonoGame.Platform.AndroidGL.Graphics
 {
 	public class AndroidGLGraphicsAdapter : IGraphicsAdapter
 	{
-		private View mView;
-		public AndroidGLGraphicsAdapter (View view)
+		private IAndroidGameActivity mActivity;
+		public AndroidGLGraphicsAdapter (IAndroidGameActivity activity)
 		{
-			mView = view;
+			mActivity = activity;
 			InitializeSupportedModes ();
 		}
 
 		private void InitializeSupportedModes()
 		{
-			var modes = new List<DisplayMode>(new[] { CurrentDisplayMode});
+			var modes = new List<DisplayMode>(new[] { CurrentDisplayMode });
 			SupportedDisplayModes = new DisplayModeCollection(modes);
 		}
 
@@ -24,7 +24,8 @@ namespace MonoGame.Platform.AndroidGL.Graphics
 
 		public DisplayMode CurrentDisplayMode {
 			get {
-				return new DisplayMode(mView.Width, mView.Height, 60, SurfaceFormat.Color);
+				var deviceSize = mActivity.GetDeviceSize ();
+				return new DisplayMode((int) deviceSize.X, (int) deviceSize.Y, 60, SurfaceFormat.Color); 
 			}
 		}
 

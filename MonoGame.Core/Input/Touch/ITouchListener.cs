@@ -50,8 +50,11 @@ namespace Microsoft.Xna.Framework.Input.Touch
 			set;
 		}
 
+		void AddEvent (int id, TouchLocationState state, Vector2 position);
 		void AddEvent (int id, TouchLocationState state, Vector2 position, bool isMouse);
 		ITouchPanelCapabilities GetCapabilities ();
 		TouchCollection GetState();
+
+		void ReleaseAllTouches ();
 	}
 }

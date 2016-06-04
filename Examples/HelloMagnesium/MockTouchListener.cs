@@ -5,6 +5,11 @@ namespace HelloMagnesium
 	public class MockTouchListener : ITouchListener
 	{
 		#region ITouchListener implementation
+
+		public void ReleaseAllTouches ()
+		{
+			throw new System.NotImplementedException ();
+		}
 		public GestureSample GetGestumeSample ()
 		{
 			throw new System.NotImplementedException ();
@@ -13,6 +18,12 @@ namespace HelloMagnesium
 		{
 			throw new System.NotImplementedException ();
 		}
+
+		public void AddEvent (int id, TouchLocationState state, Microsoft.Xna.Framework.Vector2 position)
+		{
+			throw new System.NotImplementedException ();
+		}
+
 		public void AddEvent (int id, TouchLocationState state, Microsoft.Xna.Framework.Vector2 position, bool isMouse)
 		{
 			throw new System.NotImplementedException ();

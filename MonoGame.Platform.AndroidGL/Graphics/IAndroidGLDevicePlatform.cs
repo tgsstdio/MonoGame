@@ -1,8 +1,6 @@
-using Microsoft.Xna.Framework.Graphics;
-
-namespace MonoGame.Platform.DesktopGL
+namespace MonoGame.Platform.AndroidGL.Graphics
 {
-	public interface IGLDevicePlatform
+	public interface IAndroidGLDevicePlatform
 	{
 		void Initialize();
 		void AfterApplyRenderTargets(int renderCount);

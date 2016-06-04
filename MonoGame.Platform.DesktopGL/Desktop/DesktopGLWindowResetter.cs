@@ -9,20 +9,22 @@ namespace MonoGame.Platform.DesktopGL
 		private readonly IOpenTKGameWindow mWindow;
 		private readonly IGraphicsDeviceQuery mDeviceQuery;
 		private readonly IPresentationParameters mPresentation;
+		private readonly IClientWindowBounds mClient;
 		private bool isCurrentlyFullScreen = false;
 
-		public DesktopGLWindowResetter (IOpenTKGameWindow window, IGraphicsDeviceQuery deviceQuery, IPresentationParameters presentation)
+		public DesktopGLWindowResetter (IOpenTKGameWindow window, IGraphicsDeviceQuery deviceQuery, IPresentationParameters presentation, IClientWindowBounds client)
 		{
 			mWindow = window;
 			mDeviceQuery = deviceQuery;
 			mPresentation = presentation;
+			mClient = client;
 		}
 
 		public void ResetWindowBounds()
 		{
 			Rectangle bounds;
 
-			bounds = mWindow.ClientBounds;
+			bounds = mClient.ClientBounds;
 
 			//Changing window style forces a redraw. Some games
 			//have fail-logic and toggle fullscreen in their draw function,

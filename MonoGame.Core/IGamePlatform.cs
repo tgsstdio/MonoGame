@@ -26,7 +26,7 @@ namespace Microsoft.Xna.Framework
 		bool IsMouseVisible {get;set;}
 
 		void Log (string message);
-		IGameWindow Window { get; }
+		//IGameWindow Window { get; }
 		GameRunBehavior DefaultRunBehavior { get; }
 		void AddAsyncHandler(EventHandler<EventArgs> handler);
 		void RemoveAsyncHandler(EventHandler<EventArgs> handler);

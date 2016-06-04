@@ -38,6 +38,7 @@ purpose and non-infringement.
 */
 using MonoGame.Platform.DesktopGL.Input;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Core;
 
 
 #endregion License
@@ -75,7 +76,7 @@ namespace MonoGame.Platform.DesktopGL
 
         // we need this variables to make changes beetween threads
         private WindowState windowState;
-		private Rectangle mClientBounds;
+		///private Rectangle mClientBounds;
         private Rectangle targetBounds;
         private bool updateClientBounds;
         private int updateborder = 0;
@@ -92,7 +93,7 @@ namespace MonoGame.Platform.DesktopGL
 
 		public override string ScreenDeviceName { get { return window.Title; } }
 
-		public override Rectangle ClientBounds { get { return mClientBounds; } }
+		//public override Rectangle ClientBounds { get { return mClientBounds; } }
 
         // TODO: this is buggy on linux - report to opentk team
 		public override bool AllowUserResizing
@@ -110,10 +111,10 @@ namespace MonoGame.Platform.DesktopGL
             }
         }
 
-		public override DisplayOrientation CurrentOrientation
-        {
-            get { return DisplayOrientation.LandscapeLeft; }
-        }
+//		public override DisplayOrientation CurrentOrientation
+//        {
+//            get { return DisplayOrientation.LandscapeLeft; }
+//        }
 #if DESKTOPGL
         public Microsoft.Xna.Framework.Point Position
         {
@@ -133,10 +134,6 @@ namespace MonoGame.Platform.DesktopGL
             }
         }
 #endif
-		public override void SetSupportedOrientations(DisplayOrientation orientations)
-        {
-            // Do nothing.  Desktop platforms don't do orientation.
-        }
 
 		public override bool IsBorderless
         {
@@ -161,12 +158,21 @@ namespace MonoGame.Platform.DesktopGL
 		private IMouseListener mMouse;
 		private IKeyboardInputListener mKeyboard;
 		private IDrawSuppressor mSuppressor;
-		public OpenTKGameWindow(IPresentationParameters parameters, INativeWindow emptyWindow, IDrawSuppressor suppressor, IMouseListener mouseListener, IKeyboardInputListener keyboard)
+		private IClientWindowBounds mClient;
+		public OpenTKGameWindow(
+			IPresentationParameters parameters, 
+			INativeWindow emptyWindow,
+			IDrawSuppressor suppressor, 
+			IMouseListener mouseListener,
+			IKeyboardInputListener keyboard,
+			IClientWindowBounds client
+		)
         {
 			mSuppressor = suppressor;
 			PresentationParameters = parameters;
 			mMouse = mouseListener;
 			mKeyboard = keyboard;
+			mClient = client;
 			Initialize(emptyWindow);
         }
 
@@ -225,9 +231,9 @@ namespace MonoGame.Platform.DesktopGL
 			// TODO : resize viewport
             // Game.GraphicsDevice.Viewport = new Viewport(0, 0, winWidth, winHeight);
 
-            mClientBounds = winRect;
+			mClient.ClientBounds = winRect;
 
-            OnClientSizeChanged();
+			mClient.OnClientSizeChanged();
         }
 
 		public void ProcessEvents()
@@ -350,7 +356,7 @@ namespace MonoGame.Platform.DesktopGL
             }
 
             updateClientBounds = false;
-            mClientBounds = new Rectangle(window.ClientRectangle.X, window.ClientRectangle.Y,
+			mClient.ClientBounds = new Rectangle(window.ClientRectangle.X, window.ClientRectangle.Y,
                                          window.ClientRectangle.Width, window.ClientRectangle.Height);
             windowState = window.WindowState;            
 
@@ -389,7 +395,7 @@ namespace MonoGame.Platform.DesktopGL
 
         public void ChangeClientBounds(Rectangle clientBounds)
         {
-            if (this.mClientBounds != clientBounds)
+			if (mClient.ClientBounds != clientBounds)
             {
                 updateClientBounds = true;
                 targetBounds = clientBounds;

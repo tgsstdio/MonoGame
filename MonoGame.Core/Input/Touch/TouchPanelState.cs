@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using MonoGame.Core;
 
 namespace Microsoft.Xna.Framework.Input.Touch
 {
@@ -65,12 +66,11 @@ namespace Microsoft.Xna.Framework.Input.Touch
 
 		private ITouchPanelCapabilities Capabilities;
 
-        internal readonly IGameWindow Window;
-
-		public TouchPanelState(IGameWindow window, ITouchPanelCapabilities capabilities)
+		private IClientWindowBounds mClient;
+		public TouchPanelState(ITouchPanelCapabilities capabilities, IClientWindowBounds clientBounds)
         {
-            Window = window;
 			Capabilities = capabilities;
+			mClient = clientBounds;
         }
 
         /// <summary>
@@ -236,7 +236,7 @@ namespace Microsoft.Xna.Framework.Input.Touch
         private void UpdateTouchScale()
         {
             // Get the window size.
-            var windowSize = new Vector2(Window.ClientBounds.Width, Window.ClientBounds.Height);
+			var windowSize = new Vector2(mClient.ClientBounds.Width, mClient.ClientBounds.Height);
 
             // Recalculate the touch scale.
             _touchScale = new Vector2(  _displaySize.X / windowSize.X,

@@ -10,17 +10,17 @@ namespace MonoGame.Platform.AndroidGL
 	public class OrientationListener : OrientationEventListener, IOrientationListener
     {
 		private readonly IScreenLock mScreenLock;
-		private readonly IAndroidGLGameWindow mGameWindow;
 		private readonly IAndroidCompatibility mCompatibility;
+		private readonly AndroidGLTrueWindowing mWindowing;
         /// <summary>
         /// Constructor. SensorDelay.Ui is passed to the base class as this orientation listener 
         /// is just used for flipping the screen orientation, therefore high frequency data is not required.
         /// </summary>
-		public OrientationListener(Context context, IScreenLock screenLock, IAndroidGLGameWindow window, IAndroidCompatibility compatibility)
+		public OrientationListener(Context context, IScreenLock screenLock, AndroidGLTrueWindowing windowing, IAndroidCompatibility compatibility)
             : base(context, SensorDelay.Ui)
         {
 			mScreenLock = screenLock;
-			mGameWindow = window;
+			mWindowing = windowing;
 			mCompatibility = compatibility;
         }
 
@@ -37,10 +37,11 @@ namespace MonoGame.Platform.AndroidGL
 
             // Only auto-rotate if target orientation is supported and not current
            // AndroidGameWindow gameWindow = (AndroidGameWindow)Game.Instance.Window;
-			if ((mGameWindow.GetEffectiveSupportedOrientations() & disporientation) != 0 &&
-				disporientation != mGameWindow.CurrentOrientation)
+			if ((mWindowing.WindowingState.GetEffectiveSupportedOrientations() & disporientation) != 0 &&
+				disporientation != mWindowing.WindowingState.CurrentOrientation)
             {
-				mGameWindow.SetOrientation(disporientation, true);
+				//mGameWindow.SetOrientation(disporientation, true);
+				mWindowing.ApplyOrientation(disporientation);
             }
         }
 

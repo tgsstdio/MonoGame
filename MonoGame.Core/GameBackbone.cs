@@ -295,11 +295,11 @@ namespace Microsoft.Xna.Framework
 //            }
 //        }
 
-        [CLSCompliant(false)]
-        public IGameWindow Window
-        {
-            get { return Platform.Window; }
-        }
+//        [CLSCompliant(false)]
+//        public IGameWindow Window
+//        {
+//            get { return Platform.Window; }
+//        }
 
         #endregion Properties
 

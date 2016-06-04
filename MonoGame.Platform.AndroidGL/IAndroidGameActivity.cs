@@ -22,5 +22,11 @@ namespace MonoGame.Platform.AndroidGL
 		event EventHandler Paused;
 
 		Context GetContext();
+
+		void ForceFullScreen(bool value);
+
+		bool HasSystemFeature(string feature);
+
+		Vector2 GetDeviceSize();
 	}
 }

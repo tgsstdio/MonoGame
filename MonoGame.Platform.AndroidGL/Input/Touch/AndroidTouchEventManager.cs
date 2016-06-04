@@ -16,14 +16,14 @@ namespace MonoGame.Platform.AndroidGL.Input.Touch
     /// </summary>
 	public class AndroidTouchEventManager : IAndroidTouchEventManager
     {
-        readonly IGameWindow _gameWindow;
-		readonly ITouchPanel mTouchPanel;
+		readonly IClientWindowBounds mClient;
+		readonly ITouchListener mTouchPanel;
 
         public bool Enabled { get; set; }
 
-		public AndroidTouchEventManager(IGameWindow androidGameWindow, ITouchPanel touchPanel)
+		public AndroidTouchEventManager(IClientWindowBounds client, ITouchListener touchPanel)
         {
-            _gameWindow = androidGameWindow;
+            mClient = client;
 			mTouchPanel = touchPanel;
         }
 
@@ -75,7 +75,7 @@ namespace MonoGame.Platform.AndroidGL.Input.Touch
 
         void UpdateTouchPosition(ref Vector2 position)
         {
-            Rectangle clientBounds = _gameWindow.ClientBounds;
+            Rectangle clientBounds = mClient.ClientBounds;
 
             //Fix for ClientBounds
             position.X -= clientBounds.X;

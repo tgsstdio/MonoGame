@@ -7,20 +7,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input.Touch;
 using MonoGame.Platform.DesktopGL;
-using MonoGame.Platform.DesktopGL.Graphics;
-
-#if MONOMAC
-using MonoMac.OpenGL;
-#elif GLES
-using OpenTK.Graphics.ES20;
-#elif OPENGL
-#elif WINDOWS_STOREAPP || WINDOWS_UAP
-using Windows.UI.Xaml.Controls;
-#endif
-
-#if ANDROID
-using Android.Views;
-#endif
+using MonoGame.Core;
 
 namespace MonoGame.Platform.DesktopGL
 {
@@ -39,31 +26,10 @@ namespace MonoGame.Platform.DesktopGL
 		bool disposed;
 		private bool _hardwareModeSwitch = true;
 
-		#if (WINDOWS || WINDOWS_UAP) && DIRECTX
-		private bool _firstLaunch = true;
-		#endif
-
-//		#if !WINRT || WINDOWS_UAP
-//		private bool _wantFullScreen = false;
-//		#endif
-//		public int DefaultBackBufferHeight
-//		{
-//			get {
-//				return 480;
-//			}
-//		}
-//
-//		public int DefaultBackBufferWidth {
-//			get {
-//				return 800;
-//			}
-//		}
-		private ITouchPanel mTouchPanel;
+		private ITouchListener mTouchPanel;
 		private IOpenTKWindowResetter mWindowReset;
 		private IGraphicsDevicePlatform mDevicePlatform;
 		private IOpenTKDeviceQuery mDeviceQuery;
-	//	private ISamplerStateCollectionPlatform mSamplerStateCollectionPlatform;
-	//	private ITextureCollectionPlatform mTextureCollectionPlatform;
 		private IGraphicsAdapterCollection mAdapters;
 		private IGraphicsDevicePreferences mDevicePreferences;
 		private IGraphicsDeviceService mDeviceService;
@@ -72,21 +38,18 @@ namespace MonoGame.Platform.DesktopGL
 			IOpenTKWindowResetter windowReset,
 			IGraphicsDevicePlatform devicePlatform,
 			IOpenTKDeviceQuery deviceQuery,
-			//ISamplerStateCollectionPlatform samplerStateCollectionPlatform,
-			//ITextureCollectionPlatform texCollectionPlatform,
 			IBackBufferPreferences backBufferPreferences,
 			IPresentationParameters presentationParams,
 			IGraphicsAdapterCollection adapters,
 			IGraphicsDevicePreferences devicePreferences,
-			ITouchPanel touchPanel,
-			IGraphicsDeviceService deviceService
+			ITouchListener touchPanel,
+			IGraphicsDeviceService deviceService,
+			IGraphicsProfiler profiler
 			)
 		{
 			mWindowReset = windowReset;
 			mDevicePlatform = devicePlatform;
 			mDeviceQuery = deviceQuery;
-			//mSamplerStateCollectionPlatform = samplerStateCollectionPlatform;
-		//	mTextureCollectionPlatform = texCollectionPlatform;
 			mPresentationParameters = presentationParams;
 			mDevicePreferences = devicePreferences;
 
@@ -102,28 +65,14 @@ namespace MonoGame.Platform.DesktopGL
 
 			_supportedOrientations = DisplayOrientation.Default;
 
-			#if WINDOWS || MONOMAC || DESKTOPGL
 			_preferredBackBufferHeight = backBufferPreferences.DefaultBackBufferHeight;
 			_preferredBackBufferWidth = backBufferPreferences.DefaultBackBufferWidth;
-			#else
-			// Preferred buffer width/height is used to determine default supported orientations,
-			// so set the default values to match Xna behaviour of landscape only by default.
-			// Note also that it's using the device window dimensions.
-			_preferredBackBufferWidth = Math.Max(_game.Window.ClientBounds.Height, _game.Window.ClientBounds.Width);
-			_preferredBackBufferHeight = Math.Min(_game.Window.ClientBounds.Height, _game.Window.ClientBounds.Width);
-			#endif
 
 			_preferredBackBufferFormat = SurfaceFormat.Color;
 			_preferredDepthStencilFormat = DepthFormat.Depth24;
 			_synchronizedWithVerticalRetrace = true;
 
-			GraphicsProfile = devicePlatform.GetHighestSupportedGraphicsProfile(null);
-
-//			if (_game.Services.GetService(typeof(IGraphicsDeviceManager)) != null)
-//				throw new ArgumentException("Graphics Device Manager Already Present");
-//
-//			_game.Services.AddService(typeof(IGraphicsDeviceManager), this);
-//			_game.Services.AddService(typeof(IGraphicsDeviceService), this);
+			GraphicsProfile = profiler.GetHighestSupportedGraphicsProfile();
 		}
 
 		~DesktopGLGraphicsDeviceManager()
@@ -227,83 +176,13 @@ namespace MonoGame.Platform.DesktopGL
 
 		#endregion
 
-		public void ApplyChanges()
-		{
-			// Calling ApplyChanges() before CreateDevice() should have no effect
-			if (GraphicsDevice == null)
-				return;
+	public void ApplyChanges()
+	{
+		// Calling ApplyChanges() before CreateDevice() should have no effect
+		if (GraphicsDevice == null)
+			return;
 
-			#if WINDOWS_PHONE
-			_graphicsDevice.GraphicsProfile = GraphicsProfile;
-			// Display orientation is always portrait on WP8
-			_graphicsDevice.PresentationParameters.DisplayOrientation = DisplayOrientation.Portrait;
-			#elif WINDOWS_STOREAPP || WINDOWS_UAP
-
-			// TODO:  Does this need to occur here?
-			_game.Window.SetSupportedOrientations(_supportedOrientations);
-
-			_graphicsDevice.PresentationParameters.BackBufferFormat = _preferredBackBufferFormat;
-			_graphicsDevice.PresentationParameters.BackBufferWidth = _preferredBackBufferWidth;
-			_graphicsDevice.PresentationParameters.BackBufferHeight = _preferredBackBufferHeight;
-			_graphicsDevice.PresentationParameters.DepthStencilFormat = _preferredDepthStencilFormat;
-
-			// TODO: We probably should be resetting the whole device
-			// if this changes as we are targeting a different 
-			// hardware feature level.
-			_graphicsDevice.GraphicsProfile = GraphicsProfile;
-
-			#if WINDOWS_UAP
-			_graphicsDevice.PresentationParameters.DeviceWindowHandle = IntPtr.Zero;
-			_graphicsDevice.PresentationParameters.SwapChainPanel = this.SwapChainPanel;
-			_graphicsDevice.PresentationParameters.IsFullScreen = _wantFullScreen;
-			#else
-			_graphicsDevice.PresentationParameters.IsFullScreen = false;
-
-			// The graphics device can use a XAML panel or a window
-			// to created the default swapchain target.
-			if (this.SwapChainBackgroundPanel != null)
-			{
-			_graphicsDevice.PresentationParameters.DeviceWindowHandle = IntPtr.Zero;
-			_graphicsDevice.PresentationParameters.SwapChainBackgroundPanel = this.SwapChainBackgroundPanel;
-			}
-			else
-			{
-			_graphicsDevice.PresentationParameters.DeviceWindowHandle = _game.Window.Handle;
-			_graphicsDevice.PresentationParameters.SwapChainBackgroundPanel = null;
-			}
-			#endif
-			// Update the back buffer.
-			_graphicsDevice.CreateSizeDependentResources();
-			_graphicsDevice.ApplyRenderTargets(null);
-
-			#if WINDOWS_UAP
-			((UAPGameWindow)_game.Window).SetClientSize(_preferredBackBufferWidth, _preferredBackBufferHeight);
-			#endif
-
-			#elif WINDOWS && DIRECTX
-
-			_graphicsDevice.PresentationParameters.BackBufferFormat = _preferredBackBufferFormat;
-			_graphicsDevice.PresentationParameters.BackBufferWidth = _preferredBackBufferWidth;
-			_graphicsDevice.PresentationParameters.BackBufferHeight = _preferredBackBufferHeight;
-			_graphicsDevice.PresentationParameters.DepthStencilFormat = _preferredDepthStencilFormat;
-			_graphicsDevice.PresentationParameters.PresentationInterval = _synchronizedWithVerticalRetrace ? PresentInterval.Default : PresentInterval.Immediate;
-			_graphicsDevice.PresentationParameters.IsFullScreen = _wantFullScreen;
-
-			// TODO: We probably should be resetting the whole 
-			// device if this changes as we are targeting a different
-			// hardware feature level.
-			_graphicsDevice.GraphicsProfile = GraphicsProfile;
-
-			_graphicsDevice.PresentationParameters.DeviceWindowHandle = _game.Window.Handle;
-
-			// Update the back buffer.
-			_graphicsDevice.CreateSizeDependentResources();
-			_graphicsDevice.ApplyRenderTargets(null);
-
-			((MonoGame.Framework.WinFormsGamePlatform)_game.Platform).ResetWindowBounds();
-
-			#elif DESKTOPGL
-			mWindowReset.ResetWindowBounds();
+		mWindowReset.ResetWindowBounds();
 
 		//Set the swap interval based on if vsync is desired or not.
 		//See GetSwapInterval for more details
@@ -313,33 +192,8 @@ namespace MonoGame.Platform.DesktopGL
 		else
 			swapInterval = 0;
 			
-			// TODO : figure this out somehow
-			//GraphicsDevice.Context.SwapInterval = swapInterval;
-			#elif MONOMAC
-			_graphicsDevice.PresentationParameters.IsFullScreen = _wantFullScreen;
-
-			// TODO: Implement multisampling (aka anti-alising) for all platforms!
-
-			_game.applyChanges(this);
-			#else
-
-			#if ANDROID
-			// Trigger a change in orientation in case the supported orientations have changed
-			((AndroidGameWindow)_game.Window).SetOrientation(_game.Window.CurrentOrientation, false);
-			#endif
-			// Ensure the presentation parameter orientation and buffer size matches the window
-			_graphicsDevice.PresentationParameters.DisplayOrientation = _game.Window.CurrentOrientation;
-
-			// Set the presentation parameters' actual buffer size to match the orientation
-			bool isLandscape = (0 != (_game.Window.CurrentOrientation & (DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight)));
-			int w = PreferredBackBufferWidth;
-			int h = PreferredBackBufferHeight;
-
-			_graphicsDevice.PresentationParameters.BackBufferWidth = isLandscape ? Math.Max(w, h) : Math.Min(w, h);
-			_graphicsDevice.PresentationParameters.BackBufferHeight = isLandscape ? Math.Min(w, h) : Math.Max(w, h);
-
-			ResetClientBounds();
-			#endif
+		// TODO : figure this out somehow
+		//GraphicsDevice.Context.SwapInterval = swapInterval;
 
 			// Set the new display size on the touch panel.
 			//
@@ -347,76 +201,16 @@ namespace MonoGame.Platform.DesktopGL
 			// GraphicsDevice.DeviceReset event... we need to get 
 			// those working.
 			//
-			mTouchPanel.DisplayWidth = GraphicsDevice.PresentationParameters.BackBufferWidth;
-			mTouchPanel.DisplayHeight = GraphicsDevice.PresentationParameters.BackBufferHeight;
+		mTouchPanel.DisplayWidth = GraphicsDevice.PresentationParameters.BackBufferWidth;
+		mTouchPanel.DisplayHeight = GraphicsDevice.PresentationParameters.BackBufferHeight;
 
-			#if (WINDOWS || WINDOWS_UAP) && DIRECTX
+	}
 
-			if (!_firstLaunch)
-			{
-			if (IsFullScreen)
-			{
-			_game.Platform.EnterFullScreen();
-			}
-			else
-			{
-			_game.Platform.ExitFullScreen();
-			}
-			}
-			_firstLaunch = false;
-			#endif
-			}
+	private IPresentationParameters mPresentationParameters;
+	private void Initialize()
+	{
 
-		private IPresentationParameters mPresentationParameters;
-		private void Initialize()
-		{
-
-			mPresentationParameters.DepthStencilFormat = DepthFormat.Depth24;
-
-			#if (WINDOWS || WINRT) && !DESKTOPGL
-			_game.Window.SetSupportedOrientations(_supportedOrientations);
-
-			presentationParameters.BackBufferFormat = _preferredBackBufferFormat;
-			presentationParameters.BackBufferWidth = _preferredBackBufferWidth;
-			presentationParameters.BackBufferHeight = _preferredBackBufferHeight;
-			presentationParameters.DepthStencilFormat = _preferredDepthStencilFormat;
-			presentationParameters.IsFullScreen = false;
-
-			#if WINDOWS_PHONE
-			// Nothing to do!
-			#elif WINDOWS_UAP
-			presentationParameters.DeviceWindowHandle = IntPtr.Zero;
-			presentationParameters.SwapChainPanel = this.SwapChainPanel;
-			#elif WINDOWS_STORE
-			// The graphics device can use a XAML panel or a window
-			// to created the default swapchain target.
-			if (this.SwapChainBackgroundPanel != null)
-			{
-			presentationParameters.DeviceWindowHandle = IntPtr.Zero;
-			presentationParameters.SwapChainBackgroundPanel = this.SwapChainBackgroundPanel;
-			}
-			else
-			{
-			presentationParameters.DeviceWindowHandle = _game.Window.Handle;
-			presentationParameters.SwapChainBackgroundPanel = null;
-			}
-			#else
-			presentationParameters.DeviceWindowHandle = _game.Window.Handle;
-			#endif
-
-			#else
-
-			// SEE DesktopGLGraphicsDeviceQuery
-//			#if MONOMAC
-//			presentationParameters.IsFullScreen = _wantFullScreen;
-//			#elif DESKTOPGL
-//			mPresentationParameters.IsFullScreen = _wantFullScreen;
-//			#else
-//			// Set "full screen"  as default
-//			presentationParameters.IsFullScreen = true;
-//			#endif // MONOMAC
-
-			#endif // WINDOWS || WINRT
+		mPresentationParameters.DepthStencilFormat = DepthFormat.Depth24;
 
 		// TODO: Implement multisampling (aka anti-alising) for all platforms!
 		if (PreparingDeviceSettings != null)
@@ -450,61 +244,31 @@ namespace MonoGame.Platform.DesktopGL
 		mTouchPanel.DisplayOrientation = mPresentationParameters.DisplayOrientation;
 	}
 
-//	public void ToggleFullScreen()
-//	{
-//		IsFullScreen = !IsFullScreen;
-//
-//		#if (WINDOWS || WINDOWS_UAP) && DIRECTX
-//		ApplyChanges();
-//		#endif
-//	}
-
-	#if WINDOWS_STOREAPP
-	[CLSCompliant(false)]
-	public SwapChainBackgroundPanel SwapChainBackgroundPanel { get; set; }
-	#endif
-
-	#if WINDOWS_UAP
-	[CLSCompliant(false)]
-	public SwapChainPanel SwapChainPanel { get; set; }
-	#endif
+	public void ToggleFullScreen()
+	{
+		IsFullScreen = !IsFullScreen;
+	}
 
 	public GraphicsProfile GraphicsProfile { get; set; }
 
-//	public bool IsFullScreen
-//	{
-//		get
-//		{
-//			#if WINDOWS_UAP
-//			return _wantFullScreen;
-//			#elif WINRT
-//			return true;
-//			#else
-//			if (GraphicsDevice != null)
-//				return GraphicsDevice.PresentationParameters.IsFullScreen;
-//			return _wantFullScreen;
-//			#endif
-//		}
-//		set
-//		{
-//			#if WINDOWS_UAP
-//			_wantFullScreen = value;
-//			#elif WINRT
-//			// Just ignore this as it is not relevant on Windows 8
-//			#elif WINDOWS && DIRECTX
-//			_wantFullScreen = value;
-//			#else
-//			_wantFullScreen = value;
-//			if (GraphicsDevice != null)
-//			{
-//				GraphicsDevice.PresentationParameters.IsFullScreen = value;
-//			#if ANDROID
-//			ForceSetFullScreen();
-//			#endif
-//			}
-//			#endif
-//		}
-//	}
+	private bool _wantFullScreen = false;
+	public bool IsFullScreen
+	{
+		get
+		{
+			if (GraphicsDevice != null)
+				return mPresentationParameters.IsFullScreen;
+			return _wantFullScreen;
+		}
+		set
+		{
+			_wantFullScreen = value;
+			if (GraphicsDevice != null)
+			{
+				mPresentationParameters.IsFullScreen = value;
+			}
+		}
+	}
 
 
 	/// <summary>
@@ -603,8 +367,6 @@ namespace MonoGame.Platform.DesktopGL
 		set
 		{
 			_supportedOrientations = value;
-			if (mWindow != null)
-				mWindow.SetSupportedOrientations(_supportedOrientations);
 		}
 	}
 

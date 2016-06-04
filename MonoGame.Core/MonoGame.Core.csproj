@@ -37,7 +37,6 @@
     <Compile Include="IGraphicsDeviceManager.cs" />
     <Compile Include="GameRunBehavior.cs" />
     <Compile Include="IPlatformActivator.cs" />
-    <Compile Include="Input\Touch\TouchPanel.cs" />
     <Compile Include="Input\IMouseListener.cs" />
     <Compile Include="IGraphicsDevice.cs" />
     <Compile Include="Graphics\SurfaceFormat.cs" />
@@ -107,7 +106,6 @@
     <Compile Include="Media\ISongPlatform.cs" />
     <Compile Include="Media\IMediaPlayerPlatform.cs" />
     <Compile Include="Graphics\NoSuitableGraphicsDeviceException.cs" />
-    <Compile Include="Input\Touch\ITouchPanel.cs" />
     <Compile Include="IGraphicsDeviceQuery.cs" />
     <Compile Include="Input\Keys.cs" />
     <Compile Include="Input\KeyboardState.cs" />
@@ -213,6 +211,13 @@
     <Compile Include="Media\MediaSource.cs" />
     <Compile Include="BaseTitleContainer.cs" />
     <Compile Include="SpriteBatch\VertexPositionColor.cs" />
+    <Compile Include="Graphics\PresentationParameters.cs" />
+    <Compile Include="DefaultBackBufferPreferences.cs" />
+    <Compile Include="Graphics\IGraphicsProfiler.cs" />
+    <Compile Include="Graphics\DefaultGraphicsDeviceProfiler.cs" />
+    <Compile Include="IClientWindowBounds.cs" />
+    <Compile Include="DefaultClientWindowBounds.cs" />
+    <Compile Include="DefaultGraphicsDevicePreferences.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>

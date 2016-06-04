@@ -23,14 +23,15 @@ namespace MonoGame.Platform.AndroidGL
 		private IBaseActivityInfo mActivityInfo;
 
 		IViewResumer mViewResumer;
+		private IGraphicsDeviceManager mManager;
 
 		public AndroidGamePlatform (
-			IGraphicsDeviceManager manager,
 			IPlatformActivator activator,
+			IGraphicsDeviceManager manager,
 
 			IAndroidGameActivity activity,
 			IAndroidCompatibility compatibility,
-			IAndroidGLGameWindow window,
+			AndroidGLFalseWindowing windowing,
 			IMediaPlayer mediaPlayer,
 			IMediaLibrary mediaLibrary,
 			IGraphicsDevice device,
@@ -40,8 +41,9 @@ namespace MonoGame.Platform.AndroidGL
 			IViewResumer viewResumer,
 			IBaseActivityInfo activityInfo
 			)
-			: base (manager, activator)
+			: base (activator)
         {
+			mManager = manager;
 			mActivity = activity;
 			mCompatibility = compatibility;
 			mMediaLibrary = mediaLibrary;
@@ -52,14 +54,14 @@ namespace MonoGame.Platform.AndroidGL
 			mViewRefocuser = viewRefocuser;
 			mViewResumer = viewResumer;
 			mActivityInfo = activityInfo;
-			_gameWindow = window;
+			mWindowing = windowing;
 
 			System.Diagnostics.Debug.Assert(mActivity != null, "Must set Game.Activity before creating the Game instance");
 			mActivity.Paused += Activity_Paused;
 			mActivity.Resumed += Activity_Resumed;
 
             // _gameWindow = new AndroidGameWindow(Game.Activity, game);
-			Window = window;
+			///Window = window;
 
 //			mMediaLibrary.Context = Game.Activity;
         }
@@ -76,7 +78,7 @@ namespace MonoGame.Platform.AndroidGL
 
         private bool _initialized;
         public static bool IsPlayingVdeo { get; set; }
-        private IAndroidGLGameWindow _gameWindow;
+		private AndroidGLFalseWindowing mWindowing;
 
         public override void Exit()
         {
@@ -117,10 +119,10 @@ namespace MonoGame.Platform.AndroidGL
 			switch (mActivity.ConfigurationOrientation)
             {
                 case Android.Content.Res.Orientation.Portrait:
-                    this._gameWindow.SetOrientation(currentOrientation == DisplayOrientation.PortraitDown ? DisplayOrientation.PortraitDown : DisplayOrientation.Portrait, false);
+                    this.mWindowing.SetOrientation(currentOrientation == DisplayOrientation.PortraitDown ? DisplayOrientation.PortraitDown : DisplayOrientation.Portrait);
                     break;
                 default:
-                    this._gameWindow.SetOrientation(currentOrientation == DisplayOrientation.LandscapeRight ? DisplayOrientation.LandscapeRight : DisplayOrientation.LandscapeLeft, false);
+                    this.mWindowing.SetOrientation(currentOrientation == DisplayOrientation.LandscapeRight ? DisplayOrientation.LandscapeRight : DisplayOrientation.LandscapeLeft);
                     break;
             }
             base.BeforeInitialize();
@@ -151,7 +153,7 @@ namespace MonoGame.Platform.AndroidGL
         public override void EndScreenDeviceChange(string screenDeviceName, int clientWidth, int clientHeight)
         {
             // Force the Viewport to be correctly set
-            Graphics.ResetClientBounds();
+            mManager.ResetClientBounds();
         }
 
         // EnterForeground

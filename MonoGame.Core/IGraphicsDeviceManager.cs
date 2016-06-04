@@ -25,6 +25,9 @@ namespace Microsoft.Xna.Framework
 		}
 
 		void ApplyChanges();
+
+		void ToggleFullScreen ();
+		bool IsFullScreen { get; set; }
 	}
 }
 

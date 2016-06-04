@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 using MonoGame.Graphics;
-using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Graphics;
 using MonoGame.Core;
 
 namespace MonoGame.Platform.AndroidGL.Graphics

@@ -15,7 +15,7 @@ namespace Microsoft.Xna.Framework {
 		[DefaultValue(false)]
 		public abstract bool AllowUserResizing { get; set; }
 
-		public abstract Rectangle ClientBounds { get; }
+		//public abstract Rectangle ClientBounds { get; }
 
 		public bool _allowAltF4 = true;
 
@@ -36,7 +36,7 @@ namespace Microsoft.Xna.Framework {
 //        public abstract System.Drawing.Icon Icon { get; set; }
 //#endif
 //
-		public abstract DisplayOrientation CurrentOrientation { get; }
+		//public abstract DisplayOrientation CurrentOrientation { get; }
 
 		public abstract IntPtr Handle { get; }
 
@@ -88,7 +88,7 @@ namespace Microsoft.Xna.Framework {
 
 		#region Events
 
-		public event EventHandler<EventArgs> ClientSizeChanged;
+		//public event EventHandler<EventArgs> ClientSizeChanged;
 		public event EventHandler<EventArgs> OrientationChanged;
 		public event EventHandler<EventArgs> ScreenDeviceNameChanged;
 
@@ -114,20 +114,20 @@ namespace Microsoft.Xna.Framework {
 		public abstract void EndScreenDeviceChange (
 			string screenDeviceName, int clientWidth, int clientHeight);
 
-		public void EndScreenDeviceChange (string screenDeviceName)
-		{
-			EndScreenDeviceChange(screenDeviceName, ClientBounds.Width, ClientBounds.Height);
-		}
+//		public void EndScreenDeviceChange (string screenDeviceName)
+//		{
+//			EndScreenDeviceChange(screenDeviceName, ClientBounds.Width, ClientBounds.Height);
+//		}
 
 		protected void OnActivated ()
 		{
 		}
 
-		protected void OnClientSizeChanged ()
-		{
-			if (ClientSizeChanged != null)
-				ClientSizeChanged (this, EventArgs.Empty);
-		}
+//		protected void OnClientSizeChanged ()
+//		{
+//			if (ClientSizeChanged != null)
+//				ClientSizeChanged (this, EventArgs.Empty);
+//		}
 
 		protected void OnDeactivated ()
 		{
@@ -157,7 +157,7 @@ namespace Microsoft.Xna.Framework {
 		}
 #endif
 
-		public abstract void SetSupportedOrientations (DisplayOrientation orientations);
+		//public abstract void SetSupportedOrientations (DisplayOrientation orientations);
 		protected abstract void SetTitle (string title);
 
 #if DIRECTX && WINDOWS

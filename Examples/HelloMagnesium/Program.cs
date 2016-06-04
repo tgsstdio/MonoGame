@@ -52,7 +52,7 @@ namespace HelloMagnesium
 					container.Register<IGLFramebufferHelperSelector, FullGLFramebufferHelperSelector>(Reuse.Singleton);
 
 					container.Register<IKeyboardInputListener, KeyboardInputListener>(Reuse.Singleton);
-					container.Register<ITouchPanel, TouchPanel>(Reuse.Singleton);
+					container.Register<ITouchListener, TouchPanelState>(Reuse.Singleton);
 
 					// WINDOW EXIT
 					container.Register<IDrawSuppressor, DrawSupressor>(Reuse.Singleton);

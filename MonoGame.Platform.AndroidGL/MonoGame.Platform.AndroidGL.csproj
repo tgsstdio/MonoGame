@@ -90,6 +90,17 @@
     <Compile Include="ScreenLock.cs" />
     <Compile Include="IViewResumer.cs" />
     <Compile Include="ViewResumer.cs" />
+    <Compile Include="Graphics\IAndroidGLDevicePlatform.cs" />
+    <Compile Include="Graphics\Es20GLDevicePlatform.cs" />
+    <Compile Include="Graphics\AndroidGLGraphicsDevicePlatform.cs" />
+    <Compile Include="Es20GLFramebufferHelperSelector.cs" />
+    <Compile Include="Es20GLSpecificExtensionLookup.cs" />
+    <Compile Include="Es20GraphicCapabilitiesLookup.cs" />
+    <Compile Include="AndroidGLBoolWindowing.cs" />
+    <Compile Include="IWindowOrientationListener.cs" />
+    <Compile Include="AndroidGLClientWindowBounds.cs" />
+    <Compile Include="Input\Touch\AndroidGLTouchPanelCapabilities.cs" />
+    <Compile Include="Graphics\AndroidGLGraphicsAdapterCollection.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />

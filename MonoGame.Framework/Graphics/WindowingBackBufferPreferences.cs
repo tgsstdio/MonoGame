@@ -1,13 +1,14 @@
 ﻿using System;
+using MonoGame.Core;
 
 namespace Microsoft.Xna.Framework
 {
 	public class WindowingBackBufferPreferences : IBackBufferPreferences
 	{
-		public WindowingBackBufferPreferences (GameWindow window)
+		public WindowingBackBufferPreferences (IClientWindowBounds client)
 		{
-			DefaultBackBufferWidth = Math.Max(window.ClientBounds.Height, window.ClientBounds.Width);
-			DefaultBackBufferHeight = Math.Min(window.ClientBounds.Height, window.ClientBounds.Width);
+			DefaultBackBufferWidth = Math.Max(client.ClientBounds.Height, client.ClientBounds.Width);
+			DefaultBackBufferHeight = Math.Min(client.ClientBounds.Height, client.ClientBounds.Width);
 		}
 
 		#region IBackBufferPreferences implementation

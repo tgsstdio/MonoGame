@@ -13,8 +13,8 @@ namespace Microsoft.Xna.Framework
 		void Tick();
 		//IGraphicsDevice GraphicsDevice { get; }
 
-		[CLSCompliant(false)]
-		IGameWindow Window { get; }
+//		[CLSCompliant(false)]
+//		IGameWindow Window { get; }
 
 		void Run();
 	}

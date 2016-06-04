@@ -16,6 +16,11 @@ using Microsoft.Xna.Framework.Media;
 using Android.Content.PM;
 using MonoGame.Platform.AndroidGL.Input.Touch;
 using MonoGame.Core;
+using Microsoft.Xna.Framework.Input;
+using MonoGame.Platform.AndroidGL.Graphics;
+using MonoGame.Graphics;
+using Microsoft.Core.Graphics;
+using Microsoft.Xna.Framework.Input.Touch;
 
 namespace MonoGame.Platform.AndroidGL.Example
 {
@@ -28,9 +33,9 @@ namespace MonoGame.Platform.AndroidGL.Example
 		MainLauncher = true,
 		Icon = "@mipmap/icon")]
 #if OUYA
-    public class AndroidGameActivity : Ouya.Console.Api.OuyaActivity
+	public class AndroidGameActivity : Ouya.Console.Api.OuyaActivity
 #else
-    public class AndroidGameActivity : Activity
+	public class AndroidGameActivity : Activity
 #endif
     {
 		private Container mContainer;
@@ -53,6 +58,10 @@ namespace MonoGame.Platform.AndroidGL.Example
 
 			// IOC here
 			mContainer = new Container ();
+
+			// register game here
+			mContainer.Register<Game, PlaceholderGame>(Reuse.Singleton);
+
 			RegisterMonoGameComponents();
 
 			var se = this.RequestedOrientation;
@@ -76,11 +85,14 @@ namespace MonoGame.Platform.AndroidGL.Example
 		private void RegisterMonoGameComponents()
 		{
 			mContainer.RegisterInstance<Context> (this);
+			mContainer.RegisterInstance<Window> (this.Window);
+			mContainer.RegisterInstance<Activity> (this);
 
 			mContainer.Register<IScreenLock, ScreenLock> (Reuse.Singleton);
 			mContainer.Register<BroadcastReceiver, ScreenReceiver> (Reuse.Singleton);
 			mContainer.Register<IForceFullScreenToggle, ForceFullScreenToggle> (Reuse.Singleton);
 			mContainer.Register<IBaseActivity, BaseActivity> (Reuse.Singleton);
+			mContainer.Register<IAndroidGameActivity, EnclosedGameActivity> (Reuse.Singleton);
 			mContainer.Register<IBaseActivityInfo, BaseActivityInfo> (Reuse.Singleton);
 			mContainer.Register<IAndroidCompatibility, AndroidCompatibility> (Reuse.Singleton);
 			mContainer.Register<IOrientationListener, OrientationListener> (Reuse.Singleton);
@@ -88,17 +100,40 @@ namespace MonoGame.Platform.AndroidGL.Example
 			mContainer.Register<IViewRefocuser, ViewRefocuser> (Reuse.Singleton);
 			mContainer.Register<IAndroidKeyboardListener, AndroidKeyboardListener> (Reuse.Singleton);
 			mContainer.Register<IGamePlatform, AndroidGamePlatform> (Reuse.Singleton);
+			mContainer.Register<AndroidGLFalseWindowing> (Reuse.Singleton);
+			mContainer.Register<AndroidGLTrueWindowing> (Reuse.Singleton);
+			mContainer.Register<IWindowOrientationListener, MockWindowOrientationListener> (Reuse.Singleton);
+			mContainer.Register<IClientWindowBounds, AndroidGLClientWindowBounds> (Reuse.Singleton);
+
+			mContainer.Register<IGraphicsDevicePlatform, AndroidGLGraphicsDevicePlatform> (Reuse.Singleton);
+			mContainer.Register<IAndroidGLDevicePlatform, Es20GLDevicePlatform> (Reuse.Singleton);
+			mContainer.Register<IGLFramebufferHelper, AndroidGLFramebufferHelper> (Reuse.Singleton);
+			mContainer.Register<IGLFramebufferHelperSelector, Es20GLFramebufferHelperSelector> (Reuse.Singleton);
+			mContainer.Register<IGraphicsCapabilities, GraphicsCapabilities> (Reuse.Singleton);
+			mContainer.Register<IGraphicsCapabilitiesLookup, Es20GraphicCapabilitiesLookup> (Reuse.Singleton);
+			mContainer.Register<IGLExtensionLookup, Es20GLSpecificExtensionLookup> (Reuse.Singleton);
+			mContainer.Register<IGraphicsAdapterCollection, AndroidGLGraphicsAdapterCollection> (Reuse.Singleton);
+			mContainer.Register<IGraphicsDevicePreferences, DefaultGraphicsDevicePreferences> (Reuse.Singleton);
+
 			mContainer.Register<AndroidGLThreading> (Reuse.Singleton);
 
 			mContainer.Register<IViewResumer, ViewResumer> (Reuse.Singleton);
+
 			mContainer.Register<MonoGameAndroidGameView> (Reuse.Singleton);
+			mContainer.RegisterMapping<View, MonoGameAndroidGameView>();
+
+			mContainer.Register<IPresentationParameters, DefaultPresentationParameters> (Reuse.Singleton);
+			mContainer.Register<IBackBufferPreferences, DefaultBackBufferPreferences> (Reuse.Singleton);
 
 			mContainer.Register<IGraphicsDeviceManager, AndroidGLGraphicsDeviceManager> (Reuse.Singleton);
+			mContainer.Register<IGraphicsProfiler, DefaultGraphicsDeviceProfiler> (Reuse.Singleton);
 
 			mContainer.Register<IAndroidGLGameWindow, AndroidGLGameWindow> (Reuse.Singleton);
 			mContainer.RegisterMapping<Microsoft.Xna.Framework.GameWindow, IAndroidGLGameWindow>();
 
 			mContainer.Register<IAndroidTouchEventManager, AndroidTouchEventManager> (Reuse.Singleton);
+			mContainer.Register<ITouchListener, TouchPanelState> (Reuse.Singleton);
+			mContainer.Register<ITouchPanelCapabilities, AndroidGLTouchPanelCapabilities>(Reuse.Singleton);
 
 			mContainer.Register<IGraphicsDeviceQuery, DefaultGraphicsDeviceQuery> (Reuse.Singleton);
 			mContainer.Register<IPlatformActivator, PlatformActivator> (Reuse.Singleton);
@@ -133,7 +168,10 @@ namespace MonoGame.Platform.AndroidGL.Example
             if (Paused != null)
                 Paused(this, EventArgs.Empty);
 
-			mBasicStarter.OnPause ();
+			if (mGame != null)
+			{
+				mBasicStarter.OnPause ();
+			}
         }
 
         public event EventHandler Resumed;
@@ -151,13 +189,17 @@ namespace MonoGame.Platform.AndroidGL.Example
 
 		protected override void OnDestroy ()
 		{
-			mBasicStarter.OnDestroy ();
-			mGame = null;
+			if (mGame != null)
+			{			
+				mBasicStarter.OnDestroy ();
+				mGame = null;
+			}
 			mContainer.Dispose ();
 			mContainer = null;
 			base.OnDestroy ();
 		}
-    }
+
+   }
 
 	[CLSCompliant(false)]
 	public static class ActivityExtensions

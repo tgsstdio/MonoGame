@@ -26,7 +26,7 @@ namespace MonoGame.Platform.AndroidGL
     public class MonoGameAndroidGameView : AndroidGameView, View.IOnTouchListener, ISurfaceHolderCallback
     {
 		private readonly IGraphicsDeviceQuery mDeviceQuery;
-        private readonly IAndroidGLGameWindow _gameWindow;
+		private readonly IClientWindowBounds mClient;
         private readonly IGraphicsDeviceManager _deviceManager;
         private readonly IAndroidTouchEventManager _touchManager;
 		private readonly IScreenLock mScreenLock;
@@ -35,7 +35,6 @@ namespace MonoGame.Platform.AndroidGL
 		private readonly IGraphicsDeviceService mDeviceService;
 		private readonly IGraphicsDevice mGraphicsDevice;
 		private readonly IResumeManager mResumer;
-		private GamePad mGamePad;
 
         public bool IsResuming { get; private set; }
         private bool _lostContext;
@@ -45,7 +44,7 @@ namespace MonoGame.Platform.AndroidGL
 		private IContentManager mContentManager;
 		public MonoGameAndroidGameView(
 			Context context,
-			IAndroidGLGameWindow androidGameWindow,
+			IClientWindowBounds client,
 			IGraphicsDeviceManager deviceManager,
 			IAndroidTouchEventManager touchManager,
 			IGraphicsDeviceQuery deviceQuery,
@@ -55,12 +54,11 @@ namespace MonoGame.Platform.AndroidGL
 			IGraphicsDeviceService deviceService,
 			IGraphicsDevice graphicsDevice,
 			IResumeManager resumer,
-			IContentManager contentManager,
-			GamePad gamepad
+			IContentManager contentManager
 			)
             : base(context)
         {
-            _gameWindow = androidGameWindow;
+			mClient = client;
 			_deviceManager = deviceManager;
 			_touchManager = touchManager;
 			mDeviceQuery = deviceQuery;
@@ -70,7 +68,6 @@ namespace MonoGame.Platform.AndroidGL
 			mDeviceService = deviceService;
 			mGraphicsDevice = graphicsDevice;
 			mResumer = resumer;
-			mGamePad = gamepad;
 			mContentManager = contentManager;
         }
 
@@ -132,7 +129,7 @@ namespace MonoGame.Platform.AndroidGL
             if (manager.GraphicsDevice != null)
                 manager.GraphicsDevice.Viewport = new Viewport(0, 0, width, height);
 
-            _gameWindow.ChangeClientBounds(new Rectangle(0, 0, width, height));
+            mClient.ChangeClientBounds(new Rectangle(0, 0, width, height));
 
             manager.ApplyChanges();
 
@@ -327,7 +324,8 @@ namespace MonoGame.Platform.AndroidGL
             if (keyCode == Keycode.Back && !this.backPressed)
             {
                 this.backPressed = true;
-                mGamePad. Back = true;
+				// 
+                // GamePad mGamePad. Back = true;
                 return true;
             }
 #endif

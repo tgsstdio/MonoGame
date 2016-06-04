@@ -90,13 +90,13 @@ namespace MonoGame.Platform.DesktopGL
 		private IGraphicsDeviceManager mGraphics;
 		private IOpenTKWindowResetter mWindowReset;
 		public OpenTKGamePlatform(IPlatformActivator activator, IGraphicsDeviceManager graphics, IOpenTKGameWindow view, IOpenTKWindowResetter resetter, IOpenALSoundController soundController, IMouseListener mouseListener)
-			: base(graphics, activator)
+			: base(activator)
         {
 			mGraphics = graphics;
 			mWindowReset = resetter;
             toolkit = Toolkit.Init();
 			_view = view;
-            this.Window = _view;
+           // this.Window = _view;
 
 			// Setup our OpenALSoundController to handle our SoundBuffer pools
 //            try
@@ -225,7 +225,7 @@ namespace MonoGame.Platform.DesktopGL
 
         public override void Present()
         {
-			var device = Graphics.GraphicsDevice;
+			var device = mGraphics.GraphicsDevice;
             if (device != null)
                 device.Present();
         }
