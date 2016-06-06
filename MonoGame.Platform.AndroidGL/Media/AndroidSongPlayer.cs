@@ -10,15 +10,13 @@ namespace MonoGame.Platform.AndroidGL
 		Android.Media.MediaPlayer mAndroidPlayer;
 		ISong _playingSong;
 		private readonly Context mContext;
-		private IMediaPlayer mSystem;
 		private AssetManager mAssetManager;
 
-		public AndroidSongPlayer (Android.Media.MediaPlayer player, Context context, IMediaPlayer mediaPlayer, AssetManager assetManager)
+		public AndroidSongPlayer (Android.Media.MediaPlayer player, Context context, AssetManager assetManager)
 		{
 			mAndroidPlayer = player;
 			mAndroidPlayer.Completion += this.AndroidPlayer_Completion;
 			mContext = context;
-			mSystem = mediaPlayer;
 			mAssetManager = assetManager;
 		}
 
@@ -29,6 +27,17 @@ namespace MonoGame.Platform.AndroidGL
 
 			if (playingSong != null)
 				playingSong.SongCompleted(sender, e);
+		}
+
+		public bool IsLooping
+		{
+			get
+			{
+				return mAndroidPlayer.Looping;
+			}
+			set {
+				mAndroidPlayer.Looping = value;
+			}
 		}
 
 		public void Play(Android.Net.Uri assetUri, ISong song, string name)
@@ -45,13 +54,12 @@ namespace MonoGame.Platform.AndroidGL
 				var afd = mAssetManager.OpenFd(name);
 				if (afd == null)
 					return;
-
 				mAndroidPlayer.SetDataSource(afd.FileDescriptor, afd.StartOffset, afd.Length);
 			}
 
 
 			mAndroidPlayer.Prepare();
-			mAndroidPlayer.Looping = mSystem.IsRepeating;
+			//mAndroidPlayer.Looping = IMediaPlayer mSystem.IsRepeating;
 			_playingSong = song;
 
 			mAndroidPlayer.Start();

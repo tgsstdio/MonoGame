@@ -10,7 +10,7 @@ namespace MonoGame.Platform.AndroidGL
 		private readonly IAndroidTouchEventManager mTouchManager;
 		readonly View.IOnTouchListener mOnTouchListener;
 
-		public ViewRefocuser (AndroidGameView view, IAndroidTouchEventManager touchEventManager, View.IOnTouchListener onTouchListener)
+		public ViewRefocuser (MonoGameAndroidGameView view, IAndroidTouchEventManager touchEventManager, View.IOnTouchListener onTouchListener)
 		{
 			mGameView = view;
 			mTouchManager = touchEventManager;
@@ -21,6 +21,7 @@ namespace MonoGame.Platform.AndroidGL
 
 		public void Run ()
 		{
+			// GameViewBase
 			mGameView.Run ();
 		}
 

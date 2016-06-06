@@ -11,12 +11,12 @@ namespace MonoGame.Platform.AndroidGL
     {
 		private readonly IScreenLock mScreenLock;
 		private readonly IAndroidCompatibility mCompatibility;
-		private readonly AndroidGLTrueWindowing mWindowing;
+		private readonly AndroidGLOrientationApplicator mWindowing;
         /// <summary>
         /// Constructor. SensorDelay.Ui is passed to the base class as this orientation listener 
         /// is just used for flipping the screen orientation, therefore high frequency data is not required.
         /// </summary>
-		public OrientationListener(Context context, IScreenLock screenLock, AndroidGLTrueWindowing windowing, IAndroidCompatibility compatibility)
+		public OrientationListener(Context context, IScreenLock screenLock, AndroidGLOrientationApplicator windowing, IAndroidCompatibility compatibility)
             : base(context, SensorDelay.Ui)
         {
 			mScreenLock = screenLock;

@@ -6,7 +6,7 @@
 	url = https://github.com/Mono-Game/MonoGame.Dependencies.git
 [submodule "Magnesium"]
 	path = Magnesium
-	url = https://github.com/tgsstdio/Magnesium.git
+	url = ./Magnesium
 	branch = master
 [submodule "Examples/Samples"]
 	path = Examples/Samples

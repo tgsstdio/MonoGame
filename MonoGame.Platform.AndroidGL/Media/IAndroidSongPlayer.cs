@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.Xna.Framework.Media;
+﻿using Microsoft.Xna.Framework.Media;
 
 namespace MonoGame.Platform.AndroidGL
 {
@@ -25,6 +24,8 @@ namespace MonoGame.Platform.AndroidGL
 
 		ISong Current { get; }
 		void Play (Android.Net.Uri assetUri, ISong song, string name);
+
+		bool IsLooping { get; set; }
 	}
 }
 

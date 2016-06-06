@@ -218,6 +218,9 @@
     <Compile Include="IClientWindowBounds.cs" />
     <Compile Include="DefaultClientWindowBounds.cs" />
     <Compile Include="DefaultGraphicsDevicePreferences.cs" />
+    <Compile Include="Media\MediaPlayer.cs" />
+    <Compile Include="Media\IMediaQueue.cs" />
+    <Compile Include="Media\DefaultMediaQueue.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>

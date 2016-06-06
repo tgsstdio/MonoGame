@@ -5,15 +5,7 @@ using Android.Content.PM;
 
 namespace MonoGame.Platform.AndroidGL
 {
-	public class WindowOrientationListener : IWindowOrientationListener
-	{
-		public void OnOrientationChanged()
-		{
-
-		}
-	}
-
-	public class AndroidGLFalseWindowing
+	public class AndroidGLOrientationSetter
 	{
 		private DisplayOrientation _supportedOrientations = DisplayOrientation.Default;
 		private DisplayOrientation _currentOrientation;
@@ -32,10 +24,10 @@ namespace MonoGame.Platform.AndroidGL
 		}
 
 		private IGraphicsDeviceQuery mDeviceQuery;
-		private ITouchListener mTouchPanel;
+		private readonly ITouchListener mTouchPanel;
 		private readonly IAndroidGameActivity mActivity;
 		private readonly IWindowOrientationListener mListener;
-		public AndroidGLFalseWindowing (
+		public AndroidGLOrientationSetter (
 			IGraphicsDeviceQuery deviceQuery,
 			ITouchListener touchPanel, 
 			IAndroidGameActivity activity,
@@ -195,27 +187,6 @@ namespace MonoGame.Platform.AndroidGL
 					mListener.OnOrientationChanged();
 				}
 			}
-		}
-	}
-
-	public class AndroidGLTrueWindowing
-	{
-		public AndroidGLFalseWindowing WindowingState { get; private set; }
-		private readonly IGraphicsDeviceManager mManager;
-		public AndroidGLTrueWindowing (AndroidGLFalseWindowing windowing, IGraphicsDeviceManager manager)
-		{
-			WindowingState = windowing;
-			mManager = manager;
-		}
-
-		/// <summary>
-		/// Updates the screen orientation. Filters out requests for unsupported orientations.
-		/// </summary>
-		public void ApplyOrientation(DisplayOrientation newOrientation)
-		{
-
-			if (WindowingState.SetOrientation(newOrientation))
-				mManager.ApplyChanges();
 		}
 	}
 }

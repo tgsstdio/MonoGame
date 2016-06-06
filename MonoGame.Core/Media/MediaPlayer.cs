@@ -6,17 +6,12 @@ using System;
 
 namespace Microsoft.Xna.Framework.Media
 {
-    public partial class MediaPlayer : IMediaPlayer
+    public abstract class BaseMediaPlayer : IMediaPlayer
     {
 		// Need to hold onto this to keep track of how many songs
 		// have played when in shuffle mode
 		private int _numSongsInQueuePlayed = 0;
-		private MediaState _state = MediaState.Stopped;
-		private float _volume = 1.0f;
-		private bool _isMuted;
-        private bool _isRepeating;
-        private bool _isShuffled;
-		private readonly IMediaQueue _queue;
+
 
 #if WINDOWS_PHONE
         // PlayingInternal should default to true to be to work with the user's default playing music
@@ -24,94 +19,112 @@ namespace Microsoft.Xna.Framework.Media
 #endif
 
 		public event EventHandler<EventArgs> ActiveSongChanged;
-        public event EventHandler<EventArgs> MediaStateChanged;
 
-		private IMediaPlayerPlatform mPlatform;
-		public MediaPlayer(IMediaPlayerPlatform platform, IMediaQueue queue)
+		protected BaseMediaPlayer(IMediaQueue queue)
         {
-			mPlatform = platform;
-			_queue = queue;
-			mPlatform.Initialize();
+			Queue = queue;
         }
 
         #region Properties
+		public IMediaQueue Queue { get; }
 
-        public IMediaQueue Queue { get { return _queue; } }
+		protected abstract bool GetIsMuted ();
+		protected abstract void SetIsMuted (bool value);
 
 		public bool IsMuted
         {
-			get { return mPlatform.GetIsMuted(); }
-			set { mPlatform.SetIsMuted(value); }
+			get { return GetIsMuted(); }
+			set { SetIsMuted(value); }
         }
+
+		protected abstract bool GetIsRepeating ();
+		protected abstract void SetIsRepeating (bool value);
 
         public bool IsRepeating 
         {
-			get { return mPlatform.GetIsRepeating(); }
-			set { mPlatform.SetIsRepeating(value); }
+			get { return GetIsRepeating(); }
+			set { SetIsRepeating(value); }
         }
+
+		protected abstract bool GetIsShuffled ();
+		protected abstract void SetIsShuffled (bool value);
 
         public bool IsShuffled
         {
-			get { return mPlatform.GetIsShuffled(); }
-			set { mPlatform.SetIsShuffled(value); }
+			get { return GetIsShuffled(); }
+			set { SetIsShuffled(value); }
         }
 
         public bool IsVisualizationEnabled { get { return false; } }
 
+		protected abstract TimeSpan GetPlayPosition ();
+		protected abstract void SetPlayPosition (TimeSpan value);
+
         public TimeSpan PlayPosition
         {
-			get { return mPlatform.GetPlayPosition(); }
-//#if IOS || ANDROID
-			set { mPlatform.SetPlayPosition(value); }
-//#endif
+			get { return GetPlayPosition(); }
+			set { SetPlayPosition(value); }
         }
 
+		protected abstract void OnMediaStateChange ();
+//		{
+//#if WINDOWS_PHONE
+//                      // Playing music using XNA, we shouldn't fire extra state changed events
+//                        if (!playingInternal)
+//#endif
+//			MediaStateChanged (null, EventArgs.Empty);
+//		}
+
+		protected abstract MediaState GetState ();
+
+		protected MediaState mState = MediaState.Stopped;
         public MediaState State
         {
-			get { return mPlatform.GetState(); }
+			get { return GetState(); }
             private set
             {
-                if (_state != value)
+				if (mState != value)
                 {
-                    _state = value;
-                    if (MediaStateChanged != null)
-#if WINDOWS_PHONE
-                        // Playing music using XNA, we shouldn't fire extra state changed events
-                        if (!playingInternal)
-#endif
-                            MediaStateChanged(null, EventArgs.Empty);
+                    mState = value;
+					OnMediaStateChange ();
                 }
             }
         }
+
+		protected abstract bool GetGameHasControl ();
 
         public bool GameHasControl
         {
             get
             {
-				return mPlatform.GetGameHasControl();
+				return GetGameHasControl();
             }
         }
 		
+		protected abstract float GetVolume();
+		protected abstract void SetVolume (float value);
 
         public float Volume
         {
-			get { return mPlatform.GetVolume(); }
+			get { return GetVolume(); }
             set
             {
                 var volume = MathHelper.Clamp(value, 0, 1);
 
-				mPlatform.SetVolume(volume);
+				SetVolume(volume);
             }
         }
 
 		#endregion
-		
+
+		protected abstract void PlatformPause();
+
         public void Pause()
         {
-            if (State != MediaState.Playing || _queue.ActiveSong == null)
+            if (State != MediaState.Playing || Queue.ActiveSong == null)
                 return;
 
-			mPlatform.Pause();
+			PlatformPause();
 
             State = MediaState.Paused;
         }
@@ -122,11 +135,11 @@ namespace Microsoft.Xna.Framework.Media
 		/// </summary>
         public void Play(ISong song)
         {
-			ISong previousSong = _queue.Count > 0 ? _queue.At(0) : null;
-            _queue.Clear();
+			ISong previousSong = Queue.Count > 0 ? Queue.At(0) : null;
+            Queue.Clear();
             _numSongsInQueuePlayed = 0;
-            _queue.Add(song);
-			_queue.ActiveSongIndex = 0;
+            Queue.Add(song);
+			Queue.ActiveSongIndex = 0;
             
             PlaySong(song);
 
@@ -136,29 +149,33 @@ namespace Microsoft.Xna.Framework.Media
 		
 		public void Play(StandardSongCollection collection, int index = 0)
 		{
-            _queue.Clear();
+            Queue.Clear();
             _numSongsInQueuePlayed = 0;
 
 			foreach(var song in collection)
-				_queue.Add(song);
+				Queue.Add(song);
 			
-			_queue.ActiveSongIndex = index;
+			Queue.ActiveSongIndex = index;
 			
-			PlaySong(_queue.ActiveSong);
+			PlaySong(Queue.ActiveSong);
 		}
+
+		protected abstract void PlatformPlaySong (ISong song);
 
         private void PlaySong(ISong song)
         {
-			mPlatform.PlaySong(song);
+			PlatformPlaySong(song);
             State = MediaState.Playing;
         }
 
-        internal void OnSongFinishedPlaying(object sender, EventArgs args)
+		protected abstract void RepeatCurrentSong ();
+
+        protected void OnSongFinishedPlaying(object sender, EventArgs args)
 		{
 			// TODO: Check args to see if song sucessfully played
 			_numSongsInQueuePlayed++;
 			
-			if (_numSongsInQueuePlayed >= _queue.Count)
+			if (_numSongsInQueuePlayed >= Queue.Count)
 			{
 				_numSongsInQueuePlayed = 0;
 				if (!IsRepeating)
@@ -174,35 +191,30 @@ namespace Microsoft.Xna.Framework.Media
 				}
 			}
 
-#if WINDOWS_PHONE
-            if (IsRepeating)
-            {
-                System.Windows.Deployment.Current.Dispatcher.BeginInvoke(() =>
-                {
-                    _mediaElement.Position = TimeSpan.Zero;
-                    _mediaElement.Play();
-                });
-            }
-#endif
+			RepeatCurrentSong ();
 			
 			MoveNext();
 		}
+
+		protected abstract void PlatformResume ();
 
         public void Resume()
         {
             if (State != MediaState.Paused)
                 return;
 
-			mPlatform.Resume();
+			PlatformResume();
 			State = MediaState.Playing;
         }
+
+		protected abstract void PlatformStop ();
 
         public void Stop()
         {
             if (State == MediaState.Stopped)
                 return;
 
-			mPlatform.Stop();
+			PlatformStop();
 			State = MediaState.Stopped;
 		}
 		
@@ -220,9 +232,9 @@ namespace Microsoft.Xna.Framework.Media
 		{
             Stop();
 
-            if (IsRepeating && _queue.ActiveSongIndex >= _queue.Count - 1)
+            if (IsRepeating && Queue.ActiveSongIndex >= Queue.Count - 1)
             {
-                _queue.ActiveSongIndex = 0;
+                Queue.ActiveSongIndex = 0;
                 
                 // Setting direction to 0 will force the first song
                 // in the queue to be played.
@@ -231,7 +243,7 @@ namespace Microsoft.Xna.Framework.Media
                 direction = 0;
             }
 
-			var nextSong = _queue.GetNextSong(direction, IsShuffled);
+			var nextSong = Queue.GetNextSong(direction, IsShuffled);
 
             if (nextSong != null)
                 PlaySong(nextSong);

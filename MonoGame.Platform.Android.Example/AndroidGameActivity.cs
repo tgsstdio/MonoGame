@@ -21,6 +21,10 @@ using MonoGame.Platform.AndroidGL.Graphics;
 using MonoGame.Graphics;
 using Microsoft.Core.Graphics;
 using Microsoft.Xna.Framework.Input.Touch;
+using Android.Runtime;
+using Android.Content.Res;
+using OpenTK.Platform.Android;
+using MonoGame.Platform.AndroidGL.Media;
 
 namespace MonoGame.Platform.AndroidGL.Example
 {
@@ -87,6 +91,13 @@ namespace MonoGame.Platform.AndroidGL.Example
 			mContainer.RegisterInstance<Context> (this);
 			mContainer.RegisterInstance<Window> (this.Window);
 			mContainer.RegisterInstance<Activity> (this);
+			mContainer.RegisterInstance<AssetManager> (this.Assets);
+
+			var keyguard = GetSystemService (Context.KeyguardService) as KeyguardManager;
+			mContainer.RegisterInstance<KeyguardManager> (keyguard);
+
+			mContainer.RegisterInstance<IWindowManager> (this.WindowManager);
+			mContainer.RegisterInstance<Configuration> (this.Resources.Configuration);
 
 			mContainer.Register<IScreenLock, ScreenLock> (Reuse.Singleton);
 			mContainer.Register<BroadcastReceiver, ScreenReceiver> (Reuse.Singleton);
@@ -100,8 +111,8 @@ namespace MonoGame.Platform.AndroidGL.Example
 			mContainer.Register<IViewRefocuser, ViewRefocuser> (Reuse.Singleton);
 			mContainer.Register<IAndroidKeyboardListener, AndroidKeyboardListener> (Reuse.Singleton);
 			mContainer.Register<IGamePlatform, AndroidGamePlatform> (Reuse.Singleton);
-			mContainer.Register<AndroidGLFalseWindowing> (Reuse.Singleton);
-			mContainer.Register<AndroidGLTrueWindowing> (Reuse.Singleton);
+			mContainer.Register<AndroidGLOrientationSetter> (Reuse.Singleton);
+			mContainer.Register<AndroidGLOrientationApplicator> (Reuse.Singleton);
 			mContainer.Register<IWindowOrientationListener, MockWindowOrientationListener> (Reuse.Singleton);
 			mContainer.Register<IClientWindowBounds, AndroidGLClientWindowBounds> (Reuse.Singleton);
 
@@ -121,6 +132,7 @@ namespace MonoGame.Platform.AndroidGL.Example
 
 			mContainer.Register<MonoGameAndroidGameView> (Reuse.Singleton);
 			mContainer.RegisterMapping<View, MonoGameAndroidGameView>();
+			mContainer.RegisterMapping<View.IOnTouchListener, MonoGameAndroidGameView>();
 
 			mContainer.Register<IPresentationParameters, DefaultPresentationParameters> (Reuse.Singleton);
 			mContainer.Register<IBackBufferPreferences, DefaultBackBufferPreferences> (Reuse.Singleton);
@@ -148,6 +160,10 @@ namespace MonoGame.Platform.AndroidGL.Example
 			mContainer.Register<IResumeManager, NullResumeManager> (Reuse.Singleton);
 
 			mContainer.Register<IMediaPlayer, NullMediaPlayer> (Reuse.Singleton);
+			mContainer.Register<IAndroidSongPlayer, AndroidSongPlayer>(Reuse.Singleton);
+			mContainer.Register<IMediaQueue, DefaultMediaQueue> (Reuse.Singleton);
+			mContainer.Register<Android.Media.MediaPlayer> (Reuse.Singleton);
+
 			mContainer.Register<IMediaLibrary, NullMediaLibrary> (Reuse.Singleton);
 
 			// WINDOW EXIT

@@ -31,7 +31,7 @@ namespace MonoGame.Platform.AndroidGL
 
 			IAndroidGameActivity activity,
 			IAndroidCompatibility compatibility,
-			AndroidGLFalseWindowing windowing,
+			AndroidGLOrientationSetter windowing,
 			IMediaPlayer mediaPlayer,
 			IMediaLibrary mediaLibrary,
 			IGraphicsDevice device,
@@ -78,7 +78,7 @@ namespace MonoGame.Platform.AndroidGL
 
         private bool _initialized;
         public static bool IsPlayingVdeo { get; set; }
-		private AndroidGLFalseWindowing mWindowing;
+		private AndroidGLOrientationSetter mWindowing;
 
         public override void Exit()
         {

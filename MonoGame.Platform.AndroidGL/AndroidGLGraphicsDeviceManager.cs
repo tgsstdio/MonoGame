@@ -27,7 +27,7 @@ namespace MonoGame.Platform.AndroidGL
 	public class AndroidGLGraphicsDeviceManager : IGraphicsDeviceManager
 	{
 		private readonly IAndroidGameActivity mActivity;
-		private AndroidGLFalseWindowing mWindowing;
+		private AndroidGLOrientationSetter mWindowing;
 		public IGraphicsDevice GraphicsDevice { get; set; }
 		private int _preferredBackBufferHeight;
 		private int _preferredBackBufferWidth;
@@ -50,7 +50,7 @@ namespace MonoGame.Platform.AndroidGL
 
 		public AndroidGLGraphicsDeviceManager(
 			IAndroidGameActivity activity,
-			AndroidGLFalseWindowing windowing,
+			AndroidGLOrientationSetter windowing,
 			IClientWindowBounds client,
 
 			IBackBufferPreferences backBufferPreferences,
@@ -59,7 +59,6 @@ namespace MonoGame.Platform.AndroidGL
 			IGraphicsDevicePreferences devicePreferences,
 			ITouchListener touchPanel,
 			IGraphicsDeviceQuery deviceQuery,
-			IGraphicsAdapter graphicsAdapter,
 			IGraphicsDevice device,
 			IGraphicsProfiler profiler
 			)
@@ -73,13 +72,14 @@ namespace MonoGame.Platform.AndroidGL
 			mAdapters = adapters;
 			mTouchPanel = touchPanel;
 			mDeviceQuery = deviceQuery;
-			mGraphicsAdapter = graphicsAdapter;
+
 			mDevice = device;
 
 			if (mAdapters.Options.Length < 1)
 			{
 				throw new InvalidOperationException ("No adapters were provided");
 			}
+			mGraphicsAdapter = mAdapters.Options[0];
 
 			_supportedOrientations = DisplayOrientation.Default;
 

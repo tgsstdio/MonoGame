@@ -49,7 +49,7 @@ namespace Microsoft.Xna.Framework.Media
         	return songs[index];
         }
 
-		internal IEnumerable<ISong> Songs
+		public IEnumerable<ISong> Songs
         {
             get
             {
