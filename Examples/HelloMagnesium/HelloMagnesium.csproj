@@ -45,8 +45,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="NullGraphicsDeviceLogger.cs" />
     <Compile Include="MockGraphicsDevicePreferences.cs" />
-    <Compile Include="MockSamplerStateCollectionPlatform.cs" />
-    <Compile Include="NullTextureCollectionPlatform.cs" />
     <Compile Include="HelloMagnesiumGame.cs" />
     <Compile Include="MagnesiumGraphicsDevicePlatform.cs" />
     <Compile Include="IMgDeviceQuery.cs" />
@@ -78,10 +76,6 @@
       <Project>{C06188B4-0C78-42CB-B868-336EB7B6B3DF}</Project>
       <Name>MonoGame.Audio.OpenAL</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\MonoGame.Framework\Microsoft.Xna.Framework.csproj">
-      <Project>{6E03191C-70AE-4B0B-8782-68D377B72A0F}</Project>
-      <Name>Microsoft.Xna.Framework</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\MonoGame.Audio.OpenAL.DesktopGL\MonoGame.Audio.OpenAL.DesktopGL.csproj">
       <Project>{D68E983C-FA4D-418A-8353-43C4CDE75B23}</Project>
       <Name>MonoGame.Audio.OpenAL.DesktopGL</Name>
@@ -90,9 +84,30 @@
       <Project>{9F9AC448-9D17-43E5-8889-285426290891}</Project>
       <Name>Magnesium</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\MonoGame.Content\MonoGame.Content.csproj">
+      <Project>{E44E47ED-2203-4E45-85A9-C755B10AC044}</Project>
+      <Name>MonoGame.Content</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\FreeImageNET-PCL\FreeImageAPI-PCL.csproj">
+      <Project>{30E16C50-498F-4E07-AFB5-084FB43F0228}</Project>
+      <Name>FreeImageAPI-PCL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\MonoGame.Textures.FreeImageNET\MonoGame.Textures.FreeImageNET.csproj">
+      <Project>{EEC1E6BC-AF82-413A-BA6A-7E80C032BCFD}</Project>
+      <Name>MonoGame.Textures.FreeImageNET</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\MonoGame.Content.Dirs\MonoGame.Content.Dirs.csproj">
+      <Project>{9D3DE491-E6D0-4D12-9A2D-D31B23D7D71D}</Project>
+      <Name>MonoGame.Content.Dirs</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
     <None Include="OpenTK.dll.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\80000000\80000001.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 </Project>

@@ -15,20 +15,20 @@ namespace MonoGame.Content
 
 		public Stream LoadContent(AssetIdentifier assetId, string[] extensions)
 		{
-			var blockId = mLocator.GetSource (assetId);
+			var blockPath = mLocator.GetBlockPath (assetId);
 
 			foreach (var ext in extensions)
 			{
 				var path = mLocator.GetLocalPath (assetId) + ext;
 
-				if (mFileSystem.Exists (blockId, path))
+				if (mFileSystem.Exists (blockPath, path))
 				{
-					if (!mFileSystem.IsRegistered (blockId))
-					{
-						mFileSystem.Register (blockId);
-					}
+//					if (!mFileSystem.IsRegistered (blockPath))
+//					{
+//						mFileSystem.Register (blockPath);
+//					}
 
-					return mFileSystem.OpenStream (blockId, path);
+					return mFileSystem.OpenStream (blockPath, path);
 				}
 			}
 

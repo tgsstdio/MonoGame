@@ -8,7 +8,7 @@ namespace MonoGame.Content
 		private const UInt32 FRONT_MASK = 0xffff0000;
 		private const UInt32 BACK_MASK = 0x0000ffff;
 
-		public BlockIdentifier GetSource (AssetIdentifier identifier)
+		public string GetBlockPath (AssetIdentifier identifier)
 		{
 			// 16 bit reserved for blocks
 			UInt32 Front = identifier.AssetId & FRONT_MASK;
@@ -16,7 +16,7 @@ namespace MonoGame.Content
 			// 16 bits reserved for assets in block
 			//const UInt32 Back = identifier.AssetId & 0x0000ffff;
 
-			return new BlockIdentifier{ BlockId = ReverseBits (Front)};
+			return Front.ToString("x8");
 		}
 
 		public string GetLocalPath(AssetIdentifier identifier)
@@ -24,7 +24,7 @@ namespace MonoGame.Content
 			// 16 bits reserved for assets in block
 			UInt32 Back = identifier.AssetId & BACK_MASK;
 
-			return Back.ToString ();
+			return Back.ToString("x8");
 		}
 
 		#endregion

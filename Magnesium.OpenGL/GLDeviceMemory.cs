@@ -9,7 +9,7 @@ namespace Magnesium.OpenGL
 		private readonly bool mIsHostCached;
 		public GLDeviceMemory (MgMemoryAllocateInfo pAllocateInfo)
 		{	
-			mIsHostCached = (pAllocateInfo.MemoryTypeIndex == (int) GLMemoryBufferType.INDIRECT);
+			mIsHostCached = (pAllocateInfo.MemoryTypeIndex == (uint) GLMemoryBufferType.INDIRECT);
 
 			if (pAllocateInfo.AllocationSize >= (ulong)Int64.MaxValue)
 			{
@@ -18,24 +18,30 @@ namespace Magnesium.OpenGL
 
 			BufferSize = (IntPtr) ((Int64) pAllocateInfo.AllocationSize);
 			BufferType = (GLMemoryBufferType)pAllocateInfo.MemoryTypeIndex;
-			mBufferTarget = BufferType.GetBufferTarget ();
+		
+			if (pAllocateInfo.MemoryTypeIndex != (uint) GLMemoryBufferType.IMAGE)
+				mBufferTarget = BufferType.GetBufferTarget ();
 
-			if (mIsHostCached)
+			if (mIsHostCached || pAllocateInfo.MemoryTypeIndex == (uint) GLMemoryBufferType.IMAGE)
 			{
 				Handle = Marshal.AllocHGlobal (BufferSize);
 			} 
 			else
 			{
-				BufferId = GL.GenBuffer ();
-				GL.BindBuffer(mBufferTarget, BufferId);
-				BufferStorageFlags flags = BufferStorageFlags.MapWriteBit | BufferStorageFlags.MapPersistentBit | BufferStorageFlags.MapCoherentBit;
-				GL.BufferStorage(mBufferTarget, BufferSize, IntPtr.Zero, flags);
 
-				BufferAccessMask rangeFlags = BufferAccessMask.MapWriteBit | BufferAccessMask.MapPersistentBit | BufferAccessMask.MapCoherentBit;
-				Handle = GL.MapBufferRange(mBufferTarget, (IntPtr) 0, BufferSize, rangeFlags);
+				if (mBufferTarget.HasValue)
+				{
+					BufferId = GL.GenBuffer ();
+					GL.BindBuffer (mBufferTarget.Value, BufferId);
+					BufferStorageFlags flags = BufferStorageFlags.MapWriteBit | BufferStorageFlags.MapPersistentBit | BufferStorageFlags.MapCoherentBit;
+					GL.BufferStorage (mBufferTarget.Value, BufferSize, IntPtr.Zero, flags);
+
+					BufferAccessMask rangeFlags = BufferAccessMask.MapWriteBit | BufferAccessMask.MapPersistentBit | BufferAccessMask.MapCoherentBit;
+					Handle = GL.MapBufferRange (mBufferTarget.Value, (IntPtr)0, BufferSize, rangeFlags);
+				}
 			}
 		}
-		private BufferTarget mBufferTarget;
+		private BufferTarget? mBufferTarget;
 
 		public readonly GLMemoryBufferType BufferType;
 		public readonly IntPtr BufferSize;

@@ -59,7 +59,6 @@
     <Compile Include="EnclosedGameActivity.cs" />
     <Compile Include="NullGraphicsDevicePlatform.cs" />
     <Compile Include="PlaceholderGame.cs" />
-    <Compile Include="MockWindowOrientationListener.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />

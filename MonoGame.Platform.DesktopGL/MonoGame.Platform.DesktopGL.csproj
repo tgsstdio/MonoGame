@@ -74,6 +74,7 @@
     <Compile Include="DesktopGLTitleContainer.cs" />
     <Compile Include="Graphics\IOpenTKDeviceQuery.cs" />
     <Compile Include="Graphics\OpenTKDeviceQuery.cs" />
+    <Compile Include="DesktopGLThreadSleeper.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

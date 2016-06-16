@@ -1,6 +1,6 @@
-namespace MonoGame.Platform.AndroidGL.Example
+namespace MonoGame.Core
 {
-	public class MockWindowOrientationListener : IWindowOrientationListener
+	public class DefaultWindowOrientationListener : IWindowOrientationListener
 	{
 		#region IWindowOrientationListener implementation
 		public void OnOrientationChanged ()

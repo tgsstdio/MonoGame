@@ -11,15 +11,15 @@ namespace Magnesium.OpenGL
 		public int StencilMask {get;set;}
 		public int ReferenceStencil { get; set; }
 		public int StencilWriteMask {get;set;}
-		public MgCompareOp StencilFunction { get; set; }
-		public MgStencilOp StencilPass { get; set; }
-		public MgStencilOp StencilFail {get;set;}
-		public MgStencilOp StencilDepthBufferFail { get; set; }
+		public MgCompareOp FrontStencilFunction { get; set; }
+		public MgStencilOp FrontStencilPass { get; set; }
+		public MgStencilOp FrontStencilFail {get;set;}
+		public MgStencilOp FrontDepthBufferFail { get; set; }
 
-		public MgCompareOp CounterClockwiseStencilFunction { get; set; }
-		public MgStencilOp CounterClockwiseStencilPass { get; set; }
-		public MgStencilOp CounterClockwiseStencilFail {get;set;}
-		public MgStencilOp CounterClockwiseStencilDepthBufferFail { get; set; }
+		public MgCompareOp BackStencilFunction { get; set; }
+		public MgStencilOp BackStencilPass { get; set; }
+		public MgStencilOp BackStencilFail {get;set;}
+		public MgStencilOp BackDepthBufferFail { get; set; }
 
 		//	public DepthStencilBitFlags Flags { get; set; }
 
@@ -29,15 +29,15 @@ namespace Magnesium.OpenGL
 		public bool Equals (GLQueueStencilState other)
 		{
 			return 
-				this.StencilFunction == other.StencilFunction
+				this.FrontStencilFunction == other.FrontStencilFunction
 				//&& this.DepthBufferFunction == other.DepthBufferFunction
-				&& this.StencilPass == other.StencilPass
-				&& this.StencilFail == other.StencilFail
-				&& this.StencilDepthBufferFail == other.StencilDepthBufferFail
-				&& this.CounterClockwiseStencilFunction == other.CounterClockwiseStencilFunction
-				&& this.CounterClockwiseStencilPass == other.CounterClockwiseStencilPass
-				&& this.CounterClockwiseStencilFail == other.CounterClockwiseStencilFail
-				&& this.CounterClockwiseStencilDepthBufferFail == other.CounterClockwiseStencilDepthBufferFail
+				&& this.FrontStencilPass == other.FrontStencilPass
+				&& this.FrontStencilFail == other.FrontStencilFail
+				&& this.FrontDepthBufferFail == other.FrontDepthBufferFail
+				&& this.BackStencilFunction == other.BackStencilFunction
+				&& this.BackStencilPass == other.BackStencilPass
+				&& this.BackStencilFail == other.BackStencilFail
+				&& this.BackDepthBufferFail == other.BackDepthBufferFail
 				&& this.StencilMask == other.StencilMask
 				&& this.ReferenceStencil == other.ReferenceStencil
 				&& this.StencilWriteMask == other.StencilWriteMask;
@@ -49,74 +49,74 @@ namespace Magnesium.OpenGL
 
 		public int CompareTo (GLQueueStencilState other)
 		{
-			if (StencilFunction < other.StencilFunction)
+			if (FrontStencilFunction < other.FrontStencilFunction)
 			{
 				return -1;
 			}
-			else if (StencilFunction > other.StencilFunction)
+			else if (FrontStencilFunction > other.FrontStencilFunction)
 			{
 				return 1;
 			}
 
-			if (StencilPass < other.StencilPass)
+			if (FrontStencilPass < other.FrontStencilPass)
 			{
 				return -1;
 			}
-			else if (StencilPass > other.StencilPass)
+			else if (FrontStencilPass > other.FrontStencilPass)
 			{
 				return 1;
 			}
 
-			if (StencilFail < other.StencilFail)
+			if (FrontStencilFail < other.FrontStencilFail)
 			{
 				return -1;
 			}
-			else if (StencilFail > other.StencilFail)
+			else if (FrontStencilFail > other.FrontStencilFail)
 			{
 				return 1;
 			}
 
-			if (StencilDepthBufferFail < other.StencilDepthBufferFail)
+			if (FrontDepthBufferFail < other.FrontDepthBufferFail)
 			{
 				return -1;
 			}
-			else if (StencilDepthBufferFail > other.StencilDepthBufferFail)
+			else if (FrontDepthBufferFail > other.FrontDepthBufferFail)
 			{
 				return 1;
 			}
 
-			if (CounterClockwiseStencilFunction < other.CounterClockwiseStencilFunction)
+			if (BackStencilFunction < other.BackStencilFunction)
 			{
 				return -1;
 			}
-			else if (CounterClockwiseStencilFunction > other.CounterClockwiseStencilFunction)
+			else if (BackStencilFunction > other.BackStencilFunction)
 			{
 				return 1;
 			}
 
-			if (CounterClockwiseStencilPass < other.CounterClockwiseStencilPass)
+			if (BackStencilPass < other.BackStencilPass)
 			{
 				return -1;
 			}
-			else if (CounterClockwiseStencilPass > other.CounterClockwiseStencilPass)
+			else if (BackStencilPass > other.BackStencilPass)
 			{
 				return 1;
 			}
 
-			if (CounterClockwiseStencilFail < other.CounterClockwiseStencilFail)
+			if (BackStencilFail < other.BackStencilFail)
 			{
 				return -1;
 			}
-			else if (CounterClockwiseStencilFail > other.CounterClockwiseStencilFail)
+			else if (BackStencilFail > other.BackStencilFail)
 			{
 				return 1;
 			}
 
-			if (CounterClockwiseStencilDepthBufferFail < other.CounterClockwiseStencilDepthBufferFail)
+			if (BackDepthBufferFail < other.BackDepthBufferFail)
 			{
 				return -1;
 			}
-			else if (CounterClockwiseStencilDepthBufferFail > other.CounterClockwiseStencilDepthBufferFail)
+			else if (BackDepthBufferFail > other.BackDepthBufferFail)
 			{
 				return 1;
 			}

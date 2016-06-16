@@ -5,14 +5,21 @@ namespace Magnesium.OpenGL
 	[StructLayout(LayoutKind.Sequential)]
 	public struct GLQueueDrawItem
 	{
+		public byte PassIndex { get; set; }
+		public ushort ProgramIndex { get; set; }
+		public MgPrimitiveTopology Topology { get; set;}
 		public MgPolygonMode Mode { get; set; }			
-		public DrawState State { get; set; }
-		public byte SlotIndex { get; set; }
-		public byte TargetIndex {get;set;}
-		public ushort ProgramIndex { get; set;}
-		public byte UniformsIndex { get; set;}
-		public MgPrimitiveTopology Primitive {get;set;}
 
+		public QueueDrawItemBitFlags Flags {get;set;}
+		public GLQueueRasterizerState RasterizerValues {get;set;}
+		public GLQueueStencilState StencilValues {get;set;}
+		public GLQueueBlendState BlendValues { get; set;}
+		public GLQueueDepthState DepthValues {get;set;}
+
+
+		public DrawState State { get; set; }
+		public byte TargetIndex {get;set;}
+		public byte UniformsIndex { get; set;}
 		public ushort BufferMask { get; set; }
 		public ushort ShaderOptions { get; set; }
 
@@ -21,12 +28,9 @@ namespace Magnesium.OpenGL
 		public uint BindingSet { get; set; }
 		public uint MarkerIndex { get; set; }
 
-		public GLQueueRasterizerState RasterizerValues {get;set;}
-		public GLQueueStencilState StencilValues {get;set;}
-		public GLQueueBlendState BlendValues { get; set;}
-		public GLQueueDepthState DepthValues {get;set;}
 
-		public QueueDrawItemBitFlags Flags {get;set;}
+
+
 	}
 }
 

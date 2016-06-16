@@ -8,11 +8,9 @@ namespace MonoGame.Content.Zips
 {
 	public class ZippedFileSystem : IFileSystem
 	{
-		private ITitleContainer mTitleContainer;
-		private readonly Dictionary<uint, ZippedBlockEntry> mBlocks;
+		private readonly ITitleContainer mTitleContainer;
 		public ZippedFileSystem (ITitleContainer container)
 		{
-			mBlocks = new Dictionary<uint, ZippedBlockEntry> ();
 			mTitleContainer = container;
 		}
 
@@ -58,68 +56,22 @@ namespace MonoGame.Content.Zips
 
 		#region IFileSystem implementation
 
-		private class ZippedBlockEntry
+		private static string GetZipFileName (string identifier)
 		{
-			public BlockIdentifier Id;
-			public string Path;
+			return identifier + ".zip";
 		}
 
-
-		public bool Register (BlockIdentifier identifier)
+		public Stream OpenStream (string identifier, string path)
 		{
-			// already
-			if (IsRegistered (identifier))
-			{
-				return true;
-			}
-
-			string dirPath = identifier.BlockId.ToString();
-
-			string zipFile = GetZipFileName (identifier);
-			string fullPath = System.IO.Path.Combine (dirPath, zipFile);
-
-			var archive = new ZippedBlockEntry();
-			archive.Id = identifier;
-			archive.Path = fullPath;
-
-			mBlocks.Add (identifier.BlockId, archive);
-
-			return true;
+			return new ZipArchive (mTitleContainer.OpenStream(GetZipFileName(identifier)), ZipArchiveMode.Read, false).GetEntry (path).Open ();
 		}
 
-		private static string GetZipFileName (BlockIdentifier identifier)
+		public bool Exists (string blockPath, string localPath)
 		{
-			return identifier.BlockId + ".zip";
-		}
-
-		public bool IsRegistered (BlockIdentifier identifier)
-		{
-			return mBlocks.ContainsKey (identifier.BlockId);
-		}
-
-		public Stream OpenStream (BlockIdentifier identifier, string path)
-		{
-			ZippedBlockEntry found = null;
-			if (!mBlocks.TryGetValue (identifier.BlockId, out found))
-			{
-				throw new KeyNotFoundException ();
-			}
-
-			return new ZipArchive (mTitleContainer.OpenStream(found.Path), ZipArchiveMode.Read, false).GetEntry (path).Open ();
-		}
-
-		public bool Exists (BlockIdentifier blockId, string path)
-		{
-			ZippedBlockEntry found = null;
-			if (!mBlocks.TryGetValue (blockId.BlockId, out found))
-			{
-				throw new KeyNotFoundException ();
-			}
-
-			using (var zip = new ZipArchive (mTitleContainer.OpenStream (found.Path), ZipArchiveMode.Read, false))
+			using (var zip = new ZipArchive (mTitleContainer.OpenStream (GetZipFileName(blockPath)), ZipArchiveMode.Read, false))
 			{
 				// NEED TO HANDLE DUPLICATES YOURSELF
-				return (zip.GetEntry(path) != null);
+				return (zip.GetEntry(localPath) != null);
 			}
 		}
 

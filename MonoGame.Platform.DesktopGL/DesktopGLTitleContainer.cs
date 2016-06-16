@@ -8,7 +8,7 @@ namespace MonoGame.Platform.DesktopGL
 	{
 		public DesktopGLTitleContainer ()
 			: base(
-				AppDomain.CurrentDomain.BaseDirectory,
+				Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Content"),
 				Path.DirectorySeparatorChar == BackwardSlash ? ForwardSlash : BackwardSlash,
 				Path.DirectorySeparatorChar
 				)
@@ -26,7 +26,8 @@ namespace MonoGame.Platform.DesktopGL
 
 		protected override bool StreamExists (string fullPath)
 		{
-			return File.Exists(fullPath);
+			var absolutePath = Path.Combine(Location, fullPath);
+			return File.Exists(absolutePath);
 		}
 
 		#endregion

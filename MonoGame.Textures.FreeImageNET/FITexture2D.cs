@@ -7,6 +7,7 @@ namespace MonoGame.Textures.FreeImageNET
 	{
 		public FITexture2D (int sortingKey)
 		{
+			SortingKey = sortingKey;
 		}
 
 		#region ITexture2D implementation
@@ -87,7 +88,7 @@ namespace MonoGame.Textures.FreeImageNET
 
 		public void GraphicsDeviceResetting ()
 		{
-			throw new NotImplementedException ();
+			
 		}
 
 		public int SortingKey {
@@ -96,15 +97,13 @@ namespace MonoGame.Textures.FreeImageNET
 		}
 
 		public Microsoft.Xna.Framework.Graphics.SurfaceFormat Format {
-			get {
-				throw new NotImplementedException ();
-			}
+			get;
+			internal set;
 		}
 
 		public int LevelCount {
-			get {
-				throw new NotImplementedException ();
-			}
+			get;
+			internal set;
 		}
 
 		#endregion

@@ -7,10 +7,10 @@ namespace MonoGame.Content
 	{
 		//string Path {get;}
 		//void Initialize(string path);
-		bool Register(BlockIdentifier id);
-		bool IsRegistered(BlockIdentifier id);
-		bool Exists (BlockIdentifier blockId, string path);
-		Stream OpenStream(BlockIdentifier id, string path);
+//		bool Register(string id);
+//		bool IsRegistered(string id);
+		bool Exists (string blockPath, string localPath);
+		Stream OpenStream(string blockPath, string localPath);
 	}
 }
 

@@ -23,6 +23,7 @@ namespace HelloMagnesium
 		IGLFramebufferHelperSelector mSelector;
 
 		IGLDevicePlatform mGLPlatform;
+		IMgThreadPartition mPartition;
 
 		public MagnesiumGraphicsDevicePlatform 
 		(
@@ -53,6 +54,7 @@ namespace HelloMagnesium
 			mExtensions = extensions;
 			mSelector = selector;
 			mGLPlatform = glPlatform;
+			mPartition = partition;
 		}
 
 		internal IGraphicsContext Context { get; private set; }
@@ -190,7 +192,7 @@ namespace HelloMagnesium
 				ArrayLayers = 1,
 				Samples = MgSampleCountFlagBits.COUNT_1_BIT,
 				Tiling = MgImageTiling.OPTIMAL,
-				Usage = (uint) (MgImageUsageFlagBits.DEPTH_STENCIL_ATTACHMENT_BIT | MgImageUsageFlagBits.TRANSFER_SRC_BIT),
+				Usage = MgImageUsageFlagBits.DEPTH_STENCIL_ATTACHMENT_BIT | MgImageUsageFlagBits.TRANSFER_SRC_BIT,
 				Flags = 0,
 			};
 			var mem_alloc = new MgMemoryAllocateInfo {
@@ -219,13 +221,13 @@ namespace HelloMagnesium
 			mem_alloc.AllocationSize = memReqs.Size;
 
 			uint memTypeIndex;
-			bool memoryTypeFound = getMemoryType (memReqs.MemoryTypeBits, MgMemoryPropertyFlagBits.DEVICE_LOCAL_BIT, out memTypeIndex);
+			bool memoryTypeFound = mPartition.GetMemoryType (memReqs.MemoryTypeBits, MgMemoryPropertyFlagBits.DEVICE_LOCAL_BIT, out memTypeIndex);
 			Debug.Assert (memoryTypeFound);
 			mem_alloc.MemoryTypeIndex = memTypeIndex;
 
 			err = device.AllocateMemory (mem_alloc, null, out mDepthStencil.mem);
 			Debug.Assert (err == Result.SUCCESS);
-			err = device.BindImageMemory (mDepthStencil.image, mDepthStencil.mem, 0);
+			err = mDepthStencil.image.BindImageMemory (device, mDepthStencil.mem, 0);
 			Debug.Assert (err == Result.SUCCESS);
 
 			mImageTools.SetImageLayout(setupCmdBuffer, 
@@ -238,27 +240,27 @@ namespace HelloMagnesium
 			Debug.Assert (err == Result.SUCCESS);
 		}
 
-		private MgPhysicalDeviceMemoryProperties mDeviceMemoryProperties;
-		private bool getMemoryType(uint typeBits, MgMemoryPropertyFlagBits memoryPropertyFlags, out uint typeIndex)
-		{
-			// Search memtypes to find first index with those properties
-			for (UInt32 i = 0; i < mDeviceMemoryProperties.MemoryTypes.Length; i++)
-			{
-				if ((typeBits & 1) == 1)
-				{
-					// Type is available, does it match user properties?
-					if ((mDeviceMemoryProperties.MemoryTypes[i].PropertyFlags & memoryPropertyFlags) == memoryPropertyFlags)
-					{
-						typeIndex = i;
-						return true;
-					}
-				}
-				typeBits >>= 1;
-			}
-			// No memory types matched, return failure
-			typeIndex = 0;
-			return false;
-		}
+//		private MgPhysicalDeviceMemoryProperties mDeviceMemoryProperties;
+//		private bool getMemoryType(uint typeBits, MgMemoryPropertyFlagBits memoryPropertyFlags, out uint typeIndex)
+//		{
+//			// Search memtypes to find first index with those properties
+//			for (UInt32 i = 0; i < mDeviceMemoryProperties.MemoryTypes.Length; i++)
+//			{
+//				if ((typeBits & 1) == 1)
+//				{
+//					// Type is available, does it match user properties?
+//					if ((mDeviceMemoryProperties.MemoryTypes[i].PropertyFlags & memoryPropertyFlags) == memoryPropertyFlags)
+//					{
+//						typeIndex = i;
+//						return true;
+//					}
+//				}
+//				typeBits >>= 1;
+//			}
+//			// No memory types matched, return failure
+//			typeIndex = 0;
+//			return false;
+//		}
 
 		static bool getSupportedDepthFormat(IMgPhysicalDevice physicalDevice, out MgFormat depthFormat)
 		{

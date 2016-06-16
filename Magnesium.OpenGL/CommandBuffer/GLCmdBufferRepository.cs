@@ -21,20 +21,26 @@ namespace Magnesium.OpenGL
 		public GLCmdBufferStore<GLCmdDescriptorSetParameter> DescriptorSets { get; private set; }
 		public GLCmdBufferStore<GLCmdScissorParameter> Scissors {get; private set;}
 
-		public void MapRepositoryFields(ref GLCmdDrawCommand command)
+		public bool MapRepositoryFields(ref GLCmdDrawCommand command)
 		{
-			command.DescriptorSets = DescriptorSets.LastIndex ();
-			command.IndexBuffer = IndexBuffers.LastIndex ();
-			command.VertexBuffer = VertexBuffers.LastIndex ();
-			command.Scissors = Scissors.LastIndex ();
-			command.Viewports = Viewports.LastIndex ();
-
 			GLGraphicsPipeline pipeline;
 			if (GraphicsPipelines.LastValue (out pipeline))
 			{
+				command.DescriptorSets = DescriptorSets.LastIndex ();
+				command.IndexBuffer = IndexBuffers.LastIndex ();
+				command.VertexBuffer = VertexBuffers.LastIndex ();
+				command.Scissors = Scissors.LastIndex ();
+				command.Viewports = Viewports.LastIndex ();
+
 				// add defaults
+				command.Pipeline = GraphicsPipelines.LastIndex ();
+
+				return true;
 			}
-			command.Pipeline = GraphicsPipelines.LastIndex ();
+			else
+			{
+				return false;
+			}
 		}
 
 		public void Clear ()

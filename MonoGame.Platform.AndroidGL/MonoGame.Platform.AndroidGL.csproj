@@ -96,13 +96,11 @@
     <Compile Include="Es20GLFramebufferHelperSelector.cs" />
     <Compile Include="Es20GLSpecificExtensionLookup.cs" />
     <Compile Include="Es20GraphicCapabilitiesLookup.cs" />
-    <Compile Include="IWindowOrientationListener.cs" />
     <Compile Include="AndroidGLClientWindowBounds.cs" />
     <Compile Include="Input\Touch\AndroidGLTouchPanelCapabilities.cs" />
     <Compile Include="Graphics\AndroidGLGraphicsAdapterCollection.cs" />
     <Compile Include="AndroidGLOrientationApplicator.cs" />
     <Compile Include="AndroidGLOrientationSetter.cs" />
-    <Compile Include="WindowOrientationListener.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />

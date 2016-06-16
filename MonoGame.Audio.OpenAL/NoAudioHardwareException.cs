@@ -3,21 +3,19 @@
 // file 'LICENSE.txt', which is part of this source code package.
 
 using System;
-using System.Runtime.InteropServices;
-using System.Runtime.Serialization;
 
-namespace Microsoft.Xna.Framework.Audio
+namespace MonoGame.Audio.OpenAL
 {
 
     /// <summary>
     /// The exception thrown when no audio hardware is present, or driver issues are detected.
     /// </summary>
-    [DataContract]
-#if WINRT
+//    [DataContract]
+//	if WINRT
+//    public sealed class NoAudioHardwareException : Exception
+
     public sealed class NoAudioHardwareException : Exception
-#else
-    public sealed class NoAudioHardwareException : ExternalException
-#endif
+
     {
         /// <param name="msg">A message describing the error.</param>
         public NoAudioHardwareException(string msg)

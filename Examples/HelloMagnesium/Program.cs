@@ -15,6 +15,10 @@ using MonoGame.Platform.DesktopGL.Input;
 using Microsoft.Xna.Framework.Content;
 using OpenTK;
 using Magnesium;
+using MonoGame.Textures.FreeImageNET;
+using Microsoft.Core.Graphics;
+using MonoGame.Content;
+using MonoGame.Content.Dirs;
 
 namespace HelloMagnesium
 {
@@ -35,6 +39,7 @@ namespace HelloMagnesium
 
 					container.Register<IGamePlatform, OpenTKGamePlatform>(Reuse.Singleton);
 					container.Register<IGraphicsDeviceManager, DesktopGLGraphicsDeviceManager>(Reuse.Singleton);
+					container.Register<IGraphicsProfiler, DefaultGraphicsDeviceProfiler> (Reuse.Singleton);
 					container.Register<IGraphicsDeviceService, NullGraphicsDeviceService>(Reuse.Singleton);
 					container.Register<IPlatformActivator, PlatformActivator>(Reuse.Singleton);
 
@@ -52,7 +57,9 @@ namespace HelloMagnesium
 					container.Register<IGLFramebufferHelperSelector, FullGLFramebufferHelperSelector>(Reuse.Singleton);
 
 					container.Register<IKeyboardInputListener, KeyboardInputListener>(Reuse.Singleton);
-					container.Register<ITouchListener, TouchPanelState>(Reuse.Singleton);
+
+					// TOUCH 
+					container.Register<ITouchListener, MockTouchListener>(Reuse.Singleton);
 
 					// WINDOW EXIT
 					container.Register<IDrawSuppressor, DrawSupressor>(Reuse.Singleton);
@@ -62,6 +69,8 @@ namespace HelloMagnesium
 					container.Register<IOpenTKWindowResetter, DesktopGLWindowResetter>(Reuse.Singleton);
 					container.Register<IMouseListener, DesktopGLMouseListener>(Reuse.Singleton);
 					container.Register<IGraphicsDeviceQuery, DefaultGraphicsDeviceQuery>(Reuse.Singleton);
+					container.Register<IWindowOrientationListener, DefaultWindowOrientationListener> (Reuse.Singleton);
+					container.Register<IClientWindowBounds, DefaultClientWindowBounds> (Reuse.Singleton);
 
 					// AUDIO
 					container.Register<IOpenALSoundController, DesktopGLOALSoundController>(Reuse.Singleton);
@@ -71,22 +80,18 @@ namespace HelloMagnesium
 					container.Register<ISoundEffectInstancePool, DesktopGLOALSoundEffectInstancePool>(Reuse.Singleton);
 					container.Register<ISoundEnvironment, SoundEnvironment>(Reuse.Singleton);
 
-					// TOUCH 
-					container.Register<ITouchListener, MockTouchListener>(Reuse.Singleton);
-
-
 					// MOCK 
 
 					container.Register<IContentManager, NullContentManager> (Reuse.Singleton);
 					container.Register<IContentTypeReaderManager, NullContentTypeReaderManager> (Reuse.Singleton);
-					container.Register<ISamplerStateCollectionPlatform, MockSamplerStateCollectionPlatform>(Reuse.Singleton);
-					container.Register<ITextureCollectionPlatform, NullTextureCollectionPlatform>(Reuse.Singleton);
+					//container.Register<ISamplerStateCollectionPlatform, MockSamplerStateCollectionPlatform>(Reuse.Singleton);
+					//container.Register<ITextureCollectionPlatform, NullTextureCollectionPlatform>(Reuse.Singleton);
 
-					container.Register<IPresentationParameters, PresentationParameters>(Reuse.Singleton);
+					container.Register<IPresentationParameters, DefaultPresentationParameters>(Reuse.Singleton);
 
 					// RUNTIME
 					container.Register<IGameBackbone, GameBackbone> (Reuse.Singleton);
-					container.Register<IThreadSleeper, SystemThreadSleeper>(Reuse.Singleton);
+					container.Register<IThreadSleeper, DesktopGLThreadSleeper>(Reuse.Singleton);
 
 					// MAGNESIUM
 					container.Register<IMgDriver, MgDriver>(Reuse.Singleton);
@@ -103,6 +108,15 @@ namespace HelloMagnesium
 					container.Register<Magnesium.OpenGL.IGLSemaphoreGenerator, MockGLSemaphoreGenerator >(Reuse.Singleton);
 					container.Register<IMgDeviceQuery, MgDeviceQuery>(Reuse.Singleton);
 					container.Register<IMgImageTools, MgImageTools>(Reuse.Singleton);
+
+					// MAGNESIUM TEXTURES 
+					container.Register<ITexture2DLoader, FITexture2DLoader>(Reuse.Singleton);
+					container.Register<ITextureSortingKeyGenerator, DefaultTextureSortingKeyGenerator>(Reuse.Singleton);
+					container.Register<IMgTextureGenerator, MgLinearImageOptimizer>(Reuse.Singleton);
+					container.Register<IContentStreamer, ContentStreamer>(Reuse.Singleton);
+					container.Register<IBlockLocator, MaskedBlockLocator>(Reuse.Singleton);
+					container.Register<IFileSystem, DirectoryFileSystem>(Reuse.Singleton);
+					container.Register<ITitleContainer, DesktopGLTitleContainer>(Reuse.Singleton);
 
 					using (var scope = container.OpenScope ())
 					{

@@ -17,7 +17,7 @@ namespace MonoGame.Models
 
 		public bool Load (AssetIdentifier identifier)
 		{
-			var blockId = mLocator.GetSource (identifier);
+			var blockId = mLocator.GetBlockPath (identifier);
 
 			string imageFileName = identifier.AssetId + ".bsm";
 			using (var fs = mFileSystem.OpenStream (blockId, imageFileName))

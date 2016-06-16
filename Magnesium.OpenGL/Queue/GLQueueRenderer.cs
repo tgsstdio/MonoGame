@@ -96,71 +96,71 @@ namespace Magnesium.OpenGL
 			if (nextTwoSided)
 			{
 				if (nextTwoSided != pastTwoSided ||
-					nextStencil.StencilFunction != pastStencil.StencilFunction ||
+					nextStencil.FrontStencilFunction != pastStencil.FrontStencilFunction ||
 					nextStencil.ReferenceStencil != pastStencil.ReferenceStencil ||
 					nextStencil.StencilMask != pastStencil.StencilMask)
 				{
 					mStencil.SetFrontFaceCullStencilFunction (
-						nextStencil.StencilFunction,
+						nextStencil.FrontStencilFunction,
 						nextStencil.ReferenceStencil,
 						nextStencil.StencilMask);
 				}
 
 				if (nextTwoSided != pastTwoSided ||
-					nextStencil.CounterClockwiseStencilFunction != pastStencil.CounterClockwiseStencilFunction ||
+					nextStencil.BackStencilFunction != pastStencil.BackStencilFunction ||
 					nextStencil.ReferenceStencil != pastStencil.ReferenceStencil ||
 					nextStencil.StencilMask != pastStencil.StencilMask)
 				{
 					mStencil.SetBackFaceCullStencilFunction (
-						nextStencil.CounterClockwiseStencilFunction,
+						nextStencil.BackStencilFunction,
 						nextStencil.ReferenceStencil,
 						nextStencil.StencilMask);
 				}
 
 				if (nextTwoSided != pastTwoSided ||
-					nextStencil.StencilFail != pastStencil.StencilFail ||
-					nextStencil.StencilDepthBufferFail != pastStencil.StencilDepthBufferFail ||
-					nextStencil.StencilPass != pastStencil.StencilPass)
+					nextStencil.FrontStencilFail != pastStencil.FrontStencilFail ||
+					nextStencil.FrontDepthBufferFail != pastStencil.FrontDepthBufferFail ||
+					nextStencil.FrontStencilPass != pastStencil.FrontStencilPass)
 				{
 					mStencil.SetFrontFaceStencilOperation(			
-						nextStencil.StencilFail,
-						nextStencil.StencilDepthBufferFail,
-						nextStencil.StencilPass);
+						nextStencil.FrontStencilFail,
+						nextStencil.FrontDepthBufferFail,
+						nextStencil.FrontStencilPass);
 				}
 
 				if (nextTwoSided != pastTwoSided ||
-					nextStencil.CounterClockwiseStencilFail != pastStencil.CounterClockwiseStencilFail ||
-					nextStencil.CounterClockwiseStencilDepthBufferFail != pastStencil.CounterClockwiseStencilDepthBufferFail ||
-					nextStencil.CounterClockwiseStencilPass != pastStencil.CounterClockwiseStencilPass)
+					nextStencil.BackStencilFail != pastStencil.BackStencilFail ||
+					nextStencil.BackDepthBufferFail != pastStencil.BackDepthBufferFail ||
+					nextStencil.BackStencilPass != pastStencil.BackStencilPass)
 				{
 					mStencil.SetBackFaceStencilOperation(			
-						nextStencil.CounterClockwiseStencilFail,
-						nextStencil.CounterClockwiseStencilDepthBufferFail,
-						nextStencil.CounterClockwiseStencilPass);
+						nextStencil.BackStencilFail,
+						nextStencil.BackDepthBufferFail,
+						nextStencil.BackStencilPass);
 				}
 			}
 			else
 			{
 				if (nextTwoSided != pastTwoSided ||
-					nextStencil.StencilFunction != pastStencil.StencilFunction ||
+					nextStencil.FrontStencilFunction != pastStencil.FrontStencilFunction ||
 					nextStencil.ReferenceStencil != pastStencil.ReferenceStencil ||
 					nextStencil.StencilMask != pastStencil.StencilMask)
 				{
 					mStencil.SetStencilFunction (
-						nextStencil.StencilFunction,
+						nextStencil.FrontStencilFunction,
 						nextStencil.ReferenceStencil,
 						nextStencil.StencilMask);
 				}
 
 				if (nextTwoSided != pastTwoSided ||
-					nextStencil.StencilFail != pastStencil.StencilFail ||
-					nextStencil.StencilDepthBufferFail != pastStencil.StencilDepthBufferFail ||
-					nextStencil.StencilPass != pastStencil.StencilPass)
+					nextStencil.FrontStencilFail != pastStencil.FrontStencilFail ||
+					nextStencil.FrontDepthBufferFail != pastStencil.FrontDepthBufferFail ||
+					nextStencil.FrontStencilPass != pastStencil.FrontStencilPass)
 				{
 					mStencil.SetStencilOperation (
-						nextStencil.StencilFail,
-						nextStencil.StencilDepthBufferFail,
-						nextStencil.StencilPass);
+						nextStencil.FrontStencilFail,
+						nextStencil.FrontDepthBufferFail,
+						nextStencil.FrontStencilPass);
 				}
 			}
 		}

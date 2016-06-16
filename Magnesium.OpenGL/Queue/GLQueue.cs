@@ -47,49 +47,55 @@ namespace Magnesium.OpenGL
 		private Dictionary<uint, GLQueueSubmission> mSubmissions = new Dictionary<uint, GLQueueSubmission>();
 		private Dictionary<uint, GLQueueSubmitOrder> mOrders = new Dictionary<uint, GLQueueSubmitOrder>();
 
+		Result CompleteAllPreviousSubmissions (IMgFence fence)
+		{
+			var internalFence = fence as IGLQueueFence;
+			if (internalFence != null)
+			{
+				var result = QueueWaitIdle ();
+				internalFence.Signal ();
+				return result;
+			}
+			else
+			{
+				return Result.SUCCESS;
+			}
+		}
+
 		public Result QueueSubmit (MgSubmitInfo[] pSubmits, IMgFence fence)
 		{
 			if (pSubmits == null)
 			{				
-				var internalFence = fence as IGLQueueFence;
-				if (internalFence != null)
-				{
-					var result = QueueWaitIdle ();
-					internalFence.Signal ();
-					return result;
-				}
-				else
-				{
-					return Result.SUCCESS;
-				}
-			}
-
-			var submissions = new List<GLQueueSubmission> ();
-
-			uint key = (uint)mSubmissions.Keys.Count;
-			foreach (var sub in pSubmits)
+				return CompleteAllPreviousSubmissions (fence);
+			} 
+			else
 			{
-				var submit = new GLQueueSubmission (key, sub);
-				submit.OrderFence = mSignalModule.Generate ();
-				submissions.Add (submit);
-				++key;
-				mSubmissions.Add (submit.Key, submit);
-			}
+				var submissions = new List<GLQueueSubmission> ();
 
-			if (fence != null)
-			{
-				var order = new GLQueueSubmitOrder ();
-				order.Key = (uint)mOrders.Keys.Count;
-				order.Submissions = new Dictionary<uint, ISyncObject> ();
-				order.Fence = fence as IGLQueueFence;
-				foreach (var sub in submissions)
+				uint key = (uint)mSubmissions.Keys.Count;
+				foreach (var sub in pSubmits)
 				{
-					order.Submissions.Add (key, sub.OrderFence);
-					mSubmissions.Add (sub.Key, sub);
+					var submit = new GLQueueSubmission (key, sub);
+					submit.OrderFence = mSignalModule.Generate ();
+					submissions.Add (submit);
+					++key;
 				}
-			}
 
-			return Result.SUCCESS;
+				if (fence != null)
+				{
+					var order = new GLQueueSubmitOrder ();
+					order.Key = (uint)mOrders.Keys.Count;
+					order.Submissions = new Dictionary<uint, ISyncObject> ();
+					order.Fence = fence as IGLQueueFence;
+					foreach (var sub in submissions)
+					{
+						order.Submissions.Add (key, sub.OrderFence);
+					}
+					mOrders.Add (order.Key, order);
+				}
+
+				return Result.SUCCESS;
+			}
 		}
 
 		void PerformRequests (uint key)
@@ -109,7 +115,14 @@ namespace Magnesium.OpenGL
 				// render
 				if (checks >= requirements)
 				{
-					mRenderer.Render (null);
+					foreach (var buffer in request.CommandBuffers)
+					{
+						// TRY TO FIGURE OUT HOW TO STOP CMDBUF EXECUTION WITHOUT CHANGING 
+						if (buffer.IsQueueReady)
+						{
+							mRenderer.Render (null);
+						}
+					}
 					foreach (var signal in request.Signals)
 					{
 						signal.Reset ();

@@ -3,12 +3,13 @@ using OpenTK.Graphics.OpenGL;
 
 namespace Magnesium.OpenGL
 {
-	public enum GLMemoryBufferType : int 
+	public enum GLMemoryBufferType : uint 
 	{
 		SSBO = 0,
-		INDIRECT,
-		VERTEX, 
-		INDEX,
+		INDIRECT = 1,
+		VERTEX = 2, 
+		INDEX = 3,
+		IMAGE = 4,
 	}
 
 	public static class GLMemoryBufferExtensions 
@@ -42,6 +43,8 @@ namespace Magnesium.OpenGL
 				return 1 << 2;
 			case GLMemoryBufferType.INDEX:
 				return 1 << 3;
+			case GLMemoryBufferType.IMAGE:
+				return 1 << 4;
 			default:
 				throw new NotSupportedException ();
 			}
@@ -76,19 +79,20 @@ namespace Magnesium.OpenGL
 			// 0 : buffer based 
 			// 1 : host defined (for INDIRECT)
 			pMemoryProperties = new MgPhysicalDeviceMemoryProperties();
-			var slots = new MgMemoryType[4];
+			var slots = new MgMemoryType[5];
 
-			const MgMemoryPropertyFlagBits allOn = 
-				MgMemoryPropertyFlagBits.DEVICE_LOCAL_BIT |
-				MgMemoryPropertyFlagBits.HOST_CACHED_BIT | 
-				MgMemoryPropertyFlagBits.HOST_COHERENT_BIT | 
-				MgMemoryPropertyFlagBits.LAZILY_ALLOCATED_BIT | 
-				MgMemoryPropertyFlagBits.HOST_VISIBLE_BIT;
+			const uint allOn = (uint)(
+			                       MgMemoryPropertyFlagBits.DEVICE_LOCAL_BIT |
+			                       MgMemoryPropertyFlagBits.HOST_CACHED_BIT |
+			                       MgMemoryPropertyFlagBits.HOST_COHERENT_BIT |
+			                       MgMemoryPropertyFlagBits.LAZILY_ALLOCATED_BIT |
+			                       MgMemoryPropertyFlagBits.HOST_VISIBLE_BIT);
 
-			slots [(int) GLMemoryBufferType.SSBO] = new MgMemoryType{ PropertyFlags = allOn};
-			slots [(int) GLMemoryBufferType.INDIRECT] = new MgMemoryType{ PropertyFlags = allOn };
-			slots [(int) GLMemoryBufferType.VERTEX] = new MgMemoryType{ PropertyFlags = allOn };
-			slots [(int) GLMemoryBufferType.INDEX] = new MgMemoryType{ PropertyFlags = allOn };
+			slots [0] = new MgMemoryType{ PropertyFlags = allOn };
+			slots [1] = new MgMemoryType{ PropertyFlags = allOn };
+			slots [2] = new MgMemoryType{ PropertyFlags = allOn };
+			slots [3] = new MgMemoryType{ PropertyFlags = allOn };
+			slots [4] = new MgMemoryType{ PropertyFlags = allOn };
 
 			pMemoryProperties.MemoryTypes = slots;
 		}

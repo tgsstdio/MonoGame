@@ -26,7 +26,7 @@ namespace Magnesium.OpenGL
 		CullBackFaces = 2048,
 		CullFrontFaces = 4096,
 		ScissorTestEnabled = 8192,
-		PolygonOffsetFillEnabled = 16384,
+		DepthBiasEnabled = 16384,
 		DepthClipEnabled =  32768,
 
 		// 16 - 23

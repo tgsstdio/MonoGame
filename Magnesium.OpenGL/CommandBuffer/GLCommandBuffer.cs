@@ -5,9 +5,9 @@ namespace Magnesium.OpenGL
 {
 	public class GLCommandBuffer : IMgCommandBuffer
 	{
-		private bool mIsRecording;
-		private bool mIsExecutable;
-		private bool mResetOnBegin;
+		private bool mIsRecording = false;
+		private bool mIsExecutable = false;
+		private bool mCanBeManuallyReset;
 
 		private GLCmdComputeCommand mIncompleteComputeCommand;
 		private GLCmdRenderPassCommand mIncompleteRenderPass;
@@ -15,39 +15,107 @@ namespace Magnesium.OpenGL
 		private List<GLCmdDrawCommand> mIncompleteDraws = new List<GLCmdDrawCommand>();
 
 		private GLCmdBufferRepository mRepository;
-		public GLCommandBuffer (bool resetOnBegin)
+		public GLCommandBuffer (bool canBeManuallyReset, GLCmdBufferRepository repository)
 		{
 			mIsRecording = false;
 			mIsExecutable = false;
-			mResetOnBegin = resetOnBegin;
-			mRepository = new GLCmdBufferRepository();
+			mCanBeManuallyReset = canBeManuallyReset;
+			mRepository = repository;
 		}
 
 		#region IMgCommandBuffer implementation
 
+		public MgCommandBufferUsageFlagBits SubmissionRule { get; private set; }
+		public bool IsQueueReady { get; set; }
 		public Result BeginCommandBuffer (MgCommandBufferBeginInfo pBeginInfo)
 		{
-			if (mResetOnBegin)
-			{
-				ResetAllData ();
-			}
+			SubmissionRule = pBeginInfo.Flags;
+			IsQueueReady = true;
 
 			mIsRecording = true;
 
 			return Result.SUCCESS;
 		}
 
+		public struct GLQueueRenderPass
+		{
+			public byte Index { get; set; }
+			public MgClearValue[] ClearValues { get; set; }
+		}
+
+		public GLQueueRenderPass[] Passes { get; private set; }
+		public GLQueueDrawItem[] DrawItems { get ; private set; }
 		public Result EndCommandBuffer ()
 		{
 			mIsRecording = false;
 			mIsExecutable = true;
 
 			// Generate commands here
+			var drawItems = new List<GLQueueDrawItem>();
+			var passes = new List<GLQueueRenderPass> ();
+
+			// set up defaults
+			var defaultPass = new GLQueueRenderPass { Index = 0 } ;
+			passes.Add (defaultPass);
+
+
+			if (mRenderPasses.Count > 0)
+			{
+				foreach (var pass in mRenderPasses)
+				{
+					var rp = new GLQueueRenderPass { 
+						Index = (byte) passes.Count,
+						ClearValues = pass.ClearValues,
+					};
+					passes.Add (rp);
+
+					foreach (var command in pass.DrawCommands)
+					{
+						var pipeline = mRepository.GraphicsPipelines.Items [command.Pipeline];
+
+						var depth = new GLQueueDepthState {
+							
+						};
+
+						var stencil = new GLQueueStencilState {
+
+						};
+
+						var blend = new GLQueueBlendState {
+
+						};
+							
+
+						var drawItem = new GLQueueDrawItem {
+							PassIndex = rp.Index,
+							ProgramIndex = (ushort) pipeline.ProgramId,
+							Topology = pipeline.Topology,
+							Mode = pipeline.PolygonMode,
+							StencilValues = new GLQueueStencilState{
+
+							},
+						};
+
+						drawItems.Add (drawItem);
+
+					}
+				}
+
+
+			}
+			else
+			{
+
+			}
+
+
+			DrawItems = drawItems.ToArray ();
+			
 
 			return Result.SUCCESS;
 		}
 
-		void ResetAllData ()
+		public void ResetAllData ()
 		{
 			mIncompleteRenderPass = null;
 			mIncompleteComputeCommand = null;
@@ -58,7 +126,11 @@ namespace Magnesium.OpenGL
 
 		public Result ResetCommandBuffer (MgCommandBufferResetFlagBits flags)
 		{
-			ResetAllData ();
+			if (mCanBeManuallyReset)
+			{				
+				ResetAllData ();
+				// OTHERWISE WAIT FOR BULK RESET VIA COMMAND POOL
+			}
 			return Result.SUCCESS;
 		}
 
@@ -186,6 +258,21 @@ namespace Magnesium.OpenGL
 			mRepository.VertexBuffers.Add (param);
 		}
 
+		void StoreDrawCommand (GLCmdDrawCommand command)
+		{
+			if (mRepository.MapRepositoryFields (ref command))
+			{
+				if (mIncompleteRenderPass != null)
+				{
+					mIncompleteRenderPass.DrawCommands.Add (command);
+				} 
+				else
+				{
+					mIncompleteDraws.Add (command);
+				}
+			}
+		}
+
 		public void CmdDraw (uint vertexCount, uint instanceCount, uint firstVertex, uint firstInstance)
 		{
 			//void glDrawArraysInstancedBaseInstance(GLenum mode​, GLint first​, GLsizei count​, GLsizei primcount​, GLuint baseinstance​);
@@ -202,9 +289,7 @@ namespace Magnesium.OpenGL
 			command.firstVertex = firstVertex;
 			command.firstInstance = firstInstance;
 
-			mRepository.MapRepositoryFields (ref command);
-
-			mIncompleteDraws.Add (command);
+			StoreDrawCommand(command);
 		}
 
 		public void CmdDrawIndexed (uint indexCount, uint instanceCount, uint firstIndex, int vertexOffset, uint firstInstance)
@@ -225,9 +310,7 @@ namespace Magnesium.OpenGL
 			command.vertexOffset = vertexOffset;
 			command.firstInstance = firstInstance;
 
-			mRepository.MapRepositoryFields (ref command);
-
-			mIncompleteDraws.Add (command);
+			StoreDrawCommand(command);
 		}
 
 		public void CmdDrawIndirect (IMgBuffer buffer, ulong offset, uint drawCount, uint stride)
@@ -258,9 +341,7 @@ namespace Magnesium.OpenGL
 			command.drawCount = drawCount;
 			command.stride = stride;
 
-			mRepository.MapRepositoryFields (ref command);
-
-			mIncompleteDraws.Add (command);
+			StoreDrawCommand(command);
 		}
 
 		public void CmdDrawIndexedIndirect (IMgBuffer buffer, ulong offset, uint drawCount, uint stride)
@@ -297,9 +378,7 @@ namespace Magnesium.OpenGL
 			command.drawCount = drawCount;
 			command.stride = stride;
 
-			mRepository.MapRepositoryFields (ref command);
-
-			mIncompleteDraws.Add (command);
+			StoreDrawCommand(command);
 		}
 
 		public void CmdDispatch (uint x, uint y, uint z)
@@ -384,7 +463,8 @@ namespace Magnesium.OpenGL
 
 		public void CmdPipelineBarrier (MgPipelineStageFlagBits srcStageMask, MgPipelineStageFlagBits dstStageMask, MgDependencyFlagBits dependencyFlags, MgMemoryBarrier[] pMemoryBarriers, MgBufferMemoryBarrier[] pBufferMemoryBarriers, MgImageMemoryBarrier[] pImageMemoryBarriers)
 		{
-			throw new NotImplementedException ();
+			// TODO : need barrier here
+			//throw new NotImplementedException ();
 		}
 
 		public void CmdBeginQuery (MgQueryPool queryPool, uint query, MgQueryControlFlagBits flags)

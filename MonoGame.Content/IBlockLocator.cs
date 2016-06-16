@@ -4,7 +4,7 @@ namespace MonoGame.Content
 {
 	public interface IBlockLocator
 	{
-		BlockIdentifier GetSource (AssetIdentifier assetId);
+		string GetBlockPath(AssetIdentifier assetId);
 		string GetLocalPath(AssetIdentifier assetId);
 	}
 }

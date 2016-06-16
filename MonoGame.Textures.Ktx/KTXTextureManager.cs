@@ -9,7 +9,7 @@ namespace MonoGame.Textures.Ktx
 	public class KTXTextureManager : ITextureManager
 	{
 		private readonly IAssetManager mAssetManager;
-		private readonly IFileSystem mFileSystem;
+		private readonly IContentStreamer mContentStreamer;
 		private readonly ITexturePageLookup mPageLookup;
 		private readonly IETCUnpacker mETCUnpacker;
 		private readonly ITextureAtlas mTextureAtlas;
@@ -18,7 +18,7 @@ namespace MonoGame.Textures.Ktx
 		public KTXTextureManager		(
 			IKtxPlatform platform,
 			IAssetManager am,
-			IFileSystem fs,
+			IContentStreamer cs,
 			ITexturePageLookup pageLookup,
 			IETCUnpacker unpacker,
 			ITextureAtlas atlas
@@ -26,7 +26,7 @@ namespace MonoGame.Textures.Ktx
 		{
 			mPlatform = platform;
 			mAssetManager = am;
-			mFileSystem = fs;
+			mContentStreamer = cs;
 			mPageLookup = pageLookup;
 			mETCUnpacker = unpacker;
 			mTextureAtlas = atlas;
@@ -37,8 +37,8 @@ namespace MonoGame.Textures.Ktx
 			TexturePageInfo result = null;
 			if (mPageLookup.TryGetValue (identifier, out result))
 			{
-				string imageFileName = identifier.AssetId + ".ktx";
-				using (var fs = mFileSystem.OpenStream (result.Asset.Block, imageFileName))
+				//string imageFileName = identifier.AssetId + ".ktx";
+				using (var fs = mContentStreamer.LoadContent (identifier, new []{".ktx"}))
 				{
 					KTXHeader header = null;
 

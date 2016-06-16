@@ -211,7 +211,6 @@
     <Compile Include="Media\MediaSource.cs" />
     <Compile Include="BaseTitleContainer.cs" />
     <Compile Include="SpriteBatch\VertexPositionColor.cs" />
-    <Compile Include="Graphics\PresentationParameters.cs" />
     <Compile Include="DefaultBackBufferPreferences.cs" />
     <Compile Include="Graphics\IGraphicsProfiler.cs" />
     <Compile Include="Graphics\DefaultGraphicsDeviceProfiler.cs" />
@@ -221,6 +220,14 @@
     <Compile Include="Media\MediaPlayer.cs" />
     <Compile Include="Media\IMediaQueue.cs" />
     <Compile Include="Media\DefaultMediaQueue.cs" />
+    <Compile Include="IWindowOrientationListener.cs" />
+    <Compile Include="DefaultWindowOrientationListener.cs" />
+    <Compile Include="Input\KeyboardInputListener.cs" />
+    <Compile Include="Audio\ISoundEnvironment.cs" />
+    <Compile Include="Audio\SoundEnvironment.cs" />
+    <Compile Include="Audio\ISoundEffectInstancePoolPlatform.cs" />
+    <Compile Include="Graphics\DefaultPresentationParameters.cs" />
+    <Compile Include="Audio\BaseSoundEffectInstancePool.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>

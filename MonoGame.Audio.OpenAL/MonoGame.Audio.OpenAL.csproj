@@ -38,12 +38,13 @@
     <Compile Include="IOpenALSoundContext.cs" />
     <Compile Include="BaseOpenALSoundController.cs" />
     <Compile Include="OALAudioFormat.cs" />
+    <Compile Include="NoAudioHardwareException.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <ProjectReference Include="..\MonoGame.Framework\Microsoft.Xna.Framework.csproj">
-      <Project>{6E03191C-70AE-4B0B-8782-68D377B72A0F}</Project>
-      <Name>Microsoft.Xna.Framework</Name>
+    <ProjectReference Include="..\MonoGame.Core\MonoGame.Core.csproj">
+      <Project>{699977AD-6D8C-4E0B-ADDA-554B66002D08}</Project>
+      <Name>MonoGame.Core</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>

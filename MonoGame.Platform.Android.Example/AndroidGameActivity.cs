@@ -113,7 +113,7 @@ namespace MonoGame.Platform.AndroidGL.Example
 			mContainer.Register<IGamePlatform, AndroidGamePlatform> (Reuse.Singleton);
 			mContainer.Register<AndroidGLOrientationSetter> (Reuse.Singleton);
 			mContainer.Register<AndroidGLOrientationApplicator> (Reuse.Singleton);
-			mContainer.Register<IWindowOrientationListener, MockWindowOrientationListener> (Reuse.Singleton);
+			mContainer.Register<IWindowOrientationListener, DefaultWindowOrientationListener> (Reuse.Singleton);
 			mContainer.Register<IClientWindowBounds, AndroidGLClientWindowBounds> (Reuse.Singleton);
 
 			mContainer.Register<IGraphicsDevicePlatform, AndroidGLGraphicsDevicePlatform> (Reuse.Singleton);

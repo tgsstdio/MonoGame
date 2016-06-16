@@ -36,7 +36,7 @@ namespace Magnesium.OpenGL
 		}
 		public List<ISyncObject> Waits { get;set; }
 
-		public IMgCommandBuffer CommandBuffers { get; set; }
+		public GLCommandBuffer[] CommandBuffers { get; set; }
 
 		public List<ISyncObject> Signals { get; set; }
 		public ISyncObject OrderFence { get; set; }
