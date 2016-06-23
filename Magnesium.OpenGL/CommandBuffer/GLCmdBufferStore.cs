@@ -1,51 +1,53 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Magnesium.OpenGL
 {
-	public class GLCmdBufferStore<TData> where TData : class 
+	public class GLCmdBufferStore<TData> : IGLCmdBufferStoreResettable, IGLCmdBufferStore<TData>
 	{
 		public GLCmdBufferStore ()
 		{
-			Items = new List<TData>();
+			mItems = new List<TData>();
 		}
 
-		public List<TData> Items { get; private set;	}
+		public int Count {
+			get {
+				return mItems.Count;
+			}
+		}
+
+		private readonly List<TData> mItems;
+
+		public TData At(int index)
+		{
+			return mItems [index];
+		}
 
 		public void Add(TData item)
 		{
-			Items.Add (item);
+			mItems.Add (item);
 		}
 
 		public int LastIndex()
 		{
-			if (Items.Count == 0)
-			{
-				return int.MinValue;
-			}
-			else
-			{
-				return Items.Count - 1;
-			}
+			return mItems.Count == 0 ? int.MinValue : (mItems.Count - 1);
 		}
 
-		public bool LastValue(out TData item)
+		public bool LastValue(ref TData item)
 		{
-			if (Items.Count == 0)
-			{
-				item = null;
+			if (mItems.Count == 0)
+			{				
 				return false;
 			}
 			else
 			{
-				item = Items[Items.Count - 1];
+				item = mItems[mItems.Count - 1];
 				return true;
 			}
 		}
 
 		public void Clear()
 		{
-			Items.Clear ();
+			mItems.Clear ();
 		}
 	}
 }

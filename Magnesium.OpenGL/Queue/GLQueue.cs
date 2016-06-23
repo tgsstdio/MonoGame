@@ -62,6 +62,8 @@ namespace Magnesium.OpenGL
 			}
 		}
 
+		private uint mSubmissionKey = 0;
+		private uint mOrderKey = 0;
 		public Result QueueSubmit (MgSubmitInfo[] pSubmits, IMgFence fence)
 		{
 			if (pSubmits == null)
@@ -70,27 +72,30 @@ namespace Magnesium.OpenGL
 			} 
 			else
 			{
-				var submissions = new List<GLQueueSubmission> ();
-
-				uint key = (uint)mSubmissions.Keys.Count;
+				var children = new List<GLQueueSubmission> ();
+	
 				foreach (var sub in pSubmits)
-				{
-					var submit = new GLQueueSubmission (key, sub);
+				{					
+					var submit = new GLQueueSubmission (mSubmissionKey, sub);
 					submit.OrderFence = mSignalModule.Generate ();
-					submissions.Add (submit);
-					++key;
+					children.Add (submit);
+					mSubmissions.Add (submit.Key, submit);
+					// JUST LOOP AROUND
+					mSubmissionKey = (mSubmissionKey >= uint.MaxValue) ? 0 : mSubmissionKey + 1;
 				}
 
 				if (fence != null)
 				{
 					var order = new GLQueueSubmitOrder ();
-					order.Key = (uint)mOrders.Keys.Count;
+					order.Key = mOrderKey;
 					order.Submissions = new Dictionary<uint, ISyncObject> ();
 					order.Fence = fence as IGLQueueFence;
-					foreach (var sub in submissions)
+					foreach (var sub in children)
 					{
-						order.Submissions.Add (key, sub.OrderFence);
+						order.Submissions.Add (sub.Key, sub.OrderFence);
 					}
+					// JUST LOOP AROUND
+					mOrderKey = (mOrderKey >= uint.MaxValue) ? 0 : mOrderKey + 1;
 					mOrders.Add (order.Key, order);
 				}
 
@@ -115,14 +120,18 @@ namespace Magnesium.OpenGL
 				// render
 				if (checks >= requirements)
 				{
-					foreach (var buffer in request.CommandBuffers)
+					if (request.CommandBuffers != null)
 					{
-						// TRY TO FIGURE OUT HOW TO STOP CMDBUF EXECUTION WITHOUT CHANGING 
-						if (buffer.IsQueueReady)
+						foreach (var buffer in request.CommandBuffers)
 						{
-							mRenderer.Render (null);
+							// TRY TO FIGURE OUT HOW TO STOP CMDBUF EXECUTION WITHOUT CHANGING 
+							if (buffer.IsQueueReady)
+							{
+								mRenderer.Render (null);
+							}
 						}
 					}
+
 					foreach (var signal in request.Signals)
 					{
 						signal.Reset ();

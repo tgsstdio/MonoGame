@@ -9,23 +9,30 @@ namespace Magnesium.OpenGL
 			
 		}
 
-		public abstract void SetUniformIndex (byte index);
-		public abstract byte GetUniformIndex ();
-		public abstract void BindMask (IConstantBufferCollection buffers);
-		public abstract ushort GetBufferMask ();
-
-		public abstract uint GetBindingSet ();
-		public abstract void BindSet (uint setIndex);
-
 		public void Use ()
 		{
-			//GL.UseProgram (mProgram.ProgramID);
+			throw new NotImplementedException ();
+		}
+		public void Unuse ()
+		{
+			throw new NotImplementedException ();
 		}
 
-		// FIXME : better method name
-		public void Unuse()
-		{
-			//GL.UseProgram (0);
+		public byte DescriptorSet {
+			get {
+				throw new NotImplementedException ();
+			}
+			set {
+				throw new NotImplementedException ();
+			}
+		}
+		public int VBO {
+			get {
+				throw new NotImplementedException ();
+			}
+			set {
+				throw new NotImplementedException ();
+			}
 		}
 
 		#region IDisposable implementation

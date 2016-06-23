@@ -6,7 +6,7 @@ namespace HelloMagnesium
 	public class MockShaderProgramCache : IShaderProgramCache
 	{
 		#region IShaderProgramCache implementation
-		public void SetProgram (ushort programIndex)
+		public void SetProgram (int programIndex)
 		{
 			throw new System.NotImplementedException ();
 		}

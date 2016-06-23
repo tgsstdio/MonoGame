@@ -35,6 +35,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Test.cs" />
+    <Compile Include="CmdBufferInstructions.cs" />
+    <Compile Include="CmdBufferTests.cs" />
+    <Compile Include="ItemComposer.cs" />
+    <Compile Include="IComposer.cs" />
+    <Compile Include="MockGLGraphicsPipeline.cs" />
+    <Compile Include="MockVertexBufferFactory.cs" />
+    <Compile Include="IndexTypeValidation.cs" />
+    <Compile Include="CmdBufferRepoUnitTests.cs" />
+    <Compile Include="PipelineItemUnitTests.cs" />
+    <Compile Include="MockGLIndirectBuffer.cs" />
+    <Compile Include="ViewportMergeUnitTests.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

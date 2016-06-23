@@ -73,7 +73,7 @@ namespace Magnesium.OpenGL
 			}
 
 			pMemoryRequirements = new MgMemoryRequirements ();
-			pMemoryRequirements.MemoryTypeBits = internalBuffer.MemoryBufferType.GetMask();
+			pMemoryRequirements.MemoryTypeBits = internalBuffer.BufferType.GetMask();
 		}
 
 		internal static int CalculateMipLevels(int width, int height = 0, int depth = 0)
@@ -1034,7 +1034,6 @@ namespace Magnesium.OpenGL
 				}
 
 				var programId = CompileShaderModules (info);
-				var pipeline = new GLGraphicsPipeline (programId, info.RasterizationState, info.InputAssemblyState, info.DepthStencilState);
 
 				var uniqueLocations = new SortedDictionary<int, GLVariableBind> ();
 				foreach (var binding in layout.Bindings)
@@ -1053,11 +1052,18 @@ namespace Magnesium.OpenGL
 				}
 
 				// ASSUME NO GAPS ARE SUPPLIED
-				pipeline.UniformBinder = new GLProgramUniformBinder (uniqueLocations.Values.Count);
+				var uniformBinder = new GLProgramUniformBinder (uniqueLocations.Values.Count);
 				foreach (var bind in uniqueLocations.Values)
 				{
-					pipeline.UniformBinder.Bindings[bind.Location] = bind;
+					uniformBinder.Bindings[bind.Location] = bind;
 				}
+
+				var pipeline = new GLGraphicsPipeline (programId,
+					info,
+					uniformBinder
+				);
+
+				// TODO : BASE PIPELINE / CHILD
 
 				output.Add (pipeline);
 			}

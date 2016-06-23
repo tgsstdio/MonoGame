@@ -2,6 +2,8 @@ namespace Magnesium.OpenGL
 {
 	public interface IRasterizerCapabilities
 	{
+		void SetLineWidth (float width);
+
 		void DisablePolygonOffset ();
 
 		void EnablePolygonOffset (float slopeScaleDepthBias, float depthBias);

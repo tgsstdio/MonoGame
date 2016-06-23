@@ -3,7 +3,7 @@ namespace Magnesium.OpenGL
 	public interface IShaderProgramCache
 	{
 		byte ProgramIndex { get; }
-		void SetProgram (ushort programIndex);
+		void SetProgram (int programIndex);
 		IShaderProgram GetActiveProgram ();
 	}
 

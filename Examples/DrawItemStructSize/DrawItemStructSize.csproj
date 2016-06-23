@@ -29,6 +29,17 @@
     <Externalconsole>true</Externalconsole>
     <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Externalconsole>true</Externalconsole>
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
   </ItemGroup>
@@ -38,9 +49,9 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <ProjectReference Include="..\..\MonoGame.Graphics\MonoGame.Graphics.csproj">
-      <Project>{52C293E3-DCC5-43BE-A94F-DBE0CF44E25E}</Project>
-      <Name>MonoGame.Graphics</Name>
+    <ProjectReference Include="..\..\Magnesium.OpenGL\Magnesium.OpenGL.csproj">
+      <Project>{156D7F9D-1243-4EDB-9E45-24FAF2F40A4C}</Project>
+      <Name>Magnesium.OpenGL</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>

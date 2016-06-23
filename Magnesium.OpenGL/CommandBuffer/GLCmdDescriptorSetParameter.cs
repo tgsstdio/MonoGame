@@ -4,9 +4,23 @@ namespace Magnesium.OpenGL
 {
 	public class GLCmdDescriptorSetParameter
 	{
-		public uint[] dynamicOffsets;
-		public uint firstSet;
-		public MgPipelineBindPoint bindpoint;
+		public uint FirstSet {
+			get;
+			set;
+		}
+
+		public MgDescriptorSet[] DescriptorSets {
+			get;
+			set;
+		}
+
+		public IMgPipelineLayout Layout {
+			get;
+			set;
+		}
+
+		public uint[] DynamicOffsets { get; set; }
+		public MgPipelineBindPoint Bindpoint { get; set; }
 	}
 }
 

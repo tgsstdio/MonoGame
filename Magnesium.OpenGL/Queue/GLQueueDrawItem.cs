@@ -6,7 +6,7 @@ namespace Magnesium.OpenGL
 	public struct GLQueueDrawItem
 	{
 		public byte PassIndex { get; set; }
-		public ushort ProgramIndex { get; set; }
+		public int ProgramIndex { get; set; }
 		public MgPrimitiveTopology Topology { get; set;}
 		public MgPolygonMode Mode { get; set; }			
 
@@ -16,17 +16,18 @@ namespace Magnesium.OpenGL
 		public GLQueueBlendState BlendValues { get; set;}
 		public GLQueueDepthState DepthValues {get;set;}
 
+//
+//		public DrawState State { get; set; }
+//		public byte TargetIndex {get;set;}
+		public byte DescriptorSet { get; set;}
+//		public ushort BufferMask { get; set; }
+//		public ushort ShaderOptions { get; set; }
+//
+//		public uint ResourceIndex { get; set; }
 
-		public DrawState State { get; set; }
-		public byte TargetIndex {get;set;}
-		public byte UniformsIndex { get; set;}
-		public ushort BufferMask { get; set; }
-		public ushort ShaderOptions { get; set; }
-
-		public uint ResourceIndex { get; set; }
-
-		public uint BindingSet { get; set; }
-		public uint MarkerIndex { get; set; }
+		public int VBO { get; set; }
+		public ushort DrawItem {get; set; }
+//		public uint MarkerIndex { get; set; }
 
 
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using OpenTK.Graphics.OpenGL;
 
 namespace Magnesium.OpenGL
 {
@@ -45,72 +46,11 @@ namespace Magnesium.OpenGL
 
 		public GLQueueRenderPass[] Passes { get; private set; }
 		public GLQueueDrawItem[] DrawItems { get ; private set; }
+
 		public Result EndCommandBuffer ()
 		{
 			mIsRecording = false;
 			mIsExecutable = true;
-
-			// Generate commands here
-			var drawItems = new List<GLQueueDrawItem>();
-			var passes = new List<GLQueueRenderPass> ();
-
-			// set up defaults
-			var defaultPass = new GLQueueRenderPass { Index = 0 } ;
-			passes.Add (defaultPass);
-
-
-			if (mRenderPasses.Count > 0)
-			{
-				foreach (var pass in mRenderPasses)
-				{
-					var rp = new GLQueueRenderPass { 
-						Index = (byte) passes.Count,
-						ClearValues = pass.ClearValues,
-					};
-					passes.Add (rp);
-
-					foreach (var command in pass.DrawCommands)
-					{
-						var pipeline = mRepository.GraphicsPipelines.Items [command.Pipeline];
-
-						var depth = new GLQueueDepthState {
-							
-						};
-
-						var stencil = new GLQueueStencilState {
-
-						};
-
-						var blend = new GLQueueBlendState {
-
-						};
-							
-
-						var drawItem = new GLQueueDrawItem {
-							PassIndex = rp.Index,
-							ProgramIndex = (ushort) pipeline.ProgramId,
-							Topology = pipeline.Topology,
-							Mode = pipeline.PolygonMode,
-							StencilValues = new GLQueueStencilState{
-
-							},
-						};
-
-						drawItems.Add (drawItem);
-
-					}
-				}
-
-
-			}
-			else
-			{
-
-			}
-
-
-			DrawItems = drawItems.ToArray ();
-			
 
 			return Result.SUCCESS;
 		}
@@ -142,86 +82,60 @@ namespace Magnesium.OpenGL
 			}
 			else
 			{
-				mRepository.GraphicsPipelines.Add (pipeline as GLGraphicsPipeline);
+				var glPipeline = pipeline as GLGraphicsPipeline;
+				mRepository.PushGraphicsPipeline(glPipeline);
 			}
 		}
 
-		public void CmdSetViewport (uint firstViewport, uint viewportCount, MgViewport[] pViewports)
+		public void CmdSetViewport (uint firstViewport, MgViewport[] pViewports)
 		{
-			var param = new GLCmdViewportParameter ();
-
-			param.first = (int)firstViewport;
-			param.values = new float[4 * viewportCount];
-
-			for (uint i = 0; i < viewportCount; ++i)
-			{
-				param.values [0 + 4 * i] = pViewports [i].X;
-				param.values [1 + 4 * i] = pViewports [i].Y;
-				param.values [2 + 4 * i] = pViewports [i].Width;
-				param.values [3 + 4 * i] = pViewports [i].Height;
-			}
-
-			mRepository.Viewports.Add (param);
+			mRepository.PushViewports (firstViewport, pViewports);
 		}
 
-		public void CmdSetScissor (uint firstScissor, uint scissorCount, MgRect2D[] pScissors)
+		public void CmdSetScissor (uint firstScissor, MgRect2D[] pScissors)
 		{
-			var param = new GLCmdScissorParameter ();
-
-			param.index = firstScissor;
-			param.count = scissorCount;
-			param.values = new float[4 * scissorCount];
-
-			for (uint i = 0; i < scissorCount; ++i)
-			{
-				param.values [0 + 4 * i] = pScissors [i].Offset.X;
-				param.values [1 + 4 * i] = pScissors [i].Offset.Y;
-				param.values [2 + 4 * i] = pScissors [i].Extent.Width;
-				param.values [3 + 4 * i] = pScissors [i].Extent.Height;
-			}
-
-			mRepository.Scissors.Add (param);
+			mRepository.PushScissors (firstScissor, pScissors);
 		}
 
 		public void CmdSetLineWidth (float lineWidth)
 		{
-			mRepository.LineWidth = lineWidth;
+			mRepository.PushLineWidth (lineWidth);
 		}
 
 		public void CmdSetDepthBias (float depthBiasConstantFactor, float depthBiasClamp, float depthBiasSlopeFactor)
 		{
-			mRepository.DepthBiasConstantFactor = depthBiasConstantFactor;
-			mRepository.DepthBiasClamp = depthBiasClamp;
-			mRepository.DepthBiasSlopeFactor = depthBiasSlopeFactor;
+			mRepository.PushDepthBias (
+				depthBiasConstantFactor,
+				depthBiasClamp,
+				depthBiasSlopeFactor);
 		}
 
-		public void CmdSetBlendConstants (float[] blendConstants)
+		public void CmdSetBlendConstants (MgColor4f blendConstants)
 		{
-			mRepository.BlendConstants = blendConstants;
+			mRepository.PushBlendConstants (blendConstants);
 		}
 
 		public void CmdSetDepthBounds (float minDepthBounds, float maxDepthBounds)
 		{
-			mRepository.MinDepthBounds = minDepthBounds;
-			mRepository.MaxDepthBounds = maxDepthBounds;
+			mRepository.PushDepthBounds(
+				minDepthBounds,
+				maxDepthBounds
+			);
 		}
 
 		public void CmdSetStencilCompareMask (MgStencilFaceFlagBits faceMask, uint compareMask)
 		{
-			mRepository.CompareFace = faceMask;
-			mRepository.CompareMask = compareMask;
+			mRepository.SetCompareMask (faceMask, compareMask);
 		}
 
 		public void CmdSetStencilWriteMask (MgStencilFaceFlagBits faceMask, uint writeMask)
 		{
-			mRepository.WriteFace = faceMask;
-			mRepository.WriteMask = writeMask; 
+			mRepository.SetWriteMask (faceMask, writeMask);
 		}
 
 		public void CmdSetStencilReference (MgStencilFaceFlagBits faceMask, uint reference)
 		{
-			mRepository.ReferenceFace = faceMask;
-			mRepository.Reference = reference; 
+			mRepository.SetStencilReference (faceMask, reference);
 		}
 
 		public void CmdBindDescriptorSets (
@@ -233,9 +147,11 @@ namespace Magnesium.OpenGL
 			uint[] pDynamicOffsets)
 		{
 			var parameter = new GLCmdDescriptorSetParameter ();		
-			parameter.bindpoint = pipelineBindPoint;
-			parameter.firstSet = firstSet;
-			parameter.dynamicOffsets = pDynamicOffsets;
+			parameter.Bindpoint = pipelineBindPoint;
+			parameter.Layout = layout;
+			parameter.FirstSet = firstSet;
+			parameter.DynamicOffsets = pDynamicOffsets;
+			parameter.DescriptorSets = pDescriptorSets;
 			mRepository.DescriptorSets.Add (parameter);
 		}
 
@@ -283,11 +199,11 @@ namespace Magnesium.OpenGL
 			// baseinstance => firstInstance Specifies the base instance for use in fetching instanced vertex attributes.
 
 			var command = new GLCmdDrawCommand ();
-			command.CommandType = GLCmdDrawCommand.DrawType.Draw;
-			command.vertexCount = vertexCount;
-			command.instanceCount = instanceCount;
-			command.firstVertex = firstVertex;
-			command.firstInstance = firstInstance;
+			command.Draw = new GLCmdInternalDraw ();
+			command.Draw.vertexCount = vertexCount;
+			command.Draw.instanceCount = instanceCount;
+			command.Draw.firstVertex = firstVertex;
+			command.Draw.firstInstance = firstInstance;
 
 			StoreDrawCommand(command);
 		}
@@ -303,12 +219,12 @@ namespace Magnesium.OpenGL
 			//mDrawCommands.Add (mIncompleteDrawCommand);
 
 			var command = new GLCmdDrawCommand ();
-			command.CommandType = GLCmdDrawCommand.DrawType.DrawIndexed;
-			command.indexCount = indexCount;
-			command.instanceCount = instanceCount;
-			command.firstIndex = firstIndex;
-			command.vertexOffset = vertexOffset;
-			command.firstInstance = firstInstance;
+			command.DrawIndexed = new GLCmdInternalDrawIndexed ();
+			command.DrawIndexed.indexCount = indexCount;
+			command.DrawIndexed.instanceCount = instanceCount;
+			command.DrawIndexed.firstIndex = firstIndex;
+			command.DrawIndexed.vertexOffset = vertexOffset;
+			command.DrawIndexed.firstInstance = firstInstance;
 
 			StoreDrawCommand(command);
 		}
@@ -336,10 +252,11 @@ namespace Magnesium.OpenGL
 			//mDrawCommands.Add (mIncompleteDrawCommand);
 
 			var command = new GLCmdDrawCommand ();
-			command.CommandType = GLCmdDrawCommand.DrawType.DrawIndirect;
-			command.offset = offset;
-			command.drawCount = drawCount;
-			command.stride = stride;
+			command.DrawIndirect = new GLCmdInternalDrawIndirect ();
+			command.DrawIndirect.buffer = buffer;
+			command.DrawIndirect.offset = offset;
+			command.DrawIndirect.drawCount = drawCount;
+			command.DrawIndirect.stride = stride;
 
 			StoreDrawCommand(command);
 		}
@@ -373,10 +290,11 @@ namespace Magnesium.OpenGL
 //			} DrawElementsIndirectCommand;
 			//mDrawCommands.Add (mIncompleteDrawCommand);
 			var command = new GLCmdDrawCommand ();
-			command.CommandType = GLCmdDrawCommand.DrawType.DrawIndexedIndirect;
-			command.offset = offset;
-			command.drawCount = drawCount;
-			command.stride = stride;
+			command.DrawIndexedIndirect = new GLCmdInternalDrawIndexedIndirect();
+			command.DrawIndexedIndirect.buffer = buffer;
+			command.DrawIndexedIndirect.offset = offset;
+			command.DrawIndexedIndirect.drawCount = drawCount;
+			command.DrawIndexedIndirect.stride = stride;
 
 			StoreDrawCommand(command);
 		}

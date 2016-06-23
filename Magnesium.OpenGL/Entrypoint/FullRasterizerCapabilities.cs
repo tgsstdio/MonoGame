@@ -7,6 +7,19 @@ namespace Magnesium.OpenGL
 	{
 		#region IRasterizerCapabilities implementation
 
+		public void SetLineWidth (float width)
+		{
+			if (width > 0f)
+			{
+				GL.Enable (EnableCap.LineSmooth);
+				GL.LineWidth (width);
+			} 
+			else
+			{
+				GL.Disable (EnableCap.LineSmooth);
+			}
+		}
+
 		public void DisablePolygonOffset ()
 		{
 			GL.Disable(EnableCap.PolygonOffsetFill);

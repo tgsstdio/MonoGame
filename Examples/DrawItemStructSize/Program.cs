@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
-using MonoGame.Graphics;
+using Magnesium.OpenGL;
 
 namespace DrawItemStructSize
 {
@@ -8,12 +8,13 @@ namespace DrawItemStructSize
 	{
 		public static void Main (string[] args)
 		{
-			Console.WriteLine ("Hello World!");
-
-			Console.WriteLine ("Size of DrawItem :" +  Marshal.SizeOf(typeof(DrawItem)) );
-			Console.WriteLine ("Size of DepthStencilState :" +  Marshal.SizeOf(typeof(StencilState)) );
-			Console.WriteLine ("Size of BlendState :" +  Marshal.SizeOf(typeof(BlendState)) );
-			Console.WriteLine ("Size of RasterizerState :" +  Marshal.SizeOf(typeof(RasterizerState)) );
+			Console.WriteLine ("Size of GLCmdBufferDrawItem :" +  Marshal.SizeOf(typeof(GLCmdBufferDrawItem)) );
+			Console.WriteLine ("Size of GLQueueDrawItem :" +  Marshal.SizeOf(typeof(GLQueueDrawItem)) );
+			Console.WriteLine ("Size of GLCmdPipelineItem :" +  Marshal.SizeOf(typeof(GLCmdBufferPipelineItem)) );
+			Console.WriteLine ("Size of GLQueueStencilState :" +  Marshal.SizeOf(typeof(GLQueueStencilState)) );
+			Console.WriteLine ("Size of GLQueueBlendState :" +  Marshal.SizeOf(typeof(GLQueueBlendState)) );
+			Console.WriteLine ("Size of GLQueueDepthState :" +  Marshal.SizeOf(typeof(GLQueueDepthState)) );
+			Console.WriteLine ("Size of GLQueueRasterizerState :" +  Marshal.SizeOf(typeof(GLQueueRasterizerState)) );
 		}
 	}
 }

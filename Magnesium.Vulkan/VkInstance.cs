@@ -24,17 +24,17 @@ namespace Magnesium.Vulkan
 			throw new System.NotImplementedException ();
 		}
 
-		public Result CreateDisplayPlaneSurfaceKHR (MgDisplaySurfaceCreateInfoKHR createInfo, MgAllocationCallbacks allocator, out MgSurfaceKHR pSurface)
+		public Result CreateDisplayPlaneSurfaceKHR (MgDisplaySurfaceCreateInfoKHR createInfo, MgAllocationCallbacks allocator, out IMgSurfaceKHR pSurface)
 		{
 			throw new System.NotImplementedException ();
 		}
 
-		public void DestroySurfaceKHR (MgSurfaceKHR surface, MgAllocationCallbacks allocator)
-		{
-			throw new System.NotImplementedException ();
-		}
+//		public void DestroySurfaceKHR (MgSurfaceKHR surface, MgAllocationCallbacks allocator)
+//		{
+//			throw new System.NotImplementedException ();
+//		}
 
-		public Result CreateWin32SurfaceKHR (MgWin32SurfaceCreateInfoKHR pCreateInfo, MgAllocationCallbacks allocator, out MgSurfaceKHR pSurface)
+		public Result CreateWin32SurfaceKHR (MgWin32SurfaceCreateInfoKHR pCreateInfo, MgAllocationCallbacks allocator, out IMgSurfaceKHR pSurface)
 		{
 			throw new System.NotImplementedException ();
 		}

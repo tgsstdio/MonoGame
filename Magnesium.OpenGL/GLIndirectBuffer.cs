@@ -3,32 +3,32 @@ using OpenTK.Graphics.OpenGL;
 
 namespace Magnesium.OpenGL
 {
-	public class GLIndirectBuffer : IMgBuffer
+	public class GLIndirectBuffer : IGLIndirectBuffer
 	{
 		public GLIndirectBuffer (MgBufferCreateInfo info)
 		{	
 			switch(info.Usage)
 			{
 			case MgBufferUsageFlagBits.STORAGE_BUFFER_BIT:
-				MemoryBufferType = GLMemoryBufferType.SSBO;
+				BufferType = GLMemoryBufferType.SSBO;
 				break;
 			case MgBufferUsageFlagBits.INDEX_BUFFER_BIT:
-				MemoryBufferType = GLMemoryBufferType.INDEX;
+				BufferType = GLMemoryBufferType.INDEX;
 				break;
 			case MgBufferUsageFlagBits.VERTEX_BUFFER_BIT:
-				MemoryBufferType = GLMemoryBufferType.VERTEX;
+				BufferType = GLMemoryBufferType.VERTEX;
 				break;
 			case MgBufferUsageFlagBits.INDIRECT_BUFFER_BIT:
-				MemoryBufferType = GLMemoryBufferType.INDIRECT;
+				BufferType = GLMemoryBufferType.INDIRECT;
 				break;				
 			default:
 				throw new NotSupportedException ();
 			}
 
-			Target = MemoryBufferType.GetBufferTarget ();
+			Target = BufferType.GetBufferTarget ();
 		}
 
-		public GLMemoryBufferType MemoryBufferType { get; private set;}
+		public GLMemoryBufferType BufferType { get; private set;}
 
 		public IntPtr Source { get; set; }
 
@@ -49,7 +49,6 @@ namespace Magnesium.OpenGL
 			{
 				throw new InvalidCastException ("memoryOffset >= Int32.MaxValue");
 			}
-
 			var offset = (Int32) memoryOffset;
 			this.Source = IntPtr.Add (internalMemory.Handle, offset);
 
@@ -74,7 +73,7 @@ namespace Magnesium.OpenGL
 			if (mIsDisposed)
 				return;
 
-			switch(MemoryBufferType)
+			switch(BufferType)
 			{
 			case GLMemoryBufferType.SSBO:
 			case GLMemoryBufferType.INDEX:

@@ -7,10 +7,6 @@ namespace Magnesium.OpenGL
 	[StructLayout(LayoutKind.Sequential)]
 	public struct GLQueueStencilState : IEquatable<GLQueueStencilState>, IComparable<GLQueueStencilState>
 	{
-		//public CompareFunction DepthBufferFunction { get; set; }
-		public int StencilMask {get;set;}
-		public int ReferenceStencil { get; set; }
-		public int StencilWriteMask {get;set;}
 		public MgCompareOp FrontStencilFunction { get; set; }
 		public MgStencilOp FrontStencilPass { get; set; }
 		public MgStencilOp FrontStencilFail {get;set;}
@@ -31,16 +27,13 @@ namespace Magnesium.OpenGL
 			return 
 				this.FrontStencilFunction == other.FrontStencilFunction
 				//&& this.DepthBufferFunction == other.DepthBufferFunction
-				&& this.FrontStencilPass == other.FrontStencilPass
-				&& this.FrontStencilFail == other.FrontStencilFail
-				&& this.FrontDepthBufferFail == other.FrontDepthBufferFail
-				&& this.BackStencilFunction == other.BackStencilFunction
-				&& this.BackStencilPass == other.BackStencilPass
-				&& this.BackStencilFail == other.BackStencilFail
-				&& this.BackDepthBufferFail == other.BackDepthBufferFail
-				&& this.StencilMask == other.StencilMask
-				&& this.ReferenceStencil == other.ReferenceStencil
-				&& this.StencilWriteMask == other.StencilWriteMask;
+			&& this.FrontStencilPass == other.FrontStencilPass
+			&& this.FrontStencilFail == other.FrontStencilFail
+			&& this.FrontDepthBufferFail == other.FrontDepthBufferFail
+			&& this.BackStencilFunction == other.BackStencilFunction
+			&& this.BackStencilPass == other.BackStencilPass
+			&& this.BackStencilFail == other.BackStencilFail
+			&& this.BackDepthBufferFail == other.BackDepthBufferFail;
 		}
 
 		#endregion
@@ -117,33 +110,6 @@ namespace Magnesium.OpenGL
 				return -1;
 			}
 			else if (BackDepthBufferFail > other.BackDepthBufferFail)
-			{
-				return 1;
-			}
-
-			if (StencilMask < other.StencilMask)
-			{
-				return -1;
-			}
-			else if (StencilMask > other.StencilMask)
-			{
-				return 1;
-			}
-
-			if (ReferenceStencil < other.ReferenceStencil)
-			{
-				return -1;
-			}
-			else if (ReferenceStencil > other.ReferenceStencil)
-			{
-				return 1;
-			}
-
-			if (StencilWriteMask < other.StencilWriteMask)
-			{
-				return -1;
-			}
-			else if (StencilWriteMask > other.StencilWriteMask)
 			{
 				return 1;
 			}

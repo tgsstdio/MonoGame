@@ -194,7 +194,7 @@ namespace Magnesium.OpenGL.UnitTests
 
 			var actual = queue.QueueSubmit (submits, null);
 			Assert.AreEqual (Result.SUCCESS, actual);
-			Assert.IsFalse (queue.IsEmpty ());
+			Assert.False (queue.IsEmpty ());
 
 			Assert.AreEqual (1, generator.NoOfFunctionCalls);
 
@@ -208,6 +208,87 @@ namespace Magnesium.OpenGL.UnitTests
 			Assert.IsTrue (queue.IsEmpty ());
 
 			Assert.AreEqual (1, generator.NoOfFunctionCalls);
+		}
+
+		public class FakeSemaphoreGenerator : IGLSemaphoreGenerator
+		{
+			public MockGLSemaphore Semaphore {get; set;}
+			public uint NoOfFunctionCalls;
+			public FakeSemaphoreGenerator ()
+			{
+				NoOfFunctionCalls = 0;
+			}
+
+			#region IGLSemaphoreGenerator implementation
+			public ISyncObject Generate ()
+			{
+				++NoOfFunctionCalls;
+				return Semaphore;
+			}
+			#endregion
+		}
+
+		[Test()]
+		public void SemaphoreIdsClash()
+		{
+			IGLQueueRenderer renderer = new MockQueueRenderer ();
+
+			var generator = new FakeSemaphoreGenerator ();
+
+			IGLQueue queue = new GLQueue (renderer, generator);
+			Assert.AreEqual (0, generator.NoOfFunctionCalls);
+
+			var first = new MockGLSemaphore (false);
+			var semaphore_0 = new MockGLSemaphore (false);
+			generator.Semaphore = semaphore_0;
+			var actual = queue.QueueSubmit (new [] { 
+				new MgSubmitInfo
+				{
+					WaitSemaphores = new []
+					{
+						new MgSubmitInfoWaitSemaphoreInfo{ 
+							WaitSemaphore = first
+						},
+					},
+				},
+			}, null);
+			Assert.AreEqual (Result.SUCCESS, actual);
+			Assert.False (queue.IsEmpty ());
+
+			Assert.AreEqual (1, generator.NoOfFunctionCalls);
+
+			first.ReadyState = true;
+
+			var second = new MockGLSemaphore (false);
+			var semaphore_1 = new MockGLSemaphore (false);
+			generator.Semaphore = semaphore_1;
+			actual = queue.QueueSubmit (new [] { 
+				new MgSubmitInfo
+				{
+					WaitSemaphores = new []
+					{
+						new MgSubmitInfoWaitSemaphoreInfo{ 
+							WaitSemaphore = second
+						},
+					},
+				},
+			}, null);
+			Assert.AreEqual (Result.SUCCESS, actual);
+			Assert.False (queue.IsEmpty ());
+
+			semaphore_0.ReadyState = true;
+			queue.QueueSubmit (null, null);
+			Assert.False (queue.IsEmpty ());
+
+			var semaphore_2 = new MockGLSemaphore (true);
+			generator.Semaphore = semaphore_2;
+			actual = queue.QueueSubmit (new [] { 
+				new MgSubmitInfo (),
+			}, null);
+			Assert.AreEqual (Result.SUCCESS, actual);
+			Assert.False (queue.IsEmpty ());
+
+			Assert.AreEqual (3, generator.NoOfFunctionCalls);
 		}
 	}
 }

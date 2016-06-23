@@ -101,6 +101,32 @@
     <Compile Include="IGLQueue.cs" />
     <Compile Include="Queue\IGLSemaphore.cs" />
     <Compile Include="GLImageArraySubresource.cs" />
+    <Compile Include="GLGraphicsPipelineDynamicStateFlagBits.cs" />
+    <Compile Include="GLVertexBufferBinding.cs" />
+    <Compile Include="GLVertexInputAttribute.cs" />
+    <Compile Include="GLVertexAttributeInfo.cs" />
+    <Compile Include="GLVertexBufferBinder.cs" />
+    <Compile Include="GLVertexAttribFunction.cs" />
+    <Compile Include="CommandBuffer\GLCmdInternalDraw.cs" />
+    <Compile Include="CommandBuffer\GLCmdInternalDrawIndexed.cs" />
+    <Compile Include="CommandBuffer\GLCmdInternalDrawIndexedIndirect.cs" />
+    <Compile Include="CommandBuffer\GLCmdInternalDrawIndirect.cs" />
+    <Compile Include="CommandBuffer\GLCommandBufferFlagBits.cs" />
+    <Compile Include="CommandBuffer\GLCmdBufferDrawItem.cs" />
+    <Compile Include="CommandBuffer\GLCmdDepthBiasParameter.cs" />
+    <Compile Include="CommandBuffer\GLCmdDepthBoundsParameter.cs" />
+    <Compile Include="CommandBuffer\GLCmdBufferPipelineItem.cs" />
+    <Compile Include="CommandBuffer\IGLCmdBufferRepository.cs" />
+    <Compile Include="CommandBuffer\IGLCmdBufferStore.cs" />
+    <Compile Include="CommandBuffer\IGLCmdBufferStoreResettable.cs" />
+    <Compile Include="IGLGraphicsPipeline.cs" />
+    <Compile Include="GLVertexAttributeType.cs" />
+    <Compile Include="Queue\GLQueueStencilMasks.cs" />
+    <Compile Include="IGLIndirectBuffer.cs" />
+    <Compile Include="CommandBuffer\GLCmdArraySlice.cs" />
+    <Compile Include="CommandBuffer\IMergeable.cs" />
+    <Compile Include="CommandBuffer\IGLVertexBufferFactory.cs" />
+    <Compile Include="CommandBuffer\GLCmdVertexBufferObject.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

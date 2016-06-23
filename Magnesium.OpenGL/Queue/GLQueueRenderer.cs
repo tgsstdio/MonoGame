@@ -20,8 +20,6 @@ namespace Magnesium.OpenGL
 			mDepth =  depth;
 		}
 
-		public IConstantBufferCollection mBuffers;
-
 		public GLQueueDrawItem mPreviousItem;
 
 		private void ApplyBlendChanges (GLQueueDrawItem previous, GLQueueDrawItem next)
@@ -65,14 +63,20 @@ namespace Magnesium.OpenGL
 			}
 		}
 
-		private void ApplyStencilChanges (GLQueueDrawItem previous, GLQueueDrawItem next)
+		private void ApplyStencilChanges (
+			GLQueueDrawItem previous,
+			GLQueueStencilMasks pastFrontMasks,
+			GLQueueStencilMasks pastBackMasks,
+			GLQueueDrawItem next,
+			GLQueueStencilMasks nextFrontMasks,
+			GLQueueStencilMasks nextBackMasks)
 		{
 			var pastStencil = previous.StencilValues;
 			var nextStencil = next.StencilValues;
 
-			if (pastStencil.StencilWriteMask != nextStencil.StencilWriteMask)
+			if (pastFrontMasks.WriteMask != nextFrontMasks.WriteMask)
 			{
-				mStencil.SetStencilWriteMask (nextStencil.StencilWriteMask);
+				mStencil.SetStencilWriteMask (nextFrontMasks.WriteMask);
 			}
 
 			var newStencilEnabled = (next.Flags & QueueDrawItemBitFlags.StencilEnabled);
@@ -97,24 +101,24 @@ namespace Magnesium.OpenGL
 			{
 				if (nextTwoSided != pastTwoSided ||
 					nextStencil.FrontStencilFunction != pastStencil.FrontStencilFunction ||
-					nextStencil.ReferenceStencil != pastStencil.ReferenceStencil ||
-					nextStencil.StencilMask != pastStencil.StencilMask)
+					pastFrontMasks.Reference != nextFrontMasks.Reference ||
+					pastFrontMasks.CompareMask != nextFrontMasks.CompareMask)
 				{
 					mStencil.SetFrontFaceCullStencilFunction (
 						nextStencil.FrontStencilFunction,
-						nextStencil.ReferenceStencil,
-						nextStencil.StencilMask);
+						nextFrontMasks.Reference,
+						nextFrontMasks.CompareMask);
 				}
 
 				if (nextTwoSided != pastTwoSided ||
 					nextStencil.BackStencilFunction != pastStencil.BackStencilFunction ||
-					nextStencil.ReferenceStencil != pastStencil.ReferenceStencil ||
-					nextStencil.StencilMask != pastStencil.StencilMask)
+					nextBackMasks.Reference != pastBackMasks.Reference ||
+					nextBackMasks.CompareMask != pastBackMasks.CompareMask)
 				{
 					mStencil.SetBackFaceCullStencilFunction (
 						nextStencil.BackStencilFunction,
-						nextStencil.ReferenceStencil,
-						nextStencil.StencilMask);
+						nextBackMasks.Reference,
+						nextBackMasks.CompareMask);
 				}
 
 				if (nextTwoSided != pastTwoSided ||
@@ -143,13 +147,13 @@ namespace Magnesium.OpenGL
 			{
 				if (nextTwoSided != pastTwoSided ||
 					nextStencil.FrontStencilFunction != pastStencil.FrontStencilFunction ||
-					nextStencil.ReferenceStencil != pastStencil.ReferenceStencil ||
-					nextStencil.StencilMask != pastStencil.StencilMask)
+					nextFrontMasks.Reference != pastFrontMasks.Reference ||
+					nextFrontMasks.CompareMask != pastFrontMasks.CompareMask)
 				{
 					mStencil.SetStencilFunction (
 						nextStencil.FrontStencilFunction,
-						nextStencil.ReferenceStencil,
-						nextStencil.StencilMask);
+						nextFrontMasks.Reference,
+						nextFrontMasks.CompareMask);
 				}
 
 				if (nextTwoSided != pastTwoSided ||
@@ -176,7 +180,14 @@ namespace Magnesium.OpenGL
 			return (pastFlags != nextFlags);
 		}
 
-		private static bool ChangesFoundInStencil (GLQueueDrawItem previous, GLQueueDrawItem next)
+		private static bool ChangesFoundInStencil (
+			GLQueueDrawItem previous,
+			GLQueueStencilMasks previousFront,
+			GLQueueStencilMasks previousBack,
+			GLQueueDrawItem next,
+			GLQueueStencilMasks nextFront,
+			GLQueueStencilMasks nextBack		
+		)
 		{
 			var mask = QueueDrawItemBitFlags.StencilEnabled
 			           | QueueDrawItemBitFlags.TwoSidedStencilMode;
@@ -184,7 +195,10 @@ namespace Magnesium.OpenGL
 			var pastFlags = mask & previous.Flags;
 			var nextFlags = mask & next.Flags;
 
-			return (pastFlags != nextFlags) || (!(previous.StencilValues.Equals(next.StencilValues)));
+			return (pastFlags != nextFlags)
+				|| (!previous.StencilValues.Equals(next.StencilValues))
+					|| (!previousFront.Equals(nextFront))
+				|| (!previousBack.Equals(nextBack));
 		}
 
 		private static bool ChangesFoundInBlend(GLQueueDrawItem previous, GLQueueDrawItem next)
@@ -268,16 +282,16 @@ namespace Magnesium.OpenGL
 
 
 			var nextState = next.RasterizerValues;
-			if (Math.Abs (previous.RasterizerValues.DepthBias - nextState.DepthBias) >= float.Epsilon
-				|| Math.Abs (previous.RasterizerValues.SlopeScaleDepthBias - nextState.SlopeScaleDepthBias) >= float.Epsilon)
+			if (Math.Abs (previous.RasterizerValues.DepthBiasConstantFactor - nextState.DepthBiasConstantFactor) >= float.Epsilon
+				|| Math.Abs (previous.RasterizerValues.DepthBiasSlopeFactor - nextState.DepthBiasSlopeFactor) >= float.Epsilon)
 			{
-				if (	nextState.DepthBias > 0.0f
-					|| 	nextState.DepthBias < 0.0f
-					|| nextState.SlopeScaleDepthBias < 0.0f
-					|| nextState.SlopeScaleDepthBias > 0.0f
+				if (	nextState.DepthBiasConstantFactor > 0.0f
+					|| 	nextState.DepthBiasConstantFactor < 0.0f
+					|| nextState.DepthBiasSlopeFactor < 0.0f
+					|| nextState.DepthBiasSlopeFactor > 0.0f
 					)
 				{   
-					mRaster.EnablePolygonOffset (nextState.SlopeScaleDepthBias, nextState.DepthBias);
+					mRaster.EnablePolygonOffset (nextState.DepthBiasSlopeFactor, nextState.DepthBiasConstantFactor);
 				} else
 				{
 					mRaster.DisablePolygonOffset ();		
@@ -337,9 +351,13 @@ namespace Magnesium.OpenGL
 					ApplyDepthChanges(pastState, nextState);
 				}
 
-				if (ChangesFoundInStencil (pastState, nextState))
+				//TODO : revise
+				var dummyFrontMask = new GLQueueStencilMasks();
+				var dummyBackMask = new GLQueueStencilMasks();
+
+				if (ChangesFoundInStencil (pastState, dummyFrontMask, dummyBackMask, nextState, dummyFrontMask, dummyBackMask))
 				{
-					ApplyStencilChanges (pastState, nextState);
+					ApplyStencilChanges (pastState, dummyFrontMask, dummyBackMask, nextState, dummyFrontMask, dummyBackMask);
 				}
 
 				if (ChangesFoundInRasterization(pastState, nextState))
@@ -361,20 +379,14 @@ namespace Magnesium.OpenGL
 
 			var currentProgram = mCache.GetActiveProgram ();
 			// bind constant buffers
-			if (currentProgram.GetBufferMask () != nextState.BufferMask)
-			{
-				currentProgram.BindMask (mBuffers);
-			}
+//			if (currentProgram.GetBufferMask () != nextState.BufferMask)
+//			{
+//				currentProgram.BindMask (mBuffers);
+//			}
 			// bind uniforms
-			if (currentProgram.GetUniformIndex () != nextState.UniformsIndex)
-			{
-				currentProgram.SetUniformIndex (nextState.UniformsIndex);
-			}
+			currentProgram.DescriptorSet = nextState.DescriptorSet;
 
-			if (currentProgram.GetBindingSet () != nextState.BindingSet)
-			{
-				currentProgram.BindSet (nextState.BindingSet);
-			}
+			currentProgram.VBO = nextState.VBO;
 		}
 	}
 }

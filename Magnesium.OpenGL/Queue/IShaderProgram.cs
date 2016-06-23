@@ -6,12 +6,8 @@ namespace Magnesium.OpenGL
 	{
 		void Use();
 		void Unuse();
-		void SetUniformIndex(byte index);
-		byte GetUniformIndex();
-		void BindMask (IConstantBufferCollection buffers);
-		ushort GetBufferMask();
-		uint GetBindingSet ();
-		void BindSet (uint setIndex);
+		byte DescriptorSet {get; set;}
+		int VBO { get; set; }
 	}
 }
 

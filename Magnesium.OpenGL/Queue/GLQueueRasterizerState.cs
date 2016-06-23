@@ -7,15 +7,16 @@ namespace Magnesium.OpenGL
 	public struct GLQueueRasterizerState : IEquatable<GLQueueRasterizerState>, IComparable<GLQueueRasterizerState>
 	{
 		//public RasterizerStateBitFlags Flags { get; set;}
-		public float DepthBias {get;set;}
-		public float SlopeScaleDepthBias {get;set;}
+		public float DepthBiasConstantFactor {get;set;}
+		public float DepthBiasSlopeFactor { get; set;}
+		public float LineWidth { get; set; }
 
 		#region IEquatable implementation
 
 		public bool Equals (GLQueueRasterizerState other)
 		{
-			return Math.Abs (this.DepthBias - other.DepthBias) <= float.Epsilon
-				&& Math.Abs (this.SlopeScaleDepthBias - other.SlopeScaleDepthBias) <= float.Epsilon;
+			return Math.Abs (this.DepthBiasConstantFactor - other.DepthBiasConstantFactor) <= float.Epsilon
+				&& Math.Abs (this.DepthBiasSlopeFactor - other.DepthBiasSlopeFactor) <= float.Epsilon;
 		}
 
 		#endregion
@@ -24,20 +25,29 @@ namespace Magnesium.OpenGL
 
 		public int CompareTo (GLQueueRasterizerState other)
 		{
-			if (DepthBias < other.DepthBias)
+			if (DepthBiasConstantFactor < other.DepthBiasConstantFactor)
 			{
 				return -1;
 			}
-			else if (DepthBias > other.DepthBias)
+			else if (DepthBiasConstantFactor > other.DepthBiasConstantFactor)
 			{
 				return 1;
 			}
 
-			if (SlopeScaleDepthBias < other.SlopeScaleDepthBias)
+			if (DepthBiasSlopeFactor < other.DepthBiasSlopeFactor)
 			{
 				return -1;
 			}
-			else if (SlopeScaleDepthBias > other.SlopeScaleDepthBias)
+			else if (DepthBiasSlopeFactor > other.DepthBiasSlopeFactor)
+			{
+				return 1;
+			}
+
+			if (LineWidth < other.LineWidth)
+			{
+				return -1;
+			}
+			else if (LineWidth > other.LineWidth)
 			{
 				return 1;
 			}

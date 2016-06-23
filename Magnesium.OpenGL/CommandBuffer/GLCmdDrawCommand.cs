@@ -4,34 +4,42 @@ namespace Magnesium.OpenGL
 {
 	public struct GLCmdDrawCommand
 	{
-		public enum DrawType : byte
-		{
-			Draw = 0,
-			DrawIndexed,
-			DrawIndirect,
-			DrawIndexedIndirect,
+		public GLCmdInternalDrawIndexedIndirect DrawIndexedIndirect {
+			get;
+			set;
 		}
 
-		public DrawType CommandType;
+		public GLCmdInternalDraw Draw {
+			get;
+			set;
+		}
 
-		public uint vertexCount;
-		public uint instanceCount;
-		public uint firstVertex;
-		public uint firstInstance;
-		public int vertexOffset;
-		public uint indexCount;
-		public uint firstIndex;
+		public GLCmdInternalDrawIndirect DrawIndirect {
+			get;
+			set;
+		}
 
-		public ulong offset;
-		public uint drawCount;
-		public uint stride;
+		public GLCmdInternalDrawIndexed DrawIndexed {
+			get;
+			set;
+		}
 
-		public int IndexBuffer;
-		public int VertexBuffer;
-		public int Pipeline;
-		public int Scissors;
-		public int Viewports;
-		public int DescriptorSets;
+		public int? BlendConstants  { get; set;	}
+		public int? IndexBuffer  { get; set; }
+		public int? VertexBuffer  { get; set; }
+		public int? Pipeline  { get; set; }
+		public int? Scissors  { get; set; }
+		public int? Viewports  { get; set; }
+		public int? DescriptorSet { get; set; }
+		public int? DepthBounds { get; set;	}
+		public int? DepthBias  { get; set; }
+		public int? FrontReference  { get; set;	}
+		public int? BackReference { get; set;	}
+		public int? FrontWriteMask  { get; set;	}
+		public int? BackWriteMask  { get; set;	}
+		public int? FrontCompareMask  { get; set; }
+		public int? BackCompareMask { get; set;	}
+		public int? LineWidth  { get; set;	}
 	}
 }
 
