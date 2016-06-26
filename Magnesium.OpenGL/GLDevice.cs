@@ -251,6 +251,11 @@ namespace Magnesium.OpenGL
 			glType = PixelType.UnsignedByte;
 
 			switch (format) {
+			case MgFormat.R8G8B8_UINT:
+				glInternalFormat = PixelInternalFormat.Rgb8ui;
+				glFormat = PixelFormat.Rgb;
+				glType = PixelType.UnsignedByte;
+				break;
 			case MgFormat.R8G8B8A8_UINT:
 			//case SurfaceFormat.Color:
 				glInternalFormat = PixelInternalFormat.Rgba8ui;
@@ -480,7 +485,7 @@ namespace Magnesium.OpenGL
 				break;
 				#endif
 			default:
-				throw new NotSupportedException();
+ 				throw new NotSupportedException();
 			}
 		}
 
@@ -835,15 +840,25 @@ namespace Magnesium.OpenGL
 
 			if (pCreateInfo.Image == null)
 			{
-				throw new ArgumentNullException ("pCreateInfo.Image is null");
+				throw new ArgumentNullException ("pCreateInfo.Image", "pCreateInfo.Image is null");
+			}
+
+			var image = pCreateInfo.Image as GLImage;
+
+			if (image == null)
+			{
+				throw new InvalidCastException ("pCreateInfo.Image is not GLImage");
+			}
+
+			if (pCreateInfo.SubresourceRange == null)
+			{
+				throw new ArgumentNullException ("pCreateInfo.SubresourceRange", "pCreateInfo.SubresourceRange is null");
 			}
 
 			PixelInternalFormat glInternalFormat;
 			PixelFormat glFormat;
 			PixelType glType;
 			GetGLFormat(pCreateInfo.Format, true, out glInternalFormat, out glFormat, out glType);
-
-			var image = pCreateInfo.Image as GLImage;
 
 			int textureId;
 			GL.GenTextures(1, out textureId);
@@ -862,29 +877,6 @@ namespace Magnesium.OpenGL
 
 			pView = new GLImageView (textureId); 
 			return Result.SUCCESS;
-//
-//			if (pCreateInfo.ViewType == MgImageViewType.TYPE_2D)
-//			{
-//
-//				GL.BindTexture (TextureTarget.Texture2D, textureId);
-//
-//
-//
-//
-//
-//
-//				// Restore the bound texture.
-//				GL.BindTexture (TextureTarget.Texture2D, prevTexture);
-//
-//				var view = new GLImageView (textureId); 
-//				pView = view;
-//
-//				return Result.SUCCESS;
-//			}
-//			else
-//			{
-//				throw new NotSupportedException ();
-//			}
 		}
 
 //		public void DestroyImageView (IMgImageView imageView, MgAllocationCallbacks allocator)
@@ -1220,22 +1212,23 @@ namespace Magnesium.OpenGL
 						throw new NotSupportedException ();
 					}
 
+					var x = desc.DstBinding; // SHOULD ALWAYS BE ZERO
+
+					int offset = (int)desc.DstArrayElement;
+					int count = (int)desc.DescriptorCount;
+
+					if (localSet.Bindings.Length >= (offset + count))
+					{
+						// VULKAN WOULD CONTINUE ONTO WRITE ADDITIONAL VALUES TO NEXT BINDING
+						// ONLY ONE SET OF BINDING USED
+						throw new IndexOutOfRangeException ();
+					}
+
 					switch (desc.DescriptorType)
 					{
 					case MgDescriptorType.SAMPLER:
 					case MgDescriptorType.COMBINED_IMAGE_SAMPLER:
 					case MgDescriptorType.SAMPLED_IMAGE:
-						var x = desc.DstBinding;
-
-						int offset = (int)desc.DstArrayElement;
-						int count = (int)desc.DescriptorCount;
-
-						if (localSet.Bindings.Length >= (offset + count))
-						{
-							// VULKAN WOULD CONTINUE ONTO WRITE ADDITIONAL VALUES TO NEXT BINDING
-							// ONLY ONE SET OF BINDING USED
-							throw new IndexOutOfRangeException ();
-						}
 
 						// HOPEFULLY DESCRIPTOR SETS ARE GROUPED BY COMMON TYPES
 						for (int i = 0; i < count; ++i)
@@ -1255,6 +1248,22 @@ namespace Magnesium.OpenGL
 							var imageDesc = localSet.Bindings [offset + i].ImageDesc;
 							imageDesc.Replace (texHandle);
 						}					
+						break;
+					case MgDescriptorType.STORAGE_BUFFER:
+					case MgDescriptorType.STORAGE_BUFFER_DYNAMIC:
+						// HOPEFULLY DESCRIPTOR SETS ARE GROUPED BY COMMON TYPES
+						for (int i = 0; i < count; ++i)
+						{
+							var info = desc.BufferInfo [i];
+
+							var buf = info.Buffer as GLIndirectBuffer;
+
+							if (buf != null && buf.BufferType == GLMemoryBufferType.SSBO)
+							{
+								var bufferDesc = localSet.Bindings [offset + i].BufferDesc;
+								bufferDesc.BufferId = buf.BufferId;
+							}
+						}
 						break;
 					default:
 						throw new NotSupportedException ();					
@@ -1307,11 +1316,15 @@ namespace Magnesium.OpenGL
 				cmdPool.Buffers.Add (buffer);
 				pCommandBuffers [i] = buffer;
 			}
-			return Result.SUCCESS; 
+			return Result.SUCCESS;
 		}
 		public void FreeCommandBuffers (IMgCommandPool commandPool, IMgCommandBuffer[] pCommandBuffers)
 		{
-			throw new NotImplementedException ();
+			foreach (var item in pCommandBuffers)
+			{
+				var cmdBuf = item as GLCommandBuffer;
+				cmdBuf.ResetAllData ();
+			}
 		}
 		public Result CreateSharedSwapchainsKHR (MgSwapchainCreateInfoKHR[] pCreateInfos, MgAllocationCallbacks allocator, out IMgSwapchainKHR[] pSwapchains)
 		{

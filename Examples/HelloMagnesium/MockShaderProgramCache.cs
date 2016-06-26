@@ -6,17 +6,48 @@ namespace HelloMagnesium
 	public class MockShaderProgramCache : IShaderProgramCache
 	{
 		#region IShaderProgramCache implementation
-		public void SetProgram (int programIndex)
+
+		public void BindDescriptorSet ()
 		{
 			throw new System.NotImplementedException ();
 		}
-		public IShaderProgram GetActiveProgram ()
-		{
-			throw new System.NotImplementedException ();
+
+		public byte DescriptorSetIndex {
+			get {
+				throw new System.NotImplementedException ();
+			}
+			set {
+				throw new System.NotImplementedException ();
+			}
 		}
-		public byte ProgramIndex {
-			get;
+
+		public GLCmdDescriptorSetParameter DescriptorSet {
+			get {
+				throw new System.NotImplementedException ();
+			}
+			set {
+				throw new System.NotImplementedException ();
+			}
 		}
+
+		public int ProgramID {
+			get {
+				throw new System.NotImplementedException ();
+			}
+			set {
+				throw new System.NotImplementedException ();
+			}
+		}
+
+		public int VBO {
+			get {
+				throw new System.NotImplementedException ();
+			}
+			set {
+				throw new System.NotImplementedException ();
+			}
+		}
+
 		#endregion
 	}
 

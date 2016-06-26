@@ -10,73 +10,113 @@ namespace Magnesium.OpenGL
 		private readonly IRasterizerCapabilities mRaster;
 		private readonly IDepthCapabilities mDepth;
 		private readonly IShaderProgramCache mCache;
+		private readonly IScissorsCapabilities mScissor;
 
-		public GLQueueRenderer (IBlendCapabilities blend, IStencilCapabilities stencil, IRasterizerCapabilities raster, IDepthCapabilities depth, IShaderProgramCache cache)
+		ICmdDrawCapabilities mRender;
+
+		public GLQueueRenderer (
+			IBlendCapabilities blend,
+			IStencilCapabilities stencil,
+			IRasterizerCapabilities raster,
+			IDepthCapabilities depth, 
+			IShaderProgramCache cache,
+			IScissorsCapabilities scissor,
+			ICmdDrawCapabilities render
+		)
 		{
 			mCache = cache;
 			mBlend = blend;
 			mStencil = stencil;
 			mRaster = raster;
 			mDepth =  depth;
+			mScissor = scissor;
+			mRender = render;
 		}
 
-		public GLQueueDrawItem mPreviousItem;
-
-		private void ApplyBlendChanges (GLQueueDrawItem previous, GLQueueDrawItem next)
+		private void ApplyBlendChanges (GLQueueRendererBlendState previous, GLQueueRendererBlendState current)
 		{
-			var pastBlend = previous.BlendValues;
-			var nextBlend = next.BlendValues;
-
-			bool blendEnabled = !(nextBlend.ColorSourceBlend == MgBlendFactor.ONE && 
-				nextBlend.ColorDestinationBlend == MgBlendFactor.ZERO &&
-				nextBlend.AlphaSourceBlend == MgBlendFactor.ONE &&
-				nextBlend.AlphaDestinationBlend == MgBlendFactor.ZERO);
-
-			if (blendEnabled != mBlend.IsEnabled)
+			if (previous.LogicOpEnable != current.LogicOpEnable || previous.LogicOp != current.LogicOp)
 			{
-				mBlend.EnableBlending (blendEnabled);
+				mBlend.EnableLogicOp (current.LogicOpEnable);
+				mBlend.LogicOp (current.LogicOp);
 			}
 
-			if (nextBlend.ColorSourceBlend != pastBlend.ColorSourceBlend ||
-				nextBlend.ColorDestinationBlend != pastBlend.ColorDestinationBlend ||
-				nextBlend.AlphaSourceBlend != pastBlend.AlphaSourceBlend ||
-				nextBlend.AlphaDestinationBlend != pastBlend.AlphaDestinationBlend)
+
+			uint leftSize = (uint)previous.Attachments.Length;
+			uint rightSize = (uint)current.Attachments.Length;
+
+			uint fullLoop = Math.Max (leftSize, rightSize);
+
+			for (uint i = 0; i < fullLoop; ++i)
 			{
-				mBlend.ApplyBlendSeparateFunction (
-					nextBlend.ColorSourceBlend,
-					nextBlend.ColorDestinationBlend,
-					nextBlend.AlphaSourceBlend,
-					nextBlend.AlphaDestinationBlend);
-			}
+				bool hasPastValue = (i < leftSize);
+				bool hasNextValue = (i < rightSize);
 
-			var writeMask = QueueDrawItemBitFlags.RedColorWriteChannel
-				| QueueDrawItemBitFlags.GreenColorWriteChannel
-				| QueueDrawItemBitFlags.BlueColorWriteChannel
-				| QueueDrawItemBitFlags.AlphaColorWriteChannel; 
+				if (hasPastValue && hasNextValue)
+				{
+					var past = previous.Attachments [i];
+					var next = current.Attachments [i];
 
-			var pastColourMask = writeMask & previous.Flags;
-			var nextColourMask = writeMask & next.Flags;
+//					bool blendEnabled = !(next.Value.SrcColorBlendFactor == MgBlendFactor.ONE &&
+//					                    next.Value.DstColorBlendFactor == MgBlendFactor.ZERO &&
+//					                    next.Value.SrcAlphaBlendFactor == MgBlendFactor.ONE &&
+//					                    next.Value.DstAlphaBlendFactor == MgBlendFactor.ZERO);
 
-			if (pastColourMask != nextColourMask)
-			{
-				mBlend.SetColorMask (nextColourMask);
+					if (past.BlendEnable != next.BlendEnable)
+					{
+						mBlend.EnableBlending (i, next.BlendEnable);
+					}
+
+					if (next.SrcColorBlendFactor != past.SrcColorBlendFactor ||
+					    next.DstColorBlendFactor != past.DstColorBlendFactor ||
+					    next.SrcAlphaBlendFactor != past.SrcAlphaBlendFactor ||
+					    next.DstAlphaBlendFactor != past.DstAlphaBlendFactor)
+					{
+						mBlend.ApplyBlendSeparateFunction (
+							i,
+							next.SrcColorBlendFactor,
+							next.DstColorBlendFactor,
+							next.SrcAlphaBlendFactor,
+							next.DstAlphaBlendFactor);
+					}
+
+					if (past.ColorWriteMask != next.ColorWriteMask)
+					{
+						mBlend.SetColorMask (i, next.ColorWriteMask);
+					}
+				}
+				else if (!hasPastValue && hasNextValue)
+				{
+					var next = current.Attachments [i];
+//					bool blendEnabled = !(next.Value.SrcColorBlendFactor == MgBlendFactor.ONE &&
+//						next.Value.DstColorBlendFactor == MgBlendFactor.ZERO &&
+//						next.Value.SrcAlphaBlendFactor == MgBlendFactor.ONE &&
+//						next.Value.DstAlphaBlendFactor == MgBlendFactor.ZERO);
+
+					mBlend.EnableBlending (i, next.BlendEnable);
+
+					mBlend.ApplyBlendSeparateFunction (
+						i,
+						next.SrcColorBlendFactor,
+						next.DstColorBlendFactor,
+						next.SrcAlphaBlendFactor,
+						next.DstAlphaBlendFactor);
+
+					mBlend.SetColorMask (i, next.ColorWriteMask);
+				}
 			}
 		}
 
 		private void ApplyStencilChanges (
-			GLQueueDrawItem previous,
-			GLQueueStencilMasks pastFrontMasks,
-			GLQueueStencilMasks pastBackMasks,
-			GLQueueDrawItem next,
-			GLQueueStencilMasks nextFrontMasks,
-			GLQueueStencilMasks nextBackMasks)
+			GLQueueRendererStencilState past,
+			GLQueueRendererStencilState next)
 		{
-			var pastStencil = previous.StencilValues;
-			var nextStencil = next.StencilValues;
+			var pastStencil = past.Enums;
+			var nextStencil = next.Enums;
 
-			if (pastFrontMasks.WriteMask != nextFrontMasks.WriteMask)
+			if (past.Front.WriteMask != next.Front.WriteMask)
 			{
-				mStencil.SetStencilWriteMask (nextFrontMasks.WriteMask);
+				mStencil.SetStencilWriteMask (next.Front.WriteMask);
 			}
 
 			var newStencilEnabled = (next.Flags & QueueDrawItemBitFlags.StencilEnabled);
@@ -94,31 +134,31 @@ namespace Magnesium.OpenGL
 
 			// TODO : Stencil operations
 			// set function
-			bool pastTwoSided = (previous.Flags & QueueDrawItemBitFlags.TwoSidedStencilMode) > 0;
-			bool nextTwoSided = (previous.Flags & QueueDrawItemBitFlags.TwoSidedStencilMode) > 0;
+			bool pastTwoSided = (past.Flags & QueueDrawItemBitFlags.TwoSidedStencilMode) > 0;
+			bool nextTwoSided = (past.Flags & QueueDrawItemBitFlags.TwoSidedStencilMode) > 0;
 
 			if (nextTwoSided)
 			{
 				if (nextTwoSided != pastTwoSided ||
 					nextStencil.FrontStencilFunction != pastStencil.FrontStencilFunction ||
-					pastFrontMasks.Reference != nextFrontMasks.Reference ||
-					pastFrontMasks.CompareMask != nextFrontMasks.CompareMask)
+					past.Front.Reference != next.Front.Reference ||
+					past.Front.CompareMask != next.Front.CompareMask)
 				{
 					mStencil.SetFrontFaceCullStencilFunction (
 						nextStencil.FrontStencilFunction,
-						nextFrontMasks.Reference,
-						nextFrontMasks.CompareMask);
+						next.Front.Reference,
+						next.Front.CompareMask);
 				}
 
 				if (nextTwoSided != pastTwoSided ||
 					nextStencil.BackStencilFunction != pastStencil.BackStencilFunction ||
-					nextBackMasks.Reference != pastBackMasks.Reference ||
-					nextBackMasks.CompareMask != pastBackMasks.CompareMask)
+					next.Back.Reference != past.Back.Reference ||
+					next.Back.CompareMask != past.Back.CompareMask)
 				{
 					mStencil.SetBackFaceCullStencilFunction (
 						nextStencil.BackStencilFunction,
-						nextBackMasks.Reference,
-						nextBackMasks.CompareMask);
+						next.Back.Reference,
+						next.Back.CompareMask);
 				}
 
 				if (nextTwoSided != pastTwoSided ||
@@ -147,13 +187,13 @@ namespace Magnesium.OpenGL
 			{
 				if (nextTwoSided != pastTwoSided ||
 					nextStencil.FrontStencilFunction != pastStencil.FrontStencilFunction ||
-					nextFrontMasks.Reference != pastFrontMasks.Reference ||
-					nextFrontMasks.CompareMask != pastFrontMasks.CompareMask)
+					next.Front.Reference != past.Front.Reference ||
+					next.Front.CompareMask != past.Front.CompareMask)
 				{
 					mStencil.SetStencilFunction (
 						nextStencil.FrontStencilFunction,
-						nextFrontMasks.Reference,
-						nextFrontMasks.CompareMask);
+						next.Front.Reference,
+						next.Front.CompareMask);
 				}
 
 				if (nextTwoSided != pastTwoSided ||
@@ -169,7 +209,7 @@ namespace Magnesium.OpenGL
 			}
 		}
 
-		private static bool ChangesFoundInDepth(GLQueueDrawItem previous, GLQueueDrawItem next)
+		private static bool ChangesFoundInDepth(GLCmdBufferPipelineItem previous, GLCmdBufferPipelineItem next)
 		{
 			var mask = QueueDrawItemBitFlags.DepthBufferEnabled
 			           | QueueDrawItemBitFlags.DepthBufferWriteEnabled;
@@ -177,52 +217,62 @@ namespace Magnesium.OpenGL
 			var pastFlags = mask & previous.Flags;
 			var nextFlags = mask & next.Flags;
 
-			return (pastFlags != nextFlags);
+			return (pastFlags != nextFlags) || (!previous.DepthState.Equals (next.DepthState));
 		}
 
 		private static bool ChangesFoundInStencil (
-			GLQueueDrawItem previous,
-			GLQueueStencilMasks previousFront,
-			GLQueueStencilMasks previousBack,
-			GLQueueDrawItem next,
-			GLQueueStencilMasks nextFront,
-			GLQueueStencilMasks nextBack		
+			GLQueueRendererStencilState previous,
+			GLQueueRendererStencilState current
 		)
 		{
 			var mask = QueueDrawItemBitFlags.StencilEnabled
 			           | QueueDrawItemBitFlags.TwoSidedStencilMode;
 
 			var pastFlags = mask & previous.Flags;
-			var nextFlags = mask & next.Flags;
+			var nextFlags = mask & current.Flags;
 
 			return (pastFlags != nextFlags)
-				|| (!previous.StencilValues.Equals(next.StencilValues))
-					|| (!previousFront.Equals(nextFront))
-				|| (!previousBack.Equals(nextBack));
+				|| (!previous.Enums.Equals(current.Enums))
+				|| (!previous.Front.Equals(current.Front))
+				|| (!previous.Back.Equals(current.Back));
 		}
 
-		private static bool ChangesFoundInBlend(GLQueueDrawItem previous, GLQueueDrawItem next)
+		private static bool ChangesFoundInBlend(GLQueueRendererBlendState previous, GLQueueRendererBlendState next)
 		{
-			var mask = QueueDrawItemBitFlags.RedColorWriteChannel
-				| QueueDrawItemBitFlags.GreenColorWriteChannel
-				| QueueDrawItemBitFlags.BlueColorWriteChannel
-				| QueueDrawItemBitFlags.AlphaColorWriteChannel;
+			if (previous.Attachments.Length != next.Attachments.Length)
+				return true;
 
-					var pastFlags = mask & previous.Flags;
-					var nextFlags = mask & next.Flags;
+			if (previous.LogicOpEnable != next.LogicOpEnable)
+				return true;
 
-			return (pastFlags != nextFlags) || (!(previous.BlendValues.Equals (next.BlendValues)));
+			if (previous.LogicOp != next.LogicOp)
+				return true;
+
+			for (uint i = 0; i < next.Attachments.Length; ++i)
+			{
+				if (!previous.Attachments [i].Equals (next.Attachments [i]))
+				{
+					return true;
+				}
+			}
+
+			return false;
 		}
 
 		public void SetDefault()
 		{			
-			mBlend.Initialize ();
-			mStencil.Initialize ();
-			mRaster.Initialize ();
+			PreviousPipeline = new GLCmdBufferPipelineItem {};
+
+			const int NO_OF_COLOR_ATTACHMENTS = 4;
+			PastColorBlend = mBlend.Initialize (NO_OF_COLOR_ATTACHMENTS);
+			PastStencil = mStencil.Initialize ();
+			PastRasterization = mRaster.Initialize ();
 			mDepth.Initialize ();
 		}
 
-		private static bool ChangesFoundInRasterization(GLQueueDrawItem previous, GLQueueDrawItem next)
+		private static bool ChangesFoundInRasterization(
+			GLQueueRendererRasterizerState previous,
+			GLQueueRendererRasterizerState next)
 		{
 			var mask = QueueDrawItemBitFlags.CullBackFaces
 				| QueueDrawItemBitFlags.CullFrontFaces
@@ -233,10 +283,10 @@ namespace Magnesium.OpenGL
 			var pastFlags = mask & previous.Flags;
 			var nextFlags = mask & next.Flags;
 
-			return (pastFlags != nextFlags) || !(previous.RasterizerValues.Equals (next.RasterizerValues));
+			return (pastFlags != nextFlags) || !(previous.Equals (next));
 		}
 
-		private void ApplyRasterizationChanges(GLQueueDrawItem previous, GLQueueDrawItem next)
+		private void ApplyRasterizationChanges(GLQueueRendererRasterizerState previous, GLQueueRendererRasterizerState next)
 		{
 			var mask = QueueDrawItemBitFlags.CullingEnabled;
 			if ((previous.Flags & mask) != (next.Flags & mask))
@@ -280,10 +330,10 @@ namespace Magnesium.OpenGL
 				mRaster.SetUsingCounterClockwiseWindings(nextMaskValue > 0);
 			}
 
-
-			var nextState = next.RasterizerValues;
-			if (Math.Abs (previous.RasterizerValues.DepthBiasConstantFactor - nextState.DepthBiasConstantFactor) >= float.Epsilon
-				|| Math.Abs (previous.RasterizerValues.DepthBiasSlopeFactor - nextState.DepthBiasSlopeFactor) >= float.Epsilon)
+			var prevState = previous.DepthBias;
+			var nextState = next.DepthBias;
+			if (Math.Abs (prevState.DepthBiasConstantFactor - nextState.DepthBiasConstantFactor) >= float.Epsilon
+				|| Math.Abs (prevState.DepthBiasSlopeFactor - nextState.DepthBiasSlopeFactor) >= float.Epsilon)
 			{
 				if (	nextState.DepthBiasConstantFactor > 0.0f
 					|| 	nextState.DepthBiasConstantFactor < 0.0f
@@ -299,7 +349,7 @@ namespace Magnesium.OpenGL
 			}
 		}
 
-		private void ApplyDepthChanges (GLQueueDrawItem previous, GLQueueDrawItem next)
+		private void ApplyDepthChanges (GLCmdBufferPipelineItem previous, GLCmdBufferPipelineItem next)
 		{
 			var enabled = (next.Flags & QueueDrawItemBitFlags.DepthBufferEnabled) != 0;
 
@@ -318,8 +368,8 @@ namespace Magnesium.OpenGL
 			var oldDepthWrite = (previous.Flags & QueueDrawItemBitFlags.DepthBufferWriteEnabled);
 			var newDepthWrite = (next.Flags & QueueDrawItemBitFlags.DepthBufferWriteEnabled);
 
-			var pastDepth = previous.DepthValues;
-			var nextDepth = next.DepthValues;
+			var pastDepth = previous.DepthState;
+			var nextDepth = next.DepthState;
 
 			if ((oldDepthWrite & newDepthWrite) != oldDepthWrite)
 			{
@@ -332,61 +382,197 @@ namespace Magnesium.OpenGL
 			}
 		}
 
-		public void Render(GLQueueDrawItem[] items)
-		{
-			var pastState = mPreviousItem;
-			foreach (var nextState in items)
-			{
-				// TODO : bind render target
+		public GLCmdBufferPipelineItem PreviousPipeline { get ; private set; }
+		//public GLCmdBufferDrawItem mPreviousItem;
+		public GLQueueRendererRasterizerState PastRasterization { get ; private set; }
+		public GLQueueRendererStencilState PastStencil { get; private set; }
 
-				CheckProgram (nextState);
-
-				if (ChangesFoundInBlend (pastState, nextState))
-				{
-					ApplyBlendChanges (pastState, nextState);
-				}
-
-				if (ChangesFoundInDepth (pastState, nextState))
-				{
-					ApplyDepthChanges(pastState, nextState);
-				}
-
-				//TODO : revise
-				var dummyFrontMask = new GLQueueStencilMasks();
-				var dummyBackMask = new GLQueueStencilMasks();
-
-				if (ChangesFoundInStencil (pastState, dummyFrontMask, dummyBackMask, nextState, dummyFrontMask, dummyBackMask))
-				{
-					ApplyStencilChanges (pastState, dummyFrontMask, dummyBackMask, nextState, dummyFrontMask, dummyBackMask);
-				}
-
-				if (ChangesFoundInRasterization(pastState, nextState))
-				{
-					ApplyRasterizationChanges (pastState, nextState);
-				}
-
-				pastState = nextState;
-			}
+		public GLQueueRendererBlendState PastColorBlend {
+			get;
+			private set;
 		}
 
-		public void CheckProgram(GLQueueDrawItem nextState)
+		static GLQueueRendererStencilState ExtractStencilValues (CmdBufferInstructions instructionSet, GLCmdBufferDrawItem drawItem, GLCmdBufferPipelineItem currentPipeline)
+		{
+			var currentStencil = new GLQueueRendererStencilState ();
+			currentStencil.Flags = currentPipeline.Flags;
+			currentStencil.Front = new GLQueueStencilMasks {
+				CompareMask = instructionSet.FrontCompareMasks [drawItem.FrontStencilCompareMask],
+				Reference = instructionSet.FrontReferences [drawItem.FrontStencilReference],
+				WriteMask = instructionSet.FrontWriteMasks [drawItem.FrontStencilWriteMask],
+			};
+			currentStencil.Back = new GLQueueStencilMasks {
+				CompareMask = instructionSet.BackCompareMasks [drawItem.BackStencilCompareMask],
+				Reference = instructionSet.BackReferences [drawItem.BackStencilReference],
+				WriteMask = instructionSet.BackWriteMasks [drawItem.BackStencilWriteMask],
+			};
+			return currentStencil;
+		}
+
+		static GLQueueRendererRasterizerState ExtractRasterizationValues (CmdBufferInstructions instructionSet, GLCmdBufferDrawItem drawItem, GLCmdBufferPipelineItem currentPipeline)
+		{
+			return new GLQueueRendererRasterizerState {
+				Flags = currentPipeline.Flags,
+				DepthBias = instructionSet.DepthBias [drawItem.DepthBias],
+				LineWidth = instructionSet.LineWidths [drawItem.LineWidth],
+			};
+		}
+
+		static bool ChangesFoundInScissors (GLCmdScissorParameter pastScissors, GLCmdScissorParameter currentScissors)
+		{
+			return !pastScissors.Equals (currentScissors);
+		}
+
+		public GLCmdScissorParameter PastScissors {
+			get;
+			private set;
+		}
+
+		public GLCmdViewportParameter PastViewport {
+			get;
+			private set;
+		}
+
+		bool ChangesFoundInViewports (GLCmdViewportParameter pastViewport, GLCmdViewportParameter currentViewport)
+		{
+			return !pastViewport.Equals (currentViewport);
+		}
+
+		public void Render(CmdBufferInstructions[] items)
+		{
+			var pastPipeline = PreviousPipeline;
+			var pastStencil = PastStencil;
+			foreach (var instructionSet in items)
+			{
+				foreach (var drawItem in instructionSet.DrawItems)
+				{
+					// TODO : bind render target
+					var currentPipeline = instructionSet.Pipelines[drawItem.Pipeline];
+
+					CheckProgram (instructionSet, drawItem);
+
+					// scissor 
+					var currentScissors = instructionSet.Scissors[drawItem.Scissor];
+					if (ChangesFoundInScissors (PastScissors, currentScissors))
+					{
+						mScissor.ApplyScissors (currentScissors);
+					}
+					PastScissors = currentScissors;
+
+					// viewport
+					var currentViewport = instructionSet.Viewports[drawItem.Viewport];
+					if (ChangesFoundInViewports (PastViewport, currentViewport))
+					{
+						mScissor.ApplyViewports (currentViewport);
+					}
+					PastViewport = currentViewport;
+
+					var currentBlendState = instructionSet.ColorBlends[currentPipeline.BlendEnums];
+					if (ChangesFoundInBlend (PastColorBlend, currentBlendState))
+					{
+						ApplyBlendChanges (PastColorBlend, currentBlendState);
+					}
+					PastColorBlend = currentBlendState;
+
+					if (ChangesFoundInDepth (PreviousPipeline, currentPipeline))
+					{
+						ApplyDepthChanges (PreviousPipeline, currentPipeline);
+					}
+
+					var currentStencil = ExtractStencilValues (instructionSet, drawItem, currentPipeline);
+					if (ChangesFoundInStencil (pastStencil, currentStencil))
+					{
+						ApplyStencilChanges (pastStencil, currentStencil);
+					}
+					PastStencil = currentStencil;
+
+					var currentRasterization = ExtractRasterizationValues (instructionSet, drawItem, currentPipeline);
+					if (ChangesFoundInRasterization (PastRasterization, currentRasterization))
+					{
+						ApplyRasterizationChanges (PastRasterization, currentRasterization);
+					}
+					PastRasterization = currentRasterization;
+
+					// Draw here 
+					if ((drawItem.Command & GLCommandBufferFlagBits.CmdDrawIndexedIndirect) == GLCommandBufferFlagBits.CmdDrawIndexedIndirect)
+					{
+						var indexType = (drawItem.Command & GLCommandBufferFlagBits.Index16BitMode) == GLCommandBufferFlagBits.Index16BitMode
+							? MgIndexType.UINT16 : MgIndexType.UINT32;
+
+						if (drawItem.Offset >= (ulong) int.MaxValue)
+						{
+							throw new InvalidOperationException ();
+						}
+
+						var indirect = IntPtr.Add (drawItem.Buffer, (int) drawItem.Offset);
+
+						mRender.DrawIndexedIndirect (drawItem.Topology, indexType, indirect, drawItem.Count, drawItem.Stride);
+					}
+					else if ((drawItem.Command & GLCommandBufferFlagBits.CmdDrawIndexed) == GLCommandBufferFlagBits.CmdDrawIndexed)
+					{
+						var indexType = (drawItem.Command & GLCommandBufferFlagBits.Index16BitMode) == GLCommandBufferFlagBits.Index16BitMode
+							? MgIndexType.UINT16 : MgIndexType.UINT32;
+
+						mRender.DrawIndexed (drawItem.Topology, indexType, drawItem.First, drawItem.Count, drawItem.InstanceCount, drawItem.VertexOffset);
+					}
+					else if ((drawItem.Command & GLCommandBufferFlagBits.CmdDrawIndirect) == GLCommandBufferFlagBits.CmdDrawIndirect)
+					{
+						if (drawItem.Offset >= (ulong) int.MaxValue)
+						{
+							throw new InvalidOperationException ();
+						}
+
+						var indirect = IntPtr.Add (drawItem.Buffer, (int) drawItem.Offset);
+
+						mRender.DrawArraysIndirect (drawItem.Topology, indirect, drawItem.Count, drawItem.Stride);
+					}
+					else
+					{
+						mRender.DrawArrays(drawItem.Topology, drawItem.First, drawItem.Count, drawItem.InstanceCount, drawItem.FirstInstance);
+					}
+
+//					pastState = instructionSet;
+					pastPipeline = currentPipeline;
+				}
+			}
+			PreviousPipeline = pastPipeline;
+		}
+
+		public void CheckProgram(CmdBufferInstructions instructionSet, GLCmdBufferDrawItem drawItem)
 		{
 			// bind program
-			if (mCache.ProgramIndex != nextState.ProgramIndex)
+			if (mCache.ProgramID != drawItem.ProgramID)
 			{
-				mCache.SetProgram (nextState.ProgramIndex);
+				mCache.ProgramID = drawItem.ProgramID;
+				mCache.VBO = drawItem.VBO;
+				mCache.DescriptorSet = instructionSet.DescriptorSets [drawItem.DescriptorSet];
+				mCache.BindDescriptorSet ();
+			}
+			else
+			{
+				mCache.VBO = drawItem.VBO;
+
+				if (mCache.DescriptorSetIndex != drawItem.DescriptorSet)
+				{
+					// TODO : FIX ME
+					mCache.DescriptorSet = instructionSet.DescriptorSets [drawItem.DescriptorSet];
+
+					if (mCache.DescriptorSet != null)
+					{
+						mCache.BindDescriptorSet ();
+					}
+				}
 			}
 
-			var currentProgram = mCache.GetActiveProgram ();
 			// bind constant buffers
 //			if (currentProgram.GetBufferMask () != nextState.BufferMask)
 //			{
 //				currentProgram.BindMask (mBuffers);
 //			}
 			// bind uniforms
-			currentProgram.DescriptorSet = nextState.DescriptorSet;
 
-			currentProgram.VBO = nextState.VBO;
+
+
 		}
 	}
 }

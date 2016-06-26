@@ -3,16 +3,20 @@
 namespace Magnesium.OpenGL
 {
 	public interface IBlendCapabilities
-	{	
-		bool IsEnabled { get; }
+	{
+		void EnableLogicOp (bool logicOpEnable);
+		void LogicOp (MgLogicOp logicOp);
+	
+		bool IsEnabled(uint index);
 
-		void Initialize();
+		GLQueueRendererBlendState Initialize(uint noOfAttachments);
 
-		void EnableBlending (bool value);
+		void EnableBlending (uint index, bool value);
 
-		void SetColorMask (QueueDrawItemBitFlags colorMask);
+		void SetColorMask (uint index, MgColorComponentFlagBits colorMask);
 
 		void ApplyBlendSeparateFunction (
+			uint index,
 			MgBlendFactor colorSource,
 			MgBlendFactor colorDest,
 			MgBlendFactor alphaSource,

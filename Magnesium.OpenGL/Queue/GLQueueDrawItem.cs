@@ -11,9 +11,9 @@ namespace Magnesium.OpenGL
 		public MgPolygonMode Mode { get; set; }			
 
 		public QueueDrawItemBitFlags Flags {get;set;}
-		public GLQueueRasterizerState RasterizerValues {get;set;}
+		public GLQueueRendererRasterizerState RasterizerValues {get;set;}
 		public GLQueueStencilState StencilValues {get;set;}
-		public GLQueueBlendState BlendValues { get; set;}
+		public GLQueueColorAttachmentBlendState BlendValues { get; set;}
 		public GLQueueDepthState DepthValues {get;set;}
 
 //

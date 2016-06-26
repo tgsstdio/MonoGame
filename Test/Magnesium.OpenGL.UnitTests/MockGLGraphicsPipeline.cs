@@ -4,6 +4,11 @@ namespace Magnesium.OpenGL.UnitTests
 	{
 		#region IGLGraphicsPipeline implementation
 
+		public GLQueueRendererBlendState ColorBlends {
+			get;
+			set;
+		}
+
 		public GLGraphicsPipelineDynamicStateFlagBits DynamicsStates {
 			get;
 			set;

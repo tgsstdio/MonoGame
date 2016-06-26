@@ -130,6 +130,22 @@ namespace Magnesium.OpenGL.UnitTests
 					VertexBindingDescriptions = new MgVertexInputBindingDescription[]{ },
 					VertexAttributeDescriptions = new MgVertexInputAttributeDescription[]{ },
 				},
+				InputAssemblyState = new MgPipelineInputAssemblyStateCreateInfo
+				{
+					Topology = MgPrimitiveTopology.TRIANGLE_LIST,
+				},
+				RasterizationState = new MgPipelineRasterizationStateCreateInfo
+				{
+					CullMode = MgCullModeFlagBits.BACK_BIT,
+					DepthBiasClamp = 1f,
+					DepthBiasConstantFactor = 1f,
+					DepthBiasEnable = true,
+					DepthBiasSlopeFactor = 1f,
+					DepthClampEnable = true,
+					FrontFace = MgFrontFace.COUNTER_CLOCKWISE,
+					LineWidth = 1f,
+					RasterizerDiscardEnable = false,
+				}
 			};
 
 			var pipeline = new GLGraphicsPipeline (0, info, null);
@@ -198,6 +214,7 @@ namespace Magnesium.OpenGL.UnitTests
 					VertexBuffer = 0,
 					DrawIndexed = indexedDraw,
 					Viewports = 0,
+					Scissors = 0,
 
 					DescriptorSet = null,
 
@@ -239,13 +256,9 @@ namespace Magnesium.OpenGL.UnitTests
 
 				var actual = output.Viewports [0];
 				Assert.AreEqual (0, actual.First);
-				Assert.AreEqual (1, actual.Count);
-
-//				Assert.AreEqual (4, actual.Viewport.Values.Length);
-//				Assert.AreEqual (viewport.X, actual.Viewport.Values [0]);
-//				Assert.AreEqual (viewport.Y, actual.Viewport.Values [1]);
-//				Assert.AreEqual (viewport.Width, actual.Viewport.Values [2]);
-//				Assert.AreEqual (viewport.Height, actual.Viewport.Values [3]);
+				Assert.AreEqual (0, actual.Count);
+				Assert.AreEqual (0, actual.Viewport.Values.Length);
+				Assert.AreEqual (0, actual.DepthRange.Values.Length);
 			}
 
 			{
@@ -294,6 +307,11 @@ namespace Magnesium.OpenGL.UnitTests
 				var changeArray = output.Scissors;
 				Assert.IsNotNull (changeArray);
 				Assert.AreEqual (1, changeArray.Length);
+
+				var actual = output.Scissors [0];
+				Assert.AreEqual (0, actual.Parameters.First);
+				Assert.AreEqual (0, actual.Parameters.Count);
+				Assert.AreEqual (0, actual.Parameters.Values.Length);
 			}
 
 			{

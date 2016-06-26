@@ -27,9 +27,12 @@ namespace Magnesium.OpenGL
 			mItems.Add (item);
 		}
 
-		public int LastIndex()
+		public int? LastIndex()
 		{
-			return mItems.Count == 0 ? int.MinValue : (mItems.Count - 1);
+			int? result = null;
+			if (mItems.Count > 0)
+				result = (mItems.Count - 1);
+			return result;
 		}
 
 		public bool LastValue(ref TData item)

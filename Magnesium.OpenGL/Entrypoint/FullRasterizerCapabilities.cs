@@ -52,6 +52,7 @@ namespace Magnesium.OpenGL
 		public void DisableScissorTest ()
 		{
 			GL.Disable(EnableCap.ScissorTest);
+
 			mScissorTestEnabled = false;
 		}
 
@@ -88,13 +89,41 @@ namespace Magnesium.OpenGL
 			mCullingEnabled = false;
 		}
 
-		public void Initialize ()
+		public GLQueueRendererRasterizerState Initialize ()
 		{
+			var initialValue = new GLQueueRendererRasterizerState {
+				Flags = 
+					QueueDrawItemBitFlags.ScissorTestEnabled 
+					| QueueDrawItemBitFlags.CullBackFaces 
+					| QueueDrawItemBitFlags.UseCounterClockwiseWindings,
+					// ! QueueDrawItemBitFlags.CullingEnabled,
+				DepthBias = new GLCmdDepthBiasParameter
+				{
+					DepthBiasClamp = 0,
+					DepthBiasConstantFactor = 0,
+					DepthBiasSlopeFactor = 0,
+				},
+				LineWidth = 1f,
+			};
+
 			EnableScissorTest ();
 			DisableCulling ();
-			SetCullingMode (false, true);
-			SetUsingCounterClockwiseWindings (true);
+
+			SetCullingMode (
+				(initialValue.Flags & QueueDrawItemBitFlags.CullFrontFaces)
+				== QueueDrawItemBitFlags.CullFrontFaces,
+				(initialValue.Flags & QueueDrawItemBitFlags.CullBackFaces)
+				== QueueDrawItemBitFlags.CullBackFaces);
+			SetUsingCounterClockwiseWindings (
+				(initialValue.Flags & QueueDrawItemBitFlags.UseCounterClockwiseWindings)
+					== QueueDrawItemBitFlags.UseCounterClockwiseWindings
+			);
+
 			DisablePolygonOffset ();
+
+			SetLineWidth (initialValue.LineWidth);
+
+			return initialValue;
 		}
 
 		private bool mScissorTestEnabled;

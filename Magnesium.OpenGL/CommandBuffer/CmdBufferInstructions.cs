@@ -1,7 +1,12 @@
-﻿namespace Magnesium.OpenGL.UnitTests
+﻿namespace Magnesium.OpenGL
 {
 	public class CmdBufferInstructions
 	{
+		public GLQueueRendererBlendState[] ColorBlends {
+			get;
+			set;
+		}
+
 		public GLCmdDepthBoundsParameter[] DepthBounds {
 			get;
 			set;

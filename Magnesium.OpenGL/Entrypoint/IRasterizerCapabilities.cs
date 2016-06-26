@@ -28,7 +28,7 @@ namespace Magnesium.OpenGL
 			get;
 		}
 
-		void Initialize();
+		GLQueueRendererRasterizerState Initialize();
 	}
 }
 

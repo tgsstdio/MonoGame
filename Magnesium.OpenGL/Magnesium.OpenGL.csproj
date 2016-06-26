@@ -29,11 +29,11 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="OpenTK">
-      <HintPath>..\Examples\Samples\packages\OpenTK.1.1.2225.0\lib\net20\OpenTK.dll</HintPath>
-    </Reference>
     <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
+    <Reference Include="OpenTK">
+      <HintPath>..\packages\OpenTK.1.1.2225.0\lib\net20\OpenTK.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -73,11 +73,9 @@
     <Compile Include="Queue\IConstantBufferCollection.cs" />
     <Compile Include="Queue\IConstantBuffer.cs" />
     <Compile Include="Queue\DrawState.cs" />
-    <Compile Include="Queue\GLQueueBlendState.cs" />
     <Compile Include="Queue\GLQueueDepthState.cs" />
     <Compile Include="Queue\GLQueueStencilState.cs" />
     <Compile Include="Queue\GLQueueRenderer.cs" />
-    <Compile Include="Queue\GLQueueRasterizerState.cs" />
     <Compile Include="Queue\GLQueueDrawItem.cs" />
     <Compile Include="Entrypoint\GLEntrypoint.cs" />
     <Compile Include="Entrypoint\IRasterizerCapabilities.cs" />
@@ -127,6 +125,16 @@
     <Compile Include="CommandBuffer\IMergeable.cs" />
     <Compile Include="CommandBuffer\IGLVertexBufferFactory.cs" />
     <Compile Include="CommandBuffer\GLCmdVertexBufferObject.cs" />
+    <Compile Include="CommandBuffer\CmdBufferInstructions.cs" />
+    <Compile Include="Queue\GLQueueRendererStencilState.cs" />
+    <Compile Include="Queue\GLQueueRendererRasterizerState.cs" />
+    <Compile Include="Queue\GLQueueColorAttachmentBlendState.cs" />
+    <Compile Include="Queue\GLQueueRendererBlendState.cs" />
+    <Compile Include="Entrypoint\IScissorsCapabilities.cs" />
+    <Compile Include="Entrypoint\FullScissorsCapabilities.cs" />
+    <Compile Include="Entrypoint\ICmdDrawCapabilities.cs" />
+    <Compile Include="Entrypoint\FullCmdDrawCapabilities.cs" />
+    <Compile Include="Entrypoint\FullShaderProgramCache.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -136,12 +144,12 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="OpenTK.dll.config" />
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
     <Folder Include="CommandBuffer\" />
     <Folder Include="Queue\" />
     <Folder Include="Entrypoint\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="OpenTK.dll.config" />
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>

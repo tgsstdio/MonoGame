@@ -9,12 +9,41 @@ namespace Magnesium.OpenGL
 	{
 		#region IDepthStencilCapabilities implementation
 
-		public void Initialize ()
+		public GLQueueRendererStencilState Initialize ()
 		{
+			var initialValue = new GLQueueRendererStencilState {
+				Flags = 0, // !QueueDrawItemBitFlags.StencilEnabled | !QueueDrawItemBitFlags.TwoSidedStencilMode
+				Front = new GLQueueStencilMasks
+				{
+					WriteMask = ~0,
+					Reference = ~0,
+					CompareMask = int.MaxValue,
+				},
+				Back = new GLQueueStencilMasks
+				{
+					WriteMask = ~0,
+					Reference = ~0,
+					CompareMask = int.MaxValue,
+				},
+				Enums = new GLQueueStencilState
+				{
+					FrontStencilFunction = MgCompareOp.ALWAYS,
+					BackStencilFunction = MgCompareOp.ALWAYS,
+					FrontStencilPass = MgStencilOp.KEEP,
+					BackStencilPass = MgStencilOp.KEEP,
+					FrontStencilFail = MgStencilOp.KEEP,
+					BackStencilFail = MgStencilOp.KEEP,
+					FrontDepthBufferFail = MgStencilOp.KEEP,
+					BackDepthBufferFail = MgStencilOp.KEEP,
+				},
+			};
+
 			DisableStencilBuffer ();
-			SetStencilWriteMask (~0);
-			SetStencilFunction (MgCompareOp.ALWAYS, ~0, int.MaxValue);
-			SetStencilOperation (MgStencilOp.KEEP, MgStencilOp.KEEP, MgStencilOp.KEEP);
+			SetStencilWriteMask (initialValue.Front.WriteMask);
+			SetStencilFunction (initialValue.Enums.FrontStencilFunction, initialValue.Front.Reference, initialValue.Front.CompareMask);
+			SetStencilOperation (initialValue.Enums.FrontStencilFail, initialValue.Enums.FrontDepthBufferFail, initialValue.Enums.FrontStencilPass);
+
+			return initialValue;
 		}
 
 		public void EnableStencilBuffer()

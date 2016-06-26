@@ -35,7 +35,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Test.cs" />
-    <Compile Include="CmdBufferInstructions.cs" />
     <Compile Include="CmdBufferTests.cs" />
     <Compile Include="ItemComposer.cs" />
     <Compile Include="IComposer.cs" />

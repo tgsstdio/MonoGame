@@ -8,6 +8,11 @@ namespace Magnesium.OpenGL.UnitTests
 		public class MockQueueRenderer : IGLQueueRenderer
 		{
 			#region IGLQueueRenderer implementation
+
+			public void Render (CmdBufferInstructions[] items)
+			{
+				throw new System.NotImplementedException ();
+			}
 			public void SetDefault ()
 			{
 				throw new System.NotImplementedException ();

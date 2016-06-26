@@ -20,6 +20,7 @@ namespace Magnesium.OpenGL
 		private readonly GLCmdBufferStore<int> mFrontWriteMasks;
 		private readonly GLCmdBufferStore<MgColor4f> mBlendConstants;
 		private readonly GLCmdBufferStore<int> mBackReferences;
+		private readonly GLCmdBufferStore<GLQueueRendererBlendState> mColorBlends;
 
 		public GLCmdBufferRepository ()
 		{
@@ -72,6 +73,9 @@ namespace Magnesium.OpenGL
 
 			mBlendConstants = new GLCmdBufferStore<MgColor4f> (); 
 			mClearables.Add (mBlendConstants);
+
+			mColorBlends = new GLCmdBufferStore<GLQueueRendererBlendState> (); 
+			mClearables.Add (mColorBlends);
 		}
 		private List<IGLCmdBufferStoreResettable> mClearables;
 
@@ -174,6 +178,13 @@ namespace Magnesium.OpenGL
 			}
 		}
 
+		public IGLCmdBufferStore<GLQueueRendererBlendState> ColorBlends {
+			get
+			{
+				return mColorBlends;
+			}
+		}
+
 		public bool MapRepositoryFields(ref GLCmdDrawCommand command)
 		{
 			IGLGraphicsPipeline pipeline = null;
@@ -207,40 +218,40 @@ namespace Magnesium.OpenGL
 		{
 			GraphicsPipelines.Add (glPipeline);
 
-			BlendConstants.Add(glPipeline.BlendConstants);
-
-			BackWriteMasks.Add(glPipeline.Back.WriteMask);
-			FrontWriteMasks.Add(glPipeline.Front.WriteMask);
-			BackReferences.Add(glPipeline.Back.Reference);
-			FrontReferences.Add(glPipeline.Front.Reference);
-			FrontCompareMasks.Add(glPipeline.Front.CompareMask);
-			BackCompareMasks.Add(glPipeline.Back.CompareMask);
-
-			Viewports.Add (glPipeline.Viewports);
-			Scissors.Add(glPipeline.Scissors);
-			LineWidths.Add(glPipeline.LineWidth);
-			DepthBias.Add(
-				new GLCmdDepthBiasParameter{
-					DepthBiasConstantFactor = glPipeline.DepthBiasConstantFactor,
-					DepthBiasClamp = glPipeline.DepthBiasClamp,
-					DepthBiasSlopeFactor = glPipeline.DepthBiasSlopeFactor});
-			DepthBounds.Add(
-				new GLCmdDepthBoundsParameter
-				{
-					MinDepthBounds = glPipeline.MinDepthBounds,
-					MaxDepthBounds = glPipeline.MaxDepthBounds,
-				}
-			);
-
-			DescriptorSets.Add (
-				new GLCmdDescriptorSetParameter {
-					Bindpoint = MgPipelineBindPoint.GRAPHICS,
-					DescriptorSets = new MgDescriptorSet[]{},
-					DynamicOffsets = new uint [] {},
-					FirstSet = 0,
-				}
-			);
-
+//			BlendConstants.Add(glPipeline.BlendConstants);
+//
+//			BackWriteMasks.Add(glPipeline.Back.WriteMask);
+//			FrontWriteMasks.Add(glPipeline.Front.WriteMask);
+//			BackReferences.Add(glPipeline.Back.Reference);
+//			FrontReferences.Add(glPipeline.Front.Reference);
+//			FrontCompareMasks.Add(glPipeline.Front.CompareMask);
+//			BackCompareMasks.Add(glPipeline.Back.CompareMask);
+//
+//			Viewports.Add (glPipeline.Viewports);
+//			Scissors.Add(glPipeline.Scissors);
+//			LineWidths.Add(glPipeline.LineWidth);
+//			DepthBias.Add(
+//				new GLCmdDepthBiasParameter{
+//					DepthBiasConstantFactor = glPipeline.DepthBiasConstantFactor,
+//					DepthBiasClamp = glPipeline.DepthBiasClamp,
+//					DepthBiasSlopeFactor = glPipeline.DepthBiasSlopeFactor});
+//			DepthBounds.Add(
+//				new GLCmdDepthBoundsParameter
+//				{
+//					MinDepthBounds = glPipeline.MinDepthBounds,
+//					MaxDepthBounds = glPipeline.MaxDepthBounds,
+//				}
+//			);
+//
+//			DescriptorSets.Add (
+//				new GLCmdDescriptorSetParameter {
+//					Bindpoint = MgPipelineBindPoint.GRAPHICS,
+//					DescriptorSets = new MgDescriptorSet[]{},
+//					DynamicOffsets = new uint [] {},
+//					FirstSet = 0,
+//				}
+//			);
+//			ColorBlends.Add (glPipeline.ColorBlends);
 		}
 
 		public void PushScissors (uint firstScissor, MgRect2D[] pScissors)

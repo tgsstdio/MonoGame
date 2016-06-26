@@ -2,9 +2,20 @@ namespace Magnesium.OpenGL
 {
 	public interface IShaderProgramCache
 	{
-		byte ProgramIndex { get; }
-		void SetProgram (int programIndex);
-		IShaderProgram GetActiveProgram ();
+		byte DescriptorSetIndex {
+			get;
+			set;
+		}
+
+		GLCmdDescriptorSetParameter DescriptorSet {
+			get;
+			set;
+		}
+
+		int ProgramID { get; set; }
+		int VBO { get; set; }
+
+		void BindDescriptorSet();
 	}
 
 }

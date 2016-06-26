@@ -11,6 +11,21 @@ namespace Magnesium.OpenGL
 			GLProgramUniformBinder uniforms
 		)
 		{
+			if (info.VertexInputState == null)
+			{
+				throw new ArgumentNullException ("info.VertexInputState");
+			}
+
+			if (info.InputAssemblyState == null)
+			{
+				throw new ArgumentNullException ("info.InputAssemblyState");
+			}
+
+			if (info.RasterizationState == null)
+			{
+				throw new ArgumentNullException ("info.RasterizationState");
+			}
+
 			ProgramID = programId;
 			UniformBinder = uniforms;
 
@@ -74,15 +89,55 @@ namespace Magnesium.OpenGL
 		}
 
 		public MgColor4f BlendConstants { get; private set; }
+
+		public struct GLColorAttachment
+		{
+			MgColorComponentFlagBits ColorWriteMask { get; set; }
+		}
+
+		public GLQueueRendererBlendState ColorBlends { get; private set; }
 		void PopulateColorBlend (MgPipelineColorBlendStateCreateInfo colorBlend)
 		{
+			ColorBlends = new GLQueueRendererBlendState ();
 			if (colorBlend != null)
 			{
 				BlendConstants = colorBlend.BlendConstants;
+
+				ColorBlends.LogicOpEnable = colorBlend.LogicOpEnable;
+				ColorBlends.LogicOp = colorBlend.LogicOp;
+
+				if (colorBlend.Attachments != null)
+				{
+					var colorAttachments = new GLQueueColorAttachmentBlendState[colorBlend.Attachments.Length];
+					for(uint i = 0; i < colorBlend.Attachments.Length; ++i)
+					{
+						var attachment = colorBlend.Attachments[i];
+
+						colorAttachments[i] = new GLQueueColorAttachmentBlendState {
+							BlendEnable = attachment.BlendEnable,
+							SrcColorBlendFactor = attachment.SrcColorBlendFactor,
+							DstColorBlendFactor = attachment.DstColorBlendFactor,
+							ColorBlendOp = attachment.ColorBlendOp,
+							SrcAlphaBlendFactor = attachment.SrcAlphaBlendFactor,
+							DstAlphaBlendFactor = attachment.DstAlphaBlendFactor,
+							AlphaBlendOp = attachment.AlphaBlendOp,
+							ColorWriteMask = attachment.ColorWriteMask,
+						};
+					}
+					ColorBlends.Attachments = colorAttachments;
+				}
+				else
+				{
+					ColorBlends.Attachments = new GLQueueColorAttachmentBlendState[]{ };
+				}
 			} 
 			else
 			{
-				BlendConstants = new MgColor4f( 0f, 0f, 0f, 0f );	
+				BlendConstants = new MgColor4f( 0f, 0f, 0f, 0f );
+				ColorBlends.Attachments = new GLQueueColorAttachmentBlendState[]{ };
+
+				ColorBlends.LogicOpEnable = false;
+				ColorBlends.LogicOp = MgLogicOp.COPY;
 			}
 		}
 
@@ -715,8 +770,8 @@ namespace Magnesium.OpenGL
 
 		void PopulatePipelineConstants (MgPipelineRasterizationStateCreateInfo rasterization)
 		{
-			if (rasterization != null)
-			{
+//			if (rasterization != null)
+//			{
 				QueueDrawItemBitFlags flags = 0;
 
 				flags |= ((rasterization.CullMode & MgCullModeFlagBits.FRONT_AND_BACK) > 0) ? QueueDrawItemBitFlags.CullingEnabled : 0;
@@ -732,24 +787,24 @@ namespace Magnesium.OpenGL
 				this.DepthClampEnable = rasterization.DepthClampEnable;
 
 				Flags |= flags;
-			}
-			else
-			{
-				// https://www.opengl.org/sdk/docs/man/html/glPolygonOffset.xhtml
-				DepthBiasConstantFactor = 0;
-				DepthBiasSlopeFactor = 0;
-
-				QueueDrawItemBitFlags flags = 0;
-				flags |= QueueDrawItemBitFlags.CullingEnabled;
-				// DISABLED flags |= QueueDrawItemBitFlags.CullFrontFaces;
-				flags |= QueueDrawItemBitFlags.CullBackFaces;
-				flags |= QueueDrawItemBitFlags.UseCounterClockwiseWindings;
-
-				// https://www.opengl.org/sdk/docs/man/html/glPolygonMode.xhtml
-				PolygonMode = MgPolygonMode.FILL;
-
-				Flags |= flags;
-			}
+//			}
+//			else
+//			{
+//				// https://www.opengl.org/sdk/docs/man/html/glPolygonOffset.xhtml
+//				DepthBiasConstantFactor = 0;
+//				DepthBiasSlopeFactor = 0;
+//
+//				QueueDrawItemBitFlags flags = 0;
+//				flags |= QueueDrawItemBitFlags.CullingEnabled;
+//				// DISABLED flags |= QueueDrawItemBitFlags.CullFrontFaces;
+//				flags |= QueueDrawItemBitFlags.CullBackFaces;
+//				flags |= QueueDrawItemBitFlags.UseCounterClockwiseWindings;
+//
+//				// https://www.opengl.org/sdk/docs/man/html/glPolygonMode.xhtml
+//				PolygonMode = MgPolygonMode.FILL;
+//
+//				Flags |= flags;
+//			}
 		}
 
 		#endregion
@@ -758,23 +813,23 @@ namespace Magnesium.OpenGL
 
 		void PopulateCmdFallbacks (MgPipelineRasterizationStateCreateInfo rasterization)
 		{
-			if (rasterization != null)
-			{
+//			if (rasterization != null)
+//			{
 				// RASTERIZATION DEFAULTS
 				DepthBiasConstantFactor = rasterization.DepthBiasConstantFactor;
 				DepthBiasClamp = rasterization.DepthBiasClamp;
 				DepthBiasSlopeFactor = rasterization.DepthBiasSlopeFactor;
 				LineWidth = rasterization.LineWidth;
-			}
-			else
-			{
-				// https://www.opengl.org/sdk/docs/man/html/glPolygonOffset.xhtml
-				DepthBiasConstantFactor = 0;
-				DepthBiasSlopeFactor = 0;
-				// https://www.opengl.org/registry/specs/EXT/polygon_offset_clamp.txt
-				DepthBiasClamp = 0;
-				LineWidth = 1f;
-			}
+//			}
+//			else
+//			{
+//				// https://www.opengl.org/sdk/docs/man/html/glPolygonOffset.xhtml
+//				DepthBiasConstantFactor = 0;
+//				DepthBiasSlopeFactor = 0;
+//				// https://www.opengl.org/registry/specs/EXT/polygon_offset_clamp.txt
+//				DepthBiasClamp = 0;
+//				LineWidth = 1f;
+//			}
 		}
 
 		public float DepthBiasSlopeFactor {

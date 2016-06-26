@@ -8,27 +8,27 @@ namespace Magnesium.OpenGL
 		{
 			const int factor = 4;
 			var count = scissors.Length;
-			var values = new float[factor * count];
+			var values = new int[factor * count];
 
-			Func<float[], uint, MgRect2D, uint> copyFn = (dest, offset, sc) => {
+			Func<int[], uint, MgRect2D, uint> copyFn = (dest, offset, sc) => {
 				dest [0 + offset] = sc.Offset.X;
 				dest [1 + offset] = sc.Offset.Y;
-				dest [2 + offset] = sc.Extent.Width;
-				dest [3 + offset] = sc.Extent.Height;
+				dest [2 + offset] = (int)sc.Extent.Width;
+				dest [3 + offset] = (int)sc.Extent.Height;
 				return 4;
 			};
 
-			GLCmdArraySlice<float>.CopyValues<MgRect2D>(values, 0, scissors, copyFn);
+			GLCmdArraySlice<int>.CopyValues<MgRect2D>(values, 0, scissors, copyFn);
 
-			Parameters = new GLCmdArraySlice<float> (values, factor, first, count);
+			Parameters = new GLCmdArraySlice<int> (values, factor, first, count);
 		}
 
-		private GLCmdScissorParameter(GLCmdArraySlice<float> scissors)
+		private GLCmdScissorParameter(GLCmdArraySlice<int> scissors)
 		{
 			Parameters = scissors;
 		}
 
-		public GLCmdArraySlice<float> Parameters { get; private set; }
+		public GLCmdArraySlice<int> Parameters { get; private set; }
 
 		#region IMergeable implementation
 
@@ -45,7 +45,7 @@ namespace Magnesium.OpenGL
 		public bool Equals (GLCmdScissorParameter other)
 		{
 			return this.Parameters.Matches(other.Parameters,
-				(a,b) => Math.Abs(a -b) <= float.Epsilon );
+				(a,b) => a == b);
 		}
 
 		#endregion

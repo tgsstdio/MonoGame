@@ -8,7 +8,7 @@ namespace HelloMagnesium
 		#region IGLSemaphoreGenerator implementation
 		public ISyncObject Generate ()
 		{
-			throw new System.NotImplementedException ();
+			return new GLQueueSemaphore ();
 		}
 		#endregion
 	}

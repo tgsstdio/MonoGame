@@ -91,7 +91,7 @@ namespace MonoGame.Textures.FreeImageNET
 						Format = formatType,
 						Width = width,
 						Height = height,
-						Size = size,
+						Size = size,					
 					};
 
 					var imageMemoryOutput = mLoader.Load(fs, imageInfo);
@@ -107,6 +107,14 @@ namespace MonoGame.Textures.FreeImageNET
 							G = MgComponentSwizzle.G,
 							B = MgComponentSwizzle.B, 
 							A = MgComponentSwizzle.A,
+						},
+						SubresourceRange = new MgImageSubresourceRange
+						{
+							AspectMask = MgImageAspectFlagBits.COLOR_BIT,
+							BaseArrayLayer = 0,
+							BaseMipLevel = 0,
+							LayerCount = 1,
+							LevelCount = 1,
 						},
 					};
 
