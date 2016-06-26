@@ -5,16 +5,18 @@ namespace Magnesium.OpenGL
 	public class GLEntrypoint : IMgEntrypoint
 	{
 		private readonly IGLQueue mQueue;
-		public GLEntrypoint(IGLQueue queue)
+		private readonly ICmdVBOCapabilities mVBO;
+		public GLEntrypoint(IGLQueue queue, ICmdVBOCapabilities vbo)
 		{
 			mQueue = queue;
+			mVBO = vbo;
 		}
 
 		#region IMgEntrypoint implementation
 
 		public Result CreateInstance (MgInstanceCreateInfo createInfo, MgAllocationCallbacks allocator, out IMgInstance instance)
 		{
-			instance = new GLInstance (mQueue);
+			instance = new GLInstance (mQueue, mVBO);
 			return Result.SUCCESS;
 		}
 

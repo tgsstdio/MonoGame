@@ -392,7 +392,7 @@ namespace Magnesium.OpenGL
 			private set;
 		}
 
-		static GLQueueRendererStencilState ExtractStencilValues (CmdBufferInstructions instructionSet, GLCmdBufferDrawItem drawItem, GLCmdBufferPipelineItem currentPipeline)
+		static GLQueueRendererStencilState ExtractStencilValues (CmdBufferInstructionSet instructionSet, GLCmdBufferDrawItem drawItem, GLCmdBufferPipelineItem currentPipeline)
 		{
 			var currentStencil = new GLQueueRendererStencilState ();
 			currentStencil.Flags = currentPipeline.Flags;
@@ -409,7 +409,7 @@ namespace Magnesium.OpenGL
 			return currentStencil;
 		}
 
-		static GLQueueRendererRasterizerState ExtractRasterizationValues (CmdBufferInstructions instructionSet, GLCmdBufferDrawItem drawItem, GLCmdBufferPipelineItem currentPipeline)
+		static GLQueueRendererRasterizerState ExtractRasterizationValues (CmdBufferInstructionSet instructionSet, GLCmdBufferDrawItem drawItem, GLCmdBufferPipelineItem currentPipeline)
 		{
 			return new GLQueueRendererRasterizerState {
 				Flags = currentPipeline.Flags,
@@ -438,7 +438,7 @@ namespace Magnesium.OpenGL
 			return !pastViewport.Equals (currentViewport);
 		}
 
-		public void Render(CmdBufferInstructions[] items)
+		public void Render(CmdBufferInstructionSet[] items)
 		{
 			var pastPipeline = PreviousPipeline;
 			var pastStencil = PastStencil;
@@ -538,7 +538,7 @@ namespace Magnesium.OpenGL
 			PreviousPipeline = pastPipeline;
 		}
 
-		public void CheckProgram(CmdBufferInstructions instructionSet, GLCmdBufferDrawItem drawItem)
+		public void CheckProgram(CmdBufferInstructionSet instructionSet, GLCmdBufferDrawItem drawItem)
 		{
 			// bind program
 			if (mCache.ProgramID != drawItem.ProgramID)

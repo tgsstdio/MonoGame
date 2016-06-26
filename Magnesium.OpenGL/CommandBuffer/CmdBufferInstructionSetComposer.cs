@@ -1,14 +1,14 @@
 using System.Collections.Generic;
 using System;
 
-namespace Magnesium.OpenGL.UnitTests
+namespace Magnesium.OpenGL
 {
-	public class ItemComposer : IComposer
+	public class CmdBufferInstructionSetComposer : ICmdBufferInstructionSetComposer
 	{
-		private IGLVertexBufferFactory mFactory;
-		public ItemComposer (IGLVertexBufferFactory factory)
+		private ICmdVBOCapabilities mVBO;
+		public CmdBufferInstructionSetComposer (ICmdVBOCapabilities vbo)
 		{
-			mFactory = factory;
+			mVBO = vbo;
 		}
 
 		#region IComposer implementation
@@ -36,33 +36,33 @@ namespace Magnesium.OpenGL.UnitTests
 				}
 			}
 
-			int vbo = mFactory.GenVertexArray ();
+			int vbo = mVBO.GenerateVBO ();
 			foreach (var attribute in pipeline.VertexInput.Attributes)
 			{	
 				var bufferId = bufferIds [attribute.Binding];
 				var binding = pipeline.VertexInput.Bindings [attribute.Binding];
-				mFactory.AssociateBufferToLocation (vbo, attribute.Location, bufferId, offsets[attribute.Binding], binding.Stride);
+				mVBO.AssociateBufferToLocation (vbo, attribute.Location, bufferId, offsets[attribute.Binding], binding.Stride);
 				// GL.VertexArrayVertexBuffer (vertexArray, location, bufferId, new IntPtr (offset), (int)binding.Stride);
 
 				if (attribute.Function == GLVertexAttribFunction.FLOAT)
 				{
 					// direct state access
-					mFactory.BindFloatVertexAttribute(vbo, attribute.Location, attribute.Size, attribute.PointerType, attribute.IsNormalized, attribute.Offset);
+					mVBO.BindFloatVertexAttribute(vbo, attribute.Location, attribute.Size, attribute.PointerType, attribute.IsNormalized, attribute.Offset);
 
 					//GL.VertexArrayAttribFormat (vbo, attribute.Location, attribute.Size, attribute.PointerType, attribute.IsNormalized, attribute.Offset);
 				}
 				else if (attribute.Function == GLVertexAttribFunction.INT)
 				{
-					mFactory.BindIntVertexAttribute(vbo, attribute.Location, attribute.Size, attribute.PointerType, attribute.Offset);
+					mVBO.BindIntVertexAttribute(vbo, attribute.Location, attribute.Size, attribute.PointerType, attribute.Offset);
 
 					//GL.VertexArrayAttribIFormat (vbo, attribute.Location, attribute.Size, attribute.PointerType, attribute.Offset);
 				}
 				else if (attribute.Function == GLVertexAttribFunction.DOUBLE)
 				{
-					mFactory.BindDoubleVertexAttribute(vbo, attribute.Location, attribute.Size, attribute.PointerType, attribute.Offset);
+					mVBO.BindDoubleVertexAttribute(vbo, attribute.Location, attribute.Size, attribute.PointerType, attribute.Offset);
 					//GL.VertexArrayAttribLFormat (vbo, attribute.Location, attribute.Size, (All)attribute.PointerType, attribute.Offset);
 				}
-				mFactory.SetupVertexAttributeDivisor(vbo, attribute.Location, attribute.Divisor);
+				mVBO.SetupVertexAttributeDivisor(vbo, attribute.Location, attribute.Divisor);
 				//GL.VertexArrayBindingDivisor (vbo, attribute.Location, attribute.Divisor);
 			}
 
@@ -72,12 +72,12 @@ namespace Magnesium.OpenGL.UnitTests
 				var indexBuffer = indexData.buffer as GLIndirectBuffer;
 				if (indexBuffer != null && indexBuffer.BufferType == GLMemoryBufferType.INDEX)
 				{
-					mFactory.BindIndexBuffer  (vbo, indexBuffer.BufferId);
+					mVBO.BindIndexBuffer  (vbo, indexBuffer.BufferId);
 					//GL.VertexArrayElementBuffer (vbo, indexBuffer.BufferId);
 				}
 			}
 
-			return new GLCmdVertexBufferObject(vbo, command.VertexBuffer.Value, command.IndexBuffer, mFactory);
+			return new GLCmdVertexBufferObject(vbo, command.VertexBuffer.Value, command.IndexBuffer, mVBO);
 		}
 
 		public GLCommandBufferFlagBits ExtractIndexType (GLCmdIndexBufferParameter indexBuffer, GLCommandBufferFlagBits commandType)
@@ -143,9 +143,9 @@ namespace Magnesium.OpenGL.UnitTests
 			return (pipeline.PolygonMode == MgPolygonMode.LINE) ? GLCommandBufferFlagBits.AsLinesMode : ((pipeline.PolygonMode == MgPolygonMode.POINT) ? GLCommandBufferFlagBits.AsPointsMode : 0);
 		}
 
-		public CmdBufferInstructions Compose (GLCmdBufferRepository repository, GLCmdRenderPassCommand[] passes)
+		public CmdBufferInstructionSet Compose (GLCmdBufferRepository repository, IEnumerable<GLCmdRenderPassCommand> passes)
 		{
-			var output = new CmdBufferInstructions ();
+			var output = new CmdBufferInstructionSet ();
 
 			//var passes = new List<GLQueueRenderPass> ();
 			var pipelines = new List<GLCmdBufferPipelineItem> ();
@@ -174,6 +174,11 @@ namespace Magnesium.OpenGL.UnitTests
 
 			GLCmdVertexBufferObject currentVertexArray = null;
 
+			bool isFirst = true;
+			int pastPipelineIndex = 0;
+			int currentPipelineIndex = 0;
+			GLCmdBufferPipelineItem pipelineItem;
+
 			if (passes != null)
 			{
 				foreach (var pass in passes)
@@ -188,18 +193,36 @@ namespace Magnesium.OpenGL.UnitTests
 					{
 						if (command.Pipeline.HasValue)
 						{
-							var pipeline = repository.GraphicsPipelines.At(command.Pipeline.Value);
+							currentPipelineIndex = command.Pipeline.Value;
 
-							var pipelineItem = GeneratePipelineItem (pipeline);
-							pipelineItem.DepthState = pipeline.DepthState;
-							pipelineItem.StencilState = pipeline.StencilState;
-							pipelines.Add (pipelineItem);				
+							var pipeline = repository.GraphicsPipelines.At(currentPipelineIndex);
+
+							if (isFirst)
+							{
+								isFirst = false;
+
+								pipelineItem = GeneratePipelineItem (pipeline);
+								pipelineItem.DepthState = pipeline.DepthState;
+								pipelineItem.StencilState = pipeline.StencilState;
+								pipelines.Add (pipelineItem);
+
+							}
+							else
+							{
+								if (pastPipelineIndex != currentPipelineIndex)
+								{		
+									pipelineItem = GeneratePipelineItem (pipeline);
+									pipelineItem.DepthState = pipeline.DepthState;
+									pipelineItem.StencilState = pipeline.StencilState;
+									pipelines.Add (pipelineItem);
+								}
+							}
 
 							var item = new GLCmdBufferDrawItem {
 								Command = ExtractPolygonMode (pipeline), 
 								ProgramID = pipeline.ProgramID,
 								Topology = pipeline.Topology,
-								Pipeline = 0,
+								Pipeline = (byte) currentPipelineIndex,
 								DescriptorSet = GetStoreViaNullableIndex<GLCmdDescriptorSetParameter>(descriptorSets, repository.DescriptorSets, command.DescriptorSet),
 								Viewport = GetStoreViaNullableIndex<GLCmdViewportParameter>(viewports, repository.Viewports, command.Viewports), 
 								BlendConstants = GetStoreViaNullableIndex<MgColor4f>(blendConstants, repository.BlendConstants, command.BlendConstants),
@@ -214,6 +237,8 @@ namespace Magnesium.OpenGL.UnitTests
 								BackStencilWriteMask = GetStoreViaNullableIndex<int>(backWriteMasks, repository.BackWriteMasks, command.BackWriteMask),
 								Scissor = GetStoreViaNullableIndex<GLCmdScissorParameter>(scissors, repository.Scissors, command.Scissors),
 							};
+
+							pastPipelineIndex = currentPipelineIndex;
 
 							if (command.DrawIndexedIndirect != null)
 							{

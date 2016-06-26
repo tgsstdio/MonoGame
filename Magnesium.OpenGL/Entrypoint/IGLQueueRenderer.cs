@@ -4,7 +4,7 @@ namespace Magnesium.OpenGL
 	{
 		void SetDefault ();
 //		void CheckProgram (GLQueueDrawItem nextState);
-		void Render (CmdBufferInstructions[] items);
+		void Render (CmdBufferInstructionSet[] items);
 	}
 }
 

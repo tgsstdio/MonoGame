@@ -7,15 +7,15 @@ namespace Magnesium.OpenGL.UnitTests
 	[TestFixture]
 	public class CmdBufferTests
 	{
-		IGLVertexBufferFactory mFactory;
-		IComposer mComposer;
+		ICmdVBOCapabilities mFactory;
+		ICmdBufferInstructionSetComposer mComposer;
 		GLCmdBufferRepository mRepository;
 
 		[SetUp]
 		public void Initialise()
 		{
 			mFactory = new MockVertexBufferFactory ();
-			mComposer = new ItemComposer (mFactory);
+			mComposer = new CmdBufferInstructionSetComposer (mFactory);
 			mRepository = new GLCmdBufferRepository ();
 		}
 
@@ -32,7 +32,7 @@ namespace Magnesium.OpenGL.UnitTests
 		public void NullPointer()
 		{			
 
-			CmdBufferInstructions output = mComposer.Compose (null, null);
+			CmdBufferInstructionSet output = mComposer.Compose (null, null);
 
 			Assert.IsNotNull (output);
 			Assert.IsNotNull (output.DrawItems);
@@ -46,7 +46,7 @@ namespace Magnesium.OpenGL.UnitTests
 		[TestCase]
 		public void EmptyRepository()
 		{			
-			CmdBufferInstructions output = mComposer.Compose (mRepository, null);
+			CmdBufferInstructionSet output = mComposer.Compose (mRepository, null);
 
 			Assert.IsNotNull (output);
 			Assert.IsNotNull (output.DrawItems);
@@ -98,7 +98,7 @@ namespace Magnesium.OpenGL.UnitTests
 			};
 
 			var passes = new []{ pass };
-			CmdBufferInstructions output = mComposer.Compose (mRepository, passes);
+			CmdBufferInstructionSet output = mComposer.Compose (mRepository, passes);
 
 			Assert.IsNotNull (output);
 			Assert.IsNotNull (output.DrawItems);
@@ -239,7 +239,7 @@ namespace Magnesium.OpenGL.UnitTests
 			};
 
 			var passes = new []{ pass };
-			CmdBufferInstructions output = mComposer.Compose (mRepository, passes);
+			CmdBufferInstructionSet output = mComposer.Compose (mRepository, passes);
 
 			Assert.IsNotNull (output);
 			Assert.IsNotNull (output.DrawItems);
@@ -396,7 +396,7 @@ namespace Magnesium.OpenGL.UnitTests
 			};
 
 			var passes = new []{ pass };
-			CmdBufferInstructions output = mComposer.Compose (mRepository, passes);
+			CmdBufferInstructionSet output = mComposer.Compose (mRepository, passes);
 
 			Assert.IsNotNull (output);
 			Assert.IsNotNull (output.DrawItems);
@@ -462,7 +462,7 @@ namespace Magnesium.OpenGL.UnitTests
 			};
 
 			var passes = new []{ pass };
-			CmdBufferInstructions output = mComposer.Compose (mRepository, passes);
+			CmdBufferInstructionSet output = mComposer.Compose (mRepository, passes);
 
 			Assert.IsNotNull (output);
 			Assert.IsNotNull (output.DrawItems);

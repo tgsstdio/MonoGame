@@ -4,10 +4,10 @@ namespace Magnesium.OpenGL
 {
 	public class GLInstance : IMgInstance
 	{
-		public GLInstance (IGLQueue queue)
+		public GLInstance (IGLQueue queue, ICmdVBOCapabilities vbo)
 		{
 			mPhysicalDevices = new GLPhysicalDevice[1];
-			mPhysicalDevices[0] = new GLPhysicalDevice(queue);
+			mPhysicalDevices[0] = new GLPhysicalDevice(queue, vbo);
 		}
 
 		private GLPhysicalDevice[] mPhysicalDevices;

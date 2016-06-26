@@ -36,8 +36,6 @@
   <ItemGroup>
     <Compile Include="Test.cs" />
     <Compile Include="CmdBufferTests.cs" />
-    <Compile Include="ItemComposer.cs" />
-    <Compile Include="IComposer.cs" />
     <Compile Include="MockGLGraphicsPipeline.cs" />
     <Compile Include="MockVertexBufferFactory.cs" />
     <Compile Include="IndexTypeValidation.cs" />

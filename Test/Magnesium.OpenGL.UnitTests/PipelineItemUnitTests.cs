@@ -5,14 +5,14 @@ namespace Magnesium.OpenGL.UnitTests
 	[TestFixture]
 	public class PipelineItemUnitTests
 	{
-		IGLVertexBufferFactory mFactory;
-		ItemComposer mComposer;
+		ICmdVBOCapabilities mFactory;
+		CmdBufferInstructionSetComposer mComposer;
 
 		[SetUp]
 		public void Initialise()
 		{
 			mFactory = new MockVertexBufferFactory ();
-			mComposer = new ItemComposer (mFactory);
+			mComposer = new CmdBufferInstructionSetComposer (mFactory);
 		}
 
 		[TestCase]

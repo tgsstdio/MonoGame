@@ -54,9 +54,9 @@ namespace Magnesium.OpenGL
 	public class GLPhysicalDevice : IMgPhysicalDevice
 	{
 		private readonly GLDevice mDevice;
-		public GLPhysicalDevice (IGLQueue queue)
+		public GLPhysicalDevice (IGLQueue queue, ICmdVBOCapabilities vbo)
 		{
-			mDevice = new GLDevice (queue);
+			mDevice = new GLDevice (queue, vbo);
 		}
 
 		#region IMgPhysicalDevice implementation

@@ -123,9 +123,7 @@
     <Compile Include="IGLIndirectBuffer.cs" />
     <Compile Include="CommandBuffer\GLCmdArraySlice.cs" />
     <Compile Include="CommandBuffer\IMergeable.cs" />
-    <Compile Include="CommandBuffer\IGLVertexBufferFactory.cs" />
     <Compile Include="CommandBuffer\GLCmdVertexBufferObject.cs" />
-    <Compile Include="CommandBuffer\CmdBufferInstructions.cs" />
     <Compile Include="Queue\GLQueueRendererStencilState.cs" />
     <Compile Include="Queue\GLQueueRendererRasterizerState.cs" />
     <Compile Include="Queue\GLQueueColorAttachmentBlendState.cs" />
@@ -135,6 +133,11 @@
     <Compile Include="Entrypoint\ICmdDrawCapabilities.cs" />
     <Compile Include="Entrypoint\FullCmdDrawCapabilities.cs" />
     <Compile Include="Entrypoint\FullShaderProgramCache.cs" />
+    <Compile Include="CommandBuffer\CmdBufferInstructionSet.cs" />
+    <Compile Include="CommandBuffer\CmdBufferInstructionSetComposer.cs" />
+    <Compile Include="CommandBuffer\ICmdBufferInstructionSetComposer.cs" />
+    <Compile Include="Entrypoint\ICmdVBOCapabilities.cs" />
+    <Compile Include="Entrypoint\FullCmdVBOCapabilities.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

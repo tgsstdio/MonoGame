@@ -12,7 +12,7 @@ namespace Magnesium.OpenGL
 
 		public MgSubpassContents Contents;
 		public MgClearValue[] ClearValues;
-		public MgRenderPass Origin;
+		public IMgRenderPass Origin;
 		public List<GLCmdDrawCommand> DrawCommands;
 		public List<GLCmdComputeCommand> ComputeCommands;
 	}

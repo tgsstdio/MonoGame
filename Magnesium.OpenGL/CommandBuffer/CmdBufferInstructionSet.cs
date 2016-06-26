@@ -1,6 +1,6 @@
 ﻿namespace Magnesium.OpenGL
 {
-	public class CmdBufferInstructions
+	public class CmdBufferInstructionSet
 	{
 		public GLQueueRendererBlendState[] ColorBlends {
 			get;

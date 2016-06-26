@@ -1,6 +1,6 @@
 namespace Magnesium.OpenGL
 {
-	public interface IGLVertexBufferFactory
+	public interface ICmdVBOCapabilities
 	{
 		void BindIndexBuffer (int vbo, int bufferId);
 
@@ -9,7 +9,7 @@ namespace Magnesium.OpenGL
 		void BindFloatVertexAttribute (int vbo, int location, int size, GLVertexAttributeType pointerType, bool isNormalized, int offset);
 		void SetupVertexAttributeDivisor (int vbo, int location, int divisor);
 
-		int GenVertexArray ();
+		int GenerateVBO ();
 
 		void DeleteVBO(int vbo);
 

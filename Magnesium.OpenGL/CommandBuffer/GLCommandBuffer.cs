@@ -16,12 +16,14 @@ namespace Magnesium.OpenGL
 		private List<GLCmdDrawCommand> mIncompleteDraws = new List<GLCmdDrawCommand>();
 
 		private GLCmdBufferRepository mRepository;
-		public GLCommandBuffer (bool canBeManuallyReset, GLCmdBufferRepository repository)
+		private CmdBufferInstructionSetComposer mSetComposer;
+		public GLCommandBuffer (bool canBeManuallyReset, GLCmdBufferRepository repository, ICmdVBOCapabilities vbo)
 		{
 			mIsRecording = false;
 			mIsExecutable = false;
 			mCanBeManuallyReset = canBeManuallyReset;
 			mRepository = repository;
+			mSetComposer = new CmdBufferInstructionSetComposer (vbo);
 		}
 
 		#region IMgCommandBuffer implementation
@@ -38,19 +40,13 @@ namespace Magnesium.OpenGL
 			return Result.SUCCESS;
 		}
 
-		public struct GLQueueRenderPass
-		{
-			public byte Index { get; set; }
-			public MgClearValue[] ClearValues { get; set; }
-		}
-
-		public GLQueueRenderPass[] Passes { get; private set; }
-		public GLQueueDrawItem[] DrawItems { get ; private set; }
-
+		public CmdBufferInstructionSet InstructionSet { get; private set; }
 		public Result EndCommandBuffer ()
 		{
 			mIsRecording = false;
 			mIsExecutable = true;
+
+			InstructionSet = mSetComposer.Compose (mRepository, mRenderPasses);
 
 			return Result.SUCCESS;
 		}
@@ -364,17 +360,17 @@ namespace Magnesium.OpenGL
 			throw new NotImplementedException ();
 		}
 
-		public void CmdSetEvent (MgEvent @event, MgPipelineStageFlagBits stageMask)
+		public void CmdSetEvent (IMgEvent @event, MgPipelineStageFlagBits stageMask)
 		{
 			throw new NotImplementedException ();
 		}
 
-		public void CmdResetEvent (MgEvent @event, MgPipelineStageFlagBits stageMask)
+		public void CmdResetEvent (IMgEvent @event, MgPipelineStageFlagBits stageMask)
 		{
 			throw new NotImplementedException ();
 		}
 
-		public void CmdWaitEvents (MgEvent[] pEvents, MgPipelineStageFlagBits srcStageMask, MgPipelineStageFlagBits dstStageMask, MgMemoryBarrier[] pMemoryBarriers, MgBufferMemoryBarrier[] pBufferMemoryBarriers, MgImageMemoryBarrier[] pImageMemoryBarriers)
+		public void CmdWaitEvents (IMgEvent[] pEvents, MgPipelineStageFlagBits srcStageMask, MgPipelineStageFlagBits dstStageMask, MgMemoryBarrier[] pMemoryBarriers, MgBufferMemoryBarrier[] pBufferMemoryBarriers, MgImageMemoryBarrier[] pImageMemoryBarriers)
 		{
 			throw new NotImplementedException ();
 		}
@@ -385,27 +381,27 @@ namespace Magnesium.OpenGL
 			//throw new NotImplementedException ();
 		}
 
-		public void CmdBeginQuery (MgQueryPool queryPool, uint query, MgQueryControlFlagBits flags)
+		public void CmdBeginQuery (IMgQueryPool queryPool, uint query, MgQueryControlFlagBits flags)
 		{
 			throw new NotImplementedException ();
 		}
 
-		public void CmdEndQuery (MgQueryPool queryPool, uint query)
+		public void CmdEndQuery (IMgQueryPool queryPool, uint query)
 		{
 			throw new NotImplementedException ();
 		}
 
-		public void CmdResetQueryPool (MgQueryPool queryPool, uint firstQuery, uint queryCount)
+		public void CmdResetQueryPool (IMgQueryPool queryPool, uint firstQuery, uint queryCount)
 		{
 			throw new NotImplementedException ();
 		}
 
-		public void CmdWriteTimestamp (MgPipelineStageFlagBits pipelineStage, MgQueryPool queryPool, uint query)
+		public void CmdWriteTimestamp (MgPipelineStageFlagBits pipelineStage, IMgQueryPool queryPool, uint query)
 		{
 			throw new NotImplementedException ();
 		}
 
-		public void CmdCopyQueryPoolResults (MgQueryPool queryPool, uint firstQuery, uint queryCount, IMgBuffer dstBuffer, ulong dstOffset, ulong stride, MgQueryResultFlagBits flags)
+		public void CmdCopyQueryPoolResults (IMgQueryPool queryPool, uint firstQuery, uint queryCount, IMgBuffer dstBuffer, ulong dstOffset, ulong stride, MgQueryResultFlagBits flags)
 		{
 			throw new NotImplementedException ();
 		}

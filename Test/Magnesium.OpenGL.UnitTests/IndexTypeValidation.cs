@@ -10,7 +10,7 @@ namespace Magnesium.OpenGL.UnitTests
 		public void NoIndexBufferPassedIn()
 		{	
 			var factory = new MockVertexBufferFactory ();
-			var composer = new ItemComposer (factory);
+			var composer = new CmdBufferInstructionSetComposer (factory);
 
 			var actual = composer.ExtractIndexType (null, 0);
 			Assert.AreNotEqual (GLCommandBufferFlagBits.Index16BitMode, actual);
@@ -20,7 +20,7 @@ namespace Magnesium.OpenGL.UnitTests
 		public void BufferInButNotIndexedDrawAnd32Bit()
 		{	
 			var factory = new MockVertexBufferFactory ();
-			var composer = new ItemComposer (factory);
+			var composer = new CmdBufferInstructionSetComposer (factory);
 
 			var indexBuffer = new GLCmdIndexBufferParameter {
 				indexType = MgIndexType.UINT32,
@@ -34,7 +34,7 @@ namespace Magnesium.OpenGL.UnitTests
 		public void Is16Bit()
 		{	
 			var factory = new MockVertexBufferFactory ();
-			var composer = new ItemComposer (factory);
+			var composer = new CmdBufferInstructionSetComposer (factory);
 
 			var indexBuffer = new GLCmdIndexBufferParameter {
 				indexType = MgIndexType.UINT16,
@@ -48,7 +48,7 @@ namespace Magnesium.OpenGL.UnitTests
 		public void Is16BitIndexedIndirectDraw()
 		{	
 			var factory = new MockVertexBufferFactory ();
-			var composer = new ItemComposer (factory);
+			var composer = new CmdBufferInstructionSetComposer (factory);
 
 			var indexBuffer = new GLCmdIndexBufferParameter {
 				indexType = MgIndexType.UINT16,
@@ -62,7 +62,7 @@ namespace Magnesium.OpenGL.UnitTests
 		public void Is16BitIndexedDraw()
 		{	
 			var factory = new MockVertexBufferFactory ();
-			var composer = new ItemComposer (factory);
+			var composer = new CmdBufferInstructionSetComposer (factory);
 
 			var indexBuffer = new GLCmdIndexBufferParameter {
 				indexType = MgIndexType.UINT16,
@@ -76,7 +76,7 @@ namespace Magnesium.OpenGL.UnitTests
 		public void Is32BitIndexedIndirectDraw()
 		{	
 			var factory = new MockVertexBufferFactory ();
-			var composer = new ItemComposer (factory);
+			var composer = new CmdBufferInstructionSetComposer (factory);
 
 			var indexBuffer = new GLCmdIndexBufferParameter {
 				indexType = MgIndexType.UINT32,
@@ -90,7 +90,7 @@ namespace Magnesium.OpenGL.UnitTests
 		public void Is32BitIndexedDraw()
 		{	
 			var factory = new MockVertexBufferFactory ();
-			var composer = new ItemComposer (factory);
+			var composer = new CmdBufferInstructionSetComposer (factory);
 
 			var indexBuffer = new GLCmdIndexBufferParameter {
 				indexType = MgIndexType.UINT32,

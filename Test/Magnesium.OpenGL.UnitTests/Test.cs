@@ -9,7 +9,7 @@ namespace Magnesium.OpenGL.UnitTests
 		{
 			#region IGLQueueRenderer implementation
 
-			public void Render (CmdBufferInstructions[] items)
+			public void Render (CmdBufferInstructionSet[] items)
 			{
 				throw new System.NotImplementedException ();
 			}
