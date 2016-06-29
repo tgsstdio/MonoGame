@@ -4,6 +4,8 @@ using MonoGame.Content;
 using FreeImageAPI;
 using Magnesium;
 using System.Diagnostics;
+using System.IO;
+using System.Runtime.InteropServices;
 
 namespace MonoGame.Textures.FreeImageNET
 {
@@ -94,7 +96,12 @@ namespace MonoGame.Textures.FreeImageNET
 						Size = size,					
 					};
 
-					var imageMemoryOutput = mLoader.Load(fs, imageInfo);
+					var src = FreeImage.GetBits(dib);
+
+					byte[] imageData = new byte[size];
+					Marshal.Copy(src, imageData, 0, (int)size);
+
+					var imageMemoryOutput = mLoader.Load(imageData, imageInfo);
 					IMgImage image = imageMemoryOutput.Image;
 
 					IMgImageView view;
@@ -149,7 +156,7 @@ namespace MonoGame.Textures.FreeImageNET
 					result = mPartition.Device.CreateSampler(samplerCreateInfo, null, out sampler);
 					Debug.Assert(result == Result.SUCCESS);
 
-					var texture = new FITexture2D(key);
+					var texture = new FITexture2D(key, image, view, sampler, imageMemoryOutput.ImageLayout, imageMemoryOutput.DeviceMemory);
 					texture.Format = Microsoft.Xna.Framework.Graphics.SurfaceFormat.Color;
 					texture.Bounds = new Rectangle(0,0, (int) width, (int) height);
 					texture.Width = (int)width;

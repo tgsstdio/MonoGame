@@ -1,14 +1,38 @@
 ﻿using System;
 using MonoGame.Core;
+using Magnesium;
 
 namespace MonoGame.Textures.FreeImageNET
 {
-	public class FITexture2D : ITexture2D
+	public class FITexture2D : ITexture2D, IMgTexture
 	{
-		public FITexture2D (int sortingKey)
+		IMgImage mImage;
+		IMgImageView mView;
+		IMgSampler mSampler;
+		MgImageLayout mImageLayout;
+		IMgDeviceMemory mDeviceMemory;
+
+		public FITexture2D (int sortingKey, IMgImage image, IMgImageView view, IMgSampler sampler, MgImageLayout imageLayout, IMgDeviceMemory deviceMemory)
 		{
 			SortingKey = sortingKey;
+			mImage = image; 
+			mView = view;
+			mSampler = sampler;
+			mImageLayout = imageLayout;
+			mDeviceMemory = deviceMemory;
 		}
+
+		#region IMgTexture2D implementation
+
+		public void DestroyTexture (IMgDevice device, MgAllocationCallbacks allocator)
+		{
+			mView.DestroyImageView(device, allocator);
+			mImage.DestroyImage(device, allocator);
+			mSampler.DestroySampler(device, allocator); 
+			mDeviceMemory.FreeMemory(device, allocator);
+		}
+
+		#endregion
 
 		#region ITexture2D implementation
 

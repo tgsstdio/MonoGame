@@ -106,6 +106,8 @@ namespace HelloMagnesium
 					container.Register<Magnesium.OpenGL.IStencilCapabilities, Magnesium.OpenGL.FullStencilCapabilities>(Reuse.Singleton);
 					container.Register<Magnesium.OpenGL.IScissorsCapabilities, Magnesium.OpenGL.FullScissorsCapabilities>(Reuse.Singleton);
 					container.Register<Magnesium.OpenGL.ICmdDrawCapabilities, Magnesium.OpenGL.FullCmdDrawCapabilities>(Reuse.Singleton);
+					container.Register<Magnesium.OpenGL.ICmdVBOCapabilities, Magnesium.OpenGL.FullCmdVBOCapabilities>(Reuse.Singleton);
+					container.Register<Magnesium.OpenGL.IGLCmdImageCapabilities, Magnesium.OpenGL.FullGLCmdImageCapabilities>(Reuse.Singleton);
 					container.Register<Magnesium.OpenGL.IShaderProgramCache, MockShaderProgramCache>(Reuse.Singleton);
 					container.Register<Magnesium.OpenGL.IGLSemaphoreGenerator, MockGLSemaphoreGenerator >(Reuse.Singleton);
 					container.Register<IMgDeviceQuery, MgDeviceQuery>(Reuse.Singleton);
@@ -134,7 +136,7 @@ namespace HelloMagnesium
 								ApiVersion = 1,
 							});
 
-							using (var device = driver.CreateGraphicsDevice())
+							using (var device = driver.CreateLogicalDevice())
 							using (var partition = device.Queues[0].CreatePartition())
 							{
 								container.RegisterInstance<IMgThreadPartition>(partition);							

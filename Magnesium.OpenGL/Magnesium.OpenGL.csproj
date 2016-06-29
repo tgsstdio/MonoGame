@@ -138,6 +138,12 @@
     <Compile Include="CommandBuffer\ICmdBufferInstructionSetComposer.cs" />
     <Compile Include="Entrypoint\ICmdVBOCapabilities.cs" />
     <Compile Include="Entrypoint\FullCmdVBOCapabilities.cs" />
+    <Compile Include="CommandBuffer\CmdImageInstructionSet.cs" />
+    <Compile Include="GLImageFormatExtensions.cs" />
+    <Compile Include="GLImageLevelSubresource.cs" />
+    <Compile Include="CommandBuffer\GLCmdTexImageData.cs" />
+    <Compile Include="Queue\IGLCmdImageCapabilities.cs" />
+    <Compile Include="Entrypoint\FullGLCmdImageCapabilities.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

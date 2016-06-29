@@ -8,7 +8,7 @@ namespace Magnesium.OpenGL
 		public GLQueueSubmission (uint key, MgSubmitInfo sub)
 		{
 			Key = key;
-			Waits = new List<ISyncObject> ();
+			var waits = new List<ISyncObject> ();
 			if (sub.WaitSemaphores != null)
 			{
 				foreach (var signal in sub.WaitSemaphores)
@@ -16,12 +16,13 @@ namespace Magnesium.OpenGL
 					var semaphore = signal.WaitSemaphore as ISyncObject;
 					if (semaphore != null)
 					{
-						Waits.Add (semaphore);
+						waits.Add (semaphore);
 					}
 				}
 			}
+			Waits = waits.ToArray ();
 
-			Signals = new List<ISyncObject> ();
+			var signals = new List<ISyncObject> ();
 			if (sub.SignalSemaphores != null)
 			{
 				foreach (var signal in sub.SignalSemaphores)
@@ -29,16 +30,32 @@ namespace Magnesium.OpenGL
 					var semaphore = signal as ISyncObject;
 					if (semaphore != null)
 					{
-						Signals.Add (semaphore);
+						signals.Add (semaphore);
 					}
 				}
 			}
+			Signals = signals.ToArray ();
+
+			var buffers = new List<GLCommandBuffer> ();
+			if (sub.CommandBuffers != null)
+			{
+				foreach (var buf in sub.CommandBuffers)
+				{
+					var glCmdBuf = buf as GLCommandBuffer;
+					if (glCmdBuf != null)
+					{
+						buffers.Add (glCmdBuf);
+					}
+				}
+			}
+
+			CommandBuffers = buffers.ToArray();
 		}
-		public List<ISyncObject> Waits { get;set; }
+		public ISyncObject[] Waits { get; private set; }
 
-		public GLCommandBuffer[] CommandBuffers { get; set; }
+		public GLCommandBuffer[] CommandBuffers { get; private set; }
 
-		public List<ISyncObject> Signals { get; set; }
+		public ISyncObject[] Signals { get; private set; }
 		public ISyncObject OrderFence { get; set; }
 	}
 }

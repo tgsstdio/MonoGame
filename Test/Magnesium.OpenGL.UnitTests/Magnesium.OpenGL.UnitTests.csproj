@@ -43,6 +43,7 @@
     <Compile Include="PipelineItemUnitTests.cs" />
     <Compile Include="MockGLIndirectBuffer.cs" />
     <Compile Include="ViewportMergeUnitTests.cs" />
+    <Compile Include="MockGLCmdImageCapabilities.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

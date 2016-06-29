@@ -175,7 +175,7 @@ namespace Magnesium.OpenGL
 
 			for (uint index = 0; index < mLayers; ++index)
 			{
-				var arrayItem = new GLImageArraySubresource (index, new MgSubresourceLayout[mLevels]);
+				var arrayItem = new GLImageArraySubresource (index, new GLImageLevelSubresource[mLevels]);
 
 				for (uint level = 0; level < mLevels; ++level)
 				{		
@@ -217,15 +217,6 @@ namespace Magnesium.OpenGL
 					//return Result.ERROR_FEATURE_NOT_PRESENT;
 					}
 
-					if (width > 1)
-						width /= 2;
-
-					if (height > 1)
-						height /= 2;
-
-					if (depth > 1)
-						depth /= 2;
-
 					var current = new MgSubresourceLayout {
 						Offset = offset,
 						Size = imageSize,
@@ -234,10 +225,25 @@ namespace Magnesium.OpenGL
 						DepthPitch = (mImageType == MgImageType.TYPE_1D || mImageType == MgImageType.TYPE_2D) ? 0U : RoundPixelUp(depth),
 					};
 
+					var mipLevelData = new GLImageLevelSubresource ();
+					mipLevelData.Width = (int) width;
+					mipLevelData.Height = (int) height;
+					mipLevelData.Depth = (int)depth;
+					mipLevelData.SubresourceLayout = current;
+
+					arrayItem.Levels [level] = mipLevelData;
+
 					// for next array item
 					offset += current.ArrayPitch;
 
-					arrayItem.Levels [level] = current;
+					if (width > 1)
+						width /= 2;
+
+					if (height > 1)
+						height /= 2;
+
+					if (depth > 1)
+						depth /= 2;
 				}
 				mArraySubresources [index] = arrayItem;
 			}
@@ -268,6 +274,11 @@ namespace Magnesium.OpenGL
 
 		#region IMgImage implementation
 		private IntPtr mMemory = IntPtr.Zero;
+		public IntPtr Handle {
+			get {
+				return mMemory;
+			}
+		}
 		public Result BindImageMemory (IMgDevice device, IMgDeviceMemory memory, ulong memoryOffset)
 		{
 			var deviceMemory = memory as GLDeviceMemory;

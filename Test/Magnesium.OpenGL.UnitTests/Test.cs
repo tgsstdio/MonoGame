@@ -52,8 +52,9 @@ namespace Magnesium.OpenGL.UnitTests
 		{
 			IGLQueueRenderer renderer = new MockQueueRenderer ();
 			IGLSemaphoreGenerator generator = new MockSemaphoreGenerator (null);
+			IGLCmdImageCapabilities imageOps = new MockGLCmdImageCapabilities ();
 
-			IGLQueue queue = new GLQueue (renderer, generator);
+			IGLQueue queue = new GLQueue (renderer, generator, imageOps);
 			var actual = queue.QueueSubmit (null, null);
 			Assert.AreEqual (Result.SUCCESS, actual);
 		}
@@ -85,8 +86,9 @@ namespace Magnesium.OpenGL.UnitTests
 		{
 			IGLQueueRenderer renderer = new MockQueueRenderer ();
 			IGLSemaphoreGenerator generator = new MockSemaphoreGenerator (null);
+			IGLCmdImageCapabilities imageOps = new MockGLCmdImageCapabilities ();
 
-			IGLQueue queue = new GLQueue (renderer, generator);
+			IGLQueue queue = new GLQueue (renderer, generator, imageOps);
 			var fence = new MockGLQueueFence ();
 
 			var actual = queue.QueueSubmit (null, fence);
@@ -176,12 +178,13 @@ namespace Magnesium.OpenGL.UnitTests
 		public void PreviousWorkCompleted()
 		{
 			IGLQueueRenderer renderer = new MockQueueRenderer ();
+			IGLCmdImageCapabilities imageOps = new MockGLCmdImageCapabilities ();
 
 			var internalSema = new MockGLSemaphore (true);
 
 			var generator = new MockSemaphoreGenerator (internalSema);
 
-			IGLQueue queue = new GLQueue (renderer, generator);
+			IGLQueue queue = new GLQueue (renderer, generator, imageOps);
 			var before = new MockGLSemaphore (false);
 			var submits = new [] { 
 				new MgSubmitInfo
@@ -237,10 +240,11 @@ namespace Magnesium.OpenGL.UnitTests
 		public void SemaphoreIdsClash()
 		{
 			IGLQueueRenderer renderer = new MockQueueRenderer ();
+			IGLCmdImageCapabilities imageOps = new MockGLCmdImageCapabilities ();
 
 			var generator = new FakeSemaphoreGenerator ();
 
-			IGLQueue queue = new GLQueue (renderer, generator);
+			IGLQueue queue = new GLQueue (renderer, generator, imageOps);
 			Assert.AreEqual (0, generator.NoOfFunctionCalls);
 
 			var first = new MockGLSemaphore (false);

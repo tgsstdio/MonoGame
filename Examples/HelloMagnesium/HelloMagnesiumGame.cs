@@ -7,6 +7,7 @@ namespace HelloMagnesium
 {
 	public class HelloMagnesiumGame : Game
 	{
+		private IMgThreadPartition mPartition;
 		private readonly ITexture2DLoader mTex2D;
 		public HelloMagnesiumGame(
 			IGraphicsDeviceManager manager,

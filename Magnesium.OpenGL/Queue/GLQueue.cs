@@ -37,10 +37,13 @@ namespace Magnesium.OpenGL
 			mIsDisposed = true;
 		}
 
-		public GLQueue (IGLQueueRenderer renderer, IGLSemaphoreGenerator generator)
+		private IGLCmdImageCapabilities mImageOps;
+
+		public GLQueue (IGLQueueRenderer renderer, IGLSemaphoreGenerator generator, IGLCmdImageCapabilities imageOps)
 		{
 			mRenderer = renderer;
 			mSignalModule = generator;
+			mImageOps = imageOps;
 		}
 
 		#region IMgQueue implementation
@@ -108,7 +111,7 @@ namespace Magnesium.OpenGL
 			GLQueueSubmission request;
 			if (mSubmissions.TryGetValue (key, out request))
 			{
-				int requirements = request.Waits.Count;
+				int requirements = request.Waits.Length;
 				int checks = 0;
 				foreach (var signal in request.Waits)
 				{
@@ -124,10 +127,12 @@ namespace Magnesium.OpenGL
 					{
 						foreach (var buffer in request.CommandBuffers)
 						{
+							mImageOps.PerformOperation (buffer.ImageInstructions);
+
 							// TRY TO FIGURE OUT HOW TO STOP CMDBUF EXECUTION WITHOUT CHANGING 
 							if (buffer.IsQueueReady)
 							{
-								mRenderer.Render (null);
+								mRenderer.Render (new []{buffer.InstructionSet});
 							}
 						}
 					}

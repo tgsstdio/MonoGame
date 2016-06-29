@@ -1,6 +1,8 @@
 ﻿using System;
 using Magnesium;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
+using System.IO;
 
 namespace MonoGame.Textures.FreeImageNET
 {
@@ -15,7 +17,7 @@ namespace MonoGame.Textures.FreeImageNET
 		#region IMgImageOptimizer implementation
 
 		// FROM texture.cpp (2016) Sascha Williams
-		public MgTexture Load (System.IO.Stream fs, MgImageSource source)
+		public MgTexture Load (byte[] imageData, MgImageSource source)
 		{
 			var device = mPartition.Device;
 			var queue = mPartition.Queue;
@@ -63,6 +65,8 @@ namespace MonoGame.Textures.FreeImageNET
 			Debug.Assert (result == Result.SUCCESS);
 
 			// TODO : Copy here
+			Marshal.Copy (imageData, 0, data, (int)source.Size);
+
 
 			stagingMemory.UnmapMemory (device);
 

@@ -40,6 +40,7 @@ namespace Magnesium.OpenGL
 			return Result.SUCCESS;
 		}
 
+		public CmdImageInstructionSet ImageInstructions { get; private set; }
 		public CmdBufferInstructionSet InstructionSet { get; private set; }
 		public Result EndCommandBuffer ()
 		{
@@ -47,6 +48,9 @@ namespace Magnesium.OpenGL
 			mIsExecutable = true;
 
 			InstructionSet = mSetComposer.Compose (mRepository, mRenderPasses);
+
+			ImageInstructions = new CmdImageInstructionSet ();
+			ImageInstructions.LoadImageData = mImageCopies.ToArray ();				
 
 			return Result.SUCCESS;
 		}
@@ -58,6 +62,18 @@ namespace Magnesium.OpenGL
 			mRepository.Clear ();
 			mRenderPasses.Clear ();
 			mIncompleteDraws.Clear ();
+
+			if (InstructionSet != null)
+			{
+				foreach (var vbo in InstructionSet.VBOs)
+				{
+					vbo.Dispose ();
+				}
+				InstructionSet = null;
+			}
+			ImageInstructions = null;
+
+			mImageCopies.Clear ();
 		}
 
 		public Result ResetCommandBuffer (MgCommandBufferResetFlagBits flags)
@@ -375,10 +391,69 @@ namespace Magnesium.OpenGL
 			throw new NotImplementedException ();
 		}
 
+		private List<GLCmdTexImageData> mImageCopies = new List<GLCmdTexImageData> ();
 		public void CmdPipelineBarrier (MgPipelineStageFlagBits srcStageMask, MgPipelineStageFlagBits dstStageMask, MgDependencyFlagBits dependencyFlags, MgMemoryBarrier[] pMemoryBarriers, MgBufferMemoryBarrier[] pBufferMemoryBarriers, MgImageMemoryBarrier[] pImageMemoryBarriers)
 		{
-			// TODO : need barrier here
-			//throw new NotImplementedException ();
+			if (pImageMemoryBarriers != null)
+			{
+				foreach (var imgBarrier in pImageMemoryBarriers)
+				{	
+					LoadImageData (imgBarrier);
+				}
+			}
+
+		}
+		/**
+		 * Image memory barriers initialisation are co-opted to call glCompressedTexSubImage1/2/3DExt
+		 * to load data into the texture storage
+	     **/
+		void LoadImageData (MgImageMemoryBarrier imgBarrier)
+		{
+			if (imgBarrier != null)
+			{
+				var image = imgBarrier.Image as GLImage;
+				if (image != null && imgBarrier.OldLayout == MgImageLayout.PREINITIALIZED && imgBarrier.NewLayout == MgImageLayout.SHADER_READ_ONLY_OPTIMAL)
+				{
+					PixelInternalFormat glInternalFormat;
+					PixelFormat glFormat;
+					PixelType glType;
+					image.Format.GetGLFormat (true, out glInternalFormat, out glFormat, out glType);
+					var subResourceRange = imgBarrier.SubresourceRange;
+					int layerEnd = (int)(subResourceRange.BaseArrayLayer + subResourceRange.LayerCount);
+					int levelEnd = (int)(subResourceRange.BaseMipLevel + subResourceRange.LevelCount);
+					for (int i = (int)subResourceRange.BaseArrayLayer; i < layerEnd; ++i)
+					{
+						var arrayDetail = image.ArrayLayers [i];
+						for (int j = (int)subResourceRange.BaseMipLevel; j < levelEnd; ++j)
+						{
+							var levelDetail = arrayDetail.Levels [j];
+							var copyCmd = new GLCmdTexImageData ();
+							copyCmd.Target = image.ImageType;
+							copyCmd.Level = j;
+							copyCmd.Slice = i;
+							copyCmd.Width = levelDetail.Width;
+							copyCmd.Height = levelDetail.Height;
+							copyCmd.Depth = levelDetail.Depth;
+							copyCmd.Format = image.Format;
+							copyCmd.PixelFormat = glFormat;
+							copyCmd.InternalFormat = glInternalFormat;
+							copyCmd.PixelType = glType;
+							copyCmd.TextureId = image.OriginalTextureId;
+							if (levelDetail.SubresourceLayout.Size > (ulong)int.MaxValue)
+							{
+								throw new InvalidOperationException (string.Format ("array[{0}].Levels[{1}].SubresourceLayout.Size > int.MaxValue", i, j));
+							}
+							copyCmd.Size = (int)levelDetail.SubresourceLayout.Size;
+							if (levelDetail.SubresourceLayout.Offset > (ulong)int.MaxValue)
+							{
+								throw new InvalidOperationException (string.Format ("array[{0}].Levels[{1}].SubresourceLayout.Offset > int.MaxValue", i, j));
+							}
+							copyCmd.Data = IntPtr.Add (image.Handle, (int)levelDetail.SubresourceLayout.Offset);
+							mImageCopies.Add (copyCmd);
+						}
+					}
+				}
+			}
 		}
 
 		public void CmdBeginQuery (IMgQueryPool queryPool, uint query, MgQueryControlFlagBits flags)

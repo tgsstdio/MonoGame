@@ -9,7 +9,8 @@ namespace Magnesium.OpenGL
 		private readonly bool mIsHostCached;
 		public GLDeviceMemory (MgMemoryAllocateInfo pAllocateInfo)
 		{	
-			mIsHostCached = (pAllocateInfo.MemoryTypeIndex == (uint) GLMemoryBufferType.INDIRECT);
+			BufferType = (GLMemoryBufferType)pAllocateInfo.MemoryTypeIndex;
+			mIsHostCached = (BufferType == GLMemoryBufferType.INDIRECT || BufferType== GLMemoryBufferType.IMAGE);
 
 			if (pAllocateInfo.AllocationSize >= (ulong)Int64.MaxValue)
 			{
@@ -17,9 +18,8 @@ namespace Magnesium.OpenGL
 			}
 
 			BufferSize = (IntPtr) ((Int64) pAllocateInfo.AllocationSize);
-			BufferType = (GLMemoryBufferType)pAllocateInfo.MemoryTypeIndex;
 		
-			if (pAllocateInfo.MemoryTypeIndex != (uint) GLMemoryBufferType.IMAGE)
+			if (BufferType != GLMemoryBufferType.IMAGE)
 				mBufferTarget = BufferType.GetBufferTarget ();
 
 			if (mIsHostCached || pAllocateInfo.MemoryTypeIndex == (uint) GLMemoryBufferType.IMAGE)
@@ -111,6 +111,10 @@ namespace Magnesium.OpenGL
 			{	
 				GL.Ext.UnmapNamedBuffer (BufferId);
 			}
+//			else if (mIsHostCached && BufferType == GLMemoryBufferType.IMAGE)
+//			{
+//
+//			}
 
 			mIsMapped = false;
 		}

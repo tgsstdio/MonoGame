@@ -1,6 +1,8 @@
 ﻿using System;
 using Magnesium;
 using System.Diagnostics;
+using System.IO;
+using System.Runtime.InteropServices;
 
 namespace MonoGame.Textures.FreeImageNET
 {
@@ -16,7 +18,7 @@ namespace MonoGame.Textures.FreeImageNET
 
 		#region IMgImageOptimizer implementation
 
-		public MgTexture Load (System.IO.Stream fs, MgImageSource source)
+		public MgTexture Load (byte[] imageData, MgImageSource source)
 		{
 			// Prefer using optimal tiling, as linear tiling 
 			// may support only a small set of features 
@@ -93,6 +95,7 @@ namespace MonoGame.Textures.FreeImageNET
 
 			// Copy image data into memory
 			//memcpy(data, tex2D[subRes.mipLevel].data(), tex2D[subRes.mipLevel].size());
+			Marshal.Copy (imageData, 0, data, (int)source.Size);
 
 			mappableMemory.UnmapMemory(device);
 
