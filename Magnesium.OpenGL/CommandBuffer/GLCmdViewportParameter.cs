@@ -82,14 +82,14 @@ namespace Magnesium.OpenGL
 				return false;
 
 			stillMatches = this.Viewport.Matches(other.Viewport,
-				(a, b) => Math.Abs(a - b) <= float.Epsilon);
+				(a, b) => Math.Abs(a - b) > float.Epsilon);
 
 			if (!stillMatches)
 				return false;
 
 			// EVEN IF VALUES ARE HELD AS DOUBLE, USE FLOAT.EPSILON
 			return this.DepthRange.Matches(other.DepthRange,
-				(a, b) => Math.Abs(a - b) <= float.Epsilon);
+				(a, b) => Math.Abs(a - b) > float.Epsilon);
 			
 		}
 	}

@@ -101,8 +101,8 @@ namespace MonoGame.Textures.FreeImageNET
 					byte[] imageData = new byte[size];
 					Marshal.Copy(src, imageData, 0, (int)size);
 
-					var imageMemoryOutput = mLoader.Load(imageData, imageInfo);
-					IMgImage image = imageMemoryOutput.Image;
+					var textureInfo = mLoader.Load(imageData, imageInfo, null, null);
+					IMgImage image = textureInfo.Image;
 
 					IMgImageView view;
 					var viewCreateInfo = new MgImageViewCreateInfo{
@@ -156,11 +156,16 @@ namespace MonoGame.Textures.FreeImageNET
 					result = mPartition.Device.CreateSampler(samplerCreateInfo, null, out sampler);
 					Debug.Assert(result == Result.SUCCESS);
 
-					var texture = new FITexture2D(key, image, view, sampler, imageMemoryOutput.ImageLayout, imageMemoryOutput.DeviceMemory);
+					var texture = new FITexture2D(key, image, view, sampler, textureInfo.ImageLayout, textureInfo.DeviceMemory);
 					texture.Format = Microsoft.Xna.Framework.Graphics.SurfaceFormat.Color;
 					texture.Bounds = new Rectangle(0,0, (int) width, (int) height);
 					texture.Width = (int)width;
 					texture.Height = (int)height;
+
+					result = mPartition.Queue.QueueWaitIdle();
+					Debug.Assert(result == Result.SUCCESS);
+					mPartition.Device.FreeCommandBuffers(mPartition.CommandPool, new[]{textureInfo.Command});
+
 					return texture;
 				}
 			}

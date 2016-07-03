@@ -9,6 +9,20 @@ namespace Magnesium.OpenGL
 	{
 		#region IDepthStencilCapabilities implementation
 
+		public GLQueueStencilState GetDefaultEnums ()
+		{
+			return new GLQueueStencilState {
+				FrontStencilFunction = MgCompareOp.ALWAYS,
+				BackStencilFunction = MgCompareOp.ALWAYS,
+				FrontStencilPass = MgStencilOp.KEEP,
+				BackStencilPass = MgStencilOp.KEEP,
+				FrontStencilFail = MgStencilOp.KEEP,
+				BackStencilFail = MgStencilOp.KEEP,
+				FrontDepthBufferFail = MgStencilOp.KEEP,
+				BackDepthBufferFail = MgStencilOp.KEEP,
+			};
+		}
+
 		public GLQueueRendererStencilState Initialize ()
 		{
 			var initialValue = new GLQueueRendererStencilState {
@@ -25,17 +39,7 @@ namespace Magnesium.OpenGL
 					Reference = ~0,
 					CompareMask = int.MaxValue,
 				},
-				Enums = new GLQueueStencilState
-				{
-					FrontStencilFunction = MgCompareOp.ALWAYS,
-					BackStencilFunction = MgCompareOp.ALWAYS,
-					FrontStencilPass = MgStencilOp.KEEP,
-					BackStencilPass = MgStencilOp.KEEP,
-					FrontStencilFail = MgStencilOp.KEEP,
-					BackStencilFail = MgStencilOp.KEEP,
-					FrontDepthBufferFail = MgStencilOp.KEEP,
-					BackDepthBufferFail = MgStencilOp.KEEP,
-				},
+				Enums = GetDefaultEnums(),
 			};
 
 			DisableStencilBuffer ();

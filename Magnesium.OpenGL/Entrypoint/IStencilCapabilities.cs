@@ -4,6 +4,8 @@ namespace Magnesium.OpenGL
 {
 	public interface IStencilCapabilities
 	{
+		GLQueueStencilState GetDefaultEnums();
+
 		GLQueueRendererStencilState Initialize ();
 		void EnableStencilBuffer();
 		void DisableStencilBuffer();

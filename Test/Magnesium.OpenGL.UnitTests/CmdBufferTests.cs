@@ -30,8 +30,7 @@ namespace Magnesium.OpenGL.UnitTests
 
 		[TestCase]
 		public void NullPointer()
-		{			
-
+		{
 			CmdBufferInstructionSet output = mComposer.Compose (null, null);
 
 			Assert.IsNotNull (output);
@@ -40,7 +39,7 @@ namespace Magnesium.OpenGL.UnitTests
 			Assert.IsNotNull (output.Pipelines);
 			Assert.AreEqual (0, output.Pipelines.Length);
 			Assert.IsNotNull (output.VBOs);
-			Assert.AreEqual (0, output.VBOs.Length);
+			Assert.AreEqual (1, output.VBOs.Length);
 		}
 
 		[TestCase]
@@ -54,7 +53,7 @@ namespace Magnesium.OpenGL.UnitTests
 			Assert.IsNotNull (output.Pipelines);
 			Assert.AreEqual (0, output.Pipelines.Length);
 			Assert.IsNotNull (output.VBOs);
-			Assert.AreEqual (0, output.VBOs.Length);
+			Assert.AreEqual (1, output.VBOs.Length);
 		}
 
 
@@ -483,6 +482,127 @@ namespace Magnesium.OpenGL.UnitTests
 			Assert.AreEqual(0, actual.First);
 			Assert.AreEqual(0, actual.InstanceCount);
 			Assert.AreEqual(0, actual.VertexOffset);
+		}
+
+
+		public void Test1()
+		{
+			MgCommandBufferBeginInfo cmdBufInfo = new MgCommandBufferBeginInfo {
+
+			};
+			//	vkTools::initializers::commandBufferBeginInfo();
+
+			uint width = 200;
+			uint height = 400;
+
+			IMgRenderPass pass;
+
+			MgRenderPassBeginInfo renderPassBeginInfo = new MgRenderPassBeginInfo
+			{
+				RenderPass = new MockRenderPass(),
+				RenderArea = new MgRect2D
+				{
+					Offset = new MgOffset2D
+					{
+						X = 0,
+						Y = 0,
+					},
+					Extent = new MgExtent2D
+					{
+						Width = width,
+						Height = height,
+					},
+				},
+				ClearValues = new []
+				{
+					new MgClearValue
+					{
+						Color = new MgClearColorValue(),
+					},
+					new MgClearValue
+					{
+					 	DepthStencil = new MgClearDepthStencilValue{
+							Depth = 1f,						
+							Stencil = 0,
+						},
+					}
+				},
+			};
+				//vkTools::initializers::renderPassBeginInfo();
+
+
+			Result err;
+
+			GLCmdBufferRepository repository = new GLCmdBufferRepository ();
+			ICmdVBOCapabilities vbo = new MockVertexBufferFactory ();
+			IMgCommandBuffer cmdBuf = new GLCommandBuffer (true, repository, vbo);
+
+			// Set target frame buffer
+			IMgFramebuffer frameBuffer = new MockMgFrameBuffer();
+			renderPassBeginInfo.Framebuffer = frameBuffer;
+
+			err = cmdBuf.BeginCommandBuffer(cmdBufInfo);
+			Assert.AreEqual(Result.SUCCESS, err);
+
+			cmdBuf.CmdBeginRenderPass(renderPassBeginInfo, MgSubpassContents.INLINE);
+
+			var viewport = new MgViewport[] {
+				new MgViewport
+				{
+					Width = (float) width,
+					Height = (float) height,
+					MinDepth = 0f,
+					MaxDepth = 1f,
+				}
+			};
+			cmdBuf.CmdSetViewport(0, viewport);
+
+			var scissor = new MgRect2D[]{
+				new MgRect2D{
+					Extent = new MgExtent2D
+					{
+						Width = width,
+						Height = height,
+					},
+					Offset = new MgOffset2D
+					{
+						X =0,
+						Y = 0
+					},	
+				},
+			};
+			cmdBuf.CmdSetScissor(0, scissor);
+
+			IMgPipeline solid = new MockGLGraphicsPipeline ();
+
+			IMgPipelineLayout pipelineLayout = new MockMgPipelineLayout ();
+
+			uint firstSet = 0;
+			uint descriptorSetCount = 1;
+			IMgDescriptorSet[] descriptorSets = new IMgDescriptorSet[]{ };
+			cmdBuf.CmdBindDescriptorSets(MgPipelineBindPoint.GRAPHICS, pipelineLayout, firstSet, descriptorSetCount, descriptorSets, null);
+			cmdBuf.CmdBindPipeline(MgPipelineBindPoint.GRAPHICS, solid);
+
+			uint firstBinding = 0;
+			uint bindingCount = 1;
+
+			IMgBuffer[] vertices = new IMgBuffer[]{ };
+
+			var offsets = new ulong[]{ 0 };
+			cmdBuf.CmdBindVertexBuffers(firstBinding, vertices, offsets);
+
+			IMgBuffer indicesBuf = new MockMgIndexBuffer ();
+			uint indicesCount = 0;
+
+			cmdBuf.CmdBindIndexBuffer(indicesBuf, 0, MgIndexType.UINT32);
+
+			cmdBuf.CmdDrawIndexed(indicesCount, 1, 0, 0, 0);
+
+			cmdBuf.CmdEndRenderPass();
+
+			err = cmdBuf.EndCommandBuffer();
+			Assert.AreEqual(Result.SUCCESS, err);
+
 		}
 	}
 }

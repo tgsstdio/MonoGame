@@ -5,7 +5,8 @@ namespace Magnesium.OpenGL
 {
 	public class CmdBufferInstructionSetComposer : ICmdBufferInstructionSetComposer
 	{
-		private ICmdVBOCapabilities mVBO;
+		private readonly ICmdVBOCapabilities mVBO;
+
 		public CmdBufferInstructionSetComposer (ICmdVBOCapabilities vbo)
 		{
 			mVBO = vbo;
@@ -20,7 +21,7 @@ namespace Magnesium.OpenGL
 			var bufferIds = new int[noOfBindings];
 			var offsets = new long[noOfBindings];
 
-			for (uint i = 0; i < vertexData.bindingCount; ++i)
+			for (uint i = 0; i < vertexData.pBuffers.Length; ++i)
 			{
 				uint index = i + vertexData.firstBinding;
 				var buffer = vertexData.pBuffers [index] as GLIndirectBuffer;
@@ -28,7 +29,7 @@ namespace Magnesium.OpenGL
 				if (buffer.BufferType == GLMemoryBufferType.VERTEX)
 				{
 					bufferIds [i] = buffer.BufferId;
-					offsets [i] = (long)vertexData.pOffsets [i];
+					offsets [i] = (vertexData.pOffsets != null) ? (long)vertexData.pOffsets [i] : 0L;
 				}
 				else
 				{
@@ -110,11 +111,18 @@ namespace Magnesium.OpenGL
 		{
 			if (index.HasValue)
 			{
+				// rely on defaults
+				if (src.Count == 0)
+				{
+					return 0;
+				}
+
 				var data = src.At (index.Value);
 
 				if (dest.Count == 0)
 				{
-					dest.Add (data);
+					// USE DEFAULT
+					dest.Add(data);
 					return 0;
 				}
 				else
@@ -143,16 +151,79 @@ namespace Magnesium.OpenGL
 			return (pipeline.PolygonMode == MgPolygonMode.LINE) ? GLCommandBufferFlagBits.AsLinesMode : ((pipeline.PolygonMode == MgPolygonMode.POINT) ? GLCommandBufferFlagBits.AsPointsMode : 0);
 		}
 
+		static List<GLCmdDescriptorSetParameter> SetupDescriptorSets (GLCmdBufferRepository repository)
+		{
+			var descriptorSets = new List<GLCmdDescriptorSetParameter> ();
+			if (repository == null || repository.DescriptorSets.Count == 0)
+			{
+				descriptorSets.Add (new GLCmdDescriptorSetParameter {
+					Bindpoint = MgPipelineBindPoint.GRAPHICS,
+					DescriptorSets = new IMgDescriptorSet[] {
+
+					},
+					DynamicOffsets = new uint[] {
+
+					},
+					FirstSet = 0,
+					Layout = null,
+				});
+			}
+			return descriptorSets;
+		}
+
+		static List<GLCmdViewportParameter> SetupViewpoints (GLCmdBufferRepository repository)
+		{
+			var viewports = new List<GLCmdViewportParameter> ();
+			if (repository == null || repository.Viewports.Count == 0)
+			{
+				viewports.Add (new GLCmdViewportParameter (0, new MgViewport[] {
+					
+				}));
+			}
+			return viewports;
+		}
+
+		static List<GLCmdScissorParameter> SetupScissors (GLCmdBufferRepository repository)
+		{
+			var scissors = new List<GLCmdScissorParameter> ();
+			if (repository == null || repository.Scissors.Count == 0)
+			{
+				scissors.Add (new GLCmdScissorParameter (0, new MgRect2D[] {
+
+				}));
+			}
+			return scissors;
+		}
+
+		List<GLCmdVertexBufferObject> SetupVBOs (GLCmdBufferRepository repository)
+		{
+			var vertexArrays = new List<GLCmdVertexBufferObject> ();
+			if (repository == null || repository.VertexBuffers.Count == 0)
+			{
+				vertexArrays.Add (new GLCmdVertexBufferObject (0, 0, null, mVBO));
+			}
+			return vertexArrays;
+		}
+
 		public CmdBufferInstructionSet Compose (GLCmdBufferRepository repository, IEnumerable<GLCmdRenderPassCommand> passes)
 		{
 			var output = new CmdBufferInstructionSet ();
 
 			//var passes = new List<GLQueueRenderPass> ();
 			var pipelines = new List<GLCmdBufferPipelineItem> ();
-			var drawItems = new List<GLCmdBufferDrawItem> ();
-			var vertexArrays = new List<GLCmdVertexBufferObject> ();
+//			if (repository == null || repository.GraphicsPipelines.Count == 0)
+//			{
+//				pipelines.Add (new GLCmdBufferPipelineItem {
+//					StencilState = mStencil.GetDefaultEnums(),
+//					DepthState = mDepth.GetDefaultEnums(),
+//				});
+//			}
 
-			var viewports = new List<GLCmdViewportParameter> ();
+			var drawItems = new List<GLCmdBufferDrawItem> ();
+			var vertexArrays = SetupVBOs (repository);
+
+			var viewports = SetupViewpoints (repository);
+
 			var backCompareMasks = new List<int> ();
 			var frontCompareMasks = new List<int> ();
 			var backReferences = new List<int> ();
@@ -160,9 +231,12 @@ namespace Magnesium.OpenGL
 			var backWriteMasks = new List<int> ();
 			var frontWriteMasks = new List<int> ();
 			var lineWidths = new List<float> ();
-			var scissors = new List<GLCmdScissorParameter>();
+			var scissors = SetupScissors (repository);
+
 			var blendConstants = new List<MgColor4f>();
-			var descriptorSets = new List<GLCmdDescriptorSetParameter>();
+
+			var descriptorSets = SetupDescriptorSets (repository);
+
 			var depthBias = new List<GLCmdDepthBiasParameter> ();
 			var depthBounds = new List<GLCmdDepthBoundsParameter> ();
 

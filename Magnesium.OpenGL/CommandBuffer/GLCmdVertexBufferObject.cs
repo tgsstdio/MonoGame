@@ -1,5 +1,4 @@
 ﻿using System;
-using OpenTK.Graphics.OpenGL;
 
 namespace Magnesium.OpenGL
 {
@@ -47,7 +46,8 @@ namespace Magnesium.OpenGL
 			if (mDisposed)
 				return;
 
-			mFactory.DeleteVBO(VBO);
+			if (mFactory != null)
+				mFactory.DeleteVBO(VBO);
 
 			mDisposed = true;
 		}

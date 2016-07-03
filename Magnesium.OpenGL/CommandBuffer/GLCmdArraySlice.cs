@@ -69,7 +69,7 @@ namespace Magnesium.OpenGL
 			return combined;
 		}
 
-		public bool Matches (GLCmdArraySlice<TFloat> other, Func<TFloat, TFloat, bool> valueCompare)
+		public bool Matches (GLCmdArraySlice<TFloat> other, Func<TFloat, TFloat, bool> isDifferent)
 		{
 			bool quickCheck = this.First == other.First
 				&& this.Count == other.Count;
@@ -79,7 +79,7 @@ namespace Magnesium.OpenGL
 
 			for (uint i = 0; i < Values.Length; ++i)
 			{
-				if (valueCompare(this.Values [i], other.Values [i]))
+				if (isDifferent(this.Values [i], other.Values [i]))
 					return false;
 			}
 

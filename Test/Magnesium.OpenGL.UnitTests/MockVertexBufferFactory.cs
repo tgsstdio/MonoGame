@@ -30,9 +30,10 @@ namespace Magnesium.OpenGL.UnitTests
 		{
 			
 		}
+		public int Index { get; set; }
 		public int GenerateVBO ()
 		{
-			return 0;
+			return Index;
 		}
 		public void AssociateBufferToLocation (int vbo, int location, int bufferId, long i, uint stride)
 		{

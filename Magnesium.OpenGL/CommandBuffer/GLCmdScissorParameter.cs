@@ -45,7 +45,7 @@ namespace Magnesium.OpenGL
 		public bool Equals (GLCmdScissorParameter other)
 		{
 			return this.Parameters.Matches(other.Parameters,
-				(a,b) => a == b);
+				(a,b) => a != b);
 		}
 
 		#endregion

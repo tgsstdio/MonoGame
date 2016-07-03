@@ -1,7 +1,16 @@
 namespace Magnesium.OpenGL.UnitTests
 {
-	public class MockGLGraphicsPipeline : IGLGraphicsPipeline
+	public class MockGLGraphicsPipeline : IMgPipeline, IGLGraphicsPipeline
 	{
+		#region IMgPipeline implementation
+
+		public void DestroyPipeline (IMgDevice device, MgAllocationCallbacks allocator)
+		{
+			throw new System.NotImplementedException ();
+		}
+
+		#endregion
+
 		#region IGLGraphicsPipeline implementation
 
 		public GLQueueRendererBlendState ColorBlends {

@@ -261,13 +261,21 @@ namespace Magnesium.OpenGL
 
 		public void SetDefault()
 		{			
-			PreviousPipeline = new GLCmdBufferPipelineItem {};
+
 
 			const int NO_OF_COLOR_ATTACHMENTS = 4;
 			PastColorBlend = mBlend.Initialize (NO_OF_COLOR_ATTACHMENTS);
-			PastStencil = mStencil.Initialize ();
+
+			var initialStencilValue = mStencil.Initialize ();
+			PastStencil = initialStencilValue;
+
+			var initialDepthValue = mDepth.Initialize ();
+			PreviousPipeline = new GLCmdBufferPipelineItem {
+				DepthState = initialDepthValue,
+				StencilState = initialStencilValue.Enums,
+			};
+
 			PastRasterization = mRaster.Initialize ();
-			mDepth.Initialize ();
 		}
 
 		private static bool ChangesFoundInRasterization(

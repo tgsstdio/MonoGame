@@ -33,12 +33,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="FITexture2DLoader.cs" />
     <Compile Include="FITexture2D.cs" />
-    <Compile Include="MgStagingBufferOptimizer.cs" />
-    <Compile Include="MgLinearImageOptimizer.cs" />
-    <Compile Include="IMgTextureGenerator.cs" />
-    <Compile Include="MgTexture.cs" />
-    <Compile Include="MgImageSource.cs" />
-    <Compile Include="MgImageMipmap.cs" />
     <Compile Include="IMgTexture.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />

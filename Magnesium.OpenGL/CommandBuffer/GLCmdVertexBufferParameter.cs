@@ -4,7 +4,6 @@
 	{
 		public ulong[] pOffsets;
 		public IMgBuffer[] pBuffers;
-		public uint bindingCount;
 		public uint firstBinding;
 	}
 }

@@ -9,7 +9,7 @@ namespace Magnesium.OpenGL
 			set;
 		}
 
-		public MgDescriptorSet[] DescriptorSets {
+		public IMgDescriptorSet[] DescriptorSets {
 			get;
 			set;
 		}

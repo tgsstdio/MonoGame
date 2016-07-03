@@ -893,7 +893,7 @@ namespace Magnesium.OpenGL
 		}
 
 		//private ConcurrentDictionary<int, GLDescriptorSet> mDescriptorSets = new ConcurrentDictionary<int, GLDescriptorSet>();
-		public Result AllocateDescriptorSets (MgDescriptorSetAllocateInfo pAllocateInfo, out MgDescriptorSet[] pDescriptorSets)
+		public Result AllocateDescriptorSets (MgDescriptorSetAllocateInfo pAllocateInfo, out IMgDescriptorSet[] pDescriptorSets)
 		{
 			if (pAllocateInfo == null)
 			{	
@@ -931,7 +931,7 @@ namespace Magnesium.OpenGL
 			return Result.SUCCESS;
 		}
 
-		public Result FreeDescriptorSets (IMgDescriptorPool descriptorPool, MgDescriptorSet[] pDescriptorSets)
+		public Result FreeDescriptorSets (IMgDescriptorPool descriptorPool, IMgDescriptorSet[] pDescriptorSets)
 		{
 			if (descriptorPool == null)
 			{	

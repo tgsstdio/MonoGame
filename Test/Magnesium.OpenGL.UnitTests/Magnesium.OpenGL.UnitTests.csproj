@@ -44,6 +44,26 @@
     <Compile Include="MockGLIndirectBuffer.cs" />
     <Compile Include="ViewportMergeUnitTests.cs" />
     <Compile Include="MockGLCmdImageCapabilities.cs" />
+    <Compile Include="StructCopyTests.cs" />
+    <Compile Include="MockMgIndexBuffer.cs" />
+    <Compile Include="MockMgPipelineLayout.cs" />
+    <Compile Include="MockMgFrameBuffer.cs" />
+    <Compile Include="MockRenderPass.cs" />
+    <Compile Include="Transformer.cs" />
+    <Compile Include="TransformingVBOUnitTests.cs" />
+    <Compile Include="TransformingBlendConstantsUnitTests.cs" />
+    <Compile Include="TransformerStore.cs" />
+    <Compile Include="TransformingLineWidthsUnitTests.cs" />
+    <Compile Include="TransformingBackCompareMasksUnitTests.cs" />
+    <Compile Include="TransformingFrontCompareMasksUnitTests.cs" />
+    <Compile Include="TransformingFrontWriteMasksUnitTests.cs" />
+    <Compile Include="TransformingFrontReferencesUnitTests.cs" />
+    <Compile Include="TransformingBackWriteMasksUnitTests.cs" />
+    <Compile Include="TransformingBackReferencesUnitTests.cs" />
+    <Compile Include="TransformingDepthBoundsUnitTests.cs" />
+    <Compile Include="TransformingDepthBiasUnitTests.cs" />
+    <Compile Include="TransformingViewportsUnitTests.cs" />
+    <Compile Include="ViewportParameterUnitTests.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

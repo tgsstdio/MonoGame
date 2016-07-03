@@ -1,4 +1,5 @@
 ﻿using OpenTK.Graphics.OpenGL;
+using System;
 
 namespace Magnesium.OpenGL
 {
@@ -6,11 +7,17 @@ namespace Magnesium.OpenGL
 	{
 		#region IDepthCapabilities implementation
 
-		public void Initialize ()
+		public GLQueueDepthState GetDefaultEnums ()
+		{
+			return new GLQueueDepthState{ DepthBufferFunction = MgCompareOp.LESS };
+		}
+
+		public GLQueueDepthState Initialize ()
 		{
 			EnableDepthBuffer ();
 			SetDepthBufferFunc (MgCompareOp.LESS);
 			SetDepthMask(true);
+			return GetDefaultEnums ();
 		}
 
 		private bool mIsDepthBufferEnabled;
@@ -37,6 +44,7 @@ namespace Magnesium.OpenGL
 			switch (compare)
 			{
 			default:
+				throw new NotSupportedException ();
 			case MgCompareOp.ALWAYS:
 				return DepthFunction.Always;
 			case MgCompareOp.EQUAL:

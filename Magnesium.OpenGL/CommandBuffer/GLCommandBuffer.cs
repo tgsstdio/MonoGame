@@ -155,7 +155,7 @@ namespace Magnesium.OpenGL
 			IMgPipelineLayout layout,
 			uint firstSet,
 			uint descriptorSetCount,
-			MgDescriptorSet[] pDescriptorSets,
+			IMgDescriptorSet[] pDescriptorSets,
 			uint[] pDynamicOffsets)
 		{
 			var parameter = new GLCmdDescriptorSetParameter ();		
@@ -176,11 +176,10 @@ namespace Magnesium.OpenGL
 			mRepository.IndexBuffers.Add (param);
 		}
 
-		public void CmdBindVertexBuffers (uint firstBinding, uint bindingCount, IMgBuffer[] pBuffers, ulong[] pOffsets)
+		public void CmdBindVertexBuffers (uint firstBinding, IMgBuffer[] pBuffers, ulong[] pOffsets)
 		{
 			var param = new GLCmdVertexBufferParameter ();
 			param.firstBinding = firstBinding;
-			param.bindingCount = bindingCount;
 			param.pBuffers = pBuffers;
 			param.pOffsets = pOffsets;
 			mRepository.VertexBuffers.Add (param);

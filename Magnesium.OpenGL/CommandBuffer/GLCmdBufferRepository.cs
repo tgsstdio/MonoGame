@@ -198,6 +198,22 @@ namespace Magnesium.OpenGL
 
 				// add defaults
 				command.Pipeline = GraphicsPipelines.LastIndex ();
+
+				command.BackCompareMask = BackCompareMasks.LastIndex ();
+				command.FrontCompareMask = FrontCompareMasks.LastIndex ();
+
+				command.BackReference = BackReferences.LastIndex ();
+				command.FrontReference = FrontReferences.LastIndex ();
+
+				command.BackWriteMask = BackWriteMasks.LastIndex ();
+				command.FrontWriteMask = FrontWriteMasks.LastIndex ();
+
+				command.DepthBias = DepthBias.LastIndex ();
+				command.DepthBounds = DepthBounds.LastIndex ();
+
+				command.BlendConstants = BlendConstants.LastIndex ();
+
+				command.LineWidth = LineWidths.LastIndex ();
 				return true;
 			}
 			else

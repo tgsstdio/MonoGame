@@ -85,7 +85,7 @@ namespace Magnesium.OpenGL
 		}
 	}
 
-	public class GLDescriptorSet : MgDescriptorSet, IEquatable<GLDescriptorSet>
+	public class GLDescriptorSet : IMgDescriptorSet, IEquatable<GLDescriptorSet>
 	{
 		public int Key { get; private set; }
 		public GLDescriptorSet (int key)
