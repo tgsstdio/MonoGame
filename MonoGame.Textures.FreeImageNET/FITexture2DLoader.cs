@@ -6,10 +6,11 @@ using Magnesium;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
+using MonoGame.Graphics;
 
 namespace MonoGame.Textures.FreeImageNET
 {
-	public class FITexture2DLoader : ITexture2DLoader
+	public class FITexture2DLoader : IMgBaseTextureLoader
 	{
 		private readonly IContentStreamer mContentStreamer;
 		private readonly ITextureSortingKeyGenerator mKeyGenerator;
@@ -49,7 +50,7 @@ namespace MonoGame.Textures.FreeImageNET
 			throw new NotSupportedException ();
 		}
 
-		public ITexture2D Load (AssetIdentifier assetId)
+		public MgBaseTexture Load (AssetIdentifier assetId)
 		{
 			FIBITMAP dib = new FIBITMAP();
 			try

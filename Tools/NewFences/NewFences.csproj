@@ -49,6 +49,14 @@
     <Compile Include="IRenderPassGroup.cs" />
     <Compile Include="IRenderPass.cs" />
     <Compile Include="BlockBundle.cs" />
+    <Compile Include="RenderGraph.cs" />
+    <Compile Include="SubmitInfoGraphNode.cs" />
+    <Compile Include="Technique.cs" />
+    <Compile Include="PrecompiledCommandGroup.cs" />
+    <Compile Include="CommandGroupCreateInfo.cs" />
+    <Compile Include="PrecompiledGroupGenerator.cs" />
+    <Compile Include="GraphRenderer.cs" />
+    <Compile Include="IQueueRenderable.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -59,6 +67,14 @@
     <ProjectReference Include="..\..\MonoGame.Content\MonoGame.Content.csproj">
       <Project>{E44E47ED-2203-4E45-85A9-C755B10AC044}</Project>
       <Name>MonoGame.Content</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Magnesium\Magnesium.csproj">
+      <Project>{9F9AC448-9D17-43E5-8889-285426290891}</Project>
+      <Name>Magnesium</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\MonoGame.Core\MonoGame.Core.csproj">
+      <Project>{699977AD-6D8C-4E0B-ADDA-554B66002D08}</Project>
+      <Name>MonoGame.Core</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>

@@ -52,7 +52,11 @@
     <Compile Include="MockShaderProgramCache.cs" />
     <Compile Include="MockGLSemaphoreGenerator.cs" />
     <Compile Include="MockTouchListener.cs" />
-    <Compile Include="Win32PresentationLayer.cs" />
+    <Compile Include="HelloDepthStencilBuffer.cs" />
+    <Compile Include="HelloWindowSwapChain.cs" />
+    <Compile Include="MgPresentationLayer.cs" />
+    <Compile Include="IMgPresentationLayer.cs" />
+    <Compile Include="Win32PresentationSurface.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -104,6 +108,12 @@
   <ItemGroup>
     <None Include="packages.config" />
     <None Include="OpenTK.dll.config" />
+    <None Include="Content\80000000\80000002.vs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Content\80000000\80000003.fs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\80000000\80000001.png">

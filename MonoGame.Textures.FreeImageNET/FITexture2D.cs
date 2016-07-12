@@ -1,38 +1,19 @@
 ﻿using System;
 using MonoGame.Core;
 using Magnesium;
+using MonoGame.Graphics;
 
 namespace MonoGame.Textures.FreeImageNET
 {
-	public class FITexture2D : ITexture2D, IMgTexture
+	public class FITexture2D : MgBaseTexture
 	{
-		IMgImage mImage;
-		IMgImageView mView;
-		IMgSampler mSampler;
 		MgImageLayout mImageLayout;
-		IMgDeviceMemory mDeviceMemory;
 
 		public FITexture2D (int sortingKey, IMgImage image, IMgImageView view, IMgSampler sampler, MgImageLayout imageLayout, IMgDeviceMemory deviceMemory)
+			: base(sortingKey, image, view, sampler, deviceMemory)
 		{
-			SortingKey = sortingKey;
-			mImage = image; 
-			mView = view;
-			mSampler = sampler;
 			mImageLayout = imageLayout;
-			mDeviceMemory = deviceMemory;
 		}
-
-		#region IMgTexture2D implementation
-
-		public void DestroyTexture (IMgDevice device, MgAllocationCallbacks allocator)
-		{
-			mView.DestroyImageView(device, allocator);
-			mImage.DestroyImage(device, allocator);
-			mSampler.DestroySampler(device, allocator); 
-			mDeviceMemory.FreeMemory(device, allocator);
-		}
-
-		#endregion
 
 		#region ITexture2D implementation
 
@@ -113,11 +94,6 @@ namespace MonoGame.Textures.FreeImageNET
 		public void GraphicsDeviceResetting ()
 		{
 			
-		}
-
-		public int SortingKey {
-			get;
-			private set;
 		}
 
 		public Microsoft.Xna.Framework.Graphics.SurfaceFormat Format {

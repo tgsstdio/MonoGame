@@ -9,24 +9,23 @@ using MonoGame.Core;
 
 namespace MonoGame.Graphics
 {
-	public abstract class MgBaseTexture : ITexture
+	public abstract class MgBaseTexture : IMgTexture
 	{
-		private readonly IMgTexturePlatform mPlatform;
 		private Int32 _sortingKey;
 
-		internal IMgImage mImage;
-		internal IMgImageView mView;
-		internal IMgSampler mSampler;
-		internal IMgDeviceMemory mDeviceMemory;
+		public IMgImage Image { get; private set; }
+		public IMgImageView View {get; private set; }
+		public IMgSampler Sampler {get; private set; }
+		public IMgDeviceMemory DeviceMemory { get; private set; }
 
-		protected MgBaseTexture(Int32 key, IMgTexturePlatform platform)
+		protected MgBaseTexture(Int32 key, IMgImage image, IMgImageView view, IMgSampler sampler, IMgDeviceMemory deviceMemory)
 		{
-			mPlatform = platform;
 			_sortingKey = key;
+			Image = image;
+			View = view;
+			Sampler = sampler;
+			DeviceMemory = deviceMemory;
 		}
-
-		internal SurfaceFormat _format;
-		internal Int32 _levelCount;
 
         /// <summary>
         /// Gets a unique identifier of this texture for sorting purposes.
@@ -41,16 +40,6 @@ namespace MonoGame.Graphics
             get { return _sortingKey; }
         }
 
-		public SurfaceFormat Format
-		{
-			get { return _format; }
-		}
-		
-		public Int32 LevelCount
-		{
-			get { return _levelCount; }
-		}
-
 		internal static int CalculateMipLevels(int width, int height = 0, int depth = 0)
         {
 			int levels = 1;
@@ -63,39 +52,51 @@ namespace MonoGame.Graphics
             return levels;
         }
 
-		internal uint GetPitch(UInt32 width)
-        {
-			uint pitch;
+//		internal uint GetPitch(UInt32 width)
+//        {
+//			uint pitch;
+//
+//            switch (_format)
+//            {
+//                case SurfaceFormat.Dxt1:
+//                case SurfaceFormat.Dxt1SRgb:
+//                case SurfaceFormat.Dxt1a:
+//                case SurfaceFormat.RgbPvrtc2Bpp:
+//                case SurfaceFormat.RgbaPvrtc2Bpp:
+//                case SurfaceFormat.RgbEtc1:
+//                case SurfaceFormat.Dxt3:
+//                case SurfaceFormat.Dxt3SRgb:
+//                case SurfaceFormat.Dxt5:
+//                case SurfaceFormat.Dxt5SRgb:
+//                case SurfaceFormat.RgbPvrtc4Bpp:
+//                case SurfaceFormat.RgbaPvrtc4Bpp:                    
+//                    pitch = ((width + 3u) / 4u) * _format.GetSize();
+//                    break;
+//
+//                default:
+//                    pitch = width * _format.GetSize();
+//                    break;
+//            };
+//
+//            return pitch;
+//        }
 
-            switch (_format)
-            {
-                case SurfaceFormat.Dxt1:
-                case SurfaceFormat.Dxt1SRgb:
-                case SurfaceFormat.Dxt1a:
-                case SurfaceFormat.RgbPvrtc2Bpp:
-                case SurfaceFormat.RgbaPvrtc2Bpp:
-                case SurfaceFormat.RgbEtc1:
-                case SurfaceFormat.Dxt3:
-                case SurfaceFormat.Dxt3SRgb:
-                case SurfaceFormat.Dxt5:
-                case SurfaceFormat.Dxt5SRgb:
-                case SurfaceFormat.RgbPvrtc4Bpp:
-                case SurfaceFormat.RgbaPvrtc4Bpp:                    
-                    pitch = ((width + 3u) / 4u) * _format.GetSize();
-                    break;
+		#region IMgTexture implementation
 
-                default:
-                    pitch = width * _format.GetSize();
-                    break;
-            };
+		public void DestroyTexture (IMgDevice device, MgAllocationCallbacks allocator)
+		{
+			View.DestroyImageView(device, allocator);
+			Image.DestroyImage(device, allocator);
+			Sampler.DestroySampler(device, allocator); 
+			DeviceMemory.FreeMemory(device, allocator);
+		}
 
-            return pitch;
-        }
-
-        public void GraphicsDeviceResetting()
-        {
-			mPlatform.GraphicsDeviceResetting(mImage, mView, mSampler, mDeviceMemory);
-        }
+		#endregion
+//
+//        public void GraphicsDeviceResetting()
+//        {
+//			mPlatform.GraphicsDeviceResetting(mImage, mView, mSampler, mDeviceMemory);
+//        }
     }
 }
 

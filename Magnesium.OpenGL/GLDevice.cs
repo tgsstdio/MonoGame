@@ -186,12 +186,13 @@ namespace Magnesium.OpenGL
 		}
 		public Result CreateSemaphore (MgSemaphoreCreateInfo pCreateInfo, MgAllocationCallbacks allocator, out IMgSemaphore pSemaphore)
 		{
-			throw new NotImplementedException ();
+			pSemaphore = new GLQueueSemaphore ();
+			return Result.SUCCESS;
 		}
-		public void DestroySemaphore (IMgSemaphore semaphore, MgAllocationCallbacks allocator)
-		{
-			throw new NotImplementedException ();
-		}
+//		public void DestroySemaphore (IMgSemaphore semaphore, MgAllocationCallbacks allocator)
+//		{
+//			throw new NotImplementedException ();
+//		}
 		public Result CreateEvent (MgEventCreateInfo pCreateInfo, MgAllocationCallbacks allocator, out IMgEvent @event)
 		{
 			throw new NotImplementedException ();
@@ -637,38 +638,6 @@ namespace Magnesium.OpenGL
 //			mImageViews [imageView.Key].Destroy ();
 //		}
 
-		class GLShaderModule : IMgShaderModule
-		{
-			public int? ShaderId { get; set; }
-			public MgShaderModuleCreateInfo Info { get; set; }
-
-			public void Destroy()
-			{
-				if (ShaderId.HasValue)
-				{
-					GL.DeleteShader(ShaderId.Value);
-					ShaderId = null;
-				}
-			}
-
-			#region IMgShaderModule implementation
-			private bool mIsDisposed = false;
-			public void DestroyShaderModule (IMgDevice device, MgAllocationCallbacks allocator)
-			{
-				if (mIsDisposed)
-					return;
-
-				if (ShaderId.HasValue)
-				{
-					GL.DeleteShader(ShaderId.Value);
-					ShaderId = null;
-				}
-
-				mIsDisposed = true;
-			}
-
-			#endregion
-		}
 		//private List<GLShaderModule> mShaderModules = new List<GLShaderModule>();
 		public Result CreateShaderModule (MgShaderModuleCreateInfo pCreateInfo, MgAllocationCallbacks allocator, out IMgShaderModule pShaderModule)
 		{
@@ -827,7 +796,7 @@ namespace Magnesium.OpenGL
 		//private List<GLPipelineLayout> mPipelineLayouts = new List<GLPipelineLayout> ();
 		public Result CreatePipelineLayout (MgPipelineLayoutCreateInfo pCreateInfo, MgAllocationCallbacks allocator, out IMgPipelineLayout pPipelineLayout)
 		{
-			if (pCreateInfo != null)
+			if (pCreateInfo == null)
 			{
 				throw new ArgumentNullException ("pCreateInfo");
 			}
@@ -878,7 +847,7 @@ namespace Magnesium.OpenGL
 
 		public Result CreateDescriptorPool (MgDescriptorPoolCreateInfo pCreateInfo, MgAllocationCallbacks allocator, out IMgDescriptorPool pDescriptorPool)
 		{
-			pDescriptorPool = new GLDescriptorPool ((int) pCreateInfo.MaxSets);
+			pDescriptorPool = new GLDescriptorPool (pCreateInfo.MaxSets != 0 ? (int) pCreateInfo.MaxSets : 100);
 			return Result.SUCCESS;
 		}
 
@@ -970,7 +939,9 @@ namespace Magnesium.OpenGL
 					int offset = (int)desc.DstArrayElement;
 					int count = (int)desc.DescriptorCount;
 
-					if (localSet.Bindings.Length >= (offset + count))
+					var lastIndex = localSet.Bindings.Length - 1;
+					var right = offset + count - 1;
+					if (right > lastIndex)
 					{
 						// VULKAN WOULD CONTINUE ONTO WRITE ADDITIONAL VALUES TO NEXT BINDING
 						// ONLY ONE SET OF BINDING USED
@@ -994,12 +965,17 @@ namespace Magnesium.OpenGL
 							// Generate bindless texture handle 
 							// FIXME : messy as F***
 
-							var texHandle = GL.Arb.GetTextureSamplerHandle (
-								                 localView.TextureId,
-												 localSampler.SamplerId);
+							var internalBinding = localSet.Bindings [offset + i];
 
-							var imageDesc = localSet.Bindings [offset + i].ImageDesc;
-							imageDesc.Replace (texHandle);
+							if (internalBinding != null)
+							{
+								var texHandle = GL.Arb.GetTextureSamplerHandle (
+									                 localView.TextureId,
+													 localSampler.SamplerId);
+
+								var imageDesc = internalBinding.ImageDesc;
+								imageDesc.Replace (texHandle);
+							}
 						}					
 						break;
 					case MgDescriptorType.STORAGE_BUFFER:
@@ -1035,7 +1011,8 @@ namespace Magnesium.OpenGL
 //		}
 		public Result CreateRenderPass (MgRenderPassCreateInfo pCreateInfo, MgAllocationCallbacks allocator, out IMgRenderPass pRenderPass)
 		{
-			throw new NotImplementedException ();
+			pRenderPass = new GLRenderPass ();
+			return Result.SUCCESS;
 		}
 //		public void DestroyRenderPass (IMgRenderPass renderPass, MgAllocationCallbacks allocator)
 //		{

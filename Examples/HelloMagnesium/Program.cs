@@ -96,7 +96,7 @@ namespace HelloMagnesium
 					// MAGNESIUM
 					container.Register<IMgDriver, MgDriver>(Reuse.Singleton);
 					container.Register<IMgEntrypoint, Magnesium.OpenGL.GLEntrypoint>(Reuse.Singleton);
-					container.Register<IMgPresentationLayer, Win32PresentationLayer>(Reuse.Singleton);
+					container.Register<IMgPresentationSurface, Win32PresentationSurface>(Reuse.Singleton);
 					container.Register<Magnesium.OpenGL.IGLQueue, Magnesium.OpenGL.GLQueue>(Reuse.Singleton);
 					container.Register<Magnesium.OpenGL.IGLQueueRenderer, Magnesium.OpenGL.GLQueueRenderer>(Reuse.Singleton);
 
@@ -113,8 +113,11 @@ namespace HelloMagnesium
 					container.Register<IMgDeviceQuery, MgDeviceQuery>(Reuse.Singleton);
 					container.Register<IMgImageTools, MgImageTools>(Reuse.Singleton);
 
+					container.Register<IMgDepthStencilBuffer, HelloDepthStencilBuffer>(Reuse.Singleton);
+					container.Register<IMgSwapchainCollection, HelloWindowSwapChain>(Reuse.Singleton);
+
 					// MAGNESIUM TEXTURES 
-					container.Register<ITexture2DLoader, FITexture2DLoader>(Reuse.Singleton);
+					container.Register<IMgBaseTextureLoader, FITexture2DLoader>(Reuse.Singleton);
 					container.Register<ITextureSortingKeyGenerator, DefaultTextureSortingKeyGenerator>(Reuse.Singleton);
 					container.Register<IMgTextureGenerator, MgLinearImageOptimizer>(Reuse.Singleton);
 					container.Register<IContentStreamer, ContentStreamer>(Reuse.Singleton);

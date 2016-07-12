@@ -84,11 +84,9 @@
     <Compile Include="GraphicsCapabilities.cs" />
     <Compile Include="IGLExtensionLookup.cs" />
     <Compile Include="IGLFramebufferHelperSelector.cs" />
-    <Compile Include="SpriteBatch\MgTexture2DLoader.cs" />
     <Compile Include="SpriteBatch\MgTexturePlatform.cs" />
     <Compile Include="SpriteBatch\IMgTexturePlatform.cs" />
     <Compile Include="SpriteBatch\MgBaseTexture.cs" />
-    <Compile Include="SpriteBatch\MgTexture2D.cs" />
     <Compile Include="EffectPipeline.cs" />
     <Compile Include="EffectPipelineDictionary.cs" />
     <Compile Include="IEffectPipelineCollection.cs" />
@@ -96,6 +94,8 @@
     <Compile Include="IConstantBufferCollection.cs" />
     <Compile Include="IConstantBuffer.cs" />
     <Compile Include="DrawItemBitFlags.cs" />
+    <Compile Include="SpriteBatch\IMgTexture.cs" />
+    <Compile Include="SpriteBatch\IMgBaseTextureLoader.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>

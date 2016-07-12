@@ -71,6 +71,7 @@ namespace Magnesium.OpenGL
 
 		public void SetDepthMask (bool isMaskOn)
 		{
+			// for writing to depth buffer
 			GL.DepthMask(isMaskOn);
 		}
 

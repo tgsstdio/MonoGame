@@ -4,11 +4,11 @@ using Magnesium;
 
 namespace HelloMagnesium
 {
-	public class Win32PresentationLayer : IMgPresentationLayer
+	public class Win32PresentationSurface : IMgPresentationSurface
 	{
 		private readonly IMgDriver mPlatform;
 		private readonly INativeWindow mWindow;
-		public Win32PresentationLayer (IMgDriver platform, INativeWindow window)
+		public Win32PresentationSurface (IMgDriver platform, INativeWindow window)
 		{
 			mPlatform = platform;
 			mWindow = window;

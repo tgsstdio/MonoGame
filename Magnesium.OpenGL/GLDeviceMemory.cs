@@ -98,7 +98,7 @@ namespace Magnesium.OpenGL
 				var handleSize = (IntPtr)((Int64)size);
 
 				// TODO: flags translate 
-				ppData = GL.Ext.MapNamedBufferRange(BufferId, handleOffset, handleSize, 0);
+				ppData = GL.Ext.MapNamedBufferRange(BufferId, handleOffset, handleSize, BufferAccessMask.MapWriteBit | BufferAccessMask.MapPersistentBit | BufferAccessMask.MapCoherentBit);
 				mIsMapped = true;
 				return Result.SUCCESS;
 			}

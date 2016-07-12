@@ -144,6 +144,8 @@
     <Compile Include="CommandBuffer\GLCmdTexImageData.cs" />
     <Compile Include="Queue\IGLCmdImageCapabilities.cs" />
     <Compile Include="Entrypoint\FullGLCmdImageCapabilities.cs" />
+    <Compile Include="GLRenderPass.cs" />
+    <Compile Include="GLShaderModule.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

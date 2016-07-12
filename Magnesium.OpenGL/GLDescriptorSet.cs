@@ -102,12 +102,12 @@ namespace Magnesium.OpenGL
 			int index = 0;
 			foreach (var bind in layout.Uniforms)
 			{
-				if (bind.DescriptorType == MgDescriptorType.SAMPLER)
+				if (bind.DescriptorType == MgDescriptorType.SAMPLER || bind.DescriptorType == MgDescriptorType.COMBINED_IMAGE_SAMPLER)
 				{
 					Bindings [index] = new GLDescriptorBinding (bind.Location,
 						new GLImageDescriptor ());
 				}
-				else if (bind.DescriptorType == MgDescriptorType.STORAGE_BUFFER)
+				else if (bind.DescriptorType == MgDescriptorType.STORAGE_BUFFER || bind.DescriptorType == MgDescriptorType.STORAGE_BUFFER_DYNAMIC)
 				{
 					Bindings [index] = new GLDescriptorBinding (bind.Location,
 						new GLBufferDescriptor ());

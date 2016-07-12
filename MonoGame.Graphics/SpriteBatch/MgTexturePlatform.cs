@@ -2,8 +2,6 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 using Magnesium;
-using System;
-using System.Threading;
 
 namespace MonoGame.Graphics
 {
@@ -25,12 +23,12 @@ namespace MonoGame.Graphics
 
 		public void GraphicsDeviceResetting (IMgImage image, IMgImageView view, IMgSampler sampler, IMgDeviceMemory deviceMemory)
 		{
-			DeleteGLTexture (image, view, sampler, deviceMemory);
+			DestroyTexture (image, view, sampler, deviceMemory);
 		}
 
 		#endregion
 
-		private void DeleteGLTexture(IMgImage image, IMgImageView view, IMgSampler sampler, IMgDeviceMemory deviceMemory)
+		private void DestroyTexture(IMgImage image, IMgImageView view, IMgSampler sampler, IMgDeviceMemory deviceMemory)
         {			
 			view.DestroyImageView(mDevice, mCallbacks);
 			image.DestroyImage(mDevice, mCallbacks);
