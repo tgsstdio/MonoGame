@@ -26,6 +26,8 @@ namespace HelloMagnesium
 	{
 		public static void Main (string[] args)
 		{
+			//Console.ReadKey ();
+
 			try 
 			{
 				using (var container = new Container ())

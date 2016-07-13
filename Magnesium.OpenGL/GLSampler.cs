@@ -1,5 +1,6 @@
 ﻿using System;
 using OpenTK.Graphics.OpenGL;
+using System.Diagnostics;
 
 namespace Magnesium.OpenGL
 {
@@ -25,7 +26,7 @@ namespace Magnesium.OpenGL
 			}
 		}
 
-		private static All GetFilterValue(MgFilter filter, MgSamplerMipmapMode mode)
+		private static All GetMinFilterValue(MgFilter filter, MgSamplerMipmapMode mode)
 		{
 			switch (filter)
 			{
@@ -33,6 +34,19 @@ namespace Magnesium.OpenGL
 				return (mode == MgSamplerMipmapMode.LINEAR) ? All.LinearMipmapLinear : All.Linear;
 			case MgFilter.NEAREST:
 				return (mode == MgSamplerMipmapMode.LINEAR) ? All.NearestMipmapLinear : All.Nearest;
+			default:
+				throw new NotSupportedException();
+			}
+		}
+
+		private static All GetMagFilterValue(MgFilter filter)
+		{
+			switch (filter)
+			{
+			case MgFilter.LINEAR:
+				return All.Linear;
+			case MgFilter.NEAREST:
+				return All.Nearest;
 			default:
 				throw new NotSupportedException();
 			}
@@ -72,18 +86,67 @@ namespace Magnesium.OpenGL
 
 		private void Populate (MgSamplerCreateInfo pCreateInfo)
 		{
+			{
+				var error = GL.GetError ();
+				Debug.WriteLineIf (error != ErrorCode.NoError, "SamplerParameter (BEFORE) : " + error);
+			}
+
 			// ARB_SAMPLER_OBJECTS
 			GL.SamplerParameter (SamplerId, SamplerParameterName.TextureWrapS, (int) GetAddressMode(pCreateInfo.AddressModeU));
+
+			{
+				var error = GL.GetError ();
+				Debug.WriteLineIf (error != ErrorCode.NoError, "SamplerParameter (TextureWrapS) : " + error);
+			}
+
 			GL.SamplerParameter (SamplerId, SamplerParameterName.TextureWrapT, (int) GetAddressMode(pCreateInfo.AddressModeV));
+
+			{
+				var error = GL.GetError ();
+				Debug.WriteLineIf (error != ErrorCode.NoError, "SamplerParameter (TextureWrapT) : " + error);
+			}
+
 			GL.SamplerParameter (SamplerId, SamplerParameterName.TextureWrapR, (int) GetAddressMode(pCreateInfo.AddressModeW));
 
+			{
+				var error = GL.GetError ();
+				Debug.WriteLineIf (error != ErrorCode.NoError, "SamplerParameter (TextureWrapR) : " + error);
+			}
+
 			GL.SamplerParameter (SamplerId, SamplerParameterName.TextureMinLod, pCreateInfo.MinLod);
+
+			{
+				var error = GL.GetError ();
+				Debug.WriteLineIf (error != ErrorCode.NoError, "SamplerParameter (TextureMinLod) : " + error);
+			}
+
 			GL.SamplerParameter (SamplerId, SamplerParameterName.TextureMaxLod, pCreateInfo.MaxLod);
 
-			GL.SamplerParameter (SamplerId, SamplerParameterName.TextureMinFilter, (int) GetFilterValue(pCreateInfo.MinFilter, pCreateInfo.MipmapMode));
-			GL.SamplerParameter (SamplerId, SamplerParameterName.TextureMagFilter, (int) GetFilterValue(pCreateInfo.MagFilter, pCreateInfo.MipmapMode));
+			{
+				var error = GL.GetError ();
+				Debug.WriteLineIf (error != ErrorCode.NoError, "SamplerParameter (TextureMaxLod) : " + error);
+			}
+
+			GL.SamplerParameter (SamplerId, SamplerParameterName.TextureMinFilter, (int) GetMinFilterValue(pCreateInfo.MinFilter, pCreateInfo.MipmapMode));
+
+			{
+				var error = GL.GetError ();
+				Debug.WriteLineIf (error != ErrorCode.NoError, "SamplerParameter (TextureMinFilter) : " + error);
+			}
+
+			GL.SamplerParameter (SamplerId, SamplerParameterName.TextureMagFilter, (int) GetMagFilterValue(pCreateInfo.MagFilter));
+
+			{
+				var error = GL.GetError ();
+				Debug.WriteLineIf (error != ErrorCode.NoError, "SamplerParameter (TextureMagFilter) : " + error);
+			}
 
 			GL.SamplerParameter (SamplerId, SamplerParameterName.TextureCompareFunc, (int) GetCompareOp(pCreateInfo.CompareOp) );
+
+			{
+				var error = GL.GetError ();
+				Debug.WriteLineIf (error != ErrorCode.NoError, "SamplerParameter (TextureCompareFunc) : " + error);
+			}
 
 			// EXT_texture_filter_anisotropic
 			//GL.SamplerParameter (samplerId, SamplerParameterName.TextureMaxAnisotropyExt, pCreateInfo.MaxAnisotropy);
@@ -98,6 +161,7 @@ namespace Magnesium.OpenGL
 					1f
 				};
 				GL.SamplerParameter (SamplerId, SamplerParameterName.TextureBorderColor, FLOAT_OPAQUE_BLACK);
+
 				break;
 			case MgBorderColor.FLOAT_OPAQUE_WHITE:
 				var FLOAT_OPAQUE_WHITE = new float[] {
@@ -144,6 +208,11 @@ namespace Magnesium.OpenGL
 				};
 				GL.SamplerParameter (SamplerId, SamplerParameterName.TextureBorderColor, INT_TRANSPARENT_BLACK);
 				break;
+			}
+
+			{
+				var error = GL.GetError ();
+				Debug.WriteLineIf (error != ErrorCode.NoError, "SamplerParameter (TextureBorderColor) : " + error);
 			}
 		}
 

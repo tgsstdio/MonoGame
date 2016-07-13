@@ -26,6 +26,7 @@ namespace Magnesium.OpenGL
 			}
 
 			Target = BufferType.GetBufferTarget ();
+			RequestedSize = info.Size;
 		}
 
 		public GLMemoryBufferType BufferType { get; private set;}
@@ -35,6 +36,7 @@ namespace Magnesium.OpenGL
 		// INDEX, 
 		public BufferTarget Target { get; private set;}
 		public int BufferId { get; private set; }
+		public ulong RequestedSize { get; set; }
 
 		#region IMgBuffer implementation
 		public Result BindBufferMemory (IMgDevice device, IMgDeviceMemory memory, ulong memoryOffset)

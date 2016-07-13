@@ -18,13 +18,13 @@ namespace Magnesium.OpenGL
 			switch (format) {
 			case MgFormat.R8G8B8_UINT:
 				glInternalFormat = PixelInternalFormat.Rgb8ui;
-				glFormat = PixelFormat.Rgb;
+				glFormat = PixelFormat.RgbInteger;
 				glType = PixelType.UnsignedByte;
 				break;
 			case MgFormat.R8G8B8A8_UINT:
 				//case SurfaceFormat.Color:
 				glInternalFormat = PixelInternalFormat.Rgba8ui;
-				glFormat = PixelFormat.Rgba;
+				glFormat = PixelFormat.RgbaInteger;
 				glType = PixelType.UnsignedByte;
 				break;
 			case MgFormat.R8G8B8A8_SRGB:
@@ -163,13 +163,13 @@ namespace Magnesium.OpenGL
 			case MgFormat.R16G16_UINT:
 				//case SurfaceFormat.Rg32:
 				glInternalFormat = PixelInternalFormat.Rg16ui;
-				glFormat = PixelFormat.Rg;
+				glFormat = PixelFormat.RgInteger;
 				glType = PixelType.UnsignedShort;
 				break;
 			case MgFormat.R16G16B16A16_UINT:
 				//case SurfaceFormat.Rgba64:
 				glInternalFormat = PixelInternalFormat.Rgba16ui;
-				glFormat = PixelFormat.Rgba;
+				glFormat = PixelFormat.RgbaInteger;
 				glType = PixelType.UnsignedShort;
 				break;
 			case MgFormat.A2B10G10R10_UINT_PACK32:

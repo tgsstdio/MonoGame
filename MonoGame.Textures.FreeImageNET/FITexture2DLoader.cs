@@ -53,6 +53,7 @@ namespace MonoGame.Textures.FreeImageNET
 		public MgBaseTexture Load (AssetIdentifier assetId)
 		{
 			FIBITMAP dib = new FIBITMAP();
+			FIBITMAP rgba = new FIBITMAP();
 			try
 			{
 				using (var fs = mContentStreamer.LoadContent (assetId, new []{".png"}))
@@ -78,6 +79,17 @@ namespace MonoGame.Textures.FreeImageNET
 
 					var formatType = GetFormatType(bpp, imageType, colorType);
 
+					var src = FreeImage.GetBits(dib);
+					if (formatType == MgFormat.R8G8B8_UINT)
+					{
+						rgba = FreeImage.ConvertTo32Bits(dib);
+						src = FreeImage.GetBits(rgba);
+						formatType = MgFormat.R8G8B8A8_UINT;
+						size = FreeImage.GetDIBSize(rgba);
+						bpp = FreeImage.GetBPP(rgba);
+						colorType = FreeImage.GetColorType(rgba);
+					}
+
 					// staging buffer here
 					var imageInfo = new MgImageSource
 					{
@@ -97,7 +109,6 @@ namespace MonoGame.Textures.FreeImageNET
 						Size = size,					
 					};
 
-					var src = FreeImage.GetBits(dib);
 
 					byte[] imageData = new byte[size];
 					Marshal.Copy(src, imageData, 0, (int)size);
@@ -129,7 +140,7 @@ namespace MonoGame.Textures.FreeImageNET
 					var result = mPartition.Device.CreateImageView(viewCreateInfo, null, out view);
 					Debug.Assert(result == Result.SUCCESS);
 
-					// For best compatibility and to keep the default wrap mode of XNA, only set ClampToEdge if either
+						// For best compatibility and to keep the default wrap mode of XNA, only set ClampToEdge if either
 					// dimension is not a power of two.
 					var addressMode = MgSamplerAddressMode.REPEAT;
 					if (((width & (width - 1)) != 0) || ((height & (height - 1)) != 0))
@@ -172,6 +183,7 @@ namespace MonoGame.Textures.FreeImageNET
 			}
 			finally
 			{
+				FreeImage.UnloadEx (ref rgba);
 				FreeImage.UnloadEx (ref dib);
 			}
 		}

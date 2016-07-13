@@ -1,5 +1,7 @@
 ﻿using System;
 using Magnesium;
+using System.Diagnostics;
+using OpenTK.Graphics.OpenGL;
 
 namespace Magnesium.OpenGL
 {
@@ -261,7 +263,10 @@ namespace Magnesium.OpenGL
 
 		public void SetDefault()
 		{			
-
+			{
+				var error = GL.GetError ();
+				Debug.WriteLineIf (error != ErrorCode.NoError, "SetDefault (BEFORE) : " + error);
+			}
 
 			const int NO_OF_COLOR_ATTACHMENTS = 4;
 			PastColorBlend = mBlend.Initialize (NO_OF_COLOR_ATTACHMENTS);
@@ -276,6 +281,11 @@ namespace Magnesium.OpenGL
 			};
 
 			PastRasterization = mRaster.Initialize ();
+
+			{
+				var error = GL.GetError ();
+				Debug.WriteLineIf (error != ErrorCode.NoError, "SetDefault (AFTER) : " + error);
+			}
 		}
 
 		private static bool ChangesFoundInRasterization(

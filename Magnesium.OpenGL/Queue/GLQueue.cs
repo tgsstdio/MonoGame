@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using OpenTK.Graphics.OpenGL;
 
 namespace Magnesium.OpenGL
 {

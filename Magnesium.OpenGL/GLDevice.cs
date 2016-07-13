@@ -74,8 +74,10 @@ namespace Magnesium.OpenGL
 				throw new ArgumentException ("buffer");
 			}
 
-			pMemoryRequirements = new MgMemoryRequirements ();
-			pMemoryRequirements.MemoryTypeBits = internalBuffer.BufferType.GetMask();
+			pMemoryRequirements = new MgMemoryRequirements {
+				Size = internalBuffer.RequestedSize,
+				MemoryTypeBits = internalBuffer.BufferType.GetMask (),
+			};
 		}
 
 		internal static int CalculateMipLevels(int width, int height = 0, int depth = 0)
@@ -514,8 +516,7 @@ namespace Magnesium.OpenGL
 			}
 
 			// ARB_texture_storage
-			int textureId;
-			GL.GenTextures(1, out textureId);
+			int[] textureId = new int[1];
 
 			int width = (int) pCreateInfo.Extent.Width;
 			int height = (int) pCreateInfo.Extent.Height;
@@ -529,19 +530,22 @@ namespace Magnesium.OpenGL
 			switch (pCreateInfo.ImageType)
 			{
 			case MgImageType.TYPE_1D:
-				GL.Ext.TextureStorage1D (textureId, (ExtDirectStateAccess)TextureTarget1d.Texture1D, levels, internalFormat, width);
+				GL.CreateTextures (TextureTarget.Texture1D, 1, textureId);
+				GL.Ext.TextureStorage1D (textureId[0], (ExtDirectStateAccess)All.Texture1D, levels, internalFormat, width);
 				break;
 			case MgImageType.TYPE_2D:
-				GL.Ext.TextureStorage2D (textureId, (ExtDirectStateAccess)TextureTarget2d.Texture2D, levels, internalFormat, width, height);
+				GL.CreateTextures (TextureTarget.Texture2D, 1, textureId);
+				GL.Ext.TextureStorage2D (textureId[0], (ExtDirectStateAccess)All.Texture2D, levels, internalFormat, width, height);
 				break;
 			case MgImageType.TYPE_3D:
-				GL.Ext.TextureStorage3D (textureId, (ExtDirectStateAccess)TextureTarget3d.Texture3D, levels, internalFormat, width, height, depth);
+				GL.CreateTextures (TextureTarget.Texture3D, 1, textureId);
+				GL.Ext.TextureStorage3D (textureId[0], (ExtDirectStateAccess)All.Texture3D, levels, internalFormat, width, height, depth);
 				break;
 			default:				
 				throw new NotSupportedException ();
 			}
 
-			pImage = new GLImage(textureId, imageType, pCreateInfo.Format, internalFormat, width, height, depth, levels, arrayLayers);
+			pImage = new GLImage(textureId[0], imageType, pCreateInfo.Format, internalFormat, width, height, depth, levels, arrayLayers);
 			return Result.SUCCESS;
 		}
 
@@ -614,10 +618,14 @@ namespace Magnesium.OpenGL
 			PixelType glType;
 			pCreateInfo.Format.GetGLFormat(true, out glInternalFormat, out glFormat, out glType);
 
-			int textureId;
-			GL.GenTextures(1, out textureId);
-
 			var textureTarget = GetGLTextureTarget (pCreateInfo.ViewType);
+
+			int textureId = GL.GenTexture();
+
+			{
+				var error = GL.GetError ();
+				Debug.WriteLineIf (error != ErrorCode.NoError, "GL.CreateTextures (AFTER) : " + error);
+			}
 
 			GL.TextureView​(
 				textureId,
@@ -629,7 +637,18 @@ namespace Magnesium.OpenGL
 				(int) pCreateInfo.SubresourceRange.BaseArrayLayer​,
 				(int) pCreateInfo.SubresourceRange.LayerCount​);
 
+			{
+				var error = GL.GetError ();
+				Debug.WriteLineIf (error != ErrorCode.NoError, "GL.TextureView (AFTER) : " + error);
+			}
+
 			pView = new GLImageView (textureId); 
+
+			{
+				var error = GL.GetError ();
+				Debug.WriteLineIf (error != ErrorCode.NoError, "new GLImageView (AFTER) : " + error);
+			}
+
 			return Result.SUCCESS;
 		}
 
@@ -640,7 +659,7 @@ namespace Magnesium.OpenGL
 
 		//private List<GLShaderModule> mShaderModules = new List<GLShaderModule>();
 		public Result CreateShaderModule (MgShaderModuleCreateInfo pCreateInfo, MgAllocationCallbacks allocator, out IMgShaderModule pShaderModule)
-		{
+		{			
 			var result = new GLShaderModule { 
 				Info = pCreateInfo,
 				ShaderId = null,
@@ -749,15 +768,36 @@ namespace Magnesium.OpenGL
 
 				var programId = CompileShaderModules (info);
 
+				/// MAKE SURE ACTIVE UNIFORMS ARE AVAILABLE
+				int noOfActiveUniforms;
+				GL.GetProgram (programId, GetProgramParameterName.ActiveUniforms, out noOfActiveUniforms);
+
+				{
+					var error = GL.GetError ();
+					Debug.WriteLineIf (error != ErrorCode.NoError, "GetUniform (BEFORE) : " + error);
+				}
+
 				var uniqueLocations = new SortedDictionary<int, GLVariableBind> ();
 				foreach (var binding in layout.Bindings)
 				{
-					int locationQuery;
-					GL.Ext.GetUniform (programId, binding.Location, out locationQuery);
+					bool uniformFound = false;
+
+					if (noOfActiveUniforms > 0)
+					{
+						int locationQuery;
+						GL.Ext.GetUniform(programId, binding.Location, out locationQuery);
+						uniformFound = (locationQuery != -1);
+
+						{
+							var error = GL.GetError ();
+							Debug.WriteLineIf (error != ErrorCode.NoError, "GetUniform (END) : " + binding.Location + " "  + error);
+						}
+					}
+
 					// ONLY ACTIVE UNIFORMS
 					// FIXME : input attachment
 					var bind = new GLVariableBind{
-						IsActive = (locationQuery != -1), 
+						IsActive = (noOfActiveUniforms > 0 && uniformFound), 
 						Location = binding.Location,
 						DescriptorType = binding.DescriptorType };
 
@@ -1044,6 +1084,11 @@ namespace Magnesium.OpenGL
 				throw new InvalidCastException ("pAllocateInfo.CommandPool");
 			}
 
+			{
+				var error = GL.GetError ();
+				Debug.WriteLineIf (error != ErrorCode.NoError, "AllocateCommandBuffers (BEFORE) : " + error);
+			}
+
 			for (uint i = 0; i < pAllocateInfo.CommandBufferCount; ++i)
 			{
 				// TODO : for now
@@ -1051,6 +1096,12 @@ namespace Magnesium.OpenGL
 				cmdPool.Buffers.Add (buffer);
 				pCommandBuffers [i] = buffer;
 			}
+
+			{
+				var error = GL.GetError ();
+				Debug.WriteLineIf (error != ErrorCode.NoError, "AllocateCommandBuffers (BEFORE) : " + error);
+			}
+
 			return Result.SUCCESS;
 		}
 		public void FreeCommandBuffers (IMgCommandPool commandPool, IMgCommandBuffer[] pCommandBuffers)

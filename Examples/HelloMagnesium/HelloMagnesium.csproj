@@ -37,7 +37,7 @@
       <HintPath>..\..\packages\DryIoc.dll.2.6.2\lib\net45\DryIoc.dll</HintPath>
     </Reference>
     <Reference Include="OpenTK">
-      <HintPath>..\..\packages\OpenTK.1.1.2225.0\lib\net20\OpenTK.dll</HintPath>
+      <HintPath>..\..\packages\OpenTK.Next.1.2.2336.6514-pre\lib\net20\OpenTK.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -57,6 +57,7 @@
     <Compile Include="MgPresentationLayer.cs" />
     <Compile Include="IMgPresentationLayer.cs" />
     <Compile Include="Win32PresentationSurface.cs" />
+    <Compile Include="VkBuffer.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -107,13 +108,13 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="OpenTK.dll.config" />
     <None Include="Content\80000000\80000002.vs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Content\80000000\80000003.fs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="OpenTK.dll.config" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\80000000\80000001.png">

@@ -1,6 +1,9 @@
 # BirdNest.MonoGame
 
 All in one compilation using Portable Core Libraries for cross-platform (and no preprocessors)
+Magnesium graphical interface (i.e. Vulkan) overhaul to two implementation
+ - OpenGL backend
+ - (TODO) Vulkan 
 
 Using PCL profile 259
  - .NET Framework 4.5 or later

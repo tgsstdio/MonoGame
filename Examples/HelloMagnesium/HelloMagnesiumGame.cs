@@ -7,6 +7,7 @@ using System;
 using System.Runtime.InteropServices;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Graphics;
+using OpenTK.Graphics.OpenGL;
 
 namespace HelloMagnesium
 {
@@ -167,6 +168,11 @@ namespace HelloMagnesium
 
 		void GenerateEffectPipeline ()
 		{
+			{
+				var error = GL.GetError ();
+				Debug.WriteLineIf (error != ErrorCode.NoError, "GenerateEffectPipeline (PREVIOUS) : " + error);
+			}
+
 			// Create effect / pass / sub pass / pipeline tree
 			using (var vs = mContent.LoadContent (new AssetIdentifier {AssetId = 0x80000002}, new[] {".vs"}))
 			using (var fs = mContent.LoadContent (new AssetIdentifier {AssetId = 0x80000003}, new[] {".fs"}))
@@ -304,6 +310,11 @@ namespace HelloMagnesium
 				vertSM.DestroyShaderModule (mPartition.Device, null);
 				fragSM.DestroyShaderModule (mPartition.Device, null);
 			}
+
+			{
+				var error = GL.GetError ();
+				Debug.WriteLineIf (error != ErrorCode.NoError, "GenerateEffectPipeline (END) : " + error);
+			}
 		}
 
 		static IMgRenderPass SetupRenderPass(IMgDevice device, MgFormat colorformat, MgFormat depthFormat)
@@ -408,283 +419,6 @@ namespace HelloMagnesium
 			Marshal.Copy (data, srcStartIndex, dest, length);
 		}
 
-		class VkBuffer
-		{
-			public VkBuffer(IMgThreadPartition partition, MgBufferUsageFlagBits usage, uint bufferSize)
-			{
-				var memoryPropertyFlags = MgMemoryPropertyFlagBits.HOST_VISIBLE_BIT;
-
-				var bufferCreateInfo = new MgBufferCreateInfo {
-					Usage = usage,
-					Size = bufferSize,
-				};
-
-				IMgBuffer buffer;
-
-				var device = partition.Device;
-
-				var result = device.CreateBuffer(bufferCreateInfo, null, out buffer);
-				Debug.Assert (result == Result.SUCCESS);
-
-				MgMemoryRequirements memReqs;
-				device.GetBufferMemoryRequirements(buffer, out memReqs);
-
-				uint memoryTypeIndex;
-				partition.GetMemoryType (memReqs.MemoryTypeBits, memoryPropertyFlags, out memoryTypeIndex);
-
-				var memAlloc = new MgMemoryAllocateInfo
-				{
-					MemoryTypeIndex = memoryTypeIndex,
-					AllocationSize = memReqs.Size,
-				};
-
-				IMgDeviceMemory deviceMemory;
-				result = device.AllocateMemory(memAlloc, null, out deviceMemory);
-				Debug.Assert (result == Result.SUCCESS);
-
-				buffer.BindBufferMemory(device, deviceMemory, 0);
-
-				BufferSize = bufferSize;
-				Buffer = buffer;
-				DeviceMemory = deviceMemory;
-			}
-
-			public void Destroy(IMgDevice device, MgAllocationCallbacks allocator)
-			{
-				Buffer.DestroyBuffer (device, allocator);
-				DeviceMemory.FreeMemory (device, allocator);
-			}
-
-			public uint BufferSize { get; private set;	}
-			public IMgBuffer Buffer { get; private set; }
-			public IMgDeviceMemory DeviceMemory { get; private set; }
-
-			/// <summary>
-			/// Map memory, then copies data then unmaps device memory
-			/// </summary>
-			/// <returns>The data.</returns>
-			/// <param name="device">Device.</param>
-			/// <param name="sizeInBytes">Size in bytes.</param>
-			/// <param name="data">Data.</param>
-			/// <param name="srcStartIndex">Source start index.</param>
-			/// <param name="elementCount">Element count.</param>
-			public Result SetData(IMgDevice device, uint sizeInBytes, float[] data, int srcStartIndex, int elementCount)
-			{
-				if (data == null)
-					return Result.SUCCESS;
-
-				const int stride = sizeof(float);
-				if (sizeInBytes < (stride * elementCount))
-				{
-					throw new ArgumentOutOfRangeException ("sizeInBytes"); 
-				}
-
-				IntPtr dest;
-				var result = DeviceMemory.MapMemory (device, 0, sizeInBytes, 0, out dest);
-				Debug.Assert (result == Result.SUCCESS);
-
-				Marshal.Copy (data, srcStartIndex, dest, elementCount);
-
-				return Result.SUCCESS;
-			}
-
-			/// <summary>
-			/// Map memory, then copies data then unmaps device memory
-			/// </summary>
-			/// <returns>The data.</returns>
-			/// <param name="device">Device.</param>
-			/// <param name="sizeInBytes">Size in bytes.</param>
-			/// <param name="data">Data.</param>
-			/// <param name="startIndex">Start index.</param>
-			/// <param name="elementCount">Element count.</param>
-			public Result SetData(IMgDevice device, uint sizeInBytes, int[] data, int startIndex, int elementCount)
-			{
-				if (data == null)
-					return Result.SUCCESS;
-
-				const int stride = sizeof(int);
-				if (sizeInBytes < (stride * elementCount))
-				{
-					throw new ArgumentOutOfRangeException ("sizeInBytes"); 
-				}
-
-				IntPtr dest;
-				var result = DeviceMemory.MapMemory (device, 0, sizeInBytes, 0, out dest);
-				Debug.Assert (result == Result.SUCCESS);
-
-				Marshal.Copy (data, startIndex, dest, elementCount);
-
-				DeviceMemory.UnmapMemory (device);
-
-				return Result.SUCCESS;
-			}
-
-			/// <summary>
-			/// Map memory, then copies data then unmaps device memory
-			/// </summary>
-			/// <returns>The data.</returns>
-			/// <param name="device">Device.</param>
-			/// <param name="sizeInBytes">Size in bytes.</param>
-			/// <param name="data">Data.</param>
-			/// <param name="startIndex">Start index.</param>
-			/// <param name="elementCount">Element count.</param>
-			public Result SetData(IMgDevice device, uint sizeInBytes, double[] data, int startIndex, int elementCount)
-			{
-				if (data == null)
-					return Result.SUCCESS;
-
-				const int stride = sizeof(double);
-				if (sizeInBytes < (stride * elementCount))
-				{
-					throw new ArgumentOutOfRangeException ("sizeInBytes"); 
-				}
-
-				IntPtr dest;
-				var result = DeviceMemory.MapMemory (device, 0, sizeInBytes, 0, out dest);
-				Debug.Assert (result == Result.SUCCESS);
-
-				Marshal.Copy (data, startIndex, dest, elementCount);
-
-				DeviceMemory.UnmapMemory (device);
-
-				return Result.SUCCESS;
-			}
-
-			/// <summary>
-			/// Map memory, then copies data then unmaps device memory
-			/// </summary>
-			/// <returns>The data.</returns>
-			/// <param name="device">Device.</param>
-			/// <param name="sizeInBytes">Size in bytes.</param>
-			/// <param name="data">Data.</param>
-			/// <param name="startIndex">Start index.</param>
-			/// <param name="elementCount">Element count.</param>
-			public Result SetData(IMgDevice device, uint sizeInBytes, IntPtr[] data, int startIndex, int elementCount)
-			{
-				if (data == null)
-					return Result.SUCCESS;
-
-				int stride = Marshal.SizeOf(typeof(IntPtr));
-				if (sizeInBytes < (stride * elementCount))
-				{
-					throw new ArgumentOutOfRangeException ("sizeInBytes"); 
-				}
-
-				IntPtr dest;
-				var result = DeviceMemory.MapMemory (device, 0, sizeInBytes, 0, out dest);
-				Debug.Assert (result == Result.SUCCESS);
-
-				Marshal.Copy (data, startIndex, dest, elementCount);
-
-				DeviceMemory.UnmapMemory (device);
-
-				return Result.SUCCESS;
-			}
-
-			/// <summary>
-			/// Map memory, then copies data then unmaps device memory
-			/// </summary>
-			/// <returns>The data.</returns>
-			/// <param name="device">Device.</param>
-			/// <param name="sizeInBytes">Size in bytes.</param>
-			/// <param name="data">Data.</param>
-			/// <param name="startIndex">Start index.</param>
-			/// <param name="elementCount">Element count.</param>
-			public Result SetData(IMgDevice device, uint sizeInBytes, byte[] data, int startIndex, int elementCount)
-			{
-				if (data == null)
-					return Result.SUCCESS;
-
-				const int stride = sizeof(byte);
-				if (sizeInBytes < (stride * elementCount))
-				{
-					throw new ArgumentOutOfRangeException ("sizeInBytes"); 
-				}
-
-				IntPtr dest;
-				var result = DeviceMemory.MapMemory (device, 0, sizeInBytes, 0, out dest);
-				Debug.Assert (result == Result.SUCCESS);
-
-				Marshal.Copy (data, startIndex, dest, elementCount);
-
-				DeviceMemory.UnmapMemory (device);
-
-				return Result.SUCCESS;
-			}
-
-			/// <summary>
-			/// Map memory, then copies data then unmaps device memory
-			/// </summary>
-			/// <returns>The data.</returns>
-			/// <param name="device">Device.</param>
-			/// <param name="sizeInBytes">Size in bytes.</param>
-			/// <param name="data">Data.</param>
-			/// <param name="startIndex">Start index.</param>
-			/// <param name="elementCount">Element count.</param>
-			public Result SetData(IMgDevice device, uint sizeInBytes, short[] data, int startIndex, int elementCount)
-			{
-				if (data == null)
-					return Result.SUCCESS;
-
-				const int stride = sizeof(short);
-				if (sizeInBytes < (stride * elementCount))
-				{
-					throw new ArgumentOutOfRangeException ("sizeInBytes"); 
-				}
-
-				IntPtr dest;
-				var result = DeviceMemory.MapMemory (device, 0, sizeInBytes, 0, out dest);
-				Debug.Assert (result == Result.SUCCESS);
-
-				Marshal.Copy (data, startIndex, dest, elementCount);
-
-				DeviceMemory.UnmapMemory (device);
-
-				return Result.SUCCESS;
-			}
-
-			/// <summary>
-			/// Map memory, then copies data then unmaps device memory
-			/// </summary>
-			/// <returns>The data.</returns>
-			/// <param name="device">Device.</param>
-			/// <param name="sizeInBytes">Size in bytes.</param>
-			/// <param name="data">Data.</param>
-			/// <param name="startIndex">Start index.</param>
-			/// <param name="elementCount">Element count.</param>
-			/// <typeparam name="TData">The 1st type parameter.</typeparam>
-			public Result SetData<TData>(IMgDevice device, uint sizeInBytes, TData[] data, int startIndex, int elementCount)
-				where TData : struct
-			{
-				if (data == null)
-					return Result.SUCCESS;
-
-				int stride = Marshal.SizeOf(typeof(TData));
-				if (sizeInBytes < (stride * elementCount))
-				{
-					throw new ArgumentOutOfRangeException ("sizeInBytes"); 
-				}
-
-				IntPtr dest;
-				var result = DeviceMemory.MapMemory (device, 0, sizeInBytes, 0, out dest);
-				Debug.Assert (result == Result.SUCCESS);
-
-
-				// Copy the struct to unmanaged memory.	
-				int offset = 0;
-				for(int i = 0; i < elementCount; ++i)
-				{
-					IntPtr localDest = IntPtr.Add(dest, offset);
-					Marshal.StructureToPtr(data[i + startIndex], localDest, false);
-					offset += stride;
-				}
-
-				DeviceMemory.UnmapMemory (device);
-
-				return Result.SUCCESS;
-			}
-		}
-
 		private MgBaseTexture mBackground;
 		/// <summary>
 		/// LoadContent will be called once per game and is the place to load
@@ -692,20 +426,53 @@ namespace HelloMagnesium
 		/// </summary>
 		public override void LoadContent()
 		{
+			{
+				var error = GL.GetError ();
+				Debug.WriteLineIf (error != ErrorCode.NoError, "LoadContent (BEFORE) : " + error);
+			}
+
 			mBackground = mTex2D.Load (new AssetIdentifier { AssetId = 0x80000001 });
+
+			{
+				var error = GL.GetError ();
+				Debug.WriteLineIf (error != ErrorCode.NoError, "mTex2D.Load (AFTER) : " + error);
+			}
 
 			// create vertex buffer set of quad
 			// vertex buffer of vertices, tex2d
 			// instance buffer 
 
 			const uint NO_OF_VERTICES = 4;
+
 			var vertexBuf = new VkBuffer (mPartition, MgBufferUsageFlagBits.VERTEX_BUFFER_BIT, (5 * sizeof(float)) * NO_OF_VERTICES);
-			// TODO : COPY DATA HERE
+
+			float[] vertexData = {
+				-1f, -1f, 0,
+				1.0f, 1.0f,
+
+				0.9f, -1f, 0,
+				0.9f, 0.9f,
+
+				1f, 1f, 0,
+				0.9f, 0.9f,
+
+				-1f, 0.9f, 0,
+				0.9f, 0.9f,
+			};
+
+			vertexBuf.SetData(mPartition.Device, vertexBuf.BufferSize, vertexData, 0, vertexData.Length);
+
 
 			// create index buffer of quad
 			const int NO_OF_INDICES = 6;
 			var indexBuf = new VkBuffer (mPartition, MgBufferUsageFlagBits.INDEX_BUFFER_BIT, sizeof(Int32) * NO_OF_INDICES);
-			// TODO : COPY DATA HERE
+
+			uint[] elementData = {
+				0, 1, 2,
+				2, 3, 0,
+			};
+
+			indexBuf.SetData(mPartition.Device, indexBuf.BufferSize, elementData, 0, elementData.Length);
 
 			// create command buffer for quad
 
@@ -717,8 +484,8 @@ namespace HelloMagnesium
 				CommandPool = mPartition.CommandPool,
 				Level = MgCommandBufferLevel.PRIMARY
 			};
-			var error = mPartition.Device.AllocateCommandBuffers (allocateInfo, pCommandBuffers);
-			Debug.Assert (error == Result.SUCCESS);
+			var result = mPartition.Device.AllocateCommandBuffers (allocateInfo, pCommandBuffers);
+			Debug.Assert (result == Result.SUCCESS);
 			Bank.CommandBuffers = pCommandBuffers;
 
 			// NEED TO CREATE A COMMANDBUFFER FOR EVERY FRAMEBUFFER SO THE RIGHT FRAMEBUFFER 
@@ -779,8 +546,8 @@ namespace HelloMagnesium
 					Bank.SetLayout,
 				},
 			};
-			error = mPartition.Device.AllocateDescriptorSets (dsAllocateInfo, out descriptorSets);
-			Debug.Assert (error == Result.SUCCESS);
+			result = mPartition.Device.AllocateDescriptorSets (dsAllocateInfo, out descriptorSets);
+			Debug.Assert (result == Result.SUCCESS);
 
 			var writes = new [] {
 //				new MgWriteDescriptorSet
