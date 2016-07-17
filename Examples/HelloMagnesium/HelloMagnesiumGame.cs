@@ -8,6 +8,7 @@ using System.Runtime.InteropServices;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Graphics;
 using OpenTK.Graphics.OpenGL;
+using System.Collections.Generic;
 
 namespace HelloMagnesium
 {
@@ -20,72 +21,9 @@ namespace HelloMagnesium
 		private IPresentationParameters mPresentation;
 		private IContentStreamer mContent;
 
-		private class GraphicsBank
-		{
-			public IMgSemaphore RenderComplete {
-				get;
-				set;
-			}
+		private readonly GraphicsBank Bank = new GraphicsBank ();
 
-			public IMgSemaphore PresentComplete {
-				get;
-				set;
-			}
-
-			public IMgCommandBuffer[] CommandBuffers {
-				get;
-				set;
-			}
-
-			public IMgPipeline[] GraphicsPipelines {
-				get;
-				set;
-			}
-
-			public IMgPipelineLayout PipelineLayout {
-				get;
-				set;
-			}
-
-			public IMgDescriptorSetLayout SetLayout {
-				get;
-				set;
-			}
-
-			public uint Height {
-				get;
-				set;
-			}
-
-			public uint Width {
-				get;
-				set;
-			}
-
-			public MgRect2D CurrentScissor {
-				get;
-				set;
-			}
-
-			public MgViewport CurrentViewport {
-				get;
-				set;
-			}
-
-			public IMgFramebuffer[] FrameBuffers {
-				get;
-				set;
-			}
-
-			public IMgRenderPass RenderPass {
-				get;
-				set;
-			}
-		}
-
-		private GraphicsBank Bank = new GraphicsBank ();
-
-		IMgPresentationSurface mPresentationLayer;
+		readonly IMgPresentationLayer mPresentationLayer;
 
 		public HelloMagnesiumGame(
 			IGraphicsDeviceManager manager,
@@ -94,7 +32,7 @@ namespace HelloMagnesium
 			IMgDepthStencilBuffer depthStencil,
 			IPresentationParameters presentation,
 			IMgSwapchainCollection swapChain,
-			IMgPresentationSurface presentationLayer,
+			IMgPresentationLayer presentationLayer,
 			IContentStreamer content
 		)
 		{
@@ -162,6 +100,17 @@ namespace HelloMagnesium
 			err = mPartition.Device.CreateSemaphore(semaphoreCreateInfo, null, out renderComplete);
 			Debug.Assert(err == Result.SUCCESS);
 			Bank.RenderComplete = renderComplete;
+
+			IMgCommandBuffer[] buffers = new IMgCommandBuffer[2];
+			MgCommandBufferAllocateInfo pAllocateInfo = new MgCommandBufferAllocateInfo {
+				CommandBufferCount = 2,
+				CommandPool = mPartition.CommandPool,
+				Level = MgCommandBufferLevel.PRIMARY,
+			};
+			mPartition.Device.AllocateCommandBuffers (pAllocateInfo, buffers);
+
+			Bank.PrePresentBarrierCmd = buffers [0];
+			Bank.PostPresentBarrierCmd = buffers [1];
 
 			GenerateEffectPipeline ();
 		}
@@ -413,12 +362,6 @@ namespace HelloMagnesium
 			return frameBuffers;
 		}
 
-		static void CopyIntArray (IntPtr dest, int[] data, int elementCount, int srcStartIndex)
-		{
-			int length = sizeof(int) * elementCount;
-			Marshal.Copy (data, srcStartIndex, dest, length);
-		}
-
 		private MgBaseTexture mBackground;
 		/// <summary>
 		/// LoadContent will be called once per game and is the place to load
@@ -431,7 +374,7 @@ namespace HelloMagnesium
 				Debug.WriteLineIf (error != ErrorCode.NoError, "LoadContent (BEFORE) : " + error);
 			}
 
-			mBackground = mTex2D.Load (new AssetIdentifier { AssetId = 0x80000001 });
+			//mBackground = mTex2D.Load (new AssetIdentifier { AssetId = 0x80000001 });
 
 			{
 				var error = GL.GetError ();
@@ -488,6 +431,10 @@ namespace HelloMagnesium
 			Debug.Assert (result == Result.SUCCESS);
 			Bank.CommandBuffers = pCommandBuffers;
 
+			Bank.Renderer = new GraphRenderer ();
+
+			var frameInstances = new List<SubmitInfoGraphNode> ();
+
 			// NEED TO CREATE A COMMANDBUFFER FOR EVERY FRAMEBUFFER SO THE RIGHT FRAMEBUFFER 
 			// IS TARGETED FOR THE DRAW
 			for (uint i = 0; i < NO_OF_FRAMEBUFFERS; ++i)
@@ -532,7 +479,20 @@ namespace HelloMagnesium
 				cmdBuf.CmdEndRenderPass ();
 
 				cmdBuf.EndCommandBuffer ();
+
+				var node = new SubmitInfoGraphNode {
+					Submit = new MgSubmitInfo
+					{
+						CommandBuffers = new [] {cmdBuf},
+						SignalSemaphores = new [] {Bank.RenderComplete},
+					},
+					Fence = null,
+				};
+				frameInstances.Add (node);
 			}
+
+			var graphNode = new PrecompiledGraphNode (frameInstances.ToArray());
+			Bank.Renderer.Renderables.Add (graphNode);
 
 			// create descriptor set for 
 				// background image
@@ -549,7 +509,7 @@ namespace HelloMagnesium
 			result = mPartition.Device.AllocateDescriptorSets (dsAllocateInfo, out descriptorSets);
 			Debug.Assert (result == Result.SUCCESS);
 
-			var writes = new [] {
+			var writes = new MgWriteDescriptorSet [] {
 //				new MgWriteDescriptorSet
 //				{
 //					DstSet = descriptorSets[0],
@@ -566,22 +526,22 @@ namespace HelloMagnesium
 //						}
 //					}
 //				},
-				new MgWriteDescriptorSet
-				{
-					DstSet = descriptorSets[0],
-					DescriptorType = MgDescriptorType.SAMPLED_IMAGE,
-					DstBinding = 0,
-					DescriptorCount = 1,
-					ImageInfo = new []
-					{
-						new MgDescriptorImageInfo
-						{
-							Sampler = mBackground.Sampler,
-							ImageView = mBackground.View,
-							ImageLayout = MgImageLayout.GENERAL,
-						},
-					},
-				}
+//				new MgWriteDescriptorSet
+//				{
+//					DstSet = descriptorSets[0],
+//					DescriptorType = MgDescriptorType.SAMPLED_IMAGE,
+//					DstBinding = 0,
+//					DescriptorCount = 1,
+//					ImageInfo = new []
+//					{
+//						new MgDescriptorImageInfo
+//						{
+//							Sampler = mBackground.Sampler,
+//							ImageView = mBackground.View,
+//							ImageLayout = MgImageLayout.GENERAL,
+//						},
+//					},
+//				}
 			};
 			MgCopyDescriptorSet[] copies = null;
 			mPartition.Device.UpdateDescriptorSets (writes, copies);	
@@ -620,9 +580,12 @@ namespace HelloMagnesium
 
 
 		public override void Draw(GameTime gameTime)
-		{
+		{			
+			uint currentFrame = mPresentationLayer.BeginDraw (Bank.PostPresentBarrierCmd, Bank.PresentComplete);
 
 
+
+			mPresentationLayer.EndDraw (currentFrame, Bank.PrePresentBarrierCmd, null);			
 			// submit command buffer to queue
 			base.Draw (gameTime);	
 		}

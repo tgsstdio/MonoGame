@@ -182,7 +182,8 @@ namespace Magnesium.OpenGL
 							Debug.WriteLineIf (error != ErrorCode.NoError, "PixelStore BEGIN : " + error);
 						}
 
-
+						// SEEMS to behave like glTexImage2D
+						// https://www.opengl.org/sdk/docs/man/html/glTexImage2D.xhtml
 						GL.Ext.TextureSubImage2D (
 							inst.TextureId,
 							TextureTarget.Texture2D,

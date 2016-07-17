@@ -1,9 +1,9 @@
 using Magnesium;
 using System;
 
-namespace NewFences
+namespace HelloMagnesium
 {
-	public interface IQueueRenderable
+	public interface IRenderGraphNode
 	{
 		int DrawOrder { get; }
 		bool Visible { get; }
@@ -11,7 +11,7 @@ namespace NewFences
 		event EventHandler<EventArgs> DrawOrderChanged;
 		event EventHandler<EventArgs> VisibleChanged;
 
-		void Render (IMgQueue queue, uint frameIndex);
+		void Render (QueueArgument arg);
 	}
 }
 

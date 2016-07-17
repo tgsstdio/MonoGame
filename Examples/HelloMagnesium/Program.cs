@@ -116,7 +116,8 @@ namespace HelloMagnesium
 					container.Register<IMgImageTools, MgImageTools>(Reuse.Singleton);
 
 					container.Register<IMgDepthStencilBuffer, HelloDepthStencilBuffer>(Reuse.Singleton);
-					container.Register<IMgSwapchainCollection, HelloWindowSwapChain>(Reuse.Singleton);
+					container.Register<IMgSwapchainCollection, HelloMgSwapchainCollection>(Reuse.Singleton);
+					container.Register<IMgPresentationLayer, MgPresentationLayer>(Reuse.Singleton);
 
 					// MAGNESIUM TEXTURES 
 					container.Register<IMgBaseTextureLoader, FITexture2DLoader>(Reuse.Singleton);
@@ -128,8 +129,8 @@ namespace HelloMagnesium
 					container.Register<ITitleContainer, DesktopGLTitleContainer>(Reuse.Singleton);
 
 					using (var scope = container.OpenScope ())
-					{
-						using (var window = new NativeWindow())
+					{					
+						using (var window = new NativeWindow())						
 						using (var driver = container.Resolve<IMgDriver>())								
 						{							
 							container.RegisterInstance<INativeWindow>(window);

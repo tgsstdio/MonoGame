@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using System;
+using OpenTK.Graphics.OpenGL;
+using System.Diagnostics;
 
 namespace Magnesium.OpenGL
 {
@@ -37,7 +39,12 @@ namespace Magnesium.OpenGL
 				}
 			}
 
+//			int[] arrays = new int[1];
+//			GL.CreateVertexArrays(1, arrays);
 			int vbo = mVBO.GenerateVBO ();
+//			Debug.Assert(GL.IsVertexArray(vbo));
+//			GL.DeleteVertexArray (vbo);
+
 			foreach (var attribute in pipeline.VertexInput.Attributes)
 			{	
 				var bufferId = bufferIds [attribute.Binding];
@@ -200,7 +207,7 @@ namespace Magnesium.OpenGL
 			var vertexArrays = new List<GLCmdVertexBufferObject> ();
 			if (repository == null || repository.VertexBuffers.Count == 0)
 			{
-				vertexArrays.Add (new GLCmdVertexBufferObject (0, 0, null, mVBO));
+				vertexArrays.Add (new GLCmdVertexBufferObject (0, 0, null, null));
 			}
 			return vertexArrays;
 		}

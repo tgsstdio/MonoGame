@@ -81,6 +81,9 @@ namespace Magnesium.OpenGL
 			case GLMemoryBufferType.INDEX:
 			case GLMemoryBufferType.VERTEX:
 				GL.DeleteBuffer (this.BufferId);
+
+
+
 				break;
 			case GLMemoryBufferType.INDIRECT:
 				break;				

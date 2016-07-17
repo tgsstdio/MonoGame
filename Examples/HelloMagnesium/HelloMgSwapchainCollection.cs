@@ -1,32 +1,38 @@
 ﻿using Magnesium;
+using Magnesium.OpenGL;
 
 namespace HelloMagnesium
 {
-	public class HelloWindowSwapChain : IMgSwapchainCollection
+	public class HelloMgSwapchainCollection : IMgSwapchainCollection
 	{
-		public HelloWindowSwapChain ()
+		public HelloMgSwapchainCollection ()
 		{
-			Buffers = new MgSwapchainBuffer[]{ };
+			Buffers = new MgSwapchainBuffer[]{ 
+				new MgSwapchainBuffer{
+					View = new GLNullImageView(),
+				},
+				new MgSwapchainBuffer{
+					View = new GLNullImageView(),
+				}
+			};
+			Swapchain = new GLSwapchainKHR (2);
 		}
 
 		#region IMgSwapchain implementation
 
 		public IMgSwapchainKHR Swapchain {
-			get {
-				throw new System.NotImplementedException ();
-			}
+			get;
+			private set;
 		}
 
 		public uint Width {
-			get {
-				throw new System.NotImplementedException ();
-			}
+			get;
+			private set;
 		}
 
 		public uint Height {
-			get {
-				throw new System.NotImplementedException ();
-			}
+			get;
+			private set;
 		}
 
 		public void Setup ()
@@ -36,7 +42,8 @@ namespace HelloMagnesium
 
 		public void Create (IMgCommandBuffer cmd, uint width, uint height)
 		{
-
+			Width = width;
+			Height = height;
 		}
 
 		public MgSwapchainBuffer[] Buffers {

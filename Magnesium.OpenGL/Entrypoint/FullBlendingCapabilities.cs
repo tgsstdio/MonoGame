@@ -1,6 +1,7 @@
 ﻿using OpenTK.Graphics.OpenGL;
 using Magnesium;
 using System;
+using System.Diagnostics;
 
 namespace Magnesium.OpenGL
 {
@@ -14,6 +15,14 @@ namespace Magnesium.OpenGL
 				GL.Enable (EnableCap.ColorLogicOp);
 			else 
 				GL.Disable (EnableCap.ColorLogicOp);
+
+			{
+				var error = GL.GetError ();
+				if (error != ErrorCode.NoError)
+				{
+					Debug.WriteLine ("EnableLogicOp : " + error);
+				}
+			}
 		}
 
 		private static LogicOp GetGLLogicOp(MgLogicOp logicOp)
@@ -61,6 +70,14 @@ namespace Magnesium.OpenGL
 		public void LogicOp (MgLogicOp logicOp)
 		{
 			GL.LogicOp (GetGLLogicOp (logicOp));
+
+			{
+				var error = GL.GetError ();
+				if (error != ErrorCode.NoError)
+				{
+					Debug.WriteLine ("LogicOp : " + error);
+				}
+			}
 		}
 
 		private static int GetColorAttachmentId(uint index)
@@ -176,6 +193,14 @@ namespace Magnesium.OpenGL
 
 			else
 				GL.Disable (IndexedEnableCap.Blend, GetColorAttachmentId(index));
+
+			{
+				var error = GL.GetError ();
+				if (error != ErrorCode.NoError)
+				{
+					Debug.WriteLine ("EnableBlending : " + error);
+				}
+			}
 		}
 
 		public void SetColorMask (uint index, MgColorComponentFlagBits colorMask)
@@ -234,6 +259,14 @@ namespace Magnesium.OpenGL
 				GetBlendFactorDest(dstColor), 
 				GetBlendFactorSrc(srcAlpha), 
 				GetBlendFactorDest(destAlpha));
+
+			{
+				var error = GL.GetError ();
+				if (error != ErrorCode.NoError)
+				{
+					Debug.WriteLine ("ApplyBlendSeparateFunction : " + error);
+				}
+			}
 		}
 
 		#endregion

@@ -25,6 +25,7 @@ namespace Magnesium.OpenGL
 			if (ObjectPtr != IntPtr.Zero)
 			{
 				GL.DeleteSync (ObjectPtr);
+				ObjectPtr = IntPtr.Zero;
 			}
 		}
 

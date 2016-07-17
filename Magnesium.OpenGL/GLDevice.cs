@@ -1012,6 +1012,17 @@ namespace Magnesium.OpenGL
 								var texHandle = GL.Arb.GetTextureSamplerHandle (
 									                 localView.TextureId,
 													 localSampler.SamplerId);
+//								var texHandle = 0U;
+//								var texHandle = GL.Arb.GetTextureHandle (
+//									localSampler.SamplerId);
+
+								{
+									var error = GL.GetError ();
+									if (error != ErrorCode.NoError)
+									{
+										Debug.WriteLine ("GL.Arb.GetTextureSamplerHandle " + error);
+									}
+								}
 
 								var imageDesc = internalBinding.ImageDesc;
 								imageDesc.Replace (texHandle);
@@ -1043,8 +1054,10 @@ namespace Magnesium.OpenGL
 		}
 		public Result CreateFramebuffer (MgFramebufferCreateInfo pCreateInfo, MgAllocationCallbacks allocator, out IMgFramebuffer pFramebuffer)
 		{
-			throw new NotImplementedException ();
+			pFramebuffer = new GLFramebuffer ();
+			return Result.SUCCESS;
 		}
+
 //		public void DestroyFramebuffer (IMgFramebuffer framebuffer, MgAllocationCallbacks allocator)
 //		{
 //			throw new NotImplementedException ();
@@ -1130,7 +1143,20 @@ namespace Magnesium.OpenGL
 		}
 		public Result AcquireNextImageKHR (IMgSwapchainKHR swapchain, ulong timeout, IMgSemaphore semaphore, IMgFence fence, out uint pImageIndex)
 		{
-			throw new NotImplementedException ();
+			if (swapchain == null)
+			{
+				throw new ArgumentNullException ("swapchain");
+			}
+
+			var sc = swapchain as GLSwapchainKHR;
+			if (sc == null)
+			{
+				throw new InvalidCastException ("swapchain is not GLSwapchainKHR");
+			}
+
+			pImageIndex = sc.GetNextImage ();
+			// TODO : fence stuff
+			return Result.SUCCESS;
 		}
 		#endregion
 		

@@ -1,5 +1,6 @@
 ﻿using OpenTK.Graphics.OpenGL;
 using System;
+using System.Diagnostics;
 
 namespace Magnesium.OpenGL
 {
@@ -31,12 +32,28 @@ namespace Magnesium.OpenGL
 		{
 			GL.Enable(EnableCap.DepthTest);
 			mIsDepthBufferEnabled = true;
+
+			{
+				var error = GL.GetError ();
+				if (error != ErrorCode.NoError)
+				{
+					Debug.WriteLine ("EnableDepthBuffer : " + error);
+				}
+			}
 		}
 
 		public void DisableDepthBuffer ()
 		{
 			GL.Disable(EnableCap.DepthTest);
 			mIsDepthBufferEnabled = false;
+
+			{
+				var error = GL.GetError ();
+				if (error != ErrorCode.NoError)
+				{
+					Debug.WriteLine ("DisableDepthBuffer : " + error);
+				}
+			}
 		}
 
 		private static DepthFunction GetDepthFunction(MgCompareOp compare)
@@ -67,12 +84,28 @@ namespace Magnesium.OpenGL
 		public void SetDepthBufferFunc(MgCompareOp func)
 		{
 			GL.DepthFunc (GetDepthFunction (func));
+
+			{
+				var error = GL.GetError ();
+				if (error != ErrorCode.NoError)
+				{
+					Debug.WriteLine ("SetDepthBufferFunc : " + error);
+				}
+			}
 		}
 
 		public void SetDepthMask (bool isMaskOn)
 		{
 			// for writing to depth buffer
 			GL.DepthMask(isMaskOn);
+
+			{
+				var error = GL.GetError ();
+				if (error != ErrorCode.NoError)
+				{
+					Debug.WriteLine ("SetDepthMask : " + error);
+				}
+			}
 		}
 
 		public void SetClipControl(bool usingLowerLeftCorner, bool zeroToOneRange)

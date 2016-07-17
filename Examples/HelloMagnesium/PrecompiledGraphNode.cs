@@ -1,10 +1,9 @@
-﻿using Magnesium;
-
-namespace NewFences
+﻿
+namespace HelloMagnesium
 {
-	public class PrecompiledCommandGroup : IQueueRenderable
+	public class PrecompiledGraphNode : IRenderGraphNode
 	{
-		public PrecompiledCommandGroup (SubmitInfoGraphNode[] frameInstances)
+		public PrecompiledGraphNode (SubmitInfoGraphNode[] frameInstances)
 		{
 			FrameInstances = frameInstances;
 		}
@@ -17,10 +16,11 @@ namespace NewFences
 
 		public event System.EventHandler<System.EventArgs> VisibleChanged;
 
-		public void Render(IMgQueue queue, uint frameIndex)
+		public void Render(QueueArgument arg)
 		{
-			var submission = FrameInstances [frameIndex];
-			queue.QueueSubmit(new []{submission.Submit}, submission.Fence);
+			var submission = FrameInstances [arg.FrameIndex];
+
+			arg.Queue.QueueSubmit(new []{submission.Submit}, submission.Fence);
 		}
 
 		private int mDrawOrder = 0;

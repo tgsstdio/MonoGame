@@ -1,5 +1,6 @@
 ﻿using System;
 using OpenTK.Graphics.OpenGL;
+using System.Diagnostics;
 
 namespace Magnesium.OpenGL
 {
@@ -18,17 +19,41 @@ namespace Magnesium.OpenGL
 			{
 				GL.Disable (EnableCap.LineSmooth);
 			}
+
+			{
+				var error = GL.GetError ();
+				if (error != ErrorCode.NoError)
+				{
+					Debug.WriteLine ("SetLineWidth : " + error);
+				}
+			}
 		}
 
 		public void DisablePolygonOffset ()
 		{
 			GL.Disable(EnableCap.PolygonOffsetFill);
+
+			{
+				var error = GL.GetError ();
+				if (error != ErrorCode.NoError)
+				{
+					Debug.WriteLine ("DisablePolygonOffset : " + error);
+				}
+			}
 		}
 
 		public void EnablePolygonOffset (float slopeScaleDepthBias, float depthBias)
 		{
 			GL.Enable(EnableCap.PolygonOffsetFill);
 			GL.PolygonOffset(slopeScaleDepthBias, depthBias);
+
+			{
+				var error = GL.GetError ();
+				if (error != ErrorCode.NoError)
+				{
+					Debug.WriteLine ("EnablePolygonOffset : " + error);
+				}
+			}
 		}
 
 		public void SetUsingCounterClockwiseWindings (bool flag)
@@ -41,12 +66,28 @@ namespace Magnesium.OpenGL
 			{
 				GL.FrontFace (FrontFaceDirection.Cw);
 			}
+
+			{
+				var error = GL.GetError ();
+				if (error != ErrorCode.NoError)
+				{
+					Debug.WriteLine ("SetUsingCounterClockwiseWindings : " + error);
+				}
+			}
 		}
 
 		public void EnableScissorTest ()
 		{
 			GL.Enable(EnableCap.ScissorTest);
 			mScissorTestEnabled = true;
+
+			{
+				var error = GL.GetError ();
+				if (error != ErrorCode.NoError)
+				{
+					Debug.WriteLine ("EnableScissorTest : " + error);
+				}
+			}
 		}
 
 		public void DisableScissorTest ()
@@ -54,6 +95,14 @@ namespace Magnesium.OpenGL
 			GL.Disable(EnableCap.ScissorTest);
 
 			mScissorTestEnabled = false;
+
+			{
+				var error = GL.GetError ();
+				if (error != ErrorCode.NoError)
+				{
+					Debug.WriteLine ("DisableScissorTest : " + error);
+				}
+			}
 		}
 
 		public void SetCullingMode (bool front, bool back)
@@ -75,18 +124,42 @@ namespace Magnesium.OpenGL
 				// not sure about this
 				DisableCulling ();
 			}
+
+			{
+				var error = GL.GetError ();
+				if (error != ErrorCode.NoError)
+				{
+					Debug.WriteLine ("SetCullingMode : " + error);
+				}
+			}
 		}
 
 		public void EnableCulling ()
 		{
 			GL.Enable(EnableCap.CullFace);
 			mCullingEnabled = true;
+
+			{
+				var error = GL.GetError ();
+				if (error != ErrorCode.NoError)
+				{
+					Debug.WriteLine ("EnableCulling : " + error);
+				}
+			}
 		}
 
 		public void DisableCulling ()
 		{
 			GL.Disable(EnableCap.CullFace);
 			mCullingEnabled = false;
+
+			{
+				var error = GL.GetError ();
+				if (error != ErrorCode.NoError)
+				{
+					Debug.WriteLine ("DisableCulling : " + error);
+				}
+			}
 		}
 
 		public GLQueueRendererRasterizerState Initialize ()

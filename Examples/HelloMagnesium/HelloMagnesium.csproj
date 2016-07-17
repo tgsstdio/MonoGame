@@ -53,11 +53,19 @@
     <Compile Include="MockGLSemaphoreGenerator.cs" />
     <Compile Include="MockTouchListener.cs" />
     <Compile Include="HelloDepthStencilBuffer.cs" />
-    <Compile Include="HelloWindowSwapChain.cs" />
     <Compile Include="MgPresentationLayer.cs" />
     <Compile Include="IMgPresentationLayer.cs" />
     <Compile Include="Win32PresentationSurface.cs" />
     <Compile Include="VkBuffer.cs" />
+    <Compile Include="GraphicsBank.cs" />
+    <Compile Include="GraphRenderer.cs" />
+    <Compile Include="SubmitInfoGraphNode.cs" />
+    <Compile Include="PrecompiledGraphNode.cs" />
+    <Compile Include="IRenderGraphNode.cs" />
+    <Compile Include="ImmediateModeGraphNode.cs" />
+    <Compile Include="QueueArgument.cs" />
+    <Compile Include="HelloMgSwapchainCollection.cs" />
+    <Compile Include="GLNullImageView.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

@@ -27,15 +27,13 @@ namespace HelloMagnesium
 			return nextImage;
 		}
 
-		public void EndDraw (uint nextImage, IMgCommandBuffer prePresent, IMgSemaphore renderComplete)
+		public void EndDraw (uint nextImage, IMgCommandBuffer prePresent, IMgSemaphore[] renderComplete)
 		{
 			Result err;
 			var currentBuffer = mCollection.Buffers [nextImage];
 			submitPrePresentBarrier (prePresent, currentBuffer.Image);
 			var presentInfo = new MgPresentInfoKHR {
-				WaitSemaphores = new[] {
-					renderComplete
-				},
+				WaitSemaphores = renderComplete,
 				Images = new[] {
 					new MgPresentInfoKHRImage {
 						ImageIndex = nextImage,

@@ -146,6 +146,8 @@
     <Compile Include="Entrypoint\FullGLCmdImageCapabilities.cs" />
     <Compile Include="GLRenderPass.cs" />
     <Compile Include="GLShaderModule.cs" />
+    <Compile Include="GLSwapchainKHR.cs" />
+    <Compile Include="GLFramebuffer.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

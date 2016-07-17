@@ -1,5 +1,6 @@
 ﻿using OpenTK.Graphics.OpenGL;
 using Magnesium;
+using System.Diagnostics;
 
 namespace Magnesium.OpenGL
 {
@@ -54,12 +55,28 @@ namespace Magnesium.OpenGL
 		{
 			GL.Disable(EnableCap.StencilTest);
 			mIsStencilBufferEnabled = true;
+
+			{
+				var error = GL.GetError ();
+				if (error != ErrorCode.NoError)
+				{
+					Debug.WriteLine ("EnableStencilBuffer : " + error);
+				}
+			}
 		}
 
 		public void DisableStencilBuffer()
 		{
 			GL.Enable(EnableCap.StencilTest);
 			mIsStencilBufferEnabled = false;
+
+			{
+				var error = GL.GetError ();
+				if (error != ErrorCode.NoError)
+				{
+					Debug.WriteLine ("DisableStencilBuffer : " + error);
+				}
+			}
 		}
 
 		private bool mIsStencilBufferEnabled;
@@ -72,6 +89,14 @@ namespace Magnesium.OpenGL
 		public void SetStencilWriteMask(int mask)
 		{
 			GL.StencilMask(mask);
+
+			{
+				var error = GL.GetError ();
+				if (error != ErrorCode.NoError)
+				{
+					Debug.WriteLine ("SetStencilWriteMask : " + error);
+				}
+			}
 		}
 
 		public void SetFrontFaceCullStencilFunction (MgCompareOp func, int referenceStencil, int stencilMask)
@@ -82,6 +107,14 @@ namespace Magnesium.OpenGL
 				GetStencilFunc (func),
 				referenceStencil,
 				stencilMask);
+
+			{
+				var error = GL.GetError ();
+				if (error != ErrorCode.NoError)
+				{
+					Debug.WriteLine ("SetFrontFaceCullStencilFunction : " + error);
+				}
+			}
 		}
 
 		public void SetBackFaceCullStencilFunction(MgCompareOp func, int referenceStencil, int stencilMask)
@@ -92,6 +125,14 @@ namespace Magnesium.OpenGL
 				GetStencilFunc (func),
 				referenceStencil,
 				stencilMask);
+
+			{
+				var error = GL.GetError ();
+				if (error != ErrorCode.NoError)
+				{
+					Debug.WriteLine ("SetBackFaceCullStencilFunction : " + error);
+				}
+			}
 		}
 
 		private static GLStencilFunction GetStencilFunc(MgCompareOp function)
@@ -138,7 +179,15 @@ namespace Magnesium.OpenGL
 			var stencilFaceBack = StencilFace.Back;					
 			GL.StencilOpSeparate(stencilFaceBack, GetStencilOp(counterClockwiseStencilFail),
 				GetStencilOp(counterClockwiseStencilDepthBufferFail),
-				GetStencilOp(counterClockwiseStencilPass));			
+				GetStencilOp(counterClockwiseStencilPass));	
+
+			{
+				var error = GL.GetError ();
+				if (error != ErrorCode.NoError)
+				{
+					Debug.WriteLine ("SetBackFaceStencilOperation : " + error);
+				}
+			}
 		}
 
 		public void SetStencilFunction(
@@ -150,6 +199,14 @@ namespace Magnesium.OpenGL
 				GetStencilFunc (stencilFunction),
 				referenceStencil,
 				stencilMask);
+
+			{
+				var error = GL.GetError ();
+				if (error != ErrorCode.NoError)
+				{
+					Debug.WriteLine ("SetStencilFunction : " + error);
+				}
+			}
 		}
 
 		public void SetStencilOperation(
@@ -160,6 +217,14 @@ namespace Magnesium.OpenGL
 			GL.StencilOp (GetStencilOp(stencilFail),
 				GetStencilOp(stencilDepthBufferFail),
 				GetStencilOp(stencilPass));
+
+			{
+				var error = GL.GetError ();
+				if (error != ErrorCode.NoError)
+				{
+					Debug.WriteLine ("SetStencilOperation : " + error);
+				}
+			}
 		}
 
 		private static StencilOp GetStencilOp(MgStencilOp operation)

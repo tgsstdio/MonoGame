@@ -69,6 +69,16 @@ namespace Magnesium.OpenGL
 
 		private uint mSubmissionKey = 0;
 		private uint mOrderKey = 0;
+
+		GLQueueSubmission EnqueueSubmission (MgSubmitInfo sub)
+		{
+			var submit = new GLQueueSubmission (mSubmissionKey, sub);
+			// JUST LOOP AROUND
+			mSubmissionKey = (mSubmissionKey >= uint.MaxValue) ? 0 : mSubmissionKey + 1;
+			mSubmissions.Add (submit.Key, submit);
+			return submit;
+		}
+
 		public Result QueueSubmit (MgSubmitInfo[] pSubmits, IMgFence fence)
 		{
 			if (pSubmits == null)
@@ -81,12 +91,12 @@ namespace Magnesium.OpenGL
 	
 				foreach (var sub in pSubmits)
 				{					
-					var submit = new GLQueueSubmission (mSubmissionKey, sub);
-					submit.OrderFence = mSignalModule.Generate ();
+					var submit = EnqueueSubmission (sub);
+					if (fence != null)
+					{
+						submit.OrderFence = mSignalModule.Generate ();
+					}
 					children.Add (submit);
-					mSubmissions.Add (submit.Key, submit);
-					// JUST LOOP AROUND
-					mSubmissionKey = (mSubmissionKey >= uint.MaxValue) ? 0 : mSubmissionKey + 1;
 				}
 
 				if (fence != null)
@@ -213,7 +223,32 @@ namespace Magnesium.OpenGL
 
 		public Result QueuePresentKHR (MgPresentInfoKHR pPresentInfo)
 		{
-			throw new NotImplementedException ();
+			// EARLY EXIT
+			if (pPresentInfo == null)
+			{
+				return Result.SUCCESS;
+			}
+
+			var signalInfos = new List<MgSubmitInfoWaitSemaphoreInfo> ();
+			if (pPresentInfo.WaitSemaphores != null)
+			{
+				foreach (var signal in pPresentInfo.WaitSemaphores)
+				{
+					if (signal != null)
+					{
+						signalInfos.Add (new MgSubmitInfoWaitSemaphoreInfo {
+							WaitDstStageMask = 0,
+							WaitSemaphore = signal,
+						});
+					}
+				}
+			}
+
+			var sub = new MgSubmitInfo {
+				WaitSemaphores = signalInfos.ToArray(),
+			};
+			EnqueueSubmission (sub);
+			return Result.SUCCESS;
 		}
 
 		#endregion

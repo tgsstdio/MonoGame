@@ -1,10 +1,9 @@
 ﻿using Magnesium;
 
-namespace NewFences
+namespace HelloMagnesium
 {
 	public class SubmitInfoGraphNode
 	{
-		public bool IsVisible { get; set; }
 		public MgSubmitInfo Submit { get; set; }
 		public IMgFence Fence { get; set; }
 	}
