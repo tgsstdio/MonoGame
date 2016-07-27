@@ -15,8 +15,8 @@ namespace Magnesium.OpenGL.UnitTests
 		public void Initialise()
 		{
 			mFactory = new MockVertexBufferFactory ();
-			mComposer = new Transformer (mFactory);
 			mRepository = new GLCmdBufferRepository ();
+			mComposer = new Transformer (mFactory, mRepository);
 		}
 
 		[TearDown]
@@ -66,6 +66,8 @@ namespace Magnesium.OpenGL.UnitTests
 			var attributes = new GLVertexInputAttribute[] { };
 
 			pipeline.VertexInput = new GLVertexBufferBinder(bindings, attributes);
+			pipeline.Viewports = new GLCmdViewportParameter (0, new MgViewport[]{ });
+			pipeline.Scissors = new GLCmdScissorParameter (0, new MgRect2D[]{ });
 
 			mRepository.PushGraphicsPipeline (pipeline);
 
@@ -92,7 +94,9 @@ namespace Magnesium.OpenGL.UnitTests
 				}
 			);
 
+			var origin = new MockIGLRenderPass ();
 			var pass = new GLCmdRenderPassCommand {
+				Origin = origin,
 				DrawCommands = drawCommands,
 			};
 
@@ -233,7 +237,9 @@ namespace Magnesium.OpenGL.UnitTests
 				}
 			);
 
+			var origin = new MockIGLRenderPass (); 
 			var pass = new GLCmdRenderPassCommand {
+				Origin = origin,
 				DrawCommands = drawCommands,
 			};
 
@@ -322,7 +328,7 @@ namespace Magnesium.OpenGL.UnitTests
 			{
 				var changeArray = output.DescriptorSets;
 				Assert.IsNotNull (changeArray);
-				Assert.AreEqual (0, changeArray.Length);
+				Assert.AreEqual (1, changeArray.Length);
 			}
 
 			{
@@ -361,6 +367,8 @@ namespace Magnesium.OpenGL.UnitTests
 			var attributes = new GLVertexInputAttribute[] { };
 
 			pipeline.VertexInput = new GLVertexBufferBinder(bindings, attributes);
+			pipeline.Viewports = new GLCmdViewportParameter (0, new MgViewport[]{ });
+			pipeline.Scissors = new GLCmdScissorParameter (0, new MgRect2D[]{ });
 
 			mRepository.PushGraphicsPipeline (pipeline);
 
@@ -390,7 +398,9 @@ namespace Magnesium.OpenGL.UnitTests
 				}
 			);
 
+			var origin = new MockIGLRenderPass (); 
 			var pass = new GLCmdRenderPassCommand {
+				Origin = origin,
 				DrawCommands = drawCommands,
 			};
 
@@ -427,6 +437,8 @@ namespace Magnesium.OpenGL.UnitTests
 			var attributes = new GLVertexInputAttribute[] { };
 
 			pipeline.VertexInput = new GLVertexBufferBinder(bindings, attributes);
+			pipeline.Viewports = new GLCmdViewportParameter (0, new MgViewport[]{ });
+			pipeline.Scissors = new GLCmdScissorParameter (0, new MgRect2D[]{ });
 
 			mRepository.PushGraphicsPipeline (pipeline);
 
@@ -456,7 +468,9 @@ namespace Magnesium.OpenGL.UnitTests
 				}
 			);
 
+			var origin = new MockIGLRenderPass (); 
 			var pass = new GLCmdRenderPassCommand {
+				Origin = origin,
 				DrawCommands = drawCommands,
 			};
 

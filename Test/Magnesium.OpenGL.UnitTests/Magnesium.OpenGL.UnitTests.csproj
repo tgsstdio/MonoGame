@@ -67,6 +67,7 @@
     <Compile Include="MockIGLRenderPass.cs" />
     <Compile Include="TransformingScissorsUnitTests.cs" />
     <Compile Include="TransformingClearValuesUnitTests.cs" />
+    <Compile Include="TransformingColorBlendEnumsUnitTests.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

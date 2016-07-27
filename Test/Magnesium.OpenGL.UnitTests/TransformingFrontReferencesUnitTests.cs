@@ -12,9 +12,9 @@ namespace Magnesium.OpenGL.UnitTests
 			Assert.AreEqual (0, repo.FrontReferences.Count);
 
 			ICmdVBOCapabilities vbo = new MockVertexBufferFactory ();
-			var transform = new Transformer (vbo);
+			var transform = new Transformer (vbo, repo);
 
-			transform.Initialise (repo);
+			
 
 			Assert.IsNotNull (transform.FrontReferences);
 			Assert.AreEqual (0, transform.FrontReferences.Count);
@@ -27,8 +27,8 @@ namespace Magnesium.OpenGL.UnitTests
 			Assert.AreEqual (0, repo.FrontReferences.Count);
 
 			ICmdVBOCapabilities vbo = new MockVertexBufferFactory ();
-			var transform = new Transformer (vbo);
-			transform.Initialise (repo);
+			var transform = new Transformer (vbo, repo);
+			
 
 			var command = new GLCmdDrawCommand{ FrontReference = null, Draw = new GLCmdInternalDraw{ }  };
 
@@ -49,8 +49,8 @@ namespace Magnesium.OpenGL.UnitTests
 			Assert.AreEqual (1, repo.FrontReferences.Count);
 
 			ICmdVBOCapabilities vbo = new MockVertexBufferFactory ();
-			var transform = new Transformer (vbo);
-			transform.Initialise (repo);
+			var transform = new Transformer (vbo, repo);
+			
 
 			var command = new GLCmdDrawCommand{ Pipeline = null, FrontReference = 0, Draw = new GLCmdInternalDraw{ }  };
 
@@ -92,8 +92,8 @@ namespace Magnesium.OpenGL.UnitTests
 			Assert.AreEqual (1, repo.GraphicsPipelines.Count);
 
 			ICmdVBOCapabilities vbo = new MockVertexBufferFactory ();
-			var transform = new Transformer (vbo);
-			transform.Initialise (repo);
+			var transform = new Transformer (vbo, repo);
+			
 
 			var command = new GLCmdDrawCommand{ Pipeline = 0, FrontReference = 0, Draw = new GLCmdInternalDraw{ }  };
 
@@ -138,8 +138,8 @@ namespace Magnesium.OpenGL.UnitTests
 			Assert.AreEqual (1, repo.GraphicsPipelines.Count);
 
 			ICmdVBOCapabilities vbo = new MockVertexBufferFactory ();
-			var transform = new Transformer (vbo);
-			transform.Initialise (repo);
+			var transform = new Transformer (vbo, repo);
+			
 
 			// USE OVERRIDE 
 			var command_0 = new GLCmdDrawCommand{ Pipeline = 0, FrontReference = 0, Draw = new GLCmdInternalDraw{ }  };

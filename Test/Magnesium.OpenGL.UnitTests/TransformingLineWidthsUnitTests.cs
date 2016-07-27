@@ -12,9 +12,8 @@ namespace Magnesium.OpenGL.UnitTests
 			Assert.AreEqual (0, repo.LineWidths.Count);
 
 			ICmdVBOCapabilities vbo = new MockVertexBufferFactory ();
-			var transform = new Transformer (vbo);
+			var transform = new Transformer (vbo, repo);
 
-			transform.Initialise (repo);
 
 			Assert.IsNotNull (transform.LineWidths);
 			Assert.AreEqual (0, transform.LineWidths.Count);
@@ -27,8 +26,7 @@ namespace Magnesium.OpenGL.UnitTests
 			Assert.AreEqual (0, repo.LineWidths.Count);
 
 			ICmdVBOCapabilities vbo = new MockVertexBufferFactory ();
-			var transform = new Transformer (vbo);
-			transform.Initialise (repo);
+			var transform = new Transformer (vbo, repo);
 
 			var command = new GLCmdDrawCommand{ LineWidth = null, Draw = new GLCmdInternalDraw{ }  };
 
@@ -49,8 +47,7 @@ namespace Magnesium.OpenGL.UnitTests
 			Assert.AreEqual (1, repo.LineWidths.Count);
 
 			ICmdVBOCapabilities vbo = new MockVertexBufferFactory ();
-			var transform = new Transformer (vbo);
-			transform.Initialise (repo);
+			var transform = new Transformer (vbo, repo);
 
 			var command = new GLCmdDrawCommand{ Pipeline = null, LineWidth = 0, Draw = new GLCmdInternalDraw{ }  };
 
@@ -92,8 +89,7 @@ namespace Magnesium.OpenGL.UnitTests
 			Assert.AreEqual (1, repo.GraphicsPipelines.Count);
 
 			ICmdVBOCapabilities vbo = new MockVertexBufferFactory ();
-			var transform = new Transformer (vbo);
-			transform.Initialise (repo);
+			var transform = new Transformer (vbo, repo);
 
 			var command = new GLCmdDrawCommand{ Pipeline = 0, LineWidth = 0, Draw = new GLCmdInternalDraw{ }  };
 
@@ -138,8 +134,7 @@ namespace Magnesium.OpenGL.UnitTests
 			Assert.AreEqual (1, repo.GraphicsPipelines.Count);
 
 			ICmdVBOCapabilities vbo = new MockVertexBufferFactory ();
-			var transform = new Transformer (vbo);
-			transform.Initialise (repo);
+			var transform = new Transformer (vbo, repo);
 
 			// USE OVERRIDE 
 			var command_0 = new GLCmdDrawCommand{ Pipeline = 0, LineWidth = 0 , Draw = new GLCmdInternalDraw{ } };

@@ -176,7 +176,9 @@ namespace Magnesium.OpenGL
 					PerformRequests (key);
 				}
 
-				var orderKeys = mOrders.Keys;
+
+				var orderKeys = new uint[mOrders.Keys.Count];
+				mOrders.Keys.CopyTo(orderKeys, 0);
 				foreach (var orderKey in orderKeys)
 				{
 					GLQueueSubmitOrder order;

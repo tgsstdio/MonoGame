@@ -33,7 +33,7 @@ namespace Magnesium.OpenGL.UnitTests
 				Pipelines = Pipelines.ToArray (),
 				VBOs = VBOs.ToArray (),
 				ClearValues = ClearValues.ToArray (),
-				ColorBlends = ColorBlends.ToArray (),
+				ColorBlends = ColorBlendEnums.ToArray (),
 				Viewports = Viewports.Items.ToArray (),
 				BackCompareMasks = BackCompareMasks.Items.ToArray (),
 				FrontCompareMasks = FrontCompareMasks.Items.ToArray (),
@@ -42,9 +42,9 @@ namespace Magnesium.OpenGL.UnitTests
 				BackWriteMasks = BackWriteMasks.Items.ToArray (),
 				FrontWriteMasks = FrontWriteMasks.Items.ToArray (),
 				LineWidths = LineWidths.Items.ToArray (),
-				//Scissors = Scissors.Items.ToArray (),
+				Scissors = Scissors.Items.ToArray (),
 				BlendConstants = BlendConstants.Items.ToArray (),
-				//DescriptorSets = DescriptorSets.Items.ToArray (),
+				DescriptorSets = DescriptorSets.ToArray (),
 				DepthBias = DepthBias.ToArray (),
 				DepthBounds = DepthBounds.Items.ToArray (),
 			};
@@ -56,7 +56,7 @@ namespace Magnesium.OpenGL.UnitTests
 
 		ICmdVBOCapabilities mVBO;
 
-		public Transformer (ICmdVBOCapabilities vbo)
+		public Transformer (ICmdVBOCapabilities vbo, IGLCmdBufferRepository repository)
 		{
 			mVBO = vbo;
 			VBOs = new List<GLCmdVertexBufferObject>();
@@ -64,7 +64,7 @@ namespace Magnesium.OpenGL.UnitTests
 			DrawItems = new List<GLCmdBufferDrawItem> ();
 			Pipelines = new List<GLCmdBufferPipelineItem> ();
 			ClearValues = new List<GLCmdClearValuesParameter> ();
-			ColorBlends = new List<GLQueueRendererColorBlendState> ();
+			ColorBlendEnums = new List<GLQueueRendererColorBlendState> ();
 
 			BlendConstants = new TransformerStore<MgColor4f> (
 				GLGraphicsPipelineDynamicStateFlagBits.BLEND_CONSTANTS,
@@ -136,6 +136,15 @@ namespace Magnesium.OpenGL.UnitTests
 				(d) => d.Scissors,
 				(r, i) => r.Scissors.At(i),
 				(gp) => gp.Scissors);
+
+			DescriptorSets = new List<GLCmdDescriptorSetParameter> ();
+
+			Initialise (repository);
+		}
+
+		public List<GLCmdDescriptorSetParameter> DescriptorSets {
+			get;
+			private set;
 		}
 
 		public TransformerStore<GLCmdScissorParameter> Scissors {
@@ -204,7 +213,7 @@ namespace Magnesium.OpenGL.UnitTests
 		}
 
 		public List<GLCmdVertexBufferObject> VBOs { get; private set; }
-		public void Initialise(IGLCmdBufferRepository userSettings)
+		private void Initialise(IGLCmdBufferRepository userSettings)
 		{
 			InsertNullVBO ();
 
@@ -217,6 +226,13 @@ namespace Magnesium.OpenGL.UnitTests
 			{
 				Scissors.Items.Add (new GLCmdScissorParameter (0, new MgRect2D[]{ }));
 			}
+
+			InsertNullDescriptorSet ();
+		}
+
+		void InsertNullDescriptorSet ()
+		{
+			DescriptorSets.Add (GetEmptyDescriptorSet ());
 		}
 
 		void InsertNullVBO ()
@@ -507,7 +523,7 @@ namespace Magnesium.OpenGL.UnitTests
 			}	
 		}
 
-		public List<GLQueueRendererColorBlendState> ColorBlends {get; private set; }
+		public List<GLQueueRendererColorBlendState> ColorBlendEnums {get; private set; }
 		byte GenerateColorBlendEnums (IGLGraphicsPipeline pipeline)
 		{
 			if (pipeline == null)
@@ -517,17 +533,17 @@ namespace Magnesium.OpenGL.UnitTests
 
 			var currentValue = pipeline.ColorBlendEnums;
 
-			var count = ColorBlends.Count;
+			var count = ColorBlendEnums.Count;
 			if (count == 0)
 			{
 				// USE DEFAULT
-				ColorBlends.Add (currentValue);
+				ColorBlendEnums.Add (currentValue);
 				return 0;
 			}
 			else
 			{	
 				var topIndex = count - 1;
-				var lastValue = ColorBlends [topIndex];
+				var lastValue = ColorBlendEnums [topIndex];
 
 				if (currentValue.Equals (lastValue))
 				{
@@ -535,7 +551,7 @@ namespace Magnesium.OpenGL.UnitTests
 				}
 				else
 				{
-					ColorBlends.Add (currentValue);
+					ColorBlendEnums.Add (currentValue);
 					return (byte)count;
 				}
 			}	
@@ -579,6 +595,44 @@ namespace Magnesium.OpenGL.UnitTests
 			}	
 		}
 
+		static GLCmdDescriptorSetParameter GetEmptyDescriptorSet ()
+		{
+			return new GLCmdDescriptorSetParameter {
+				Bindpoint = MgPipelineBindPoint.GRAPHICS,
+				DescriptorSets = new IMgDescriptorSet[] {
+
+				},
+				DynamicOffsets = new uint[] {
+
+				},
+				FirstSet = 0,
+				Layout = null,
+			};
+		}
+
+		byte ExtractDescriptorSet (IGLCmdBufferRepository repo, IGLGraphicsPipeline pipeline, GLCmdDrawCommand command)
+		{
+			if (pipeline == null)
+			{	
+				throw new ArgumentNullException ("pipeline");
+			}
+
+			// NO COMPARISON 
+			if (command.DescriptorSet.HasValue)
+			{
+				var currentValue = repo.DescriptorSets.At (command.DescriptorSet.Value);
+
+				var count = DescriptorSets.Count;
+				DescriptorSets.Add (currentValue);
+				return (byte)count;
+			}
+			else
+			{
+				// RESERVED INDEX OF ZERO
+				return 0;
+			}
+		}
+
 		public bool InitialiseDrawItem(IGLCmdBufferRepository repo, GLCmdRenderPassCommand pass, GLCmdDrawCommand drawCommand)
 		{
 			if (drawCommand.Pipeline.HasValue)
@@ -610,6 +664,8 @@ namespace Magnesium.OpenGL.UnitTests
 				item.Viewport = Viewports.Extract (repo, pipeline, drawCommand);
 
 				item.Scissor = Scissors.Extract (repo, pipeline, drawCommand);
+
+				item.DescriptorSet = ExtractDescriptorSet (repo, pipeline, drawCommand);
 
 				DrawItems.Add (item);
 				return true;

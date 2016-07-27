@@ -12,9 +12,7 @@ namespace Magnesium.OpenGL.UnitTests
 			Assert.AreEqual (0, repo.FrontWriteMasks.Count);
 
 			ICmdVBOCapabilities vbo = new MockVertexBufferFactory ();
-			var transform = new Transformer (vbo);
-
-			transform.Initialise (repo);
+			var transform = new Transformer (vbo, repo);
 
 			Assert.IsNotNull (transform.FrontWriteMasks);
 			Assert.AreEqual (0, transform.FrontWriteMasks.Count);
@@ -27,8 +25,7 @@ namespace Magnesium.OpenGL.UnitTests
 			Assert.AreEqual (0, repo.FrontWriteMasks.Count);
 
 			ICmdVBOCapabilities vbo = new MockVertexBufferFactory ();
-			var transform = new Transformer (vbo);
-			transform.Initialise (repo);
+			var transform = new Transformer (vbo, repo);
 
 			var command = new GLCmdDrawCommand{ FrontWriteMask = null, Draw = new GLCmdInternalDraw{ }  };
 
@@ -49,8 +46,7 @@ namespace Magnesium.OpenGL.UnitTests
 			Assert.AreEqual (1, repo.FrontWriteMasks.Count);
 
 			ICmdVBOCapabilities vbo = new MockVertexBufferFactory ();
-			var transform = new Transformer (vbo);
-			transform.Initialise (repo);
+			var transform = new Transformer (vbo, repo);
 
 			var command = new GLCmdDrawCommand{ Pipeline = null, FrontWriteMask = 0, Draw = new GLCmdInternalDraw{ }  };
 
@@ -91,8 +87,7 @@ namespace Magnesium.OpenGL.UnitTests
 			Assert.AreEqual (1, repo.GraphicsPipelines.Count);
 
 			ICmdVBOCapabilities vbo = new MockVertexBufferFactory ();
-			var transform = new Transformer (vbo);
-			transform.Initialise (repo);
+			var transform = new Transformer (vbo, repo);
 
 			var command = new GLCmdDrawCommand{ Pipeline = 0, FrontWriteMask = 0, Draw = new GLCmdInternalDraw{ }  };
 
@@ -137,8 +132,7 @@ namespace Magnesium.OpenGL.UnitTests
 			Assert.AreEqual (1, repo.GraphicsPipelines.Count);
 
 			ICmdVBOCapabilities vbo = new MockVertexBufferFactory ();
-			var transform = new Transformer (vbo);
-			transform.Initialise (repo);
+			var transform = new Transformer (vbo, repo);
 
 			// USE OVERRIDE 
 			var command_0 = new GLCmdDrawCommand{ Pipeline = 0, FrontWriteMask = 0, Draw = new GLCmdInternalDraw{ }  };
