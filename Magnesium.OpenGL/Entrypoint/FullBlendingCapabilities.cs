@@ -152,9 +152,9 @@ namespace Magnesium.OpenGL
 			throw new System.NotImplementedException ();
 		}
 
-		public GLQueueRendererBlendState Initialize (uint noOfAttachments)
+		public GLQueueRendererColorBlendState Initialize (uint noOfAttachments)
 		{
-			var initialState = new GLQueueRendererBlendState {
+			var initialState = new GLQueueRendererColorBlendState {
 				LogicOpEnable = false,
 				LogicOp = MgLogicOp.COPY,
 				Attachments = new GLQueueColorAttachmentBlendState[noOfAttachments],

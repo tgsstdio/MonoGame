@@ -212,6 +212,65 @@ namespace Magnesium.OpenGL
 			return vertexArrays;
 		}
 
+		static byte GenerateClearValues (GLCmdRenderPassCommand pass, List<GLCmdClearValuesParameter> clearValues)
+		{
+			var glPass = pass.Origin as IGLRenderPass;
+
+			if (glPass == null)
+			{
+				throw new InvalidCastException ();
+			}
+
+			var finalLength = Math.Min (glPass.AttachmentFormats.Length, pass.ClearValues.Length);
+
+			var finalValues = new List<GLClearValueArrayItem> ();
+			for (var i = 0; i < finalLength; ++i)
+			{
+				finalValues.Add (new GLClearValueArrayItem {
+					Attachment = glPass.AttachmentFormats [i],
+					Value = pass.ClearValues [i]
+				});
+			}
+
+			var nextIndex = clearValues.Count;
+
+			clearValues.Add (new GLCmdClearValuesParameter {
+				Attachments = finalValues.ToArray(),
+			});
+
+			return (byte) nextIndex;
+		}
+
+		byte GenerateBlendEnums (IGLGraphicsPipeline pipeline, List<GLQueueRendererColorBlendState> colorBlends)
+		{
+			if (pipeline == null)
+			{
+				throw new ArgumentNullException("pipeline");
+			}
+
+			var nextIndex = colorBlends.Count;
+			colorBlends.Add (pipeline.ColorBlendEnums);
+
+			return (byte) nextIndex;
+		}
+
+		void InsertNewPipeline (
+			GLCmdRenderPassCommand pass,
+			IGLGraphicsPipeline pipeline,
+			List<GLCmdBufferPipelineItem> pipelines,
+			List<GLCmdClearValuesParameter> clearValues,
+			List<GLQueueRendererColorBlendState> colorBlends
+		)
+		{
+			var pipelineItem = GeneratePipelineItem (pipeline);
+			pipelineItem.DepthState = pipeline.DepthState;
+			pipelineItem.StencilState = pipeline.StencilState;
+			pipelineItem.ClearValues = GenerateClearValues (pass, clearValues);
+			pipelineItem.ColorBlendEnums = GenerateBlendEnums (pipeline, colorBlends);
+
+			pipelines.Add (pipelineItem);
+		}
+
 		public CmdBufferInstructionSet Compose (GLCmdBufferRepository repository, IEnumerable<GLCmdRenderPassCommand> passes)
 		{
 			var output = new CmdBufferInstructionSet ();
@@ -246,6 +305,8 @@ namespace Magnesium.OpenGL
 
 			var depthBias = new List<GLCmdDepthBiasParameter> ();
 			var depthBounds = new List<GLCmdDepthBoundsParameter> ();
+			var clearValues = new List<GLCmdClearValuesParameter> ();
+			var colorBlends = new List<GLQueueRendererColorBlendState> ();
 
 			// Generate commands here
 
@@ -281,21 +342,13 @@ namespace Magnesium.OpenGL
 							if (isFirst)
 							{
 								isFirst = false;
-
-								pipelineItem = GeneratePipelineItem (pipeline);
-								pipelineItem.DepthState = pipeline.DepthState;
-								pipelineItem.StencilState = pipeline.StencilState;
-								pipelines.Add (pipelineItem);
-
+								InsertNewPipeline(pass, pipeline, pipelines, clearValues, colorBlends);
 							}
 							else
 							{
 								if (pastPipelineIndex != currentPipelineIndex)
 								{		
-									pipelineItem = GeneratePipelineItem (pipeline);
-									pipelineItem.DepthState = pipeline.DepthState;
-									pipelineItem.StencilState = pipeline.StencilState;
-									pipelines.Add (pipelineItem);
+									InsertNewPipeline(pass, pipeline, pipelines, clearValues, colorBlends);
 								}
 							}
 
@@ -414,6 +467,8 @@ namespace Magnesium.OpenGL
 			output.DrawItems = drawItems.ToArray ();
 			output.Pipelines = pipelines.ToArray ();
 			output.VBOs = vertexArrays.ToArray ();
+			output.ClearValues = clearValues.ToArray ();
+			output.ColorBlends = colorBlends.ToArray ();
 
 			output.Viewports = viewports.ToArray ();
 			output.BackCompareMasks = backCompareMasks.ToArray ();

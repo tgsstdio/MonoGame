@@ -248,6 +248,16 @@ namespace Magnesium.OpenGL
 				WaitSemaphores = signalInfos.ToArray(),
 			};
 			EnqueueSubmission (sub);
+
+			foreach (var image in pPresentInfo.Images)
+			{
+				var sc = image.Swapchain as IOpenTKSwapchainKHR;
+				if (sc != null)
+				{
+					sc.SwapBuffers ();
+				}
+			}
+
 			return Result.SUCCESS;
 		}
 

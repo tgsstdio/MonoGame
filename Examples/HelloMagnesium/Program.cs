@@ -19,6 +19,7 @@ using MonoGame.Textures.FreeImageNET;
 using Microsoft.Core.Graphics;
 using MonoGame.Content;
 using MonoGame.Content.Dirs;
+using Magnesium.OpenGL;
 
 namespace HelloMagnesium
 {
@@ -40,7 +41,9 @@ namespace HelloMagnesium
 					container.RegisterMapping<Microsoft.Xna.Framework.IGameWindow, IOpenTKGameWindow>();
 
 					container.Register<IGamePlatform, OpenTKGamePlatform>(Reuse.Singleton);
-					container.Register<IGraphicsDeviceManager, DesktopGLGraphicsDeviceManager>(Reuse.Singleton);
+					container.Register<IMgGraphicsDeviceManager, MgGraphicsDeviceManager>(Reuse.Singleton);
+					container.RegisterMapping<Microsoft.Xna.Framework.IGraphicsDeviceManager, IMgGraphicsDeviceManager>();
+
 					container.Register<IGraphicsProfiler, DefaultGraphicsDeviceProfiler> (Reuse.Singleton);
 					container.Register<IGraphicsDeviceService, NullGraphicsDeviceService>(Reuse.Singleton);
 					container.Register<IPlatformActivator, PlatformActivator>(Reuse.Singleton);
@@ -48,7 +51,7 @@ namespace HelloMagnesium
 					container.Register<IGraphicsAdapterCollection, DesktopGLGraphicsAdapterCollection>(Reuse.Singleton);
 					container.Register<IGraphicsCapabilities, GraphicsCapabilities>(Reuse.Singleton);
 					//container.Register<IGLExtensionLookup, FullGLExtensionLookup>(Reuse.Singleton);
-					container.Register<IGraphicsDevicePlatform, MagnesiumGraphicsDevicePlatform> (Reuse.Singleton);
+					//container.Register<IGraphicsDevicePlatform, MagnesiumGraphicsDevicePlatform> (Reuse.Singleton);
 					container.Register<IGLExtensionLookup, FullGLExtensionLookup>(Reuse.Singleton);
 					container.Register<IGraphicsCapabilitiesLookup, FullGLSpecificGraphicsCapabilitiesLookup>(Reuse.Singleton);
 					container.Register<IGLDevicePlatform, FullGLDevicePlatform>(Reuse.Singleton);
@@ -98,7 +101,7 @@ namespace HelloMagnesium
 					// MAGNESIUM
 					container.Register<IMgDriver, MgDriver>(Reuse.Singleton);
 					container.Register<IMgEntrypoint, Magnesium.OpenGL.GLEntrypoint>(Reuse.Singleton);
-					container.Register<IMgPresentationSurface, Win32PresentationSurface>(Reuse.Singleton);
+					//container.Register<IMgPresentationSurface, Win32PresentationSurface>(Reuse.Singleton);
 					container.Register<Magnesium.OpenGL.IGLQueue, Magnesium.OpenGL.GLQueue>(Reuse.Singleton);
 					container.Register<Magnesium.OpenGL.IGLQueueRenderer, Magnesium.OpenGL.GLQueueRenderer>(Reuse.Singleton);
 
@@ -110,14 +113,17 @@ namespace HelloMagnesium
 					container.Register<Magnesium.OpenGL.ICmdDrawCapabilities, Magnesium.OpenGL.FullCmdDrawCapabilities>(Reuse.Singleton);
 					container.Register<Magnesium.OpenGL.ICmdVBOCapabilities, Magnesium.OpenGL.FullCmdVBOCapabilities>(Reuse.Singleton);
 					container.Register<Magnesium.OpenGL.IGLCmdImageCapabilities, Magnesium.OpenGL.FullGLCmdImageCapabilities>(Reuse.Singleton);
-					container.Register<Magnesium.OpenGL.IShaderProgramCache, MockShaderProgramCache>(Reuse.Singleton);
+					container.Register<Magnesium.OpenGL.IShaderProgramCache, FullShaderProgramCache>(Reuse.Singleton);
 					container.Register<Magnesium.OpenGL.IGLSemaphoreGenerator, MockGLSemaphoreGenerator >(Reuse.Singleton);
 					container.Register<IMgDeviceQuery, MgDeviceQuery>(Reuse.Singleton);
 					container.Register<IMgImageTools, MgImageTools>(Reuse.Singleton);
 
-					container.Register<IMgDepthStencilBuffer, HelloDepthStencilBuffer>(Reuse.Singleton);
+					container.Register<IHelloGraphicsDevice, HelloMgGraphicsDevice>(Reuse.Singleton);
+					container.RegisterMapping<Microsoft.Xna.Framework.IGraphicsDevice, IHelloGraphicsDevice>();
+
 					container.Register<IMgSwapchainCollection, HelloMgSwapchainCollection>(Reuse.Singleton);
 					container.Register<IMgPresentationLayer, MgPresentationLayer>(Reuse.Singleton);
+					container.Register<IOpenTKSwapchainKHR, GLSwapchainKHR>(Reuse.Singleton);
 
 					// MAGNESIUM TEXTURES 
 					container.Register<IMgBaseTextureLoader, FITexture2DLoader>(Reuse.Singleton);
@@ -149,27 +155,19 @@ namespace HelloMagnesium
 								using (var audioContext = container.Resolve<IOpenALSoundContext>())														
 								using (var manager = container.Resolve<IGraphicsDeviceManager>())
 								{
-									manager.CreateDevice();
+									audioContext.Initialize();
 
-									using (var platform = container.Resolve<IGraphicsDevicePlatform>())						
+//									var capabilities = container.Resolve<IGraphicsCapabilities>();
+//									capabilities.Initialize();
+
+									using (var backbone = container.Resolve<IGameBackbone> ())
 									{
-										audioContext.Initialize();
+										var exitStrategy = container.Resolve<IWindowExitStrategy>();
+										exitStrategy.Initialize();
 
-										platform.Setup();
+										backbone.Run ();
+									}								
 
-										var capabilities = container.Resolve<IGraphicsCapabilities>();
-										capabilities.Initialize();
-
-										platform.Initialize();
-
-										using (var backbone = container.Resolve<IGameBackbone> ())
-										{
-											var exitStrategy = container.Resolve<IWindowExitStrategy>();
-											exitStrategy.Initialize();
-
-											backbone.Run ();
-										}								
-									}
 								}
 							}
 						}

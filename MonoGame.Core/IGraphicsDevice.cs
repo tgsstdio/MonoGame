@@ -17,10 +17,10 @@ namespace Microsoft.Xna.Framework
 		void OnDeviceReset ();
 
 		IPresentationParameters PresentationParameters { get; }
-		IWeakReferenceCollection WeakReferences { get; }
+		//IWeakReferenceCollection WeakReferences { get; }
 		GraphicsProfile GraphicsProfile { get; }
 		//IGraphicsCapabilities GraphicsCapabilities {get;}
-		void CreateDevice (IGraphicsAdapter adapter, GraphicsProfile graphicsProfile);
+		//void CreateDevice (IGraphicsAdapter adapter, GraphicsProfile graphicsProfile);
 		void Present();
 
 		void Initialize ();

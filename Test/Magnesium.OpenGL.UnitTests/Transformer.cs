@@ -3,8 +3,57 @@ using System.Collections.Generic;
 
 namespace Magnesium.OpenGL.UnitTests
 {
-	public class Transformer
+	public class Transformer : ICmdBufferInstructionSetComposer
 	{
+		#region ICmdBufferInstructionSetComposer implementation
+
+		public CmdBufferInstructionSet Compose (GLCmdBufferRepository repository, IEnumerable<GLCmdRenderPassCommand> passes)
+		{	
+			if (repository == null || passes == null)
+			{
+				// EARLY EXIT
+				return BuildInstructionSet ();
+			}
+
+			bool isFirst = true;
+			foreach (var pass in passes)
+			{
+				foreach (var command in pass.DrawCommands)
+				{
+					InitialiseDrawItem(repository, pass, command);
+				}
+			}
+			return BuildInstructionSet ();
+		}
+
+		CmdBufferInstructionSet BuildInstructionSet ()
+		{
+			var output = new CmdBufferInstructionSet {
+				DrawItems = DrawItems.ToArray(),
+				Pipelines = Pipelines.ToArray (),
+				VBOs = VBOs.ToArray (),
+				ClearValues = ClearValues.ToArray (),
+				ColorBlends = ColorBlends.ToArray (),
+				Viewports = Viewports.Items.ToArray (),
+				BackCompareMasks = BackCompareMasks.Items.ToArray (),
+				FrontCompareMasks = FrontCompareMasks.Items.ToArray (),
+				BackReferences = BackReferences.Items.ToArray (),
+				FrontReferences = FrontReferences.Items.ToArray (),
+				BackWriteMasks = BackWriteMasks.Items.ToArray (),
+				FrontWriteMasks = FrontWriteMasks.Items.ToArray (),
+				LineWidths = LineWidths.Items.ToArray (),
+				//Scissors = Scissors.Items.ToArray (),
+				BlendConstants = BlendConstants.Items.ToArray (),
+				//DescriptorSets = DescriptorSets.Items.ToArray (),
+				DepthBias = DepthBias.ToArray (),
+				DepthBounds = DepthBounds.Items.ToArray (),
+			};
+
+			return output;
+		}
+
+		#endregion
+
 		ICmdVBOCapabilities mVBO;
 
 		public Transformer (ICmdVBOCapabilities vbo)
@@ -13,6 +62,9 @@ namespace Magnesium.OpenGL.UnitTests
 			VBOs = new List<GLCmdVertexBufferObject>();
 			DepthBias = new List<GLCmdDepthBiasParameter> ();
 			DrawItems = new List<GLCmdBufferDrawItem> ();
+			Pipelines = new List<GLCmdBufferPipelineItem> ();
+			ClearValues = new List<GLCmdClearValuesParameter> ();
+			ColorBlends = new List<GLQueueRendererColorBlendState> ();
 
 			BlendConstants = new TransformerStore<MgColor4f> (
 				GLGraphicsPipelineDynamicStateFlagBits.BLEND_CONSTANTS,
@@ -78,11 +130,22 @@ namespace Magnesium.OpenGL.UnitTests
 				(d) => d.Viewports,
 				(r, i) => r.Viewports.At(i),
 				(gp) => gp.Viewports);
+
+			Scissors = new TransformerStore<GLCmdScissorParameter> (
+				GLGraphicsPipelineDynamicStateFlagBits.SCISSOR,
+				(d) => d.Scissors,
+				(r, i) => r.Scissors.At(i),
+				(gp) => gp.Scissors);
+		}
+
+		public TransformerStore<GLCmdScissorParameter> Scissors {
+			get;
+			private set;
 		}
 
 		public TransformerStore<GLCmdViewportParameter> Viewports {
 			get;
-			set;
+			private set;
 		}
 
 		public TransformerStore<int> FrontReferences {
@@ -148,6 +211,11 @@ namespace Magnesium.OpenGL.UnitTests
 			if (userSettings.Viewports.Count == 0)
 			{
 				Viewports.Items.Add (new GLCmdViewportParameter (0, new MgViewport[]{ }));
+			}
+
+			if (userSettings.Scissors.Count == 0)
+			{
+				Scissors.Items.Add (new GLCmdScissorParameter (0, new MgRect2D[]{ }));
 			}
 		}
 
@@ -313,13 +381,212 @@ namespace Magnesium.OpenGL.UnitTests
 			}			
 		}
 
-		public bool InitialiseDrawItem(IGLCmdBufferRepository repo, GLCmdDrawCommand drawCommand)
+		static IntPtr ExtractIndirectBuffer (IMgBuffer buffer)
+		{
+			var indirectBuffer = buffer as IGLIndirectBuffer;
+			return (indirectBuffer != null && indirectBuffer.BufferType == GLMemoryBufferType.INDIRECT) ? indirectBuffer.Source : IntPtr.Zero;
+		}
+
+		public static GLCommandBufferFlagBits ExtractPolygonMode (IGLGraphicsPipeline pipeline)
+		{
+			return (pipeline.PolygonMode == MgPolygonMode.LINE) ? GLCommandBufferFlagBits.AsLinesMode : ((pipeline.PolygonMode == MgPolygonMode.POINT) ? GLCommandBufferFlagBits.AsPointsMode : 0);
+		}
+
+		public GLCmdBufferDrawItem GenerateDrawItem (GLCmdRenderPassCommand pass, IGLGraphicsPipeline pipeline, GLCmdDrawCommand command)
+		{
+			var item = new GLCmdBufferDrawItem {
+				Command = ExtractPolygonMode (pipeline), 
+				ProgramID = pipeline.ProgramID,
+				Topology = pipeline.Topology,
+			};
+
+			item.Pipeline = ExtractGraphicsPipeline (pass, pipeline);
+
+			if (command.DrawIndexedIndirect != null)
+			{
+				item.Command |= GLCommandBufferFlagBits.CmdDrawIndexedIndirect;
+				var drawCommand = command.DrawIndexedIndirect;
+				item.Buffer = ExtractIndirectBuffer (drawCommand.buffer);
+				item.Count = drawCommand.drawCount;
+				item.Offset = drawCommand.offset;
+				item.Stride = drawCommand.stride;
+			}
+			else if (command.DrawIndirect != null)
+			{
+				item.Command |= GLCommandBufferFlagBits.CmdDrawIndirect;
+				var drawCommand = command.DrawIndirect;
+				item.Buffer = ExtractIndirectBuffer (drawCommand.buffer);
+				item.Count = drawCommand.drawCount;
+				item.Offset = drawCommand.offset;
+				item.Stride = drawCommand.stride;
+			}
+			else if (command.DrawIndexed != null)
+			{
+				item.Command |= GLCommandBufferFlagBits.CmdDrawIndexed;
+				var drawCommand = command.DrawIndexed;
+				item.First = drawCommand.firstIndex;
+				item.FirstInstance = drawCommand.firstInstance;
+				item.Count = drawCommand.indexCount;
+				item.VertexOffset = drawCommand.vertexOffset;
+				item.InstanceCount = drawCommand.instanceCount;
+			}
+			else if (command.Draw != null)
+			{
+				var drawCommand = command.Draw;
+				item.FirstInstance = drawCommand.firstInstance;
+				item.First = drawCommand.firstVertex;
+				item.InstanceCount = drawCommand.instanceCount;
+				item.Count = drawCommand.vertexCount;
+			}
+			else
+			{
+				throw new InvalidOperationException ();
+			}
+			return item;
+		}
+
+		public List<GLCmdClearValuesParameter> ClearValues { get; private set; }
+		byte GenerateClearValues (GLCmdRenderPassCommand pass)
+		{
+			if (pass == null)
+			{
+				throw new ArgumentNullException ("pass");
+			}
+
+			if (pass.Origin == null)
+			{
+				throw new ArgumentNullException ("pass.Origin");
+			}
+
+			var glPass = pass.Origin as IGLRenderPass;
+
+			if (glPass == null)
+			{
+				throw new InvalidCastException ();
+			}
+
+			var noOfAttachments = glPass.AttachmentFormats == null ? 0 : glPass.AttachmentFormats.Length;
+			var noOfClearValues = pass.ClearValues == null ? 0 : pass.ClearValues.Length;
+
+			var finalLength = Math.Min (noOfAttachments, noOfClearValues);
+
+			var finalValues = new List<GLClearValueArrayItem> ();
+			for (var i = 0; i < finalLength; ++i)
+			{
+				finalValues.Add (new GLClearValueArrayItem {
+					Attachment = glPass.AttachmentFormats [i],
+					Value = pass.ClearValues [i]
+				});
+			}
+
+			var currentValue = new GLCmdClearValuesParameter {
+				Attachments = finalValues.ToArray(),
+			};
+
+			var count = ClearValues.Count;
+			if (count == 0)
+			{
+				// USE DEFAULT
+				ClearValues.Add (currentValue);
+				return 0;
+			}
+			else
+			{	
+				var topIndex = count - 1;
+				var lastValue = ClearValues [topIndex];
+
+				if (currentValue.Equals (lastValue))
+				{
+					return (byte)topIndex;
+				}
+				else
+				{
+					ClearValues.Add (currentValue);
+					return (byte)count;
+				}
+			}	
+		}
+
+		public List<GLQueueRendererColorBlendState> ColorBlends {get; private set; }
+		byte GenerateColorBlendEnums (IGLGraphicsPipeline pipeline)
+		{
+			if (pipeline == null)
+			{
+				throw new ArgumentNullException("pipeline");
+			}
+
+			var currentValue = pipeline.ColorBlendEnums;
+
+			var count = ColorBlends.Count;
+			if (count == 0)
+			{
+				// USE DEFAULT
+				ColorBlends.Add (currentValue);
+				return 0;
+			}
+			else
+			{	
+				var topIndex = count - 1;
+				var lastValue = ColorBlends [topIndex];
+
+				if (currentValue.Equals (lastValue))
+				{
+					return (byte)topIndex;
+				}
+				else
+				{
+					ColorBlends.Add (currentValue);
+					return (byte)count;
+				}
+			}	
+		}
+
+		public List<GLCmdBufferPipelineItem> Pipelines {get; private set; }
+		byte ExtractGraphicsPipeline (GLCmdRenderPassCommand pass, IGLGraphicsPipeline pipeline)
+		{
+			QueueDrawItemBitFlags flags = pipeline.Flags;
+
+			var count = Pipelines.Count;
+			var currentValue = new GLCmdBufferPipelineItem {
+				//Pipeline = (byte) count,
+				Flags = flags,
+				DepthState = pipeline.DepthState,
+				StencilState = pipeline.StencilState,
+				ClearValues = GenerateClearValues (pass),
+				ColorBlendEnums = GenerateColorBlendEnums (pipeline),
+			};
+
+			if (count == 0)
+			{
+				// USE DEFAULT
+				Pipelines.Add (currentValue);
+				return 0;
+			}
+			else
+			{	
+				var topIndex = count - 1;
+				var lastValue = Pipelines [topIndex];
+
+				if (currentValue.Equals (lastValue))
+				{
+					return (byte)topIndex;
+				}
+				else
+				{
+					Pipelines.Add (currentValue);
+					return (byte)count;
+				}
+			}	
+		}
+
+		public bool InitialiseDrawItem(IGLCmdBufferRepository repo, GLCmdRenderPassCommand pass, GLCmdDrawCommand drawCommand)
 		{
 			if (drawCommand.Pipeline.HasValue)
 			{
 				var pipeline = repo.GraphicsPipelines.At (drawCommand.Pipeline.Value);
 
-				var item = new GLCmdBufferDrawItem ();
+				var item = GenerateDrawItem (pass, pipeline, drawCommand);
+
 				item.DepthBias = ExtractDepthBias (repo, pipeline, drawCommand);
 
 				item.BlendConstants = BlendConstants.Extract (repo, pipeline, drawCommand);
@@ -341,6 +608,8 @@ namespace Magnesium.OpenGL.UnitTests
 				item.BackStencilReference = BackReferences.Extract (repo, pipeline, drawCommand);
 
 				item.Viewport = Viewports.Extract (repo, pipeline, drawCommand);
+
+				item.Scissor = Scissors.Extract (repo, pipeline, drawCommand);
 
 				DrawItems.Add (item);
 				return true;

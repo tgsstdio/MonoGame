@@ -55,7 +55,7 @@ namespace Magnesium.OpenGL
 
 		public void BindDescriptorSet ()
 		{
-			throw new NotImplementedException ();
+			
 		}
 	}
 }

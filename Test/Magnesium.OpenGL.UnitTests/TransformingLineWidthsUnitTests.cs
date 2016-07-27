@@ -30,9 +30,9 @@ namespace Magnesium.OpenGL.UnitTests
 			var transform = new Transformer (vbo);
 			transform.Initialise (repo);
 
-			var command = new GLCmdDrawCommand{ LineWidth = null };
+			var command = new GLCmdDrawCommand{ LineWidth = null, Draw = new GLCmdInternalDraw{ }  };
 
-			var actual = transform.InitialiseDrawItem (repo, command);
+			var actual = transform.InitialiseDrawItem (repo, null, command);
 			Assert.IsFalse (actual);
 			Assert.IsNotNull (transform.LineWidths);
 			Assert.AreEqual (0, transform.LineWidths.Count);
@@ -52,9 +52,9 @@ namespace Magnesium.OpenGL.UnitTests
 			var transform = new Transformer (vbo);
 			transform.Initialise (repo);
 
-			var command = new GLCmdDrawCommand{ Pipeline = null, LineWidth = 0 };
+			var command = new GLCmdDrawCommand{ Pipeline = null, LineWidth = 0, Draw = new GLCmdInternalDraw{ }  };
 
-			var actual = transform.InitialiseDrawItem (repo, command);
+			var actual = transform.InitialiseDrawItem (repo, null, command);
 			Assert.IsFalse (actual);
 			Assert.IsNotNull (transform.LineWidths);
 			Assert.AreEqual (0, transform.LineWidths.Count);
@@ -75,12 +75,17 @@ namespace Magnesium.OpenGL.UnitTests
 
 			const float DEFAULT_LINEWIDTH = 100f;
 
+			var origin = new MockIGLRenderPass ();
+			var pass = new GLCmdRenderPassCommand{ Origin = origin};
+
 			repo.GraphicsPipelines.Add (new MockGLGraphicsPipeline 
 				{
 					VertexInput = new GLVertexBufferBinder(bindings, attributes),
 					DynamicsStates = 0,
 					LineWidth = DEFAULT_LINEWIDTH,
 					Viewports = new GLCmdViewportParameter(0, new MgViewport[]{}),
+					Scissors = new GLCmdScissorParameter(0, new MgRect2D[]{}),
+					ColorBlendEnums = new GLQueueRendererColorBlendState{ Attachments = new GLQueueColorAttachmentBlendState[]{} },
 				}
 			);
 
@@ -90,9 +95,9 @@ namespace Magnesium.OpenGL.UnitTests
 			var transform = new Transformer (vbo);
 			transform.Initialise (repo);
 
-			var command = new GLCmdDrawCommand{ Pipeline = 0, LineWidth = 0 };
+			var command = new GLCmdDrawCommand{ Pipeline = 0, LineWidth = 0, Draw = new GLCmdInternalDraw{ }  };
 
-			var result = transform.InitialiseDrawItem (repo, command);
+			var result = transform.InitialiseDrawItem (repo, pass, command);
 			Assert.IsTrue (result);
 			Assert.IsNotNull (transform.LineWidths);
 			Assert.AreEqual (1, transform.LineWidths.Count);
@@ -116,12 +121,17 @@ namespace Magnesium.OpenGL.UnitTests
 
 			const float DEFAULT_LINEWIDTH = 100f;
 
+			var origin = new MockIGLRenderPass ();
+			var pass = new GLCmdRenderPassCommand{ Origin = origin};
+
 			repo.GraphicsPipelines.Add (new MockGLGraphicsPipeline 
 				{
 					VertexInput = new GLVertexBufferBinder(bindings, attributes),
 					DynamicsStates = GLGraphicsPipelineDynamicStateFlagBits.LINE_WIDTH,
 					LineWidth = DEFAULT_LINEWIDTH,
 					Viewports = new GLCmdViewportParameter(0, new MgViewport[]{}),
+					Scissors = new GLCmdScissorParameter(0, new MgRect2D[]{}),
+					ColorBlendEnums = new GLQueueRendererColorBlendState{ Attachments = new GLQueueColorAttachmentBlendState[]{} },
 				}
 			);
 
@@ -132,9 +142,9 @@ namespace Magnesium.OpenGL.UnitTests
 			transform.Initialise (repo);
 
 			// USE OVERRIDE 
-			var command_0 = new GLCmdDrawCommand{ Pipeline = 0, LineWidth = 0 };
+			var command_0 = new GLCmdDrawCommand{ Pipeline = 0, LineWidth = 0 , Draw = new GLCmdInternalDraw{ } };
 
-			var result = transform.InitialiseDrawItem (repo, command_0);
+			var result = transform.InitialiseDrawItem (repo, pass, command_0);
 			Assert.IsTrue (result);
 			Assert.IsNotNull (transform.LineWidths);
 			Assert.AreEqual (1, transform.LineWidths.Count);
@@ -148,9 +158,9 @@ namespace Magnesium.OpenGL.UnitTests
 			Assert.AreEqual (0, drawItem_0.LineWidth);
 
 			// NEXT TEST - IF VALUES DIFFER, CREATE NEW DEPTHBIAS
-			var command_1 = new GLCmdDrawCommand{ Pipeline = 0, LineWidth = null };
+			var command_1 = new GLCmdDrawCommand{ Pipeline = 0, LineWidth = null, Draw = new GLCmdInternalDraw{ }  };
 
-			result = transform.InitialiseDrawItem (repo, command_1);
+			result = transform.InitialiseDrawItem (repo, pass, command_1);
 			Assert.IsTrue (result);
 			Assert.AreEqual (2, transform.LineWidths.Count);
 
@@ -163,9 +173,9 @@ namespace Magnesium.OpenGL.UnitTests
 			Assert.AreEqual (1, drawItem_1.LineWidth);
 
 			// NEXT TEST - IF DEPTHBIAS IS SAME, REUSE INDEX 1
-			var command_2 = new GLCmdDrawCommand{ Pipeline = 0, LineWidth = null };
+			var command_2 = new GLCmdDrawCommand{ Pipeline = 0, LineWidth = null, Draw = new GLCmdInternalDraw{ }  };
 
-			result = transform.InitialiseDrawItem (repo, command_2);
+			result = transform.InitialiseDrawItem (repo, pass, command_2);
 			Assert.IsTrue (result);
 			Assert.AreEqual (2, transform.LineWidths.Count);
 

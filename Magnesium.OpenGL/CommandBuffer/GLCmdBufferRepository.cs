@@ -20,7 +20,7 @@ namespace Magnesium.OpenGL
 		private readonly GLCmdBufferStore<int> mFrontWriteMasks;
 		private readonly GLCmdBufferStore<MgColor4f> mBlendConstants;
 		private readonly GLCmdBufferStore<int> mBackReferences;
-		private readonly GLCmdBufferStore<GLQueueRendererBlendState> mColorBlends;
+		private readonly GLCmdBufferStore<GLQueueRendererColorBlendState> mColorBlends;
 
 		public GLCmdBufferRepository ()
 		{
@@ -74,7 +74,7 @@ namespace Magnesium.OpenGL
 			mBlendConstants = new GLCmdBufferStore<MgColor4f> (); 
 			mClearables.Add (mBlendConstants);
 
-			mColorBlends = new GLCmdBufferStore<GLQueueRendererBlendState> (); 
+			mColorBlends = new GLCmdBufferStore<GLQueueRendererColorBlendState> (); 
 			mClearables.Add (mColorBlends);
 		}
 		private List<IGLCmdBufferStoreResettable> mClearables;
@@ -178,7 +178,7 @@ namespace Magnesium.OpenGL
 			}
 		}
 
-		public IGLCmdBufferStore<GLQueueRendererBlendState> ColorBlends {
+		public IGLCmdBufferStore<GLQueueRendererColorBlendState> ColorBlends {
 			get
 			{
 				return mColorBlends;

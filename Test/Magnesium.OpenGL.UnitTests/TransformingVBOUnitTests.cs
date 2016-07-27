@@ -31,7 +31,7 @@ namespace Magnesium.OpenGL.UnitTests
 			var transform = new Transformer (vbo);
 			transform.Initialise (repo);
 
-			var command = new GLCmdDrawCommand{ VertexBuffer = null };
+			var command = new GLCmdDrawCommand{ VertexBuffer = null, Draw = new GLCmdInternalDraw{ }  };
 
 			var actual = transform.ExtractVertexBuffer (repo, command);
 			Assert.AreEqual (0, actual);
@@ -85,7 +85,7 @@ namespace Magnesium.OpenGL.UnitTests
 			var transform = new Transformer (vbo);
 			transform.Initialise (repo);
 
-			var command = new GLCmdDrawCommand{ VertexBuffer = 1 };
+			var command = new GLCmdDrawCommand{ VertexBuffer = 1, Draw = new GLCmdInternalDraw{ }  };
 
 			var actual = transform.ExtractVertexBuffer (repo, command);
 			Assert.AreEqual (0, actual);
@@ -124,7 +124,7 @@ namespace Magnesium.OpenGL.UnitTests
 			var transform = new Transformer (vbo);
 			transform.Initialise (repo);
 
-			var command_0 = new GLCmdDrawCommand{ VertexBuffer = 1, Pipeline = 0 };
+			var command_0 = new GLCmdDrawCommand{ VertexBuffer = 1, Pipeline = 0 , Draw = new GLCmdInternalDraw{ } };
 
 			const int BUFFER_0 = 100;
 			vbo.Index = BUFFER_0;
@@ -132,7 +132,7 @@ namespace Magnesium.OpenGL.UnitTests
 			Assert.AreEqual (BUFFER_0, actual_0);
 			Assert.AreEqual (2, transform.VBOs.Count);
 
-			var command_1 = new GLCmdDrawCommand{ VertexBuffer = 1, Pipeline = 0 };
+			var command_1 = new GLCmdDrawCommand{ VertexBuffer = 1, Pipeline = 0, Draw = new GLCmdInternalDraw{ }  };
 
 			const int BUFFER_1 = 200;
 			vbo.Index = BUFFER_1;
@@ -140,7 +140,7 @@ namespace Magnesium.OpenGL.UnitTests
 			Assert.AreEqual (BUFFER_0, actual_1);
 			Assert.AreEqual (2, transform.VBOs.Count);
 
-			var command_2 = new GLCmdDrawCommand{ VertexBuffer = 0, Pipeline = 0 };
+			var command_2 = new GLCmdDrawCommand{ VertexBuffer = 0, Pipeline = 0, Draw = new GLCmdInternalDraw{ }  };
 
 			var actual_2 = transform.ExtractVertexBuffer (repo, command_2);
 			Assert.AreEqual (BUFFER_1, actual_2);

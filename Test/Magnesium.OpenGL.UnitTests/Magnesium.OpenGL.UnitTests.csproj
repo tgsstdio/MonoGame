@@ -64,6 +64,9 @@
     <Compile Include="TransformingDepthBiasUnitTests.cs" />
     <Compile Include="TransformingViewportsUnitTests.cs" />
     <Compile Include="ViewportParameterUnitTests.cs" />
+    <Compile Include="MockIGLRenderPass.cs" />
+    <Compile Include="TransformingScissorsUnitTests.cs" />
+    <Compile Include="TransformingClearValuesUnitTests.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

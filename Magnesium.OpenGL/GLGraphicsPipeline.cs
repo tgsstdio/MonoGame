@@ -95,16 +95,16 @@ namespace Magnesium.OpenGL
 			MgColorComponentFlagBits ColorWriteMask { get; set; }
 		}
 
-		public GLQueueRendererBlendState ColorBlends { get; private set; }
+		public GLQueueRendererColorBlendState ColorBlendEnums { get; private set; }
 		void PopulateColorBlend (MgPipelineColorBlendStateCreateInfo colorBlend)
 		{
-			ColorBlends = new GLQueueRendererBlendState ();
+			ColorBlendEnums = new GLQueueRendererColorBlendState ();
 			if (colorBlend != null)
 			{
 				BlendConstants = colorBlend.BlendConstants;
 
-				ColorBlends.LogicOpEnable = colorBlend.LogicOpEnable;
-				ColorBlends.LogicOp = colorBlend.LogicOp;
+				ColorBlendEnums.LogicOpEnable = colorBlend.LogicOpEnable;
+				ColorBlendEnums.LogicOp = colorBlend.LogicOp;
 
 				if (colorBlend.Attachments != null)
 				{
@@ -124,20 +124,20 @@ namespace Magnesium.OpenGL
 							ColorWriteMask = attachment.ColorWriteMask,
 						};
 					}
-					ColorBlends.Attachments = colorAttachments;
+					ColorBlendEnums.Attachments = colorAttachments;
 				}
 				else
 				{
-					ColorBlends.Attachments = new GLQueueColorAttachmentBlendState[]{ };
+					ColorBlendEnums.Attachments = new GLQueueColorAttachmentBlendState[]{ };
 				}
 			} 
 			else
 			{
 				BlendConstants = new MgColor4f( 0f, 0f, 0f, 0f );
-				ColorBlends.Attachments = new GLQueueColorAttachmentBlendState[]{ };
+				ColorBlendEnums.Attachments = new GLQueueColorAttachmentBlendState[]{ };
 
-				ColorBlends.LogicOpEnable = false;
-				ColorBlends.LogicOp = MgLogicOp.COPY;
+				ColorBlendEnums.LogicOpEnable = false;
+				ColorBlendEnums.LogicOp = MgLogicOp.COPY;
 			}
 		}
 

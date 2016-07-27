@@ -5,43 +5,37 @@ using OpenTK.Graphics;
 using MonoGame.Graphics;
 using MonoGame.Platform.DesktopGL;
 using Magnesium;
-using System.Diagnostics;
+using OpenTK;
 
 namespace HelloMagnesium
 {
-	public class MagnesiumGraphicsDevicePlatform : IGraphicsDevicePlatform
+	public class MagnesiumGraphicsDevicePlatform
 	{
-		private readonly IOpenTKGameWindow mWindow;
+		private readonly NativeWindow mWindow;
 		private readonly IGraphicsDevicePreferences mDevicePreferences;
 		private readonly IGraphicsDeviceLogger mLogger;
 		private IPresentationParameters mPresentation;
 		private IMgDeviceQuery mDeviceQuery;
-		private IMgImageTools mImageTools;
 
 		IGLExtensionLookup mExtensions;
 
 		IGLFramebufferHelperSelector mSelector;
 
 		IGLDevicePlatform mGLPlatform;
-		IMgThreadPartition mPartition;
 
 		public MagnesiumGraphicsDevicePlatform 
 		(
 			// IMPLEMENTATION BELOW
-			IOpenTKGameWindow window
+			NativeWindow window
 			,IMgDeviceQuery deviceQuery
 			,IGraphicsDevicePreferences devicePreferences
 			,IGraphicsDeviceLogger logger
-			,IMgImageTools imageTools
 			,IPresentationParameters presentation
 
 			,IGLFramebufferHelperSelector selector
 
 			,IGLExtensionLookup extensions
 			,IGLDevicePlatform glPlatform
-
-			,IMgThreadPartition partition
-			,IMgPresentationSurface layer
 		)
 		{
 			mWindow = window;
@@ -49,12 +43,10 @@ namespace HelloMagnesium
 			mDeviceQuery = deviceQuery;
 			mLogger = logger;
 			mPresentation = presentation;
-			mImageTools = imageTools;
 
 			mExtensions = extensions;
 			mSelector = selector;
 			mGLPlatform = glPlatform;
-			mPartition = partition;
 		}
 
 		internal IGraphicsContext Context { get; private set; }
@@ -62,7 +54,7 @@ namespace HelloMagnesium
 		void SetupContext ()
 		{
 			GraphicsMode mode;
-			var wnd = mWindow.GetWindowInfo();
+			var wnd = mWindow.WindowInfo;
 
 			// Create an OpenGL compatibility context
 			var flags = GraphicsContextFlags.Default;
@@ -342,7 +334,7 @@ namespace HelloMagnesium
 			throw new NotImplementedException ();
 		}
 
-		public void Clear (ClearOptions options, Vector4 vector4, float maxDepth, int i)
+		public void Clear (ClearOptions options, OpenTK.Vector4 vector4, float maxDepth, int i)
 		{
 			throw new NotImplementedException ();
 		}

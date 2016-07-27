@@ -35,20 +35,20 @@ namespace HelloMagnesium
 			set;
 		}
 
-		public IMgPipeline[] GraphicsPipelines {
-			get;
-			set;
-		}
+//		public IMgPipeline[] GraphicsPipelines {
+//			get;
+//			set;
+//		}
 
-		public IMgPipelineLayout PipelineLayout {
-			get;
-			set;
-		}
-
-		public IMgDescriptorSetLayout SetLayout {
-			get;
-			set;
-		}
+//		public IMgPipelineLayout PipelineLayout {
+//			get;
+//			set;
+//		}
+//
+//		public IMgDescriptorSetLayout SetLayout {
+//			get;
+//			set;
+//		}
 
 		public uint Height {
 			get;
@@ -60,25 +60,15 @@ namespace HelloMagnesium
 			set;
 		}
 
-		public MgRect2D CurrentScissor {
-			get;
-			set;
-		}
-
-		public MgViewport CurrentViewport {
-			get;
-			set;
-		}
-
-		public IMgFramebuffer[] FrameBuffers {
-			get;
-			set;
-		}
-
-		public IMgRenderPass RenderPass {
-			get;
-			set;
-		}
+//		public MgRect2D CurrentScissor {
+//			get;
+//			set;
+//		}
+//
+//		public MgViewport CurrentViewport {
+//			get;
+//			set;
+//		}
 	}
 }
 

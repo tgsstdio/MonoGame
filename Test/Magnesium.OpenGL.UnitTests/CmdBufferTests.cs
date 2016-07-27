@@ -15,7 +15,7 @@ namespace Magnesium.OpenGL.UnitTests
 		public void Initialise()
 		{
 			mFactory = new MockVertexBufferFactory ();
-			mComposer = new CmdBufferInstructionSetComposer (mFactory);
+			mComposer = new Transformer (mFactory);
 			mRepository = new GLCmdBufferRepository ();
 		}
 
@@ -31,7 +31,7 @@ namespace Magnesium.OpenGL.UnitTests
 		[TestCase]
 		public void NullPointer()
 		{
-			CmdBufferInstructionSet output = mComposer.Compose (null, null);
+			var output = mComposer.Compose (null, null);
 
 			Assert.IsNotNull (output);
 			Assert.IsNotNull (output.DrawItems);
@@ -45,7 +45,7 @@ namespace Magnesium.OpenGL.UnitTests
 		[TestCase]
 		public void EmptyRepository()
 		{			
-			CmdBufferInstructionSet output = mComposer.Compose (mRepository, null);
+			var output = mComposer.Compose (mRepository, null);
 
 			Assert.IsNotNull (output);
 			Assert.IsNotNull (output.DrawItems);

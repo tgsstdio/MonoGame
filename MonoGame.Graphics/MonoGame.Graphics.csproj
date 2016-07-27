@@ -96,6 +96,7 @@
     <Compile Include="DrawItemBitFlags.cs" />
     <Compile Include="SpriteBatch\IMgTexture.cs" />
     <Compile Include="SpriteBatch\IMgBaseTextureLoader.cs" />
+    <Compile Include="IMgGraphicsDeviceManager.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>

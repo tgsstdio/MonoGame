@@ -2,7 +2,12 @@
 {
 	public class CmdBufferInstructionSet
 	{
-		public GLQueueRendererBlendState[] ColorBlends {
+		public GLCmdClearValuesParameter[] ClearValues {
+			get;
+			set;
+		}
+
+		public GLQueueRendererColorBlendState[] ColorBlends {
 			get;
 			set;
 		}

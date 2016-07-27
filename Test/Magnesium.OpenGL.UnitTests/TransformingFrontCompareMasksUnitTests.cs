@@ -30,9 +30,9 @@ namespace Magnesium.OpenGL.UnitTests
 			var transform = new Transformer (vbo);
 			transform.Initialise (repo);
 
-			var command = new GLCmdDrawCommand{ FrontCompareMask = null };
+			var command = new GLCmdDrawCommand{ FrontCompareMask = null, Draw = new GLCmdInternalDraw{ }  };
 
-			var actual = transform.InitialiseDrawItem (repo, command);
+			var actual = transform.InitialiseDrawItem (repo, null, command);
 			Assert.IsFalse (actual);
 			Assert.IsNotNull (transform.FrontCompareMasks);
 			Assert.AreEqual (0, transform.FrontCompareMasks.Count);
@@ -52,9 +52,9 @@ namespace Magnesium.OpenGL.UnitTests
 			var transform = new Transformer (vbo);
 			transform.Initialise (repo);
 
-			var command = new GLCmdDrawCommand{ Pipeline = null, FrontCompareMask = 0 };
+			var command = new GLCmdDrawCommand{ Pipeline = null, FrontCompareMask = 0, Draw = new GLCmdInternalDraw{ }  };
 
-			var actual = transform.InitialiseDrawItem (repo, command);
+			var actual = transform.InitialiseDrawItem (repo, null, command);
 			Assert.IsFalse (actual);
 			Assert.IsNotNull (transform.FrontCompareMasks);
 			Assert.AreEqual (0, transform.FrontCompareMasks.Count);
@@ -75,12 +75,17 @@ namespace Magnesium.OpenGL.UnitTests
 
 			const int DEFAULT_VALUE = 100;
 
+			var origin = new MockIGLRenderPass ();
+			var pass = new GLCmdRenderPassCommand{ Origin = origin};
+
 			repo.GraphicsPipelines.Add (new MockGLGraphicsPipeline 
 				{
 					VertexInput = new GLVertexBufferBinder(bindings, attributes),
 					DynamicsStates = 0,
 					Front = new GLQueueStencilMasks{ CompareMask = DEFAULT_VALUE},
 					Viewports = new GLCmdViewportParameter(0, new MgViewport[]{}),
+					Scissors = new GLCmdScissorParameter(0, new MgRect2D[]{}),
+					ColorBlendEnums = new GLQueueRendererColorBlendState{ Attachments = new GLQueueColorAttachmentBlendState[]{} },
 				}
 			);
 
@@ -90,9 +95,9 @@ namespace Magnesium.OpenGL.UnitTests
 			var transform = new Transformer (vbo);
 			transform.Initialise (repo);
 
-			var command = new GLCmdDrawCommand{ Pipeline = 0, FrontCompareMask = 0 };
+			var command = new GLCmdDrawCommand{ Pipeline = 0, FrontCompareMask = 0, Draw = new GLCmdInternalDraw{ }  };
 
-			var result = transform.InitialiseDrawItem (repo, command);
+			var result = transform.InitialiseDrawItem (repo, pass, command);
 			Assert.IsTrue (result);
 			Assert.IsNotNull (transform.FrontCompareMasks);
 			Assert.AreEqual (1, transform.FrontCompareMasks.Count);
@@ -116,12 +121,17 @@ namespace Magnesium.OpenGL.UnitTests
 
 			const int DEFAULT_VALUE = 100;
 
+			var origin = new MockIGLRenderPass ();
+			var pass = new GLCmdRenderPassCommand{ Origin = origin};
+
 			repo.GraphicsPipelines.Add (new MockGLGraphicsPipeline 
 				{
 					VertexInput = new GLVertexBufferBinder(bindings, attributes),
 					DynamicsStates = GLGraphicsPipelineDynamicStateFlagBits.STENCIL_COMPARE_MASK,
 					Front = new GLQueueStencilMasks{CompareMask = DEFAULT_VALUE},
 					Viewports = new GLCmdViewportParameter(0, new MgViewport[]{}),
+					Scissors = new GLCmdScissorParameter(0, new MgRect2D[]{}),
+					ColorBlendEnums = new GLQueueRendererColorBlendState{ Attachments = new GLQueueColorAttachmentBlendState[]{} },
 				}
 			);
 
@@ -132,9 +142,9 @@ namespace Magnesium.OpenGL.UnitTests
 			transform.Initialise (repo);
 
 			// USE OVERRIDE 
-			var command_0 = new GLCmdDrawCommand{ Pipeline = 0, FrontCompareMask = 0 };
+			var command_0 = new GLCmdDrawCommand{ Pipeline = 0, FrontCompareMask = 0, Draw = new GLCmdInternalDraw{ }  };
 
-			var result = transform.InitialiseDrawItem (repo, command_0);
+			var result = transform.InitialiseDrawItem (repo, pass, command_0);
 			Assert.IsTrue (result);
 			Assert.IsNotNull (transform.FrontCompareMasks);
 			Assert.AreEqual (1, transform.FrontCompareMasks.Count);
@@ -148,9 +158,9 @@ namespace Magnesium.OpenGL.UnitTests
 			Assert.AreEqual (0, drawItem_0.FrontStencilCompareMask);
 
 			// NEXT TEST - IF VALUES DIFFER, CREATE NEW DEPTHBIAS
-			var command_1 = new GLCmdDrawCommand{ Pipeline = 0, FrontCompareMask = null };
+			var command_1 = new GLCmdDrawCommand{ Pipeline = 0, FrontCompareMask = null, Draw = new GLCmdInternalDraw{ }  };
 
-			result = transform.InitialiseDrawItem (repo, command_1);
+			result = transform.InitialiseDrawItem (repo, pass, command_1);
 			Assert.IsTrue (result);
 			Assert.AreEqual (2, transform.FrontCompareMasks.Count);
 
@@ -163,9 +173,9 @@ namespace Magnesium.OpenGL.UnitTests
 			Assert.AreEqual (1, drawItem_1.FrontStencilCompareMask);
 
 			// NEXT TEST - IF DEPTHBIAS IS SAME, REUSE INDEX 1
-			var command_2 = new GLCmdDrawCommand{ Pipeline = 0, FrontCompareMask = null };
+			var command_2 = new GLCmdDrawCommand{ Pipeline = 0, FrontCompareMask = null, Draw = new GLCmdInternalDraw{ }  };
 
-			result = transform.InitialiseDrawItem (repo, command_2);
+			result = transform.InitialiseDrawItem (repo, pass, command_2);
 			Assert.IsTrue (result);
 			Assert.AreEqual (2, transform.FrontCompareMasks.Count);
 

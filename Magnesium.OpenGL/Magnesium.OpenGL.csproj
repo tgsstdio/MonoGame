@@ -127,7 +127,6 @@
     <Compile Include="Queue\GLQueueRendererStencilState.cs" />
     <Compile Include="Queue\GLQueueRendererRasterizerState.cs" />
     <Compile Include="Queue\GLQueueColorAttachmentBlendState.cs" />
-    <Compile Include="Queue\GLQueueRendererBlendState.cs" />
     <Compile Include="Entrypoint\IScissorsCapabilities.cs" />
     <Compile Include="Entrypoint\FullScissorsCapabilities.cs" />
     <Compile Include="Entrypoint\ICmdDrawCapabilities.cs" />
@@ -148,6 +147,12 @@
     <Compile Include="GLShaderModule.cs" />
     <Compile Include="GLSwapchainKHR.cs" />
     <Compile Include="GLFramebuffer.cs" />
+    <Compile Include="IOpenTKSwapchainKHR.cs" />
+    <Compile Include="IGLRenderPass.cs" />
+    <Compile Include="GLClearAttachmentType.cs" />
+    <Compile Include="CommandBuffer\GLCmdClearValuesParameter.cs" />
+    <Compile Include="CommandBuffer\GLClearValueArrayItem.cs" />
+    <Compile Include="Queue\GLQueueRendererColorBlendState.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

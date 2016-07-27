@@ -7,7 +7,7 @@ namespace Magnesium.OpenGL
 		}
 
 		GLGraphicsPipelineDynamicStateFlagBits DynamicsStates { get; }
-		GLQueueRendererBlendState ColorBlends { get; }
+		GLQueueRendererColorBlendState ColorBlendEnums { get; }
 
 		GLCmdViewportParameter Viewports { get; }
 		GLCmdScissorParameter Scissors { get; }

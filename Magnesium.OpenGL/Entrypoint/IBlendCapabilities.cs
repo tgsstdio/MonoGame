@@ -9,7 +9,7 @@ namespace Magnesium.OpenGL
 	
 		bool IsEnabled(uint index);
 
-		GLQueueRendererBlendState Initialize(uint noOfAttachments);
+		GLQueueRendererColorBlendState Initialize(uint noOfAttachments);
 
 		void EnableBlending (uint index, bool value);
 

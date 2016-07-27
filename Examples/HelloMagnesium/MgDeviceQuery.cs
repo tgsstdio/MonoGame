@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework.Graphics;
 using OpenTK.Graphics;
+using Magnesium;
 
 namespace HelloMagnesium
 {
@@ -11,6 +12,22 @@ namespace HelloMagnesium
 		public int GetStencilBit (DepthFormat format)
 		{
 			return format == DepthFormat.Depth24Stencil8 ? 8 : 0;
+		}
+
+		public int GetStencilBit (MgFormat format)
+		{
+			switch (format)
+			{
+			case MgFormat.D16_UNORM:
+			case MgFormat.D32_SFLOAT:				
+				return 0;
+			case MgFormat.D16_UNORM_S8_UINT:
+			case MgFormat.D24_UNORM_S8_UINT:
+			case MgFormat.D32_SFLOAT_S8_UINT:
+				return 8;
+			default:
+				throw new NotSupportedException ();
+			}
 		}
 
 		public int GetSwapInterval (PresentInterval interval)
@@ -41,26 +58,66 @@ namespace HelloMagnesium
 			return format == DepthFormat.None ? 0 : format == DepthFormat.Depth16 ? 16 : 24;
 		}
 
+		public int GetDepthBit (MgFormat format)
+		{
+			switch (format)
+			{
+			case MgFormat.D16_UNORM:
+			case MgFormat.D16_UNORM_S8_UINT:
+				return 16;
+			case MgFormat.D24_UNORM_S8_UINT:
+				return 24;
+			case MgFormat.D32_SFLOAT:	
+			case MgFormat.D32_SFLOAT_S8_UINT:				
+				return 32;
+			default:
+				throw new NotSupportedException ();
+			}
+		}
+
 		public ColorFormat GetColorFormat(Magnesium.MgFormat format)
 		{
 			switch (format)
 			{
-			case Magnesium.MgFormat.R8_UNORM:
-				return new ColorFormat(0, 0, 0, 8);
-			case Magnesium.MgFormat.B5G6R5_UNORM_PACK16:
+			case MgFormat.R8_UNORM:
+			case MgFormat.R8_SINT:				
+			case MgFormat.R8_UINT:			
+				return new ColorFormat(8, 0, 0, 0);
+			case MgFormat.R8G8_UNORM:
+			case MgFormat.R8G8_SINT:				
+			case MgFormat.R8G8_UINT:
+				return new ColorFormat(8, 8, 0, 0);
+
+			case MgFormat.B5G6R5_UNORM_PACK16:
 				return new ColorFormat(5, 6, 5, 0);
-			case Magnesium.MgFormat.B4G4R4A4_UNORM_PACK16:
+			case MgFormat.B4G4R4A4_UNORM_PACK16:
 				return new ColorFormat(4, 4, 4, 4);
-			case Magnesium.MgFormat.B5G5R5A1_UNORM_PACK16:
+			case MgFormat.B5G5R5A1_UNORM_PACK16:
 				return new ColorFormat(5, 5, 5, 1);
-			case Magnesium.MgFormat.B8G8R8_UNORM:
+
+			case MgFormat.B8G8R8_UINT:
+			case MgFormat.B8G8R8_SINT:			
+			case MgFormat.R8G8B8_UINT:
+			case MgFormat.R8G8B8_SINT:
+			case MgFormat.R8G8B8_SRGB:				
+			case MgFormat.B8G8R8_SRGB:
+			case MgFormat.B8G8R8_UNORM:
+			case MgFormat.R8G8B8_UNORM:	
 				return new ColorFormat(8, 8, 8, 0);
-			case Magnesium.MgFormat.B8G8R8A8_UNORM:
-			case Magnesium.MgFormat.R8G8B8A8_UNORM:
-			case Magnesium.MgFormat.R8G8B8A8_SRGB:
+
+			case MgFormat.B8G8R8A8_UNORM:
+			case MgFormat.R8G8B8A8_UNORM:
+			case MgFormat.R8G8B8A8_SRGB:
+			case MgFormat.B8G8R8A8_SRGB:
+			case MgFormat.R8G8B8A8_UINT:
+			case MgFormat.R8G8B8A8_SINT:
+			case MgFormat.B8G8R8A8_UINT:
+			case MgFormat.B8G8R8A8_SINT:				
 				return new ColorFormat(8, 8, 8, 8);
-			case Magnesium.MgFormat.A2B10G10R10_UNORM_PACK32:
+
+			case MgFormat.A2B10G10R10_UNORM_PACK32:
 				return new ColorFormat(10, 10, 10, 2);
+
 			default:
 				// Floating point backbuffers formats could be implemented
 				// but they are not typically used on the backbuffer. In

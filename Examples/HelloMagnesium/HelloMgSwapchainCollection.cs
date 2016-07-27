@@ -5,7 +5,8 @@ namespace HelloMagnesium
 {
 	public class HelloMgSwapchainCollection : IMgSwapchainCollection
 	{
-		public HelloMgSwapchainCollection ()
+		private IOpenTKSwapchainKHR mSwapchain;
+		public HelloMgSwapchainCollection (IOpenTKSwapchainKHR swapchain)
 		{
 			Buffers = new MgSwapchainBuffer[]{ 
 				new MgSwapchainBuffer{
@@ -15,14 +16,15 @@ namespace HelloMagnesium
 					View = new GLNullImageView(),
 				}
 			};
-			Swapchain = new GLSwapchainKHR (2);
+			mSwapchain = swapchain;
 		}
 
 		#region IMgSwapchain implementation
 
 		public IMgSwapchainKHR Swapchain {
-			get;
-			private set;
+			get {
+				return mSwapchain;
+			}
 		}
 
 		public uint Width {
@@ -33,11 +35,6 @@ namespace HelloMagnesium
 		public uint Height {
 			get;
 			private set;
-		}
-
-		public void Setup ()
-		{
-
 		}
 
 		public void Create (IMgCommandBuffer cmd, uint width, uint height)

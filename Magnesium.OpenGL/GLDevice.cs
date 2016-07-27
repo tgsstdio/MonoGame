@@ -1062,9 +1062,18 @@ namespace Magnesium.OpenGL
 //		{
 //			throw new NotImplementedException ();
 //		}
+
 		public Result CreateRenderPass (MgRenderPassCreateInfo pCreateInfo, MgAllocationCallbacks allocator, out IMgRenderPass pRenderPass)
 		{
-			pRenderPass = new GLRenderPass ();
+			var attachmentTypes = new List<MgFormat> ();
+			for (uint i = 0; i < pCreateInfo.Attachments.Length; ++i)
+			{
+				var attachment = pCreateInfo.Attachments [i];
+
+				attachmentTypes.Add(attachment.Format);
+			}
+
+			pRenderPass = new GLRenderPass (attachmentTypes.ToArray());
 			return Result.SUCCESS;
 		}
 //		public void DestroyRenderPass (IMgRenderPass renderPass, MgAllocationCallbacks allocator)
@@ -1097,10 +1106,10 @@ namespace Magnesium.OpenGL
 				throw new InvalidCastException ("pAllocateInfo.CommandPool");
 			}
 
-			{
-				var error = GL.GetError ();
-				Debug.WriteLineIf (error != ErrorCode.NoError, "AllocateCommandBuffers (BEFORE) : " + error);
-			}
+//			{
+//				var error = GL.GetError ();
+//				Debug.WriteLineIf (error != ErrorCode.NoError, "AllocateCommandBuffers (BEFORE) : " + error);
+//			}
 
 			for (uint i = 0; i < pAllocateInfo.CommandBufferCount; ++i)
 			{
@@ -1110,10 +1119,10 @@ namespace Magnesium.OpenGL
 				pCommandBuffers [i] = buffer;
 			}
 
-			{
-				var error = GL.GetError ();
-				Debug.WriteLineIf (error != ErrorCode.NoError, "AllocateCommandBuffers (BEFORE) : " + error);
-			}
+//			{
+//				var error = GL.GetError ();
+//				Debug.WriteLineIf (error != ErrorCode.NoError, "AllocateCommandBuffers (BEFORE) : " + error);
+//			}
 
 			return Result.SUCCESS;
 		}

@@ -13,7 +13,7 @@ namespace Magnesium.OpenGL.UnitTests
 
 		#region IGLGraphicsPipeline implementation
 
-		public GLQueueRendererBlendState ColorBlends {
+		public GLQueueRendererColorBlendState ColorBlendEnums {
 			get;
 			set;
 		}

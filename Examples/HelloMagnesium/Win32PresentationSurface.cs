@@ -6,11 +6,11 @@ namespace HelloMagnesium
 {
 	public class Win32PresentationSurface : IMgPresentationSurface
 	{
-		private readonly IMgDriver mPlatform;
+		private readonly IMgDriver mDriver;
 		private readonly INativeWindow mWindow;
-		public Win32PresentationSurface (IMgDriver platform, INativeWindow window)
+		public Win32PresentationSurface (IMgDriver driver, INativeWindow window)
 		{
-			mPlatform = platform;
+			mDriver = driver;
 			mWindow = window;
 		}
 
@@ -30,7 +30,7 @@ namespace HelloMagnesium
 				Hinstance = Process.GetCurrentProcess ().Handle,
 				Hwnd = mWindow.WindowInfo.Handle,
 			};
-			var err = mPlatform.Instance.CreateWin32SurfaceKHR (createInfo, null, out mSurface);
+			var err = mDriver.Instance.CreateWin32SurfaceKHR (createInfo, null, out mSurface);
 			Debug.Assert (err == Result.SUCCESS);
 		}
 
@@ -45,7 +45,7 @@ namespace HelloMagnesium
 
 			if (mSurface != null)
 			{
-				mSurface.DestroySurfaceKHR (mPlatform.Instance, null);
+				mSurface.DestroySurfaceKHR (mDriver.Instance, null);
 			}
 
 			mIsDisposed = true;
