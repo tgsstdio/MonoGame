@@ -12,7 +12,7 @@ namespace Magnesium.OpenGL.UnitTests
 			Assert.AreEqual (0, repo.Scissors.Count);
 
 			ICmdVBOCapabilities vbo = new MockVertexBufferFactory ();
-			var transform = new Transformer (vbo, repo);
+			var transform = new CmdBufferInstructionSetTransformer (vbo, repo);
 
 			
 
@@ -33,7 +33,7 @@ namespace Magnesium.OpenGL.UnitTests
 			Assert.AreEqual (0, repo.Scissors.Count);
 
 			ICmdVBOCapabilities vbo = new MockVertexBufferFactory ();
-			var transform = new Transformer (vbo, repo);
+			var transform = new CmdBufferInstructionSetTransformer (vbo, repo);
 			
 
 			var command = new GLCmdDrawCommand{ Scissors = null, Draw = new GLCmdInternalDraw{ }  };
@@ -89,7 +89,7 @@ namespace Magnesium.OpenGL.UnitTests
 			Assert.AreEqual (1, repo.Scissors.Count);
 
 			ICmdVBOCapabilities vbo = new MockVertexBufferFactory ();
-			var transform = new Transformer (vbo, repo);
+			var transform = new CmdBufferInstructionSetTransformer (vbo, repo);
 			
 
 			var command = new GLCmdDrawCommand{ Pipeline = null, Scissors = 0, Draw = new GLCmdInternalDraw{ }  };
@@ -209,7 +209,7 @@ namespace Magnesium.OpenGL.UnitTests
 			Assert.AreEqual (1, repo.GraphicsPipelines.Count);
 
 			ICmdVBOCapabilities vbo = new MockVertexBufferFactory ();
-			var transform = new Transformer (vbo, repo);
+			var transform = new CmdBufferInstructionSetTransformer (vbo, repo);
 			
 
 			Assert.AreEqual (0, transform.Scissors.Count);
@@ -335,7 +335,7 @@ namespace Magnesium.OpenGL.UnitTests
 			Assert.AreEqual (1, repo.GraphicsPipelines.Count);
 
 			ICmdVBOCapabilities vbo = new MockVertexBufferFactory ();
-			var transform = new Transformer (vbo, repo);
+			var transform = new CmdBufferInstructionSetTransformer (vbo, repo);
 			
 
 			// USE OVERRIDE 

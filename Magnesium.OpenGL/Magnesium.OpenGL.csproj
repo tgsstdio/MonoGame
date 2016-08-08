@@ -153,6 +153,8 @@
     <Compile Include="CommandBuffer\GLCmdClearValuesParameter.cs" />
     <Compile Include="CommandBuffer\GLClearValueArrayItem.cs" />
     <Compile Include="Queue\GLQueueRendererColorBlendState.cs" />
+    <Compile Include="CommandBuffer\CmdBufferInstructionSetTransformer.cs" />
+    <Compile Include="CommandBuffer\DynamicStateItemStore.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

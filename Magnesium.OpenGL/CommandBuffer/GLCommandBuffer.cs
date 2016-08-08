@@ -16,14 +16,14 @@ namespace Magnesium.OpenGL
 		private List<GLCmdDrawCommand> mIncompleteDraws = new List<GLCmdDrawCommand>();
 
 		private GLCmdBufferRepository mRepository;
-		private CmdBufferInstructionSetComposer mSetComposer;
+		private ICmdVBOCapabilities mVBO;
 		public GLCommandBuffer (bool canBeManuallyReset, GLCmdBufferRepository repository, ICmdVBOCapabilities vbo)
 		{
 			mIsRecording = false;
 			mIsExecutable = false;
 			mCanBeManuallyReset = canBeManuallyReset;
 			mRepository = repository;
-			mSetComposer = new CmdBufferInstructionSetComposer (vbo);
+			mVBO = vbo;
 		}
 
 		#region IMgCommandBuffer implementation
@@ -47,6 +47,7 @@ namespace Magnesium.OpenGL
 			mIsRecording = false;
 			mIsExecutable = true;
 
+			var mSetComposer = new CmdBufferInstructionSetTransformer (mVBO, mRepository);
 			InstructionSet = mSetComposer.Compose (mRepository, mRenderPasses);
 
 			ImageInstructions = new CmdImageInstructionSet ();

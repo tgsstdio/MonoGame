@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Magnesium.OpenGL.UnitTests
+namespace Magnesium.OpenGL
 {
-	public class Transformer : ICmdBufferInstructionSetComposer
+	public class CmdBufferInstructionSetTransformer : ICmdBufferInstructionSetComposer
 	{
 		#region ICmdBufferInstructionSetComposer implementation
 
@@ -15,7 +15,6 @@ namespace Magnesium.OpenGL.UnitTests
 				return BuildInstructionSet ();
 			}
 
-			bool isFirst = true;
 			foreach (var pass in passes)
 			{
 				foreach (var command in pass.DrawCommands)
@@ -56,7 +55,7 @@ namespace Magnesium.OpenGL.UnitTests
 
 		ICmdVBOCapabilities mVBO;
 
-		public Transformer (ICmdVBOCapabilities vbo, IGLCmdBufferRepository repository)
+		public CmdBufferInstructionSetTransformer (ICmdVBOCapabilities vbo, IGLCmdBufferRepository repository)
 		{
 			mVBO = vbo;
 			VBOs = new List<GLCmdVertexBufferObject>();
@@ -66,14 +65,14 @@ namespace Magnesium.OpenGL.UnitTests
 			ClearValues = new List<GLCmdClearValuesParameter> ();
 			ColorBlendEnums = new List<GLQueueRendererColorBlendState> ();
 
-			BlendConstants = new TransformerStore<MgColor4f> (
+			BlendConstants = new DynamicStateItemStore<MgColor4f> (
 				GLGraphicsPipelineDynamicStateFlagBits.BLEND_CONSTANTS,
 				(d) => d.BlendConstants,
 				(r, i) => r.BlendConstants.At(i),
 				(gp) => gp.BlendConstants
 			);
 
-			DepthBounds = new TransformerStore<GLCmdDepthBoundsParameter> (
+			DepthBounds = new DynamicStateItemStore<GLCmdDepthBoundsParameter> (
 				GLGraphicsPipelineDynamicStateFlagBits.DEPTH_BOUNDS,
 				(d) => d.DepthBounds,
 				(r, i) => r.DepthBounds.At(i),
@@ -82,56 +81,56 @@ namespace Magnesium.OpenGL.UnitTests
 					MaxDepthBounds = gp.MaxDepthBounds}
 			);
 
-			LineWidths = new TransformerStore<float> (
+			LineWidths = new DynamicStateItemStore<float> (
 				GLGraphicsPipelineDynamicStateFlagBits.LINE_WIDTH,
 				(d) => d.LineWidth,
 				(r, i) => r.LineWidths.At(i),
 				(gp) => gp.LineWidth
 			);
 
-			BackCompareMasks = new TransformerStore<int> (
+			BackCompareMasks = new DynamicStateItemStore<int> (
 				GLGraphicsPipelineDynamicStateFlagBits.STENCIL_COMPARE_MASK,
 				(d) => d.BackCompareMask,
 				(r, i) => r.BackCompareMasks.At (i),
 				(gp) => gp.Back.CompareMask);
 
-			FrontCompareMasks = new TransformerStore<int> (
+			FrontCompareMasks = new DynamicStateItemStore<int> (
 				GLGraphicsPipelineDynamicStateFlagBits.STENCIL_COMPARE_MASK,
 				(d) => d.FrontCompareMask,
 				(r, i) => r.FrontCompareMasks.At (i),
 				(gp) => gp.Front.CompareMask);
 
-			FrontWriteMasks = new TransformerStore<int> (
+			FrontWriteMasks = new DynamicStateItemStore<int> (
 				GLGraphicsPipelineDynamicStateFlagBits.STENCIL_WRITE_MASK,
 				(d) => d.FrontWriteMask,
 				(r, i) => r.FrontWriteMasks.At (i),
 				(gp) => gp.Front.WriteMask);
 
-			BackWriteMasks = new TransformerStore<int> (
+			BackWriteMasks = new DynamicStateItemStore<int> (
 				GLGraphicsPipelineDynamicStateFlagBits.STENCIL_WRITE_MASK,
 				(d) => d.BackWriteMask,
 				(r, i) => r.BackWriteMasks.At (i),
 				(gp) => gp.Back.WriteMask);
 
-			FrontReferences = new TransformerStore<int> (
+			FrontReferences = new DynamicStateItemStore<int> (
 				GLGraphicsPipelineDynamicStateFlagBits.STENCIL_REFERENCE,
 				(d) => d.FrontReference,
 				(r, i) => r.FrontReferences.At (i),
 				(gp) => gp.Front.Reference);
 
-			BackReferences = new TransformerStore<int> (
+			BackReferences = new DynamicStateItemStore<int> (
 				GLGraphicsPipelineDynamicStateFlagBits.STENCIL_REFERENCE,
 				(d) => d.BackReference,
 				(r, i) => r.BackReferences.At (i),
 				(gp) => gp.Back.Reference);
 
-			Viewports = new TransformerStore<GLCmdViewportParameter> (
+			Viewports = new DynamicStateItemStore<GLCmdViewportParameter> (
 				GLGraphicsPipelineDynamicStateFlagBits.VIEWPORT,
 				(d) => d.Viewports,
 				(r, i) => r.Viewports.At(i),
 				(gp) => gp.Viewports);
 
-			Scissors = new TransformerStore<GLCmdScissorParameter> (
+			Scissors = new DynamicStateItemStore<GLCmdScissorParameter> (
 				GLGraphicsPipelineDynamicStateFlagBits.SCISSOR,
 				(d) => d.Scissors,
 				(r, i) => r.Scissors.At(i),
@@ -147,57 +146,57 @@ namespace Magnesium.OpenGL.UnitTests
 			private set;
 		}
 
-		public TransformerStore<GLCmdScissorParameter> Scissors {
+		public DynamicStateItemStore<GLCmdScissorParameter> Scissors {
 			get;
 			private set;
 		}
 
-		public TransformerStore<GLCmdViewportParameter> Viewports {
+		public DynamicStateItemStore<GLCmdViewportParameter> Viewports {
 			get;
 			private set;
 		}
 
-		public TransformerStore<int> FrontReferences {
+		public DynamicStateItemStore<int> FrontReferences {
 			get;
 			private set;
 		}
 
-		public TransformerStore<int> BackReferences {
+		public DynamicStateItemStore<int> BackReferences {
 			get;
 			private set;
 		}
 
-		public TransformerStore<int> FrontWriteMasks {
+		public DynamicStateItemStore<int> FrontWriteMasks {
 			get;
 			private set;
 		}
 
-		public TransformerStore<int> BackWriteMasks {
+		public DynamicStateItemStore<int> BackWriteMasks {
 			get;
 			private set;
 		}
 
-		public TransformerStore<int> FrontCompareMasks {
+		public DynamicStateItemStore<int> FrontCompareMasks {
 			get;
 			private set;
 		}
 
-		public TransformerStore<int> BackCompareMasks {
+		public DynamicStateItemStore<int> BackCompareMasks {
 			get;
 			private set;
 		}
 
-		public TransformerStore<float> LineWidths {
+		public DynamicStateItemStore<float> LineWidths {
 			get;
 			private set;
 		}
 
-		public TransformerStore<GLCmdDepthBoundsParameter> DepthBounds {
+		public DynamicStateItemStore<GLCmdDepthBoundsParameter> DepthBounds {
 			get;
 			private set;
 		}
 
-		public TransformerStore<MgColor4f> BlendConstants {
+		public DynamicStateItemStore<MgColor4f> BlendConstants {
 			get;
 			private set;
 		}
@@ -408,7 +407,17 @@ namespace Magnesium.OpenGL.UnitTests
 			return (pipeline.PolygonMode == MgPolygonMode.LINE) ? GLCommandBufferFlagBits.AsLinesMode : ((pipeline.PolygonMode == MgPolygonMode.POINT) ? GLCommandBufferFlagBits.AsPointsMode : 0);
 		}
 
-		public GLCmdBufferDrawItem GenerateDrawItem (GLCmdRenderPassCommand pass, IGLGraphicsPipeline pipeline, GLCmdDrawCommand command)
+		static GLCommandBufferFlagBits ExtractIndexType (IGLCmdBufferRepository repo, GLCmdDrawCommand command)
+		{
+			if (command.IndexBuffer.HasValue)
+			{
+				var indexBuffer = repo.IndexBuffers.At (command.IndexBuffer.Value);
+				return (indexBuffer.indexType == MgIndexType.UINT16) ? GLCommandBufferFlagBits.Index16BitMode : 0;
+			}
+			return 0;
+		}
+
+		public GLCmdBufferDrawItem GenerateDrawItem (IGLCmdBufferRepository repo, GLCmdRenderPassCommand pass, IGLGraphicsPipeline pipeline, GLCmdDrawCommand command)
 		{
 			var item = new GLCmdBufferDrawItem {
 				Command = ExtractPolygonMode (pipeline), 
@@ -421,6 +430,8 @@ namespace Magnesium.OpenGL.UnitTests
 			if (command.DrawIndexedIndirect != null)
 			{
 				item.Command |= GLCommandBufferFlagBits.CmdDrawIndexedIndirect;
+				item.Command |=  ExtractIndexType(repo, command);
+
 				var drawCommand = command.DrawIndexedIndirect;
 				item.Buffer = ExtractIndirectBuffer (drawCommand.buffer);
 				item.Count = drawCommand.drawCount;
@@ -439,6 +450,8 @@ namespace Magnesium.OpenGL.UnitTests
 			else if (command.DrawIndexed != null)
 			{
 				item.Command |= GLCommandBufferFlagBits.CmdDrawIndexed;
+				item.Command |=  ExtractIndexType(repo, command);
+
 				var drawCommand = command.DrawIndexed;
 				item.First = drawCommand.firstIndex;
 				item.FirstInstance = drawCommand.firstInstance;
@@ -633,14 +646,15 @@ namespace Magnesium.OpenGL.UnitTests
 			}
 		}
 
+
 		public bool InitialiseDrawItem(IGLCmdBufferRepository repo, GLCmdRenderPassCommand pass, GLCmdDrawCommand drawCommand)
 		{
 			if (drawCommand.Pipeline.HasValue)
 			{
 				var pipeline = repo.GraphicsPipelines.At (drawCommand.Pipeline.Value);
 
-				var item = GenerateDrawItem (pass, pipeline, drawCommand);
-
+				var item = GenerateDrawItem (repo, pass, pipeline, drawCommand);
+					
 				item.DepthBias = ExtractDepthBias (repo, pipeline, drawCommand);
 
 				item.BlendConstants = BlendConstants.Extract (repo, pipeline, drawCommand);

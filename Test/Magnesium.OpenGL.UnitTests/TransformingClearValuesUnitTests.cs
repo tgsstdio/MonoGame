@@ -12,7 +12,7 @@ namespace Magnesium.OpenGL.UnitTests
 			Assert.AreEqual (0, repo.GraphicsPipelines.Count);
 
 			ICmdVBOCapabilities vbo = new MockVertexBufferFactory ();
-			var transform = new Transformer (vbo, repo);
+			var transform = new CmdBufferInstructionSetTransformer (vbo, repo);
 
 			
 
@@ -30,7 +30,7 @@ namespace Magnesium.OpenGL.UnitTests
 			Assert.AreEqual (0, repo.GraphicsPipelines.Count);
 
 			ICmdVBOCapabilities vbo = new MockVertexBufferFactory ();
-			var transform = new Transformer (vbo, repo);
+			var transform = new CmdBufferInstructionSetTransformer (vbo, repo);
 			
 
 			var command = new GLCmdDrawCommand{ Pipeline = null, Draw = new GLCmdInternalDraw{ } };
@@ -52,7 +52,7 @@ namespace Magnesium.OpenGL.UnitTests
 			Assert.AreEqual (0, repo.GraphicsPipelines.Count);
 
 			ICmdVBOCapabilities vbo = new MockVertexBufferFactory ();
-			var transform = new Transformer (vbo, repo);
+			var transform = new CmdBufferInstructionSetTransformer (vbo, repo);
 			
 
 			var origin = new MockIGLRenderPass ();
@@ -90,7 +90,7 @@ namespace Magnesium.OpenGL.UnitTests
 			Assert.AreEqual (1, repo.GraphicsPipelines.Count);
 
 			ICmdVBOCapabilities vbo = new MockVertexBufferFactory ();
-			var transform = new Transformer (vbo, repo);
+			var transform = new CmdBufferInstructionSetTransformer (vbo, repo);
 			
 
 			var origin = new MockIGLRenderPass ();
@@ -128,7 +128,7 @@ namespace Magnesium.OpenGL.UnitTests
 			Assert.AreEqual (1, repo.GraphicsPipelines.Count);
 
 			ICmdVBOCapabilities vbo = new MockVertexBufferFactory ();
-			var transform = new Transformer (vbo, repo);
+			var transform = new CmdBufferInstructionSetTransformer (vbo, repo);
 			
 
 			var origin = new MockIGLRenderPass ();
@@ -169,7 +169,7 @@ namespace Magnesium.OpenGL.UnitTests
 			Assert.AreEqual (1, repo.GraphicsPipelines.Count);
 
 			ICmdVBOCapabilities vbo = new MockVertexBufferFactory ();
-			var transform = new Transformer (vbo, repo);
+			var transform = new CmdBufferInstructionSetTransformer (vbo, repo);
 			
 
 			var origin = new MockIGLRenderPass ();
@@ -258,7 +258,7 @@ namespace Magnesium.OpenGL.UnitTests
 			Assert.AreEqual (1, repo.GraphicsPipelines.Count);
 
 			ICmdVBOCapabilities vbo = new MockVertexBufferFactory ();
-			var transform = new Transformer (vbo, repo);
+			var transform = new CmdBufferInstructionSetTransformer (vbo, repo);
 			
 
 			var origin = new MockIGLRenderPass ();
@@ -346,7 +346,7 @@ namespace Magnesium.OpenGL.UnitTests
 			Assert.AreEqual (1, repo.GraphicsPipelines.Count);
 
 			ICmdVBOCapabilities vbo = new MockVertexBufferFactory ();
-			var transform = new Transformer (vbo, repo);
+			var transform = new CmdBufferInstructionSetTransformer (vbo, repo);
 			
 
 			var origin = new MockIGLRenderPass ();
@@ -448,7 +448,7 @@ namespace Magnesium.OpenGL.UnitTests
 			Assert.AreEqual (1, repo.GraphicsPipelines.Count);
 
 			ICmdVBOCapabilities vbo = new MockVertexBufferFactory ();
-			var transform = new Transformer (vbo, repo);
+			var transform = new CmdBufferInstructionSetTransformer (vbo, repo);
 			
 
 			var origin = new MockIGLRenderPass ();

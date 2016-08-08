@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Magnesium.OpenGL.UnitTests
+namespace Magnesium.OpenGL
 {
-	public class TransformerStore<TData> where TData : IEquatable<TData>
+	public class DynamicStateItemStore<TData> where TData : IEquatable<TData>
 	{
 		public List<TData> Items { get; private set; }
 
@@ -15,7 +15,7 @@ namespace Magnesium.OpenGL.UnitTests
 
 		readonly Func<IGLCmdBufferRepository, int, TData> mFetch;
 
-		public TransformerStore (
+		public DynamicStateItemStore (
 			GLGraphicsPipelineDynamicStateFlagBits flag,
 			Func<GLCmdDrawCommand, int?> getLocalIndex, 
 			Func<IGLCmdBufferRepository, int, TData> fetchOverride,

@@ -49,10 +49,8 @@
     <Compile Include="MockMgPipelineLayout.cs" />
     <Compile Include="MockMgFrameBuffer.cs" />
     <Compile Include="MockRenderPass.cs" />
-    <Compile Include="Transformer.cs" />
     <Compile Include="TransformingVBOUnitTests.cs" />
     <Compile Include="TransformingBlendConstantsUnitTests.cs" />
-    <Compile Include="TransformerStore.cs" />
     <Compile Include="TransformingLineWidthsUnitTests.cs" />
     <Compile Include="TransformingBackCompareMasksUnitTests.cs" />
     <Compile Include="TransformingFrontCompareMasksUnitTests.cs" />

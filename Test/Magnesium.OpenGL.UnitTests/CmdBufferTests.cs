@@ -16,7 +16,7 @@ namespace Magnesium.OpenGL.UnitTests
 		{
 			mFactory = new MockVertexBufferFactory ();
 			mRepository = new GLCmdBufferRepository ();
-			mComposer = new Transformer (mFactory, mRepository);
+			mComposer = new CmdBufferInstructionSetTransformer (mFactory, mRepository);
 		}
 
 		[TearDown]
