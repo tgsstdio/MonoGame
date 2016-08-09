@@ -2,7 +2,7 @@
 
 namespace Magnesium.OpenGL
 {
-	public enum GLClearAttachmentType
+	public enum GLClearAttachmentType : byte
 	{
 		COLOR_FLOAT,
 		COLOR_INT,

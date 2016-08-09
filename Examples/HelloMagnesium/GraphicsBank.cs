@@ -35,40 +35,26 @@ namespace HelloMagnesium
 			set;
 		}
 
-//		public IMgPipeline[] GraphicsPipelines {
-//			get;
-//			set;
-//		}
+		public void Destroy(IMgThreadPartition partition)
+		{
+			if (partition == null)
+				return;
 
-//		public IMgPipelineLayout PipelineLayout {
-//			get;
-//			set;
-//		}
-//
-//		public IMgDescriptorSetLayout SetLayout {
-//			get;
-//			set;
-//		}
+			if (PostPresentBarrierCmd != null)
+				partition.Device.FreeCommandBuffers(partition.CommandPool, new [] {PostPresentBarrierCmd} );
 
-		public uint Height {
-			get;
-			set;
+			if (PrePresentBarrierCmd != null)
+				partition.Device.FreeCommandBuffers(partition.CommandPool, new [] {PrePresentBarrierCmd} );
+
+			if (RenderComplete != null)
+				RenderComplete.DestroySemaphore (partition.Device, null);
+
+			if (PresentComplete != null)
+				PresentComplete.DestroySemaphore (partition.Device, null);
+
+			if (CommandBuffers != null)
+				partition.Device.FreeCommandBuffers(partition.CommandPool, CommandBuffers );
 		}
-
-		public uint Width {
-			get;
-			set;
-		}
-
-//		public MgRect2D CurrentScissor {
-//			get;
-//			set;
-//		}
-//
-//		public MgViewport CurrentViewport {
-//			get;
-//			set;
-//		}
 	}
 }
 

@@ -219,23 +219,23 @@ namespace Magnesium.OpenGL.UnitTests
 				{
 					new GLClearValueArrayItem
 					{
-						Attachment = GLClearAttachmentType.COLOR_FLOAT,
+						Attachment = new GLClearAttachmentInfo{AttachmentType= GLClearAttachmentType.COLOR_FLOAT},
 						Value = FLOAT_VALUE_0,
 					}
 					,new GLClearValueArrayItem
 					{
 
-						Attachment = GLClearAttachmentType.DEPTH_STENCIL,
+						Attachment = new GLClearAttachmentInfo{AttachmentType=GLClearAttachmentType.DEPTH_STENCIL},
 						Value = DEPTH_STENCIL_0,
 					}
 					,new GLClearValueArrayItem
 					{
-						Attachment = GLClearAttachmentType.COLOR_INT,
+						Attachment = new GLClearAttachmentInfo{AttachmentType=GLClearAttachmentType.COLOR_INT},
 						Value = INT_VALUE_0,
 					}
 					,new GLClearValueArrayItem
 					{
-						Attachment = GLClearAttachmentType.COLOR_UINT,
+						Attachment = new GLClearAttachmentInfo{AttachmentType=GLClearAttachmentType.COLOR_UINT},
 						Value = UINT_VALUE_0,
 					}
 				}
@@ -307,23 +307,23 @@ namespace Magnesium.OpenGL.UnitTests
 				{
 					new GLClearValueArrayItem
 					{
-						Attachment = GLClearAttachmentType.COLOR_FLOAT,
+						Attachment = new GLClearAttachmentInfo{AttachmentType=GLClearAttachmentType.COLOR_FLOAT},
 						Value = FLOAT_VALUE_0,
 					}
 					,new GLClearValueArrayItem
 					{
 
-						Attachment = GLClearAttachmentType.DEPTH_STENCIL,
+						Attachment = new GLClearAttachmentInfo{AttachmentType=GLClearAttachmentType.DEPTH_STENCIL},
 						Value = DEPTH_STENCIL_0,
 					}
 					,new GLClearValueArrayItem
 					{
-						Attachment = GLClearAttachmentType.COLOR_INT,
+						Attachment = new GLClearAttachmentInfo{AttachmentType=GLClearAttachmentType.COLOR_INT},
 						Value = INT_VALUE_0,
 					}
 					,new GLClearValueArrayItem
 					{
-						Attachment = GLClearAttachmentType.COLOR_UINT,
+						Attachment = new GLClearAttachmentInfo{AttachmentType=GLClearAttachmentType.COLOR_UINT},
 						Value = UINT_VALUE_0,
 					}
 				}
@@ -409,23 +409,23 @@ namespace Magnesium.OpenGL.UnitTests
 				{
 					new GLClearValueArrayItem
 					{
-						Attachment = GLClearAttachmentType.COLOR_FLOAT,
+						Attachment = new GLClearAttachmentInfo{AttachmentType=GLClearAttachmentType.COLOR_FLOAT},
 						Value = FLOAT_VALUE_0,
 					}
 					,new GLClearValueArrayItem
 					{
 
-						Attachment = GLClearAttachmentType.DEPTH_STENCIL,
+						Attachment = new GLClearAttachmentInfo{AttachmentType=GLClearAttachmentType.DEPTH_STENCIL},
 						Value = DEPTH_STENCIL_0,
 					}
 					,new GLClearValueArrayItem
 					{
-						Attachment = GLClearAttachmentType.COLOR_INT,
+						Attachment = new GLClearAttachmentInfo{AttachmentType=GLClearAttachmentType.COLOR_INT},
 						Value = INT_VALUE_0,
 					}
 					,new GLClearValueArrayItem
 					{
-						Attachment = GLClearAttachmentType.COLOR_UINT,
+						Attachment = new GLClearAttachmentInfo{AttachmentType=GLClearAttachmentType.COLOR_UINT},
 						Value = UINT_VALUE_0,
 					}
 				}
@@ -488,7 +488,7 @@ namespace Magnesium.OpenGL.UnitTests
 				{
 					new GLClearValueArrayItem
 					{
-						Attachment = GLClearAttachmentType.COLOR_FLOAT,
+						Attachment = new GLClearAttachmentInfo{AttachmentType=GLClearAttachmentType.COLOR_FLOAT},
 						Value = FLOAT_VALUE_0,
 					}
 				}

@@ -26,7 +26,7 @@ namespace Magnesium.OpenGL
 
 		public void SwapBuffers ()
 		{
-			if (mContext != null && mContext.IsDisposed)
+			if (mContext != null && !mContext.IsDisposed)
 				mContext.SwapBuffers ();
 		}
 

@@ -7,10 +7,11 @@ using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Graphics;
 using OpenTK.Graphics.OpenGL;
 using System.Collections.Generic;
+using Magnesium.OpenGL;
 
 namespace HelloMagnesium
 {
-	public class HelloMagnesiumGame : Game
+	public class HelloMagnesiumGame : Game, IDisposable
 	{
 		private readonly IMgThreadPartition mPartition;
 		private readonly IMgBaseTextureLoader mTex2D;
@@ -24,6 +25,52 @@ namespace HelloMagnesium
 
 		IMgGraphicsDeviceManager mManager;
 
+		#region IDisposable implementation
+
+		~HelloMagnesiumGame()
+		{
+			Dispose (false);
+		}
+
+		public void Dispose ()
+		{
+			Dispose (true);
+			GC.SuppressFinalize (this);
+		}
+
+		void ReleaseUnmanagedResources ()
+		{
+			if (mPartition != null)
+				Bank.Destroy (mPartition);
+		}
+
+		void ReleaseManagedResources ()
+		{
+
+		}
+
+		bool mDisposing = false;
+		public void Dispose (bool disposing)
+		{
+			if (mDisposing)
+				return;
+
+			ReleaseUnmanagedResources ();
+
+			if (disposing)
+			{
+				ReleaseManagedResources ();
+			}
+
+			mDisposing = true;
+		}
+
+		#endregion
+
+		readonly IMgSwapchainCollection mSwapchain;
+
+		IOpenTKSwapchainKHR mInternalChain;
+
 		public HelloMagnesiumGame(
 			IMgGraphicsDeviceManager manager,
 			IMgThreadPartition partition,
@@ -31,7 +78,8 @@ namespace HelloMagnesium
 			IPresentationParameters presentation,
 			IMgSwapchainCollection swapChain,
 			IMgPresentationLayer presentationLayer,
-			IContentStreamer content
+			IContentStreamer content,
+			IOpenTKSwapchainKHR internalChain
 		)
 		{
 			mTex2D = tex2DLoader;
@@ -40,16 +88,18 @@ namespace HelloMagnesium
 			mPresentation = presentation;
 			mContent = content;
 			mPresentationLayer = presentationLayer;
+			mSwapchain = swapChain;
+			mInternalChain = internalChain;
 
 			// Create device
-			//manager.CreateDevice();
+			mManager.CreateDevice();
 //
 //			Bank.Width = (uint)mPresentation.BackBufferWidth;
 //			Bank.Height = (uint)mPresentation.BackBufferHeight;
 //
 			const int NO_OF_BUFFERS = 2;
-			IMgCommandBuffer[] buffers = new IMgCommandBuffer[NO_OF_BUFFERS];
-			MgCommandBufferAllocateInfo pAllocateInfo = new MgCommandBufferAllocateInfo {
+			var buffers = new IMgCommandBuffer[NO_OF_BUFFERS];
+			var pAllocateInfo = new MgCommandBufferAllocateInfo {
 				CommandBufferCount = NO_OF_BUFFERS,
 				CommandPool = mPartition.CommandPool,
 				Level = MgCommandBufferLevel.PRIMARY,
@@ -70,7 +120,7 @@ namespace HelloMagnesium
 //				Samples = MgSampleCountFlagBits.COUNT_1_BIT,
 //				Swapchains = swapChain,
 //			};
-			mManager.CreateDevice();
+			//mManager.CreateDevice();
 
 			// Create synchronization objects
 
@@ -186,8 +236,8 @@ namespace HelloMagnesium
 					RenderArea = new MgRect2D {
 						// FIXME: specific screen width
 						Extent = new MgExtent2D {
-							Width = Bank.Width,
-							Height = Bank.Height,
+							Width = mSwapchain.Width,
+							Height = mSwapchain.Height,
 						},
 						Offset = new MgOffset2D {
 							X = 0,
@@ -196,7 +246,7 @@ namespace HelloMagnesium
 					},
 					ClearValues = new [] {
 						new MgClearValue {
-							Color = new MgClearColorValue (1f, 1f, 1f, 1f),
+							Color = new MgClearColorValue (uint.MaxValue, 0, 0, uint.MaxValue),
 						},
 						new MgClearValue {
 							DepthStencil = new MgClearDepthStencilValue (1f, 0),							
@@ -316,13 +366,29 @@ namespace HelloMagnesium
 
 		public override void Draw(GameTime gameTime)
 		{			
-			uint frameIndex = mPresentationLayer.BeginDraw (Bank.PostPresentBarrierCmd, Bank.PresentComplete);
+			UseRendergraph (gameTime);
 
-			Bank.Renderer.Render (mPartition.Queue, gameTime, frameIndex);
+			//ExplicitSwapbuffers ();
 
-			mPresentationLayer.EndDraw (frameIndex, Bank.PrePresentBarrierCmd, null);			
 			// submit command buffer to queue
 			base.Draw (gameTime);	
+		}
+
+		void UseRendergraph (GameTime gameTime)
+		{
+			uint frameIndex = mPresentationLayer.BeginDraw (Bank.PostPresentBarrierCmd, Bank.PresentComplete);
+			Bank.Renderer.Render (mPartition.Queue, gameTime, frameIndex);
+			mPresentationLayer.EndDraw (frameIndex, Bank.PrePresentBarrierCmd, null);
+		}
+
+		void ExplicitSwapbuffers ()
+		{
+			GL.ClearColor (1f, 0f, 0f, 1f);
+			GL.Viewport (0, 0, (int)mSwapchain.Width, (int)mSwapchain.Height);
+			GL.Clear (ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+			GL.Flush ();
+
+			mInternalChain.SwapBuffers();
 		}
 	}
 }

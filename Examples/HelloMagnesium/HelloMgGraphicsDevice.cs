@@ -162,7 +162,24 @@ namespace HelloMagnesium
 		GLRenderPass mRenderpass;
 		void SetupRenderpass (MgGraphicsDeviceCreateInfo createInfo)
 		{
-			mRenderpass = new GLRenderPass (new []{createInfo.Color, createInfo.DepthStencil});
+			var attachmentDescriptions = new [] {
+				new MgAttachmentDescription {
+					Format = createInfo.Color,
+					LoadOp = MgAttachmentLoadOp.CLEAR,
+					StoreOp = MgAttachmentStoreOp.STORE,
+					StencilLoadOp = MgAttachmentLoadOp.DONT_CARE,
+					StencilStoreOp = MgAttachmentStoreOp.DONT_CARE,
+				},
+				new MgAttachmentDescription {
+					Format = createInfo.DepthStencil,
+					LoadOp = MgAttachmentLoadOp.CLEAR,
+					StoreOp = MgAttachmentStoreOp.STORE,
+					StencilLoadOp = MgAttachmentLoadOp.CLEAR,
+					StencilStoreOp = MgAttachmentStoreOp.STORE,
+				},
+			};
+
+			mRenderpass = new GLRenderPass (attachmentDescriptions);
 		}
 
 		void CreateFramebuffers (MgGraphicsDeviceCreateInfo createInfo)

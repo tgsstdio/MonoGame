@@ -478,63 +478,104 @@ namespace Magnesium.OpenGL
 			return !pastViewport.Equals (currentViewport);
 		}
 
-		void ApplyClearState (GLCmdClearValuesParameter clearState)
+		static void ApplyClearBuffers (GLCmdClearValuesParameter clearState, ClearBufferMask combinedMask)
+		{
+			if (clearState.Attachments.Length > 0)
+			{
+				GL.Clear (combinedMask);
+			}
+		}
+
+		static ClearBufferMask InitialiseClearBuffers (GLCmdClearValuesParameter clearState)
 		{
 			ClearBufferMask combinedMask = 0;
 
 			foreach (var state in clearState.Attachments)
 			{
-				if (state.Attachment == GLClearAttachmentType.COLOR_INT)
+				if (state.Attachment.LoadOp == MgAttachmentLoadOp.CLEAR)
 				{
-					var initialValue = state.Value.Color.Int32;
-
-					var clearValue = new MgVec4f
+					if (state.Attachment.AttachmentType == GLClearAttachmentType.COLOR_INT)
 					{
-						X = (float) initialValue.X / int.MaxValue,
-						Y = (float) initialValue.Y / int.MaxValue,
-						Z = (float) initialValue.Z / int.MaxValue,
-						W = (float) initialValue.W / int.MaxValue,
-					};
+						var initialValue = state.Value.Color.Int32;
 
-					GL.ClearColor (clearValue.X, clearValue.Y, clearValue.Z, clearValue.W);
-					combinedMask |= ClearBufferMask.ColorBufferBit;
-				}
-				else if (state.Attachment == GLClearAttachmentType.COLOR_FLOAT)
-				{
-					var clearValue = state.Value.Color.Float32;
-					GL.ClearColor (clearValue.X, clearValue.Y, clearValue.Z, clearValue.W);
-					combinedMask |= ClearBufferMask.ColorBufferBit;
-				}
-				else if (state.Attachment == GLClearAttachmentType.COLOR_UINT)
-				{
-					var initialValue = state.Value.Color.Uint32;
+						var clearValue = new MgVec4f {
+							X = Math.Max (Math.Min ((float)initialValue.X, state.Attachment.Divisor), -state.Attachment.Divisor) / state.Attachment.Divisor,
+							Y = Math.Max (Math.Min ((float)initialValue.Y, state.Attachment.Divisor), -state.Attachment.Divisor) / state.Attachment.Divisor,
+							Z = Math.Max (Math.Min ((float)initialValue.Z, state.Attachment.Divisor), -state.Attachment.Divisor) / state.Attachment.Divisor,
+							W = Math.Max (Math.Min ((float)initialValue.W, state.Attachment.Divisor), -state.Attachment.Divisor) / state.Attachment.Divisor,
+						};
 
-					var clearValue = new MgVec4f
+						GL.ClearColor (clearValue.X, clearValue.Y, clearValue.Z, clearValue.W);
+						combinedMask |= ClearBufferMask.ColorBufferBit;
+					} else if (state.Attachment.AttachmentType == GLClearAttachmentType.COLOR_FLOAT)
 					{
-						X = (float) initialValue.X / uint.MaxValue,
-						Y = (float) initialValue.Y / uint.MaxValue,
-						Z = (float) initialValue.Z / uint.MaxValue,
-						W = (float) initialValue.W / uint.MaxValue,
-					};
+						var clearValue = state.Value.Color.Float32;
+						GL.ClearColor (clearValue.X, clearValue.Y, clearValue.Z, clearValue.W);
+						combinedMask |= ClearBufferMask.ColorBufferBit;
+					} else if (state.Attachment.AttachmentType == GLClearAttachmentType.COLOR_UINT)
+					{
+						var initialValue = state.Value.Color.Uint32;
 
-					GL.ClearColor (clearValue.X, clearValue.Y, clearValue.Z, clearValue.W);
-					combinedMask |= ClearBufferMask.ColorBufferBit;
+						var clearValue = new MgVec4f {
+							X = Math.Min ((float)initialValue.X, state.Attachment.Divisor) / state.Attachment.Divisor,
+							Y = Math.Min ((float)initialValue.Y, state.Attachment.Divisor) / state.Attachment.Divisor,
+							Z = Math.Min ((float)initialValue.Z, state.Attachment.Divisor) / state.Attachment.Divisor,
+							W = Math.Min ((float)initialValue.W, state.Attachment.Divisor) / state.Attachment.Divisor,
+						};
+
+						GL.ClearColor (clearValue.X, clearValue.Y, clearValue.Z, clearValue.W);
+						combinedMask |= ClearBufferMask.ColorBufferBit;
+					} 
+					else if (state.Attachment.AttachmentType == GLClearAttachmentType.DEPTH_STENCIL)
+					{
+						var clearValue = state.Value.DepthStencil;
+						GL.ClearDepth (clearValue.Depth);
+						combinedMask |= ClearBufferMask.DepthBufferBit;
+					}
+
 				}
-				else if (state.Attachment == GLClearAttachmentType.DEPTH_STENCIL)
-				{
-					var clearValue = state.Value.DepthStencil;
-					GL.ClearDepth (clearValue.Depth);
 
-					// TODO : CHECK IF THIS RIGHT
-					GL.ClearStencil ((int)clearValue.Stencil);
-					combinedMask |= ClearBufferMask.DepthBufferBit | ClearBufferMask.StencilBufferBit;
+				if (state.Attachment.StencilLoadOp == MgAttachmentLoadOp.CLEAR)
+				{
+					if (state.Attachment.AttachmentType == GLClearAttachmentType.DEPTH_STENCIL)
+					{
+						var clearValue = state.Value.DepthStencil;
+						GL.ClearDepth (clearValue.Depth);
+
+						// TODO : CHECK IF THIS RIGHT
+						GL.ClearStencil ((int)clearValue.Stencil);
+						combinedMask |= ClearBufferMask.StencilBufferBit;
+					}
 				}
 			}
 
-			if (clearState.Attachments.Length > 0)
+			return combinedMask;
+		}
+
+		byte ApplyRenderpass (CmdBufferInstructionSet instructionSet, GLCmdBufferPipelineItem currentPipeline, GLCmdBufferDrawItem drawItem)
+		{
+			var clearValues = currentPipeline.ClearValues;
+			var clearState = instructionSet.ClearValues [clearValues];
+			var bitmask = InitialiseClearBuffers (clearState);
+
+			// scissor 
+			var currentScissors = instructionSet.Scissors [drawItem.Scissor];
+			if (ChangesFoundInScissors (PastScissors, currentScissors))
 			{
-				GL.Clear (combinedMask);
+				mScissor.ApplyScissors (currentScissors);
 			}
+			PastScissors = currentScissors;
+
+			// viewport
+			var currentViewport = instructionSet.Viewports [drawItem.Viewport];
+			if (ChangesFoundInViewports (PastViewport, currentViewport))
+			{
+				mScissor.ApplyViewports (currentViewport);
+			}
+			PastViewport = currentViewport;
+
+			ApplyClearBuffers (clearState, bitmask);
+			return clearValues;
 		}
 
 		public void Render(CmdBufferInstructionSet[] items)
@@ -552,11 +593,10 @@ namespace Magnesium.OpenGL
 					// TODO : bind render target
 					var currentPipeline = instructionSet.Pipelines[drawItem.Pipeline];
 
+					// clear values
 					if (isFirst)
 					{
-						clearValues = currentPipeline.ClearValues;
-						var clearState = instructionSet.ClearValues[clearValues];
-						ApplyClearState (clearState);
+						clearValues = ApplyRenderpass (instructionSet, currentPipeline, drawItem);
 
 						isFirst = false;
 					}
@@ -564,29 +604,11 @@ namespace Magnesium.OpenGL
 					{
 						if (clearValues != currentPipeline.ClearValues)
 						{
-							clearValues = currentPipeline.ClearValues;
-							var clearState = instructionSet.ClearValues[clearValues];
-							ApplyClearState (clearState);
+							clearValues = ApplyRenderpass (instructionSet, currentPipeline, drawItem);
 						}
 					}
 
 					CheckProgram (instructionSet, drawItem);
-
-					// scissor 
-					var currentScissors = instructionSet.Scissors[drawItem.Scissor];
-					if (ChangesFoundInScissors (PastScissors, currentScissors))
-					{
-						mScissor.ApplyScissors (currentScissors);
-					}
-					PastScissors = currentScissors;
-
-					// viewport
-					var currentViewport = instructionSet.Viewports[drawItem.Viewport];
-					if (ChangesFoundInViewports (PastViewport, currentViewport))
-					{
-						mScissor.ApplyViewports (currentViewport);
-					}
-					PastViewport = currentViewport;
 
 					var currentBlendState = instructionSet.ColorBlends[currentPipeline.ColorBlendEnums];
 					if (ChangesFoundInBlend (PastColorBlend, currentBlendState))

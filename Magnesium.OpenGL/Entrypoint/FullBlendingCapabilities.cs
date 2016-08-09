@@ -189,10 +189,10 @@ namespace Magnesium.OpenGL
 		public void EnableBlending (uint index, bool blendEnabled)
 		{
 			if (blendEnabled)
-				GL.Enable (IndexedEnableCap.Blend, GetColorAttachmentId(index));
+				GL.Enable (IndexedEnableCap.Blend, index);
 
 			else
-				GL.Disable (IndexedEnableCap.Blend, GetColorAttachmentId(index));
+				GL.Disable (IndexedEnableCap.Blend, index);
 
 			{
 				var error = GL.GetError ();
@@ -254,7 +254,7 @@ namespace Magnesium.OpenGL
 		public void ApplyBlendSeparateFunction (uint index, MgBlendFactor srcColor, MgBlendFactor dstColor, MgBlendFactor srcAlpha, MgBlendFactor destAlpha)
 		{
 			GL.BlendFuncSeparate(	
-				GetColorAttachmentId(index),
+				index,
 				GetBlendFactorSrc(srcColor),
 				GetBlendFactorDest(dstColor), 
 				GetBlendFactorSrc(srcAlpha), 

@@ -6,7 +6,7 @@ namespace Magnesium.OpenGL.UnitTests
 	{
 		public MockIGLRenderPass ()
 		{
-			AttachmentFormats = new GLClearAttachmentType[]{ };
+			AttachmentFormats = new GLClearAttachmentInfo[]{ };
 		}
 
 		#region IMgRenderPass implementation
@@ -20,7 +20,7 @@ namespace Magnesium.OpenGL.UnitTests
 
 		#region IGLRenderPass implementation
 
-		public GLClearAttachmentType[] AttachmentFormats {
+		public GLClearAttachmentInfo[] AttachmentFormats {
 			get;
 			set;
 		}

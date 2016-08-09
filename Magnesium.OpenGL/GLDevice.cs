@@ -1065,15 +1065,7 @@ namespace Magnesium.OpenGL
 
 		public Result CreateRenderPass (MgRenderPassCreateInfo pCreateInfo, MgAllocationCallbacks allocator, out IMgRenderPass pRenderPass)
 		{
-			var attachmentTypes = new List<MgFormat> ();
-			for (uint i = 0; i < pCreateInfo.Attachments.Length; ++i)
-			{
-				var attachment = pCreateInfo.Attachments [i];
-
-				attachmentTypes.Add(attachment.Format);
-			}
-
-			pRenderPass = new GLRenderPass (attachmentTypes.ToArray());
+			pRenderPass = new GLRenderPass (pCreateInfo.Attachments);
 			return Result.SUCCESS;
 		}
 //		public void DestroyRenderPass (IMgRenderPass renderPass, MgAllocationCallbacks allocator)

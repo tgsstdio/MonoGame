@@ -4,19 +4,19 @@ namespace Magnesium.OpenGL
 {
 	public struct GLClearValueArrayItem : IEquatable<GLClearValueArrayItem>
 	{
-		public GLClearAttachmentType Attachment { get; set; }
+		public GLClearAttachmentInfo Attachment { get; set; }
 		public MgClearValue Value { get; set; }
 
 		 
 		#region IEquatable implementation
 		public bool Equals (GLClearValueArrayItem other)
 		{
-			if (Attachment != other.Attachment)
+			if (!Attachment.Equals(other.Attachment))
 			{
 				return false;
 			}
 
-			switch (this.Attachment)
+			switch (this.Attachment.AttachmentType)
 			{
 			case GLClearAttachmentType.COLOR_FLOAT:
 				return this.Value.Color.Float32.Equals (other.Value.Color.Float32);
