@@ -134,81 +134,65 @@ namespace Magnesium.OpenGL
 				}
 			}
 
+			// TODO : fix stenciling
+			//SetupStencilOperations (past, next, pastStencil, nextStencil, newStencilEnabled);
+		}
+
+		void SetupStencilOperations (GLQueueRendererStencilState past, GLQueueRendererStencilState next, GLQueueStencilState pastStencil, GLQueueStencilState nextStencil, QueueDrawItemBitFlags newStencilEnabled)
+		{
 			// TODO : Stencil operations
 			// set function
 			bool pastTwoSided = (past.Flags & QueueDrawItemBitFlags.TwoSidedStencilMode) > 0;
 			bool nextTwoSided = (past.Flags & QueueDrawItemBitFlags.TwoSidedStencilMode) > 0;
-
-			if (nextTwoSided)
+			if (newStencilEnabled == QueueDrawItemBitFlags.StencilEnabled)
 			{
-				if (nextTwoSided != pastTwoSided ||
-					nextStencil.FrontStencilFunction != pastStencil.FrontStencilFunction ||
-					past.Front.Reference != next.Front.Reference ||
-					past.Front.CompareMask != next.Front.CompareMask)
+				if (//nextTwoSided != pastTwoSided ||
+				nextStencil.FrontStencilFunction != pastStencil.FrontStencilFunction || past.Front.Reference != next.Front.Reference || past.Front.CompareMask != next.Front.CompareMask)
 				{
-					mStencil.SetFrontFaceCullStencilFunction (
-						nextStencil.FrontStencilFunction,
-						next.Front.Reference,
-						next.Front.CompareMask);
+					mStencil.SetFrontFaceCullStencilFunction (nextStencil.FrontStencilFunction, next.Front.Reference, next.Front.CompareMask);
 				}
-
-				if (nextTwoSided != pastTwoSided ||
-					nextStencil.BackStencilFunction != pastStencil.BackStencilFunction ||
-					next.Back.Reference != past.Back.Reference ||
-					next.Back.CompareMask != past.Back.CompareMask)
+				if (//nextTwoSided != pastTwoSided ||
+				nextStencil.BackStencilFunction != pastStencil.BackStencilFunction || next.Back.Reference != past.Back.Reference || next.Back.CompareMask != past.Back.CompareMask)
 				{
-					mStencil.SetBackFaceCullStencilFunction (
-						nextStencil.BackStencilFunction,
-						next.Back.Reference,
-						next.Back.CompareMask);
+					mStencil.SetBackFaceCullStencilFunction (nextStencil.BackStencilFunction, next.Back.Reference, next.Back.CompareMask);
 				}
-
-				if (nextTwoSided != pastTwoSided ||
-					nextStencil.FrontStencilFail != pastStencil.FrontStencilFail ||
-					nextStencil.FrontDepthBufferFail != pastStencil.FrontDepthBufferFail ||
-					nextStencil.FrontStencilPass != pastStencil.FrontStencilPass)
+				if (// nextTwoSided != pastTwoSided ||
+				nextStencil.FrontStencilFail != pastStencil.FrontStencilFail || nextStencil.FrontDepthBufferFail != pastStencil.FrontDepthBufferFail || nextStencil.FrontStencilPass != pastStencil.FrontStencilPass)
 				{
-					mStencil.SetFrontFaceStencilOperation(			
-						nextStencil.FrontStencilFail,
-						nextStencil.FrontDepthBufferFail,
-						nextStencil.FrontStencilPass);
+					mStencil.SetFrontFaceStencilOperation (nextStencil.FrontStencilFail, nextStencil.FrontDepthBufferFail, nextStencil.FrontStencilPass);
 				}
-
-				if (nextTwoSided != pastTwoSided ||
-					nextStencil.BackStencilFail != pastStencil.BackStencilFail ||
-					nextStencil.BackDepthBufferFail != pastStencil.BackDepthBufferFail ||
-					nextStencil.BackStencilPass != pastStencil.BackStencilPass)
+				if (// nextTwoSided != pastTwoSided ||
+				nextStencil.BackStencilFail != pastStencil.BackStencilFail || nextStencil.BackDepthBufferFail != pastStencil.BackDepthBufferFail || nextStencil.BackStencilPass != pastStencil.BackStencilPass)
 				{
-					mStencil.SetBackFaceStencilOperation(			
-						nextStencil.BackStencilFail,
-						nextStencil.BackDepthBufferFail,
-						nextStencil.BackStencilPass);
+					mStencil.SetBackFaceStencilOperation (nextStencil.BackStencilFail, nextStencil.BackDepthBufferFail, nextStencil.BackStencilPass);
 				}
 			}
-			else
-			{
-				if (nextTwoSided != pastTwoSided ||
-					nextStencil.FrontStencilFunction != pastStencil.FrontStencilFunction ||
-					next.Front.Reference != past.Front.Reference ||
-					next.Front.CompareMask != past.Front.CompareMask)
-				{
-					mStencil.SetStencilFunction (
-						nextStencil.FrontStencilFunction,
-						next.Front.Reference,
-						next.Front.CompareMask);
-				}
-
-				if (nextTwoSided != pastTwoSided ||
-					nextStencil.FrontStencilFail != pastStencil.FrontStencilFail ||
-					nextStencil.FrontDepthBufferFail != pastStencil.FrontDepthBufferFail ||
-					nextStencil.FrontStencilPass != pastStencil.FrontStencilPass)
-				{
-					mStencil.SetStencilOperation (
-						nextStencil.FrontStencilFail,
-						nextStencil.FrontDepthBufferFail,
-						nextStencil.FrontStencilPass);
-				}
-			}
+			//			else
+			//			{
+			//				GL.Disable (EnableCap.StencilTest);
+			//
+			//				if (nextTwoSided != pastTwoSided ||
+			//					nextStencil.FrontStencilFunction != pastStencil.FrontStencilFunction ||
+			//					next.Front.Reference != past.Front.Reference ||
+			//					next.Front.CompareMask != past.Front.CompareMask)
+			//				{
+			//					mStencil.SetStencilFunction (
+			//						nextStencil.FrontStencilFunction,
+			//						next.Front.Reference,
+			//						next.Front.CompareMask);
+			//				}
+			//
+			//				if (nextTwoSided != pastTwoSided ||
+			//					nextStencil.FrontStencilFail != pastStencil.FrontStencilFail ||
+			//					nextStencil.FrontDepthBufferFail != pastStencil.FrontDepthBufferFail ||
+			//					nextStencil.FrontStencilPass != pastStencil.FrontStencilPass)
+			//				{
+			//					mStencil.SetStencilOperation (
+			//						nextStencil.FrontStencilFail,
+			//						nextStencil.FrontDepthBufferFail,
+			//						nextStencil.FrontStencilPass);
+			//				}
+			//			}
 		}
 
 		private static bool ChangesFoundInDepth(GLCmdBufferPipelineItem previous, GLCmdBufferPipelineItem next)

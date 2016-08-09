@@ -545,14 +545,28 @@ namespace Magnesium.OpenGL
 
 				var divisor = (binding.InputRate == MgVertexInputRate.INSTANCE) ? 1 : 0;
 
-				var attribute = new GLVertexInputAttribute (
-					description.Binding,
-					description.Location,
-					description.Offset,
-					binding.Stride,
-					divisor,
-					elementInfo
-				);
+				if (description.Location > int.MaxValue)
+					throw new ArgumentOutOfRangeException ("description.Location[i]", "description.Location > int.MaxValue");
+
+				if (description.Offset > int.MaxValue)
+					throw new ArgumentOutOfRangeException ("description.Offset[i]", "description.Offset > int.MaxValue");
+
+				if ( binding.Stride > int.MaxValue)
+					throw new ArgumentOutOfRangeException ("binding.Stride[i]", "binding.Stride > int.MaxValue");
+
+				var attribute = new GLVertexInputAttribute{ 
+					Binding = description.Binding,
+
+					Location = (int) description.Location,
+					Offset = (int) description.Offset,
+					Stride = (int) binding.Stride,
+
+					Divisor = divisor,
+					Size = elementInfo.Size,
+					PointerType = elementInfo.PointerType,
+					IsNormalized = elementInfo.IsNormalized,
+					Function = elementInfo.Function,
+				};
 
 				attributes.Add (attribute);
 			}

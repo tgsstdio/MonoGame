@@ -28,7 +28,8 @@ For loading content/media (read-only) files
 For saving files for configuration files
 	
 	- FileSystem/IFileSystem	
-	- 
+	
+	- IContentStreamer
 	
  - IMouseListener
  

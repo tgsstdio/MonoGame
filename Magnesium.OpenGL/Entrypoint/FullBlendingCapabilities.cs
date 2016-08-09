@@ -164,7 +164,7 @@ namespace Magnesium.OpenGL
 			{
 				var attachment = new GLQueueColorAttachmentBlendState {
 					BlendEnable = false,
-					ColorWriteMask = 0,
+					ColorWriteMask = MgColorComponentFlagBits.R_BIT | MgColorComponentFlagBits.G_BIT | MgColorComponentFlagBits.B_BIT | MgColorComponentFlagBits.A_BIT,
 					ColorBlendOp = MgBlendOp.ADD,
 					AlphaBlendOp = MgBlendOp.ADD,
 					SrcColorBlendFactor = MgBlendFactor.ONE,

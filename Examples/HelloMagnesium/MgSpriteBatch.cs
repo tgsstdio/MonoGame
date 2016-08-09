@@ -86,6 +86,22 @@ namespace HelloMagnesium
 				var pipelineParameters = new[] {
 					new MgGraphicsPipelineCreateInfo {
 						RenderPass = graphicsDevice.Renderpass,
+						ColorBlendState = new MgPipelineColorBlendStateCreateInfo
+						{
+							Attachments = new MgPipelineColorBlendAttachmentState[]
+							{
+								new MgPipelineColorBlendAttachmentState
+								{
+									BlendEnable = true,
+									ColorWriteMask = MgColorComponentFlagBits.R_BIT | MgColorComponentFlagBits.G_BIT | MgColorComponentFlagBits.B_BIT | MgColorComponentFlagBits.A_BIT,
+									SrcColorBlendFactor = MgBlendFactor.SRC_COLOR,
+									SrcAlphaBlendFactor = MgBlendFactor.SRC_ALPHA,
+									ColorBlendOp = MgBlendOp.ADD,
+									DstColorBlendFactor = MgBlendFactor.ZERO,
+									DstAlphaBlendFactor = MgBlendFactor.ZERO,
+								}
+							},
+						},
 						DepthStencilState = new MgPipelineDepthStencilStateCreateInfo {
 							Front = new MgStencilOpState {
 								WriteMask = ~0U,
@@ -96,7 +112,7 @@ namespace HelloMagnesium
 								FailOp = MgStencilOp.KEEP,
 								DepthFailOp = MgStencilOp.KEEP,
 							},
-							Back = new MgStencilOpState {
+							Back = new MgStencilOpState {								
 								WriteMask = ~0U,
 								Reference = ~0U,
 								CompareMask = int.MaxValue,
@@ -109,6 +125,8 @@ namespace HelloMagnesium
 							DepthTestEnable = true,
 							DepthWriteEnable = true,
 							DepthCompareOp = MgCompareOp.LESS,
+							MinDepthBounds = 0f,
+							MaxDepthBounds = 1000f,
 						},
 						Stages = new[] {
 							new MgPipelineShaderStageCreateInfo {
@@ -141,7 +159,7 @@ namespace HelloMagnesium
 							VertexBindingDescriptions = new[] {
 								new MgVertexInputBindingDescription {
 									Binding = 0,
-									Stride = sizeof(float) * 5,
+									Stride = sizeof(float) * 4,
 									InputRate = MgVertexInputRate.VERTEX
 								},
 							},
@@ -149,14 +167,14 @@ namespace HelloMagnesium
 								new MgVertexInputAttributeDescription {
 									Binding = 0,
 									Location = 0,
-									Format = MgFormat.R32G32B32_SFLOAT,
+									Format = MgFormat.R32G32_SFLOAT,
 									Offset = 0,
 								},
 								new MgVertexInputAttributeDescription {
 									Binding = 0,
 									Location = 1,
 									Format = MgFormat.R32G32_SFLOAT,
-									Offset = sizeof(float) * 3,
+									Offset = sizeof(float) * 2,
 								},
 							},
 						},

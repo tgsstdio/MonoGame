@@ -313,12 +313,11 @@ namespace Magnesium.OpenGL
 		}
 
 		// NEED TO MERGE 
-		public int ExtractVertexBuffer(IGLCmdBufferRepository userSettings, GLCmdDrawCommand command)
+		public int ExtractVertexBuffer(IGLCmdBufferRepository userSettings, IGLGraphicsPipeline pipeline, GLCmdDrawCommand command)
 		{				
-			if (command.Pipeline.HasValue && command.VertexBuffer.HasValue)
+			if (command.VertexBuffer.HasValue)
 			{				
 				var currentVertexArray = GetLastVBO ();
-				var pipeline = userSettings.GraphicsPipelines.At (command.Pipeline.Value);
 
 				// create new vbo
 				if (currentVertexArray == null)
@@ -680,6 +679,8 @@ namespace Magnesium.OpenGL
 				item.Scissor = Scissors.Extract (repo, pipeline, drawCommand);
 
 				item.DescriptorSet = ExtractDescriptorSet (repo, pipeline, drawCommand);
+
+				item.VBO = ExtractVertexBuffer (repo, pipeline, drawCommand);
 
 				DrawItems.Add (item);
 				return true;

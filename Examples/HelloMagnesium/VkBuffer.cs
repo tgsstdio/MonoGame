@@ -82,6 +82,8 @@ namespace HelloMagnesium
 
 			Marshal.Copy (data, srcStartIndex, dest, elementCount);
 
+			DeviceMemory.UnmapMemory (device);
+
 			return Result.SUCCESS;
 		}
 

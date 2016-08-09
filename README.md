@@ -23,7 +23,7 @@ Implemented around modern OpenGL design features such as
  - GLSL shaders entirely for rendering
  - multi indirect draw calls
  - vertex buffer objects
- - compute shaders 
+ - compute shaders (TODO)
  - shader storage buffer objects 
 
 Licensed under MIT license (my contributions) and Microsoft Public License.

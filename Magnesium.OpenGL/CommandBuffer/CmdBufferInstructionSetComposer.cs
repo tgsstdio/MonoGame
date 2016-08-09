@@ -1,10 +1,9 @@
 using System.Collections.Generic;
 using System;
-using OpenTK.Graphics.OpenGL;
-using System.Diagnostics;
 
 namespace Magnesium.OpenGL
 {
+	[Obsolete]
 	public class CmdBufferInstructionSetComposer : ICmdBufferInstructionSetComposer
 	{
 		private readonly ICmdVBOCapabilities mVBO;

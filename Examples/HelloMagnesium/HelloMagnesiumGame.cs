@@ -169,19 +169,19 @@ namespace HelloMagnesium
 
 			const uint NO_OF_VERTICES = 4;
 
-			var vertexBuf = new VkBuffer (mPartition, MgBufferUsageFlagBits.VERTEX_BUFFER_BIT, (5 * sizeof(float)) * NO_OF_VERTICES);
+			var vertexBuf = new VkBuffer (mPartition, MgBufferUsageFlagBits.VERTEX_BUFFER_BIT, (4 * sizeof(float)) * NO_OF_VERTICES);
 
 			float[] vertexData = {
-				-1f, -1f, 0,
+				-1f, -1f,
 				1.0f, 1.0f,
 
-				0.9f, -1f, 0,
+				0.9f, -1f,
 				0.9f, 0.9f,
 
-				1f, 1f, 0,
+				1f, 1f,
 				0.9f, 0.9f,
 
-				-1f, 0.9f, 0,
+				-1f, 0.9f, 
 				0.9f, 0.9f,
 			};
 
@@ -246,7 +246,7 @@ namespace HelloMagnesium
 					},
 					ClearValues = new [] {
 						new MgClearValue {
-							Color = new MgClearColorValue (uint.MaxValue, 0, 0, uint.MaxValue),
+							Color = new MgClearColorValue (uint.MaxValue, 0, uint.MaxValue, uint.MaxValue),
 						},
 						new MgClearValue {
 							DepthStencil = new MgClearDepthStencilValue (1f, 0),							
@@ -332,38 +332,6 @@ namespace HelloMagnesium
 			mPartition.Device.UpdateDescriptorSets (writes, copies);	
 		}
 
-		static void Render (IMgThreadPartition partition, uint nextImage)
-		{
-			// Command buffer to be sumitted to the queue
-			var submitInfo = new[] {
-				new MgSubmitInfo {
-					// DRAW HERE
-					CommandBuffers = new IMgCommandBuffer[] {
-
-					},
-				}
-			};
-			//submitInfo.commandBufferCount = 1;
-			//submitInfo.pCommandBuffers = &drawCmdBuffers[currentBuffer];
-			// Submit to queue
-			IMgQueue queue = partition.Queue;
-			var err = queue.QueueSubmit (submitInfo, null);
-			Debug.Assert (err == Result.SUCCESS);
-		}
-
-//		MgPresentationLayer present;
-//		void draw2(IMgSemaphore presentComplete)
-//		{
-//			Result err;
-//			var nextImage = present.BeginDraw (presentComplete);
-//
-//			//Render (nextImage);
-//
-//			IMgSemaphore renderComplete;
-//			present.EndDraw (nextImage, renderComplete);
-//		}
-
-
 		public override void Draw(GameTime gameTime)
 		{			
 			UseRendergraph (gameTime);
@@ -377,16 +345,31 @@ namespace HelloMagnesium
 		void UseRendergraph (GameTime gameTime)
 		{
 			uint frameIndex = mPresentationLayer.BeginDraw (Bank.PostPresentBarrierCmd, Bank.PresentComplete);
+			//GL.ColorMask (true, true, true, true);
 			Bank.Renderer.Render (mPartition.Queue, gameTime, frameIndex);
+			// should use semaphores instead
+			mPartition.Queue.QueueWaitIdle ();
+
 			mPresentationLayer.EndDraw (frameIndex, Bank.PrePresentBarrierCmd, null);
 		}
 
 		void ExplicitSwapbuffers ()
 		{
-			GL.ClearColor (1f, 0f, 0f, 1f);
+			GL.ClearColor (0f, 0f, 0f, 0f);
 			GL.Viewport (0, 0, (int)mSwapchain.Width, (int)mSwapchain.Height);
+			GL.ColorMask (true, false, true, true);
 			GL.Clear (ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-			GL.Flush ();
+
+			GL.Begin(OpenTK.Graphics.OpenGL.PrimitiveType.Quads);
+				GL.Color3(1.0f, 1.0f, 1.0);
+				GL.Vertex2(-1f, -1f);
+				GL.Color3(0.9f, 0.9f, 0.9f);
+				GL.Vertex2(-1f, 1f);
+				GL.Color3(0.9f, 0.9f, 0.9f);
+				GL.Vertex2(1f, 1f);
+				GL.Color3(0.9f, 0.9f, 0.9f);
+				GL.Vertex2(1f, -1f);
+			GL.End();
 
 			mInternalChain.SwapBuffers();
 		}

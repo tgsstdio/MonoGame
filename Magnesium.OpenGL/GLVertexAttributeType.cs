@@ -1,6 +1,6 @@
 ﻿namespace Magnesium.OpenGL
 {
-	public enum GLVertexAttributeType
+	public enum GLVertexAttributeType : byte
 	{
 		Byte,
 		UnsignedByte,
