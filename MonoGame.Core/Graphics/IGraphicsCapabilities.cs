@@ -65,11 +65,11 @@ namespace MonoGame.Core
 
 		bool SupportsVertexTextures { get; }	
 
-		bool SupportsFramebufferObjectARB { get; }
-
-		/// <summary>
-		/// True, if GL_EXT_framebuffer_object is supported; false otherwise.
-		/// </summary>
-		bool SupportsFramebufferObjectEXT { get; }
+//		bool SupportsFramebufferObjectARB { get; }
+//
+//		/// <summary>
+//		/// True, if GL_EXT_framebuffer_object is supported; false otherwise.
+//		/// </summary>
+//		bool SupportsFramebufferObjectEXT { get; }
 	}
 }

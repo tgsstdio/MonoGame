@@ -34,7 +34,6 @@
     <Compile Include="BaseGamePlatform.cs" />
     <Compile Include="IGamePlatform.cs" />
     <Compile Include="GameTime.cs" />
-    <Compile Include="IGraphicsDeviceManager.cs" />
     <Compile Include="GameRunBehavior.cs" />
     <Compile Include="IPlatformActivator.cs" />
     <Compile Include="Input\IMouseListener.cs" />

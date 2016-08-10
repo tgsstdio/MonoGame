@@ -76,15 +76,15 @@ namespace MonoGame.Graphics
 		public bool SupportsAtitc { get; private set; }
 
 //#if OPENGL
-        /// <summary>
-        /// True, if GL_ARB_framebuffer_object is supported; false otherwise.
-        /// </summary>
-        public bool SupportsFramebufferObjectARB { get; private set; }
-
-        /// <summary>
-        /// True, if GL_EXT_framebuffer_object is supported; false otherwise.
-        /// </summary>
-		public bool SupportsFramebufferObjectEXT { get; private set; }
+//        /// <summary>
+//        /// True, if GL_ARB_framebuffer_object is supported; false otherwise.
+//        /// </summary>
+//        public bool SupportsFramebufferObjectARB { get; private set; }
+//
+//        /// <summary>
+//        /// True, if GL_EXT_framebuffer_object is supported; false otherwise.
+//        /// </summary>
+//		public bool SupportsFramebufferObjectEXT { get; private set; }
 
         /// <summary>
         /// Gets the max texture anisotropy. This value typically lies
@@ -167,8 +167,8 @@ namespace MonoGame.Graphics
             SupportsFramebufferObjectEXT = device._extensions.Contains("GL_EXT_framebuffer_object");
 #endif
 #endif
-			SupportsFramebufferObjectARB = mLookup.SupportsFramebufferObjectARB ();
-			SupportsFramebufferObjectEXT = mLookup.SupportsFramebufferObjectEXT ();
+//			SupportsFramebufferObjectARB = mLookup.SupportsFramebufferObjectARB ();
+//			SupportsFramebufferObjectEXT = mLookup.SupportsFramebufferObjectEXT ();
 
 
             // Anisotropic filtering

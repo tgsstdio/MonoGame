@@ -48,7 +48,6 @@
     <Compile Include="Desktop\OpenTKGamePlatform.cs" />
     <Compile Include="Graphics\GraphicsExtensions.cs" />
     <Compile Include="DesktopGLThreadingContext.cs" />
-    <Compile Include="Es20GLSpecificExtensionLookup.cs" />
     <Compile Include="Desktop\DesktopGLWindowResetter.cs" />
     <Compile Include="DesktopGLExitStrategy.cs" />
     <Compile Include="IWindowExitStrategy.cs" />
@@ -57,23 +56,13 @@
     <Compile Include="Graphics\DesktopGLGraphicsAdapter.cs" />
     <Compile Include="Graphics\DesktopGLGraphicsAdapterCollection.cs" />
     <Compile Include="Graphics\IGraphicsDeviceLogger.cs" />
-    <Compile Include="Graphics\FullGLFramebufferHelperEXT.cs" />
-    <Compile Include="Graphics\FullGLFramebufferHelper.cs" />
-    <Compile Include="Graphics\IGLDevicePlatform.cs" />
-    <Compile Include="Graphics\FullGLDevicePlatform.cs" />
     <Compile Include="DesktopGLBackBufferPreferences.cs" />
-    <Compile Include="Es20GraphicCapabilitiesLookup.cs" />
-    <Compile Include="FullGLExtensionLookup.cs" />
-    <Compile Include="Graphics\DesktopGLGraphicsDevicePlatform.cs" />
-    <Compile Include="FullGLFramebufferHelperSelector.cs" />
-    <Compile Include="Es20GLFramebufferHelperSelector.cs" />
-    <Compile Include="Graphics\Es20GLFramebufferHelper.cs" />
-    <Compile Include="FullGLSpecificGraphicsCapabilitiesLookup.cs" />
     <Compile Include="Desktop\IOpenTKGameWindow.cs" />
     <Compile Include="DesktopGLTitleContainer.cs" />
     <Compile Include="Graphics\IOpenTKDeviceQuery.cs" />
     <Compile Include="Graphics\OpenTKDeviceQuery.cs" />
     <Compile Include="DesktopGLThreadSleeper.cs" />
+    <Compile Include="MgGraphicsDeviceManager.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -100,6 +89,10 @@
     <ProjectReference Include="..\MonoGame.Graphics\MonoGame.Graphics.csproj">
       <Project>{52C293E3-DCC5-43BE-A94F-DBE0CF44E25E}</Project>
       <Name>MonoGame.Graphics</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Magnesium\Magnesium.csproj">
+      <Project>{9F9AC448-9D17-43E5-8889-285426290891}</Project>
+      <Name>Magnesium</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>

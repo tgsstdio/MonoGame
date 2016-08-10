@@ -41,8 +41,7 @@ namespace HelloMagnesium
 					container.RegisterMapping<Microsoft.Xna.Framework.IGameWindow, IOpenTKGameWindow>();
 
 					container.Register<IGamePlatform, OpenTKGamePlatform>(Reuse.Singleton);
-					container.Register<IMgGraphicsDeviceManager, MgGraphicsDeviceManager>(Reuse.Singleton);
-					container.RegisterMapping<Microsoft.Xna.Framework.IGraphicsDeviceManager, IMgGraphicsDeviceManager>();
+					container.Register<IGraphicsDeviceManager, MgGraphicsDeviceManager>(Reuse.Singleton);
 
 					container.Register<IGraphicsProfiler, DefaultGraphicsDeviceProfiler> (Reuse.Singleton);
 					container.Register<IGraphicsDeviceService, NullGraphicsDeviceService>(Reuse.Singleton);
@@ -53,12 +52,12 @@ namespace HelloMagnesium
 					//container.Register<IGLExtensionLookup, FullGLExtensionLookup>(Reuse.Singleton);
 					//container.Register<IGraphicsDevicePlatform, MagnesiumGraphicsDevicePlatform> (Reuse.Singleton);
 					container.Register<IGLExtensionLookup, FullGLExtensionLookup>(Reuse.Singleton);
-					container.Register<IGraphicsCapabilitiesLookup, FullGLSpecificGraphicsCapabilitiesLookup>(Reuse.Singleton);
+					//container.Register<IGraphicsCapabilitiesLookup, FullGLSpecificGraphicsCapabilitiesLookup>(Reuse.Singleton);
 					container.Register<IGLDevicePlatform, FullGLDevicePlatform>(Reuse.Singleton);
 
 					container.Register<IGraphicsDevicePreferences, MockGraphicsDevicePreferences>(Reuse.Singleton);
 					container.Register<IBackBufferPreferences, DesktopGLBackBufferPreferences>();
-					container.Register<IGraphicsDeviceLogger, MockGraphicsDeviceLogger>(Reuse.Singleton);
+					//container.Register<IGraphicsDeviceLogger, MockGraphicsDeviceLogger>(Reuse.Singleton);
 					container.Register<IGLFramebufferHelperSelector, FullGLFramebufferHelperSelector>(Reuse.Singleton);
 
 					container.Register<IKeyboardInputListener, KeyboardInputListener>(Reuse.Singleton);
@@ -101,6 +100,9 @@ namespace HelloMagnesium
 					// MAGNESIUM
 					container.Register<IMgDriver, MgDriver>(Reuse.Singleton);
 					container.Register<IMgEntrypoint, Magnesium.OpenGL.GLEntrypoint>(Reuse.Singleton);
+					container.Register<IGLFramebufferSupport, Magnesium.OpenGL.FullGLFramebufferSupport>(Reuse.Singleton);
+					container.Register<IGLErrorHandler, Magnesium.OpenGL.FullGLErrorHandler>(Reuse.Singleton);
+					container.Register<IMgGraphicsDeviceLogger, MockGraphicsDeviceLogger>(Reuse.Singleton);
 					//container.Register<IMgPresentationSurface, Win32PresentationSurface>(Reuse.Singleton);
 					container.Register<Magnesium.OpenGL.IGLQueue, Magnesium.OpenGL.GLQueue>(Reuse.Singleton);
 					container.Register<Magnesium.OpenGL.IGLQueueRenderer, Magnesium.OpenGL.GLQueueRenderer>(Reuse.Singleton);
@@ -118,10 +120,9 @@ namespace HelloMagnesium
 					container.Register<IMgDeviceQuery, MgDeviceQuery>(Reuse.Singleton);
 					container.Register<IMgImageTools, MgImageTools>(Reuse.Singleton);
 
-					container.Register<IHelloGraphicsDevice, HelloMgGraphicsDevice>(Reuse.Singleton);
-					container.RegisterMapping<Microsoft.Xna.Framework.IGraphicsDevice, IHelloGraphicsDevice>();
+					container.Register<IMgGraphicsDevice, OpenTKGraphicsDevice>(Reuse.Singleton);
 
-					container.Register<IMgSwapchainCollection, HelloMgSwapchainCollection>(Reuse.Singleton);
+					container.Register<IMgSwapchainCollection, OpenTKSwapchainCollection>(Reuse.Singleton);
 					container.Register<IMgPresentationLayer, MgPresentationLayer>(Reuse.Singleton);
 					container.Register<IOpenTKSwapchainKHR, GLSwapchainKHR>(Reuse.Singleton);
 

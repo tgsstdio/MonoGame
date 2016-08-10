@@ -23,7 +23,7 @@ namespace HelloMagnesium
 
 		readonly IMgPresentationLayer mPresentationLayer;
 
-		IMgGraphicsDeviceManager mManager;
+		IGraphicsDeviceManager mManager;
 
 		#region IDisposable implementation
 
@@ -72,7 +72,7 @@ namespace HelloMagnesium
 		IOpenTKSwapchainKHR mInternalChain;
 
 		public HelloMagnesiumGame(
-			IMgGraphicsDeviceManager manager,
+			IGraphicsDeviceManager manager,
 			IMgThreadPartition partition,
 			IMgBaseTextureLoader tex2DLoader,
 			IPresentationParameters presentation,

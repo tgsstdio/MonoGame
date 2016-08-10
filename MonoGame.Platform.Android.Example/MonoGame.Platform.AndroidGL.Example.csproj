@@ -80,10 +80,6 @@
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <ItemGroup>
-    <ProjectReference Include="..\MonoGame.Platform.AndroidGL\MonoGame.Platform.AndroidGL.csproj">
-      <Project>{8997C8B0-068F-42DC-A349-F3CD23CA70D6}</Project>
-      <Name>MonoGame.Platform.AndroidGL</Name>
-    </ProjectReference>
     <ProjectReference Include="..\MonoGame.Core\MonoGame.Core.csproj">
       <Project>{699977AD-6D8C-4E0B-ADDA-554B66002D08}</Project>
       <Name>MonoGame.Core</Name>

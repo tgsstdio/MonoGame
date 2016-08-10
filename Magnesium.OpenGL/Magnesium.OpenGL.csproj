@@ -156,6 +156,30 @@
     <Compile Include="CommandBuffer\CmdBufferInstructionSetTransformer.cs" />
     <Compile Include="CommandBuffer\DynamicStateItemStore.cs" />
     <Compile Include="GLClearAttachmentInfo.cs" />
+    <Compile Include="Driver\OpenTKPresentationSurface.cs" />
+    <Compile Include="Driver\OpenTKSwapchainCollection.cs" />
+    <Compile Include="Driver\GLNullImageView.cs" />
+    <Compile Include="Driver\IGLFramebufferSupport.cs" />
+    <Compile Include="Driver\FullGLExtensionLookup.cs" />
+    <Compile Include="Driver\Es20FramebufferSupport.cs" />
+    <Compile Include="Driver\FullGLFramebufferSupport.cs" />
+    <Compile Include="Driver\FullGLFramebufferHelperSelector.cs" />
+    <Compile Include="Driver\Es20GLFramebufferHelperSelector.cs" />
+    <Compile Include="Driver\IGLFramebufferHelper.cs" />
+    <Compile Include="Driver\IGLFramebufferHelperSelector.cs" />
+    <Compile Include="Driver\FullGLFramebufferHelper.cs" />
+    <Compile Include="Driver\FullGLFramebufferHelperEXT.cs" />
+    <Compile Include="Driver\IGLExtensionLookup.cs" />
+    <Compile Include="Driver\IGLErrorHandler.cs" />
+    <Compile Include="Driver\ES30GLErrorHandler.cs" />
+    <Compile Include="Driver\FullGLErrorHandler.cs" />
+    <Compile Include="Driver\MgOpenGLException.cs" />
+    <Compile Include="Driver\Es20GLSpecificExtensionLookup.cs" />
+    <Compile Include="Driver\Es20GLFramebufferHelper.cs" />
+    <Compile Include="Driver\OpenTKGraphicsDevice.cs" />
+    <Compile Include="Driver\IGLDevicePlatform.cs" />
+    <Compile Include="Driver\FullGLDevicePlatform.cs" />
+    <Compile Include="Driver\IMgGraphicsDeviceLogger.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -168,6 +192,7 @@
     <Folder Include="CommandBuffer\" />
     <Folder Include="Queue\" />
     <Folder Include="Entrypoint\" />
+    <Folder Include="Driver\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="OpenTK.dll.config" />

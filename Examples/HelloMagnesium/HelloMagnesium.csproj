@@ -43,31 +43,17 @@
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="NullGraphicsDeviceLogger.cs" />
     <Compile Include="MockGraphicsDevicePreferences.cs" />
     <Compile Include="HelloMagnesiumGame.cs" />
-    <Compile Include="IMgDeviceQuery.cs" />
-    <Compile Include="MgDeviceQuery.cs" />
-    <Compile Include="MockShaderProgramCache.cs" />
     <Compile Include="MockGLSemaphoreGenerator.cs" />
     <Compile Include="MockTouchListener.cs" />
     <Compile Include="MgPresentationLayer.cs" />
     <Compile Include="IMgPresentationLayer.cs" />
-    <Compile Include="Win32PresentationSurface.cs" />
     <Compile Include="VkBuffer.cs" />
     <Compile Include="GraphicsBank.cs" />
-    <Compile Include="GraphRenderer.cs" />
-    <Compile Include="SubmitInfoGraphNode.cs" />
-    <Compile Include="PrecompiledGraphNode.cs" />
-    <Compile Include="IRenderGraphNode.cs" />
-    <Compile Include="ImmediateModeGraphNode.cs" />
-    <Compile Include="QueueArgument.cs" />
-    <Compile Include="HelloMgSwapchainCollection.cs" />
-    <Compile Include="GLNullImageView.cs" />
-    <Compile Include="HelloMgGraphicsDevice.cs" />
-    <Compile Include="MgGraphicsDeviceManager.cs" />
     <Compile Include="IHelloGraphicsDevice.cs" />
     <Compile Include="MgSpriteBatch.cs" />
+    <Compile Include="MockGraphicsDeviceLogger.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

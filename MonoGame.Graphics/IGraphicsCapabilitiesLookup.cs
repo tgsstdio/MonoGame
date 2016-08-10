@@ -28,9 +28,9 @@ namespace MonoGame.Graphics
 
 		bool SupportsAtitc ();
 
-		bool SupportsFramebufferObjectARB ();
-
-		bool SupportsFramebufferObjectEXT ();
+//		bool SupportsFramebufferObjectARB ();
+//
+//		bool SupportsFramebufferObjectEXT ();
 
 		int GetMaxTextureAnisotropy ();
 

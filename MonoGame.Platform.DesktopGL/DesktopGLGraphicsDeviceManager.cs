@@ -11,7 +11,7 @@ using MonoGame.Core;
 
 namespace MonoGame.Platform.DesktopGL
 {
-	public class DesktopGLGraphicsDeviceManager : IGraphicsDeviceManager
+	public class DesktopGLGraphicsDeviceManager
 	{
 		private IOpenTKGameWindow mWindow;
 		public IGraphicsDevice GraphicsDevice { get; set; }

@@ -79,11 +79,8 @@
     <Compile Include="IGPUSyncObject.cs" />
     <Compile Include="IPassSyncObject.cs" />
     <Compile Include="IBufferSyncObject.cs" />
-    <Compile Include="IGLFramebufferHelper.cs" />
     <Compile Include="IGraphicsCapabilitiesLookup.cs" />
     <Compile Include="GraphicsCapabilities.cs" />
-    <Compile Include="IGLExtensionLookup.cs" />
-    <Compile Include="IGLFramebufferHelperSelector.cs" />
     <Compile Include="SpriteBatch\MgTexturePlatform.cs" />
     <Compile Include="SpriteBatch\IMgTexturePlatform.cs" />
     <Compile Include="SpriteBatch\MgBaseTexture.cs" />
@@ -96,7 +93,15 @@
     <Compile Include="DrawItemBitFlags.cs" />
     <Compile Include="SpriteBatch\IMgTexture.cs" />
     <Compile Include="SpriteBatch\IMgBaseTextureLoader.cs" />
-    <Compile Include="IMgGraphicsDeviceManager.cs" />
+    <Compile Include="IRenderGraphNode.cs" />
+    <Compile Include="QueueArgument.cs" />
+    <Compile Include="PrecompiledGraphNode.cs" />
+    <Compile Include="ImmediateModeGraphNode.cs" />
+    <Compile Include="GraphRenderer.cs" />
+    <Compile Include="SubmitInfoGraphNode.cs" />
+    <Compile Include="IMgDeviceQuery.cs" />
+    <Compile Include="MgDeviceQuery.cs" />
+    <Compile Include="IGraphicsDeviceManager.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>

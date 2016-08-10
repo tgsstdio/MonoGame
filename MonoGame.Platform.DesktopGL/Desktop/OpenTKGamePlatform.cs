@@ -87,12 +87,10 @@ namespace MonoGame.Platform.DesktopGL
         private int isExiting; // int, so we can use Interlocked.Increment
         
 		//private IGameBackbone mBackbone;
-		private IGraphicsDeviceManager mGraphics;
 		private IOpenTKWindowResetter mWindowReset;
-		public OpenTKGamePlatform(IPlatformActivator activator, IGraphicsDeviceManager graphics, IOpenTKGameWindow view, IOpenTKWindowResetter resetter, IOpenALSoundController soundController, IMouseListener mouseListener)
+		public OpenTKGamePlatform(IPlatformActivator activator, IOpenTKGameWindow view, IOpenTKWindowResetter resetter, IOpenALSoundController soundController, IMouseListener mouseListener)
 			: base(activator)
         {
-			mGraphics = graphics;
 			mWindowReset = resetter;
             toolkit = Toolkit.Init();
 			_view = view;
@@ -223,12 +221,12 @@ namespace MonoGame.Platform.DesktopGL
             Console.WriteLine(message);
         }
 
-        public override void Present()
-        {
-			var device = mGraphics.GraphicsDevice;
-            if (device != null)
-                device.Present();
-        }
+//        public override void Present()
+//        {
+//			var device = mGraphics.GraphicsDevice;
+//            if (device != null)
+//                device.Present();
+//        }
 		
         protected override void Dispose(bool disposing)
         {
