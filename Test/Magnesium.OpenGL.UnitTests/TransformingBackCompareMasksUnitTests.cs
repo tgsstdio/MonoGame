@@ -11,7 +11,7 @@ namespace Magnesium.OpenGL.UnitTests
 			IGLCmdBufferRepository repo = new GLCmdBufferRepository ();
 			Assert.AreEqual (0, repo.BackCompareMasks.Count);
 
-			ICmdVBOCapabilities vbo = new MockVertexBufferFactory ();
+			ICmdVBOEntrypoint vbo = new MockVertexBufferFactory ();
 			var transform = new CmdBufferInstructionSetTransformer (vbo, repo);
 
 			Assert.IsNotNull (transform.BackCompareMasks);
@@ -24,12 +24,12 @@ namespace Magnesium.OpenGL.UnitTests
 			IGLCmdBufferRepository repo = new GLCmdBufferRepository ();
 			Assert.AreEqual (0, repo.BackCompareMasks.Count);
 
-			ICmdVBOCapabilities vbo = new MockVertexBufferFactory ();
+			ICmdVBOEntrypoint vbo = new MockVertexBufferFactory ();
 			var transform = new CmdBufferInstructionSetTransformer (vbo, repo);
 
 			var command = new GLCmdDrawCommand{ BackCompareMask = null };
 
-			var actual = transform.InitialiseDrawItem (repo, null, command);
+			var actual = transform.InitializeDrawItem (repo, null, command);
 			Assert.IsFalse (actual);
 			Assert.IsNotNull (transform.BackCompareMasks);
 			Assert.AreEqual (0, transform.BackCompareMasks.Count);
@@ -45,12 +45,12 @@ namespace Magnesium.OpenGL.UnitTests
 
 			Assert.AreEqual (1, repo.BackCompareMasks.Count);
 
-			ICmdVBOCapabilities vbo = new MockVertexBufferFactory ();
+			ICmdVBOEntrypoint vbo = new MockVertexBufferFactory ();
 			var transform = new CmdBufferInstructionSetTransformer (vbo, repo);
 
 			var command = new GLCmdDrawCommand{ Pipeline = null, BackCompareMask = 0 };
 
-			var actual = transform.InitialiseDrawItem (repo, null, command);
+			var actual = transform.InitializeDrawItem (repo, null, command);
 			Assert.IsFalse (actual);
 			Assert.IsNotNull (transform.BackCompareMasks);
 			Assert.AreEqual (0, transform.BackCompareMasks.Count);
@@ -75,16 +75,16 @@ namespace Magnesium.OpenGL.UnitTests
 				{
 					VertexInput = new GLVertexBufferBinder(bindings, attributes),
 					DynamicsStates = 0,
-					Back = new GLQueueStencilMasks{ CompareMask = DEFAULT_VALUE},
+					Back = new GLGraphicsPipelineStencilMasks{ CompareMask = DEFAULT_VALUE},
 					Viewports = new GLCmdViewportParameter(0, new MgViewport[]{}),
 					Scissors = new GLCmdScissorParameter(0, new MgRect2D[]{}),
-					ColorBlendEnums = new GLQueueRendererColorBlendState{ Attachments = new GLQueueColorAttachmentBlendState[]{} },
+					ColorBlendEnums = new GLGraphicsPipelineBlendColorState{ Attachments = new GLGraphicsPipelineBlendColorAttachmentState[]{} },
 				}
 			);
 
 			Assert.AreEqual (1, repo.GraphicsPipelines.Count);
 
-			ICmdVBOCapabilities vbo = new MockVertexBufferFactory ();
+			ICmdVBOEntrypoint vbo = new MockVertexBufferFactory ();
 			var transform = new CmdBufferInstructionSetTransformer (vbo, repo);
 
 			var command = new GLCmdDrawCommand{ Pipeline = 0, BackCompareMask = 0, Draw = new GLCmdInternalDraw{ } };
@@ -92,7 +92,7 @@ namespace Magnesium.OpenGL.UnitTests
 			var origin = new MockIGLRenderPass ();
 			var pass = new GLCmdRenderPassCommand{ Origin = origin} ;
 
-			var result = transform.InitialiseDrawItem (repo, pass, command);
+			var result = transform.InitializeDrawItem (repo, pass, command);
 			Assert.IsTrue (result);
 			Assert.IsNotNull (transform.BackCompareMasks);
 			Assert.AreEqual (1, transform.BackCompareMasks.Count);
@@ -122,22 +122,22 @@ namespace Magnesium.OpenGL.UnitTests
 				{
 					VertexInput = new GLVertexBufferBinder(bindings, attributes),
 					DynamicsStates = GLGraphicsPipelineDynamicStateFlagBits.STENCIL_COMPARE_MASK,
-					Back = new GLQueueStencilMasks{CompareMask = DEFAULT_VALUE},
+					Back = new GLGraphicsPipelineStencilMasks{CompareMask = DEFAULT_VALUE},
 					Viewports = new GLCmdViewportParameter(0, new MgViewport[]{}),
 					Scissors = new GLCmdScissorParameter(0, new MgRect2D[]{}),
-					ColorBlendEnums = new GLQueueRendererColorBlendState{ Attachments = new GLQueueColorAttachmentBlendState[]{} },
+					ColorBlendEnums = new GLGraphicsPipelineBlendColorState{ Attachments = new GLGraphicsPipelineBlendColorAttachmentState[]{} },
 				}
 			);
 
 			Assert.AreEqual (1, repo.GraphicsPipelines.Count);
 
-			ICmdVBOCapabilities vbo = new MockVertexBufferFactory ();
+			ICmdVBOEntrypoint vbo = new MockVertexBufferFactory ();
 			var transform = new CmdBufferInstructionSetTransformer (vbo, repo);
 
 			// USE OVERRIDE 
 			var command_0 = new GLCmdDrawCommand{ Pipeline = 0, BackCompareMask = 0, Draw = new GLCmdInternalDraw{ }  };
 
-			var result = transform.InitialiseDrawItem (repo, pass, command_0);
+			var result = transform.InitializeDrawItem (repo, pass, command_0);
 			Assert.IsTrue (result);
 			Assert.IsNotNull (transform.BackCompareMasks);
 			Assert.AreEqual (1, transform.BackCompareMasks.Count);
@@ -153,7 +153,7 @@ namespace Magnesium.OpenGL.UnitTests
 			// NEXT TEST - IF VALUES DIFFER, CREATE NEW DEPTHBIAS
 			var command_1 = new GLCmdDrawCommand{ Pipeline = 0, BackCompareMask = null, Draw = new GLCmdInternalDraw{ } };
 
-			result = transform.InitialiseDrawItem (repo, pass, command_1);
+			result = transform.InitializeDrawItem (repo, pass, command_1);
 			Assert.IsTrue (result);
 			Assert.AreEqual (2, transform.BackCompareMasks.Count);
 
@@ -168,7 +168,7 @@ namespace Magnesium.OpenGL.UnitTests
 			// NEXT TEST - IF DEPTHBIAS IS SAME, REUSE INDEX 1
 			var command_2 = new GLCmdDrawCommand{ Pipeline = 0, BackCompareMask = null, Draw = new GLCmdInternalDraw{ }  };
 
-			result = transform.InitialiseDrawItem (repo, pass, command_2);
+			result = transform.InitializeDrawItem (repo, pass, command_2);
 			Assert.IsTrue (result);
 			Assert.AreEqual (2, transform.BackCompareMasks.Count);
 

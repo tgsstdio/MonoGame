@@ -11,7 +11,7 @@ namespace Magnesium.OpenGL.UnitTests
 			IGLCmdBufferRepository repo = new GLCmdBufferRepository ();
 			Assert.AreEqual (0, repo.GraphicsPipelines.Count);
 
-			ICmdVBOCapabilities vbo = new MockVertexBufferFactory ();
+			ICmdVBOEntrypoint vbo = new MockVertexBufferFactory ();
 			var transform = new CmdBufferInstructionSetTransformer (vbo, repo);
 
 			Assert.IsNotNull (transform.Pipelines);
@@ -27,12 +27,12 @@ namespace Magnesium.OpenGL.UnitTests
 			IGLCmdBufferRepository repo = new GLCmdBufferRepository ();
 			Assert.AreEqual (0, repo.GraphicsPipelines.Count);
 
-			ICmdVBOCapabilities vbo = new MockVertexBufferFactory ();
+			ICmdVBOEntrypoint vbo = new MockVertexBufferFactory ();
 			var transform = new CmdBufferInstructionSetTransformer (vbo, repo);
 
 			var command = new GLCmdDrawCommand{ Pipeline = null, Draw = new GLCmdInternalDraw{ } };
 
-			var actual = transform.InitialiseDrawItem (repo, null, command);
+			var actual = transform.InitializeDrawItem (repo, null, command);
 			Assert.IsFalse (actual);
 
 			Assert.IsNotNull (transform.Pipelines);
@@ -48,7 +48,7 @@ namespace Magnesium.OpenGL.UnitTests
 			IGLCmdBufferRepository repo = new GLCmdBufferRepository ();
 			Assert.AreEqual (0, repo.GraphicsPipelines.Count);
 
-			ICmdVBOCapabilities vbo = new MockVertexBufferFactory ();
+			ICmdVBOEntrypoint vbo = new MockVertexBufferFactory ();
 			var transform = new CmdBufferInstructionSetTransformer (vbo, repo);
 
 			var origin = new MockIGLRenderPass ();
@@ -56,7 +56,7 @@ namespace Magnesium.OpenGL.UnitTests
 
 			var command = new GLCmdDrawCommand{ Pipeline = null, Draw = new GLCmdInternalDraw{ } };
 
-			var actual = transform.InitialiseDrawItem (repo, pass, command);
+			var actual = transform.InitializeDrawItem (repo, pass, command);
 			Assert.IsFalse (actual);
 
 			Assert.IsNotNull (transform.Pipelines);
@@ -79,13 +79,13 @@ namespace Magnesium.OpenGL.UnitTests
 					DynamicsStates = 0,
 					Viewports = new GLCmdViewportParameter(0, new MgViewport[]{}),
 					Scissors = new GLCmdScissorParameter(0, new MgRect2D[]{}),
-					ColorBlendEnums = new GLQueueRendererColorBlendState{ Attachments = new GLQueueColorAttachmentBlendState[]{} },
+					ColorBlendEnums = new GLGraphicsPipelineBlendColorState{ Attachments = new GLGraphicsPipelineBlendColorAttachmentState[]{} },
 				}
 			);
 
 			Assert.AreEqual (1, repo.GraphicsPipelines.Count);
 
-			ICmdVBOCapabilities vbo = new MockVertexBufferFactory ();
+			ICmdVBOEntrypoint vbo = new MockVertexBufferFactory ();
 			var transform = new CmdBufferInstructionSetTransformer (vbo, repo);
 
 			var origin = new MockIGLRenderPass ();
@@ -93,7 +93,7 @@ namespace Magnesium.OpenGL.UnitTests
 
 			var command = new GLCmdDrawCommand{ Pipeline = null, Draw = new GLCmdInternalDraw{ } };
 
-			var actual = transform.InitialiseDrawItem (repo, pass, command);
+			var actual = transform.InitializeDrawItem (repo, pass, command);
 			Assert.IsFalse (actual);
 
 			Assert.IsNotNull (transform.Pipelines);
@@ -116,13 +116,13 @@ namespace Magnesium.OpenGL.UnitTests
 					DynamicsStates = 0,
 					Viewports = new GLCmdViewportParameter(0, new MgViewport[]{}),
 					Scissors = new GLCmdScissorParameter(0, new MgRect2D[]{}),
-					ColorBlendEnums = new GLQueueRendererColorBlendState{ Attachments = new GLQueueColorAttachmentBlendState[]{} },
+					ColorBlendEnums = new GLGraphicsPipelineBlendColorState{ Attachments = new GLGraphicsPipelineBlendColorAttachmentState[]{} },
 				}
 			);
 
 			Assert.AreEqual (1, repo.GraphicsPipelines.Count);
 
-			ICmdVBOCapabilities vbo = new MockVertexBufferFactory ();
+			ICmdVBOEntrypoint vbo = new MockVertexBufferFactory ();
 			var transform = new CmdBufferInstructionSetTransformer (vbo, repo);
 
 			var origin = new MockIGLRenderPass ();
@@ -130,7 +130,7 @@ namespace Magnesium.OpenGL.UnitTests
 
 			var command = new GLCmdDrawCommand{ Pipeline = 0, Draw = new GLCmdInternalDraw{ } };
 
-			var actual = transform.InitialiseDrawItem (repo, pass, command);
+			var actual = transform.InitializeDrawItem (repo, pass, command);
 			Assert.True (actual);
 
 			Assert.IsNotNull (transform.Pipelines);
@@ -156,13 +156,13 @@ namespace Magnesium.OpenGL.UnitTests
 					DynamicsStates = 0,
 					Viewports = new GLCmdViewportParameter(0, new MgViewport[]{}),
 					Scissors = new GLCmdScissorParameter(0, new MgRect2D[]{}),
-					ColorBlendEnums = new GLQueueRendererColorBlendState{ Attachments = new GLQueueColorAttachmentBlendState[]{} },
+					ColorBlendEnums = new GLGraphicsPipelineBlendColorState{ Attachments = new GLGraphicsPipelineBlendColorAttachmentState[]{} },
 				}
 			);
 
 			Assert.AreEqual (1, repo.GraphicsPipelines.Count);
 
-			ICmdVBOCapabilities vbo = new MockVertexBufferFactory ();
+			ICmdVBOEntrypoint vbo = new MockVertexBufferFactory ();
 			var transform = new CmdBufferInstructionSetTransformer (vbo, repo);
 
 			var origin = new MockIGLRenderPass ();
@@ -170,7 +170,7 @@ namespace Magnesium.OpenGL.UnitTests
 
 			var command = new GLCmdDrawCommand{ Pipeline = 0, Draw = new GLCmdInternalDraw{ } };
 
-			var actual = transform.InitialiseDrawItem (repo, pass, command);
+			var actual = transform.InitializeDrawItem (repo, pass, command);
 			Assert.True (actual);
 
 			Assert.IsNotNull (transform.Pipelines);
@@ -184,7 +184,7 @@ namespace Magnesium.OpenGL.UnitTests
 
 			var command_1 = new GLCmdDrawCommand{ Pipeline = 0, Draw = new GLCmdInternalDraw{ } };
 
-			var actual_1 = transform.InitialiseDrawItem (repo, pass, command_1);
+			var actual_1 = transform.InitializeDrawItem (repo, pass, command_1);
 			Assert.True (actual_1);
 
 			Assert.IsNotNull (transform.Pipelines);
@@ -202,12 +202,12 @@ namespace Magnesium.OpenGL.UnitTests
 		{
 			IGLCmdBufferRepository repo = new GLCmdBufferRepository ();
 
-			var EXPECTED = new GLQueueRendererColorBlendState {
+			var EXPECTED = new GLGraphicsPipelineBlendColorState {
 				LogicOp = MgLogicOp.INVERT,
 				LogicOpEnable = true,
-				Attachments = new GLQueueColorAttachmentBlendState[]
+				Attachments = new GLGraphicsPipelineBlendColorAttachmentState[]
 				{
-					new GLQueueColorAttachmentBlendState
+					new GLGraphicsPipelineBlendColorAttachmentState
 					{
 						AlphaBlendOp = MgBlendOp.ADD,
 						BlendEnable = true,
@@ -218,7 +218,7 @@ namespace Magnesium.OpenGL.UnitTests
 						SrcAlphaBlendFactor = MgBlendFactor.ONE,
 						SrcColorBlendFactor = MgBlendFactor.SRC1_COLOR,
 					},
-					new GLQueueColorAttachmentBlendState
+					new GLGraphicsPipelineBlendColorAttachmentState
 					{
 						AlphaBlendOp = MgBlendOp.ADD,
 						BlendEnable = true,
@@ -246,7 +246,7 @@ namespace Magnesium.OpenGL.UnitTests
 
 			Assert.AreEqual (1, repo.GraphicsPipelines.Count);
 
-			ICmdVBOCapabilities vbo = new MockVertexBufferFactory ();
+			ICmdVBOEntrypoint vbo = new MockVertexBufferFactory ();
 			var transform = new CmdBufferInstructionSetTransformer (vbo, repo);
 
 			var origin = new MockIGLRenderPass ();
@@ -254,7 +254,7 @@ namespace Magnesium.OpenGL.UnitTests
 
 			var command = new GLCmdDrawCommand{ Pipeline = 0, Draw = new GLCmdInternalDraw{ } };
 
-			var result_0 = transform.InitialiseDrawItem (repo, pass, command);
+			var result_0 = transform.InitializeDrawItem (repo, pass, command);
 			Assert.True (result_0);
 
 			Assert.IsNotNull (transform.Pipelines);
@@ -278,12 +278,12 @@ namespace Magnesium.OpenGL.UnitTests
 		{
 			IGLCmdBufferRepository repo = new GLCmdBufferRepository ();
 
-			var EXPECTED = new GLQueueRendererColorBlendState {
+			var EXPECTED = new GLGraphicsPipelineBlendColorState {
 				LogicOp = MgLogicOp.INVERT,
 				LogicOpEnable = true,
-				Attachments = new GLQueueColorAttachmentBlendState[]
+				Attachments = new GLGraphicsPipelineBlendColorAttachmentState[]
 				{
-					new GLQueueColorAttachmentBlendState
+					new GLGraphicsPipelineBlendColorAttachmentState
 					{
 						AlphaBlendOp = MgBlendOp.ADD,
 						BlendEnable = true,
@@ -294,7 +294,7 @@ namespace Magnesium.OpenGL.UnitTests
 						SrcAlphaBlendFactor = MgBlendFactor.ONE,
 						SrcColorBlendFactor = MgBlendFactor.SRC1_COLOR,
 					},
-					new GLQueueColorAttachmentBlendState
+					new GLGraphicsPipelineBlendColorAttachmentState
 					{
 						AlphaBlendOp = MgBlendOp.ADD,
 						BlendEnable = true,
@@ -322,7 +322,7 @@ namespace Magnesium.OpenGL.UnitTests
 
 			Assert.AreEqual (1, repo.GraphicsPipelines.Count);
 
-			ICmdVBOCapabilities vbo = new MockVertexBufferFactory ();
+			ICmdVBOEntrypoint vbo = new MockVertexBufferFactory ();
 			var transform = new CmdBufferInstructionSetTransformer (vbo, repo);
 
 			var origin = new MockIGLRenderPass ();
@@ -330,7 +330,7 @@ namespace Magnesium.OpenGL.UnitTests
 
 			var command = new GLCmdDrawCommand{ Pipeline = 0, Draw = new GLCmdInternalDraw{ } };
 
-			var result_0 = transform.InitialiseDrawItem (repo, pass, command);
+			var result_0 = transform.InitializeDrawItem (repo, pass, command);
 			Assert.True (result_0);
 
 			Assert.IsNotNull (transform.Pipelines);
@@ -350,7 +350,7 @@ namespace Magnesium.OpenGL.UnitTests
 
 			var command_1 = new GLCmdDrawCommand{ Pipeline = 0, Draw = new GLCmdInternalDraw{ } };
 
-			var result_1 = transform.InitialiseDrawItem (repo, pass, command_1);
+			var result_1 = transform.InitializeDrawItem (repo, pass, command_1);
 			Assert.True (result_1);
 
 			Assert.IsNotNull (transform.Pipelines);
@@ -368,12 +368,12 @@ namespace Magnesium.OpenGL.UnitTests
 		{
 			IGLCmdBufferRepository repo = new GLCmdBufferRepository ();
 
-			var EXPECTED_0 = new GLQueueRendererColorBlendState {
+			var EXPECTED_0 = new GLGraphicsPipelineBlendColorState {
 				LogicOp = MgLogicOp.INVERT,
 				LogicOpEnable = true,
-				Attachments = new GLQueueColorAttachmentBlendState[]
+				Attachments = new GLGraphicsPipelineBlendColorAttachmentState[]
 				{
-					new GLQueueColorAttachmentBlendState
+					new GLGraphicsPipelineBlendColorAttachmentState
 					{
 						AlphaBlendOp = MgBlendOp.ADD,
 						BlendEnable = true,
@@ -384,7 +384,7 @@ namespace Magnesium.OpenGL.UnitTests
 						SrcAlphaBlendFactor = MgBlendFactor.ONE,
 						SrcColorBlendFactor = MgBlendFactor.SRC1_COLOR,
 					},
-					new GLQueueColorAttachmentBlendState
+					new GLGraphicsPipelineBlendColorAttachmentState
 					{
 						AlphaBlendOp = MgBlendOp.ADD,
 						BlendEnable = true,
@@ -412,7 +412,7 @@ namespace Magnesium.OpenGL.UnitTests
 
 			Assert.AreEqual (1, repo.GraphicsPipelines.Count);
 
-			ICmdVBOCapabilities vbo = new MockVertexBufferFactory ();
+			ICmdVBOEntrypoint vbo = new MockVertexBufferFactory ();
 			var transform = new CmdBufferInstructionSetTransformer (vbo, repo);
 
 			var origin = new MockIGLRenderPass ();
@@ -421,7 +421,7 @@ namespace Magnesium.OpenGL.UnitTests
 
 			var command = new GLCmdDrawCommand{ Pipeline = 0, Draw = new GLCmdInternalDraw{ } };
 
-			var result_0 = transform.InitialiseDrawItem (repo, pass_0, command);
+			var result_0 = transform.InitializeDrawItem (repo, pass_0, command);
 			Assert.True (result_0);
 
 			Assert.IsNotNull (transform.Pipelines);
@@ -439,12 +439,12 @@ namespace Magnesium.OpenGL.UnitTests
 			var actual_0 = transform.ColorBlendEnums [0]; 
 			Assert.IsTrue (EXPECTED_0.Equals (actual_0));
 
-			var EXPECTED_1 = new GLQueueRendererColorBlendState {
+			var EXPECTED_1 = new GLGraphicsPipelineBlendColorState {
 					LogicOp = MgLogicOp.INVERT,
 					LogicOpEnable = true,
-					Attachments = new GLQueueColorAttachmentBlendState[]
+					Attachments = new GLGraphicsPipelineBlendColorAttachmentState[]
 					{
-						new GLQueueColorAttachmentBlendState
+						new GLGraphicsPipelineBlendColorAttachmentState
 						{
 							AlphaBlendOp = MgBlendOp.REVERSE_SUBTRACT,
 							BlendEnable = true,
@@ -455,7 +455,7 @@ namespace Magnesium.OpenGL.UnitTests
 							SrcAlphaBlendFactor = MgBlendFactor.ZERO,
 							SrcColorBlendFactor = MgBlendFactor.SRC_ALPHA,
 						},
-						new GLQueueColorAttachmentBlendState
+						new GLGraphicsPipelineBlendColorAttachmentState
 						{
 							AlphaBlendOp = MgBlendOp.SUBTRACT,
 							BlendEnable = false,
@@ -485,7 +485,7 @@ namespace Magnesium.OpenGL.UnitTests
 
 			var pass_1 = new GLCmdRenderPassCommand{ Origin = origin };
 
-			var result_1 = transform.InitialiseDrawItem (repo, pass_1, command_1);
+			var result_1 = transform.InitializeDrawItem (repo, pass_1, command_1);
 			Assert.True (result_1);
 
 			Assert.IsNotNull (transform.Pipelines);

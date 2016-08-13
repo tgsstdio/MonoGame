@@ -6,7 +6,7 @@ namespace Magnesium.OpenGL
 	/// <summary>
 	/// Graphic implementation of sync object.
 	/// </summary>
-	public class GLQueueSemaphore : IMgSemaphore, ISyncObject
+	public class GLQueueSemaphore : IMgSemaphore, IGLSemaphore
 	{
 		public int Index {get;set;}
 		public IntPtr ObjectPtr {get;set;}

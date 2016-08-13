@@ -10,9 +10,9 @@ namespace Magnesium.OpenGL
 	{
 		#region IDepthStencilCapabilities implementation
 
-		public GLQueueStencilState GetDefaultEnums ()
+		public GLGraphicsPipelineStencilState GetDefaultEnums ()
 		{
-			return new GLQueueStencilState {
+			return new GLGraphicsPipelineStencilState {
 				FrontStencilFunction = MgCompareOp.ALWAYS,
 				BackStencilFunction = MgCompareOp.ALWAYS,
 				FrontStencilPass = MgStencilOp.KEEP,
@@ -28,13 +28,13 @@ namespace Magnesium.OpenGL
 		{
 			var initialValue = new GLQueueRendererStencilState {
 				Flags = 0, // !QueueDrawItemBitFlags.StencilEnabled | !QueueDrawItemBitFlags.TwoSidedStencilMode
-				Front = new GLQueueStencilMasks
+				Front = new GLGraphicsPipelineStencilMasks
 				{
 					WriteMask = ~0,
 					Reference = ~0,
 					CompareMask = int.MaxValue,
 				},
-				Back = new GLQueueStencilMasks
+				Back = new GLGraphicsPipelineStencilMasks
 				{
 					WriteMask = ~0,
 					Reference = ~0,

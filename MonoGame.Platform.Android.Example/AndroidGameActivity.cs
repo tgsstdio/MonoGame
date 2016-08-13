@@ -10,21 +10,14 @@ using Android.Views;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using DryIoc;
-using MonoGame.Platform.AndroidGL.Input;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Media;
 using Android.Content.PM;
-using MonoGame.Platform.AndroidGL.Input.Touch;
 using MonoGame.Core;
-using Microsoft.Xna.Framework.Input;
-using MonoGame.Platform.AndroidGL.Graphics;
 using MonoGame.Graphics;
 using Microsoft.Core.Graphics;
 using Microsoft.Xna.Framework.Input.Touch;
-using Android.Runtime;
 using Android.Content.Res;
-using OpenTK.Platform.Android;
-using MonoGame.Platform.AndroidGL.Media;
 
 namespace MonoGame.Platform.AndroidGL.Example
 {

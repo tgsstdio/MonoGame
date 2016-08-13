@@ -264,7 +264,7 @@ namespace Magnesium.OpenGL
 		}
 
 		public void Create (MgGraphicsDeviceCreateInfo createInfo)
-		{			
+		{	
 			if (createInfo == null)
 			{
 				throw new ArgumentNullException ("createInfo");
@@ -281,6 +281,7 @@ namespace Magnesium.OpenGL
 			}
 
 			ReleaseUnmanagedResources ();
+			mDeviceCreated = false;
 
 			SetupContext (createInfo);
 			SetupRenderpass (createInfo);
@@ -306,6 +307,14 @@ namespace Magnesium.OpenGL
 				MinDepth = 0f,
 				MaxDepth = 1f,
 			};
+
+			mDeviceCreated = true;
+		}
+
+		bool mDeviceCreated = false;
+		public bool DeviceCreated ()
+		{
+			return mDeviceCreated;
 		}
 
 		public MgViewport CurrentViewport {
@@ -329,7 +338,7 @@ namespace Magnesium.OpenGL
 			{
 				throw new InvalidCastException ("Not a IOpenTKSwapchainKHR type");
 			}
-			sc.Initialise (Context, (uint)createInfo.Swapchains.Buffers.Length);
+			sc.Initialize (Context, (uint)createInfo.Swapchains.Buffers.Length);
 		}
 
 		~OpenTKGraphicsDevice()
@@ -352,6 +361,11 @@ namespace Magnesium.OpenGL
 			{
 				mRenderpass.DestroyRenderPass (mPartition.Device, null);
 			}
+		}
+
+		public bool IsDisposed ()
+		{
+			return mIsDisposed;
 		}
 
 		private bool mIsDisposed = false;

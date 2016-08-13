@@ -11,7 +11,7 @@ namespace Magnesium.OpenGL
 		#region IOpenTKSwapchainKHR implementation
 
 		private IGraphicsContext mContext;
-		public void Initialise(IGraphicsContext context, uint maxNoOfImages)
+		public void Initialize(IGraphicsContext context, uint maxNoOfImages)
 		{
 			Index = maxNoOfImages - 1;
 			MaxNoOfImages = maxNoOfImages;

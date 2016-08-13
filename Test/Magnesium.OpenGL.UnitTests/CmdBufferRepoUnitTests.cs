@@ -24,7 +24,7 @@ namespace Magnesium.OpenGL.UnitTests
 			pipeline.MinDepthBounds = 11f;
 			pipeline.MaxDepthBounds = 13f;
 
-			var front = new GLQueueStencilMasks {
+			var front = new GLGraphicsPipelineStencilMasks {
 				Reference = 17,
 				WriteMask = 19,
 				CompareMask = 23,
@@ -32,7 +32,7 @@ namespace Magnesium.OpenGL.UnitTests
 
 			pipeline.Front = front;;
 
-			var back = new GLQueueStencilMasks {
+			var back = new GLGraphicsPipelineStencilMasks {
 				Reference = 29,
 				WriteMask = 31,
 				CompareMask = 37,

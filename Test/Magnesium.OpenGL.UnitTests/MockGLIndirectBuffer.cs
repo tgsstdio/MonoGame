@@ -1,6 +1,6 @@
 namespace Magnesium.OpenGL.UnitTests
 {
-	public class MockGLIndirectBuffer : IGLIndirectBuffer
+	public class MockGLIndirectBuffer : IGLBuffer
 	{
 		#region IMgBuffer implementation
 		public void DestroyBuffer (IMgDevice device, MgAllocationCallbacks allocator)
@@ -19,6 +19,16 @@ namespace Magnesium.OpenGL.UnitTests
 			}
 		}
 		public System.IntPtr Source {
+			get;
+			set;
+		}
+
+		public ulong RequestedSize {
+			get;
+			set;
+		}
+
+		public int BufferId {
 			get;
 			set;
 		}

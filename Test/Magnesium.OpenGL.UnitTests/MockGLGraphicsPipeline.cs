@@ -13,7 +13,7 @@ namespace Magnesium.OpenGL.UnitTests
 
 		#region IGLGraphicsPipeline implementation
 
-		public GLQueueRendererColorBlendState ColorBlendEnums {
+		public GLGraphicsPipelineBlendColorState ColorBlendEnums {
 			get;
 			set;
 		}
@@ -39,7 +39,7 @@ namespace Magnesium.OpenGL.UnitTests
 			set;
 		}
 
-		public QueueDrawItemBitFlags Flags {
+		public GLGraphicsPipelineFlagBits Flags {
 			get;
 			set;
 		}
@@ -54,17 +54,17 @@ namespace Magnesium.OpenGL.UnitTests
 			set;
 		}
 
-		public GLQueueStencilMasks Front {
+		public GLGraphicsPipelineStencilMasks Front {
 			get;
 			set;
 		}
 
-		public GLQueueStencilMasks Back {
+		public GLGraphicsPipelineStencilMasks Back {
 			get;
 			set;
 		}
 
-		public GLQueueDepthState DepthState {
+		public GLGraphicsPipelineDepthState DepthState {
 			get;
 			set;
 		}
@@ -103,7 +103,7 @@ namespace Magnesium.OpenGL.UnitTests
 			get;
 			set;
 		}
-		public GLQueueStencilState StencilState {
+		public GLGraphicsPipelineStencilState StencilState {
 			get;
 			set;
 		}

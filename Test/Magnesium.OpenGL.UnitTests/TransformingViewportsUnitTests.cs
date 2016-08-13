@@ -11,7 +11,7 @@ namespace Magnesium.OpenGL.UnitTests
 			IGLCmdBufferRepository repo = new GLCmdBufferRepository ();
 			Assert.AreEqual (0, repo.Viewports.Count);
 
-			ICmdVBOCapabilities vbo = new MockVertexBufferFactory ();
+			ICmdVBOEntrypoint vbo = new MockVertexBufferFactory ();
 			var transform = new CmdBufferInstructionSetTransformer (vbo, repo);
 
 			
@@ -32,13 +32,13 @@ namespace Magnesium.OpenGL.UnitTests
 			IGLCmdBufferRepository repo = new GLCmdBufferRepository ();
 			Assert.AreEqual (0, repo.Viewports.Count);
 
-			ICmdVBOCapabilities vbo = new MockVertexBufferFactory ();
+			ICmdVBOEntrypoint vbo = new MockVertexBufferFactory ();
 			var transform = new CmdBufferInstructionSetTransformer (vbo, repo);
 			
 
 			var command = new GLCmdDrawCommand{ Viewports = null, Draw = new GLCmdInternalDraw{ }  };
 
-			var actual = transform.InitialiseDrawItem (repo, null, command);
+			var actual = transform.InitializeDrawItem (repo, null, command);
 			Assert.IsFalse (actual);
 			Assert.IsNotNull (transform.Viewports);
 			Assert.AreEqual (1, transform.Viewports.Count);
@@ -76,13 +76,13 @@ namespace Magnesium.OpenGL.UnitTests
 
 			Assert.AreEqual (1, repo.Viewports.Count);
 
-			ICmdVBOCapabilities vbo = new MockVertexBufferFactory ();
+			ICmdVBOEntrypoint vbo = new MockVertexBufferFactory ();
 			var transform = new CmdBufferInstructionSetTransformer (vbo, repo);
 			
 
 			var command = new GLCmdDrawCommand{ Pipeline = null, Viewports = 0, Draw = new GLCmdInternalDraw{ }  };
 
-			var actual = transform.InitialiseDrawItem (repo, null, command);
+			var actual = transform.InitializeDrawItem (repo, null, command);
 			Assert.IsFalse (actual);
 			Assert.IsNotNull (transform.Viewports);
 			Assert.AreEqual (0, transform.Viewports.Count);
@@ -181,13 +181,13 @@ namespace Magnesium.OpenGL.UnitTests
 					DynamicsStates = 0,
 					Viewports = DEFAULT_VIEWPORT,
 					Scissors = new GLCmdScissorParameter(0, new MgRect2D[]{}),
-					ColorBlendEnums = new GLQueueRendererColorBlendState{ Attachments = new GLQueueColorAttachmentBlendState[]{} },
+					ColorBlendEnums = new GLGraphicsPipelineBlendColorState{ Attachments = new GLGraphicsPipelineBlendColorAttachmentState[]{} },
 				}
 			);
 
 			Assert.AreEqual (1, repo.GraphicsPipelines.Count);
 
-			ICmdVBOCapabilities vbo = new MockVertexBufferFactory ();
+			ICmdVBOEntrypoint vbo = new MockVertexBufferFactory ();
 			var transform = new CmdBufferInstructionSetTransformer (vbo, repo);
 			
 
@@ -195,7 +195,7 @@ namespace Magnesium.OpenGL.UnitTests
 
 			var command = new GLCmdDrawCommand{ Pipeline = 0, Viewports = 0, Draw = new GLCmdInternalDraw{ }  };
 
-			var result = transform.InitialiseDrawItem (repo, pass, command);
+			var result = transform.InitializeDrawItem (repo, pass, command);
 			Assert.IsTrue (result);
 			Assert.IsNotNull (transform.Viewports);
 			Assert.AreEqual (1, transform.Viewports.Count);
@@ -255,14 +255,14 @@ namespace Magnesium.OpenGL.UnitTests
 
 			Assert.AreEqual (1, repo.GraphicsPipelines.Count);
 
-			ICmdVBOCapabilities vbo = new MockVertexBufferFactory ();
+			ICmdVBOEntrypoint vbo = new MockVertexBufferFactory ();
 			var transform = new Transformer (vbo, repo);
 			
 
 			// USE OVERRIDE 
 			var command_0 = new GLCmdDrawCommand{ Pipeline = 0, Viewports = 0 };
 
-			var result = transform.InitialiseDrawItem (repo, null, command_0);
+			var result = transform.InitializeDrawItem (repo, null, command_0);
 			Assert.IsTrue (result);
 			Assert.IsNotNull (transform.Viewports);
 			Assert.AreEqual (1, transform.Viewports.Count);
@@ -280,7 +280,7 @@ namespace Magnesium.OpenGL.UnitTests
 			// NEXT TEST - IF VALUES DIFFER, CREATE NEW DEPTHBIAS
 			var command_1 = new GLCmdDrawCommand{ Pipeline = 0, Viewports = null };
 
-			result = transform.InitialiseDrawItem (repo, null, command_1);
+			result = transform.InitializeDrawItem (repo, null, command_1);
 			Assert.IsTrue (result);
 			Assert.AreEqual (2, transform.Viewports.Count);
 
@@ -297,7 +297,7 @@ namespace Magnesium.OpenGL.UnitTests
 			// NEXT TEST - IF DEPTHBIAS IS SAME, REUSE INDEX 1
 			var command_2 = new GLCmdDrawCommand{ Pipeline = 0, Viewports = null };
 
-			result = transform.InitialiseDrawItem (repo, null, command_2);
+			result = transform.InitializeDrawItem (repo, null, command_2);
 			Assert.IsTrue (result);
 			Assert.AreEqual (2, transform.Viewports.Count);
 

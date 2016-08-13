@@ -26,7 +26,6 @@ namespace MonoGame.Platform.AndroidGL.Example
 		
 		public static void UpdateIdValues()
 		{
-			global::MonoGame.Platform.AndroidGL.Resource.String.library_name = global::MonoGame.Platform.AndroidGL.Example.Resource.String.library_name;
 		}
 		
 		public partial class Attribute
@@ -77,11 +76,8 @@ namespace MonoGame.Platform.AndroidGL.Example
 		public partial class String
 		{
 			
-			// aapt resource value: 0x7f040001
-			public const int app_name = 2130968577;
-			
 			// aapt resource value: 0x7f040000
-			public const int library_name = 2130968576;
+			public const int app_name = 2130968576;
 			
 			static String()
 			{

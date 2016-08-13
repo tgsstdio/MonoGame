@@ -166,9 +166,9 @@ namespace Magnesium.OpenGL
 		{
 			var initialValue = new GLQueueRendererRasterizerState {
 				Flags = 
-					QueueDrawItemBitFlags.ScissorTestEnabled 
-					| QueueDrawItemBitFlags.CullBackFaces 
-					| QueueDrawItemBitFlags.UseCounterClockwiseWindings,
+					GLGraphicsPipelineFlagBits.ScissorTestEnabled 
+					| GLGraphicsPipelineFlagBits.CullBackFaces 
+					| GLGraphicsPipelineFlagBits.UseCounterClockwiseWindings,
 					// ! QueueDrawItemBitFlags.CullingEnabled,
 				DepthBias = new GLCmdDepthBiasParameter
 				{
@@ -183,13 +183,13 @@ namespace Magnesium.OpenGL
 			DisableCulling ();
 
 			SetCullingMode (
-				(initialValue.Flags & QueueDrawItemBitFlags.CullFrontFaces)
-				== QueueDrawItemBitFlags.CullFrontFaces,
-				(initialValue.Flags & QueueDrawItemBitFlags.CullBackFaces)
-				== QueueDrawItemBitFlags.CullBackFaces);
+				(initialValue.Flags & GLGraphicsPipelineFlagBits.CullFrontFaces)
+				== GLGraphicsPipelineFlagBits.CullFrontFaces,
+				(initialValue.Flags & GLGraphicsPipelineFlagBits.CullBackFaces)
+				== GLGraphicsPipelineFlagBits.CullBackFaces);
 			SetUsingCounterClockwiseWindings (
-				(initialValue.Flags & QueueDrawItemBitFlags.UseCounterClockwiseWindings)
-					== QueueDrawItemBitFlags.UseCounterClockwiseWindings
+				(initialValue.Flags & GLGraphicsPipelineFlagBits.UseCounterClockwiseWindings)
+					== GLGraphicsPipelineFlagBits.UseCounterClockwiseWindings
 			);
 
 			DisablePolygonOffset ();

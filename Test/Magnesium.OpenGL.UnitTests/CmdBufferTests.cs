@@ -7,7 +7,7 @@ namespace Magnesium.OpenGL.UnitTests
 	[TestFixture]
 	public class CmdBufferTests
 	{
-		ICmdVBOCapabilities mFactory;
+		ICmdVBOEntrypoint mFactory;
 		ICmdBufferInstructionSetComposer mComposer;
 		GLCmdBufferRepository mRepository;
 
@@ -151,7 +151,9 @@ namespace Magnesium.OpenGL.UnitTests
 				}
 			};
 
-			var pipeline = new GLGraphicsPipeline (0, info, null);
+			var entrypoint = new MockGLGraphicsPipelineEntrypoint ();
+
+			var pipeline = new GLGraphicsPipeline (entrypoint, 0, info, null);
 
 //			var bindings = new GLVertexBufferBinding[]{ };
 //			var attributes = new GLVertexInputAttribute[] { };
@@ -181,13 +183,13 @@ namespace Magnesium.OpenGL.UnitTests
 //				FrontStencilPass = MgStencilOp.DECREMENT_AND_CLAMP,
 //			};					
 //
-//			pipeline.Front = new GLQueueStencilMasks {
+//			pipeline.Front = new GLGraphicsPipelineStencilMasks {
 //				CompareMask = 200,
 //				Reference = 300,
 //				WriteMask = 100,
 //			};
 //
-//			pipeline.Back = new GLQueueStencilMasks {
+//			pipeline.Back = new GLGraphicsPipelineStencilMasks {
 //				CompareMask = 1200,
 //				Reference = 1300,
 //				WriteMask = 1100,
@@ -548,8 +550,9 @@ namespace Magnesium.OpenGL.UnitTests
 			Result err;
 
 			GLCmdBufferRepository repository = new GLCmdBufferRepository ();
-			ICmdVBOCapabilities vbo = new MockVertexBufferFactory ();
-			IMgCommandBuffer cmdBuf = new GLCommandBuffer (true, repository, vbo);
+			ICmdVBOEntrypoint vbo = new MockVertexBufferFactory ();
+			var imgFormat = new MockGLImageFormatEntrypoint ();
+			IMgCommandBuffer cmdBuf = new GLCommandBuffer (true, repository, vbo, imgFormat);
 
 			// Set target frame buffer
 			IMgFramebuffer frameBuffer = new MockMgFrameBuffer();

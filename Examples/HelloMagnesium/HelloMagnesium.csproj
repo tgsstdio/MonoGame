@@ -57,10 +57,6 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <ProjectReference Include="..\..\Magnesium.OpenGL\Magnesium.OpenGL.csproj">
-      <Project>{156D7F9D-1243-4EDB-9E45-24FAF2F40A4C}</Project>
-      <Name>Magnesium.OpenGL</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\MonoGame.Platform.DesktopGL\MonoGame.Platform.DesktopGL.csproj">
       <Project>{B512C831-4562-447E-9F99-C66F86B1279F}</Project>
       <Name>MonoGame.Platform.DesktopGL</Name>
@@ -100,6 +96,14 @@
     <ProjectReference Include="..\..\MonoGame.Content.Dirs\MonoGame.Content.Dirs.csproj">
       <Project>{9D3DE491-E6D0-4D12-9A2D-D31B23D7D71D}</Project>
       <Name>MonoGame.Content.Dirs</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Magnesium.OpenGL\Magnesium.OpenGL.DesktopGL.csproj">
+      <Project>{156D7F9D-1243-4EDB-9E45-24FAF2F40A4C}</Project>
+      <Name>Magnesium.OpenGL.DesktopGL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Magnesium.OpenGL.Backend\Magnesium.OpenGL.csproj">
+      <Project>{84924A0F-0D4C-4B0C-B16A-4F26DD838AF2}</Project>
+      <Name>Magnesium.OpenGL</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

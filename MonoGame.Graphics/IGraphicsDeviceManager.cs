@@ -10,27 +10,31 @@ namespace MonoGame.Graphics
 {
     public interface IGraphicsDeviceManager : IDisposable
     {
+		Viewport Viewport {
+			get;
+			set;
+		}
+
 //        bool BeginDraw();
         void CreateDevice();
 //        void EndDraw();
 
 		IMgGraphicsDevice Device { get; }
-//		void ResetClientBounds ();
-//
-//		DisplayOrientation SupportedOrientations {
-//			get;
-//			set;
-//		}
-//
-//		DepthFormat PreferredDepthStencilFormat {
-//			get;
-//			set;
-//		}
-//
-//		void ApplyChanges();
-//
-//		void ToggleFullScreen ();
-//		bool IsFullScreen { get; set; }
+		void ResetClientBounds ();
+
+		DisplayOrientation SupportedOrientations {
+			get;
+			set;
+		}
+
+		DepthFormat PreferredDepthStencilFormat {
+			get;
+			set;
+		}
+
+		void ApplyChanges();
+		void ToggleFullScreen ();
+		bool IsFullScreen { get; set; }
 	}
 }
 

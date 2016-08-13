@@ -28,7 +28,7 @@ namespace Magnesium.OpenGL.UnitTests
 			#endregion
 		}
 
-		public class MockSemaphoreGenerator : IGLSemaphoreGenerator
+		public class MockSemaphoreGenerator : IGLSemaphoreEntrypoint
 		{
 			private readonly MockGLSemaphore mMainSemaphore;
 			public uint NoOfFunctionCalls;
@@ -39,7 +39,7 @@ namespace Magnesium.OpenGL.UnitTests
 			}
 
 			#region IGLSemaphoreGenerator implementation
-			public ISyncObject Generate ()
+			public IGLSemaphore CreateSemaphore ()
 			{
 				++NoOfFunctionCalls;
 				return mMainSemaphore;
@@ -51,7 +51,7 @@ namespace Magnesium.OpenGL.UnitTests
 		public void EmptyParameter ()
 		{
 			IGLQueueRenderer renderer = new MockQueueRenderer ();
-			IGLSemaphoreGenerator generator = new MockSemaphoreGenerator (null);
+			IGLSemaphoreEntrypoint generator = new MockSemaphoreGenerator (null);
 			IGLCmdImageCapabilities imageOps = new MockGLCmdImageCapabilities ();
 
 			IGLQueue queue = new GLQueue (renderer, generator, imageOps);
@@ -85,7 +85,7 @@ namespace Magnesium.OpenGL.UnitTests
 		public void NullWithFence()
 		{
 			IGLQueueRenderer renderer = new MockQueueRenderer ();
-			IGLSemaphoreGenerator generator = new MockSemaphoreGenerator (null);
+			IGLSemaphoreEntrypoint generator = new MockSemaphoreGenerator (null);
 			IGLCmdImageCapabilities imageOps = new MockGLCmdImageCapabilities ();
 
 			IGLQueue queue = new GLQueue (renderer, generator, imageOps);
@@ -262,7 +262,7 @@ namespace Magnesium.OpenGL.UnitTests
 			//Assert.AreEqual (1, generator.NoOfFunctionCalls);
 		}
 
-		public class FakeSemaphoreGenerator : IGLSemaphoreGenerator
+		public class FakeSemaphoreGenerator : IGLSemaphoreEntrypoint
 		{
 			public MockGLSemaphore Semaphore {get; set;}
 			public uint NoOfFunctionCalls;
@@ -272,7 +272,7 @@ namespace Magnesium.OpenGL.UnitTests
 			}
 
 			#region IGLSemaphoreGenerator implementation
-			public ISyncObject Generate ()
+			public IGLSemaphore CreateSemaphore ()
 			{
 				++NoOfFunctionCalls;
 				return Semaphore;

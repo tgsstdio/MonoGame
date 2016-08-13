@@ -4,9 +4,9 @@ using System.Diagnostics;
 
 namespace Magnesium.OpenGL
 {
-	public class FullCmdVBOCapabilities : ICmdVBOCapabilities
+	public class FullCmdVBOCapabilities : ICmdVBOEntrypoint
 	{
-		#region ICmdVBOCapabilities implementation
+		#region ICmdVBOEntrypoint implementation
 
 		public void BindIndexBuffer (int vbo, int bufferId)
 		{

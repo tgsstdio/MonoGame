@@ -17,6 +17,7 @@ using MonoGame.Platform.AndroidGL.Input;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Content;
 using MonoGame.Core;
+using MonoGame.Graphics;
 
 namespace MonoGame.Platform.AndroidGL
 {
@@ -126,8 +127,9 @@ namespace MonoGame.Platform.AndroidGL
 			mDeviceQuery.PreferredBackBufferWidth = width;
 			mDeviceQuery.PreferredBackBufferHeight = height;
 
-            if (manager.GraphicsDevice != null)
-                manager.GraphicsDevice.Viewport = new Viewport(0, 0, width, height);
+            if (manager.Device != null)
+			//  manager.Device.Viewport = new Viewport(0, 0, width, height); 
+                manager.Viewport = new Viewport(0, 0, width, height);
 
             mClient.ChangeClientBounds(new Rectangle(0, 0, width, height));
 
@@ -136,7 +138,7 @@ namespace MonoGame.Platform.AndroidGL
             SurfaceChanged(holder, format, width, height);
             Android.Util.Log.Debug("MonoGame", "MonoGameAndroidGameView.SurfaceChanged: format = " + format + ", width = " + width + ", height = " + height);
 
-            if (_deviceManager.GraphicsDevice != null)
+            if (_deviceManager.Device != null)
                 _deviceManager.ResetClientBounds();
         }
 
@@ -209,9 +211,10 @@ namespace MonoGame.Platform.AndroidGL
             {
                 _lostContext = false;
 
-                if (_deviceManager.GraphicsDevice != null)
+                if (_deviceManager.Device != null)
                 {
-                    _deviceManager.GraphicsDevice.Initialize();
+					// FIXME : add this back again
+                    //_deviceManager.Device.Initialize();
 
                     IsResuming = true;
 					mResumer.LoadContent();

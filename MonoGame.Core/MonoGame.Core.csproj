@@ -243,13 +243,13 @@
     <Folder Include="Audio\Xact\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MonoGame.Content\MonoGame.Content.csproj">
-      <Project>{E44E47ED-2203-4E45-85A9-C755B10AC044}</Project>
-      <Name>MonoGame.Content</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Magnesium\Magnesium.csproj">
       <Project>{9F9AC448-9D17-43E5-8889-285426290891}</Project>
       <Name>Magnesium</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MonoGame.Content\MonoGame.Content.csproj">
+      <Project>{E44E47ED-2203-4E45-85A9-C755B10AC044}</Project>
+      <Name>MonoGame.Content</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>

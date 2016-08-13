@@ -2,11 +2,9 @@ using OpenTK.Graphics;
 
 namespace Magnesium.OpenGL
 {
-	public interface IOpenTKSwapchainKHR : IMgSwapchainKHR
+	public interface IOpenTKSwapchainKHR : IGLSwapchainKHR, IMgSwapchainKHR
 	{
-		void Initialise (IGraphicsContext context, uint maxNoOfImages);
-		uint GetNextImage ();
-		void SwapBuffers();
+		void Initialize (IGraphicsContext context, uint maxNoOfImages);
 	}
 }
 

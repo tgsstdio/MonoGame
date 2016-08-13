@@ -49,8 +49,8 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <ProjectReference Include="..\..\Magnesium.OpenGL\Magnesium.OpenGL.csproj">
-      <Project>{156D7F9D-1243-4EDB-9E45-24FAF2F40A4C}</Project>
+    <ProjectReference Include="..\..\Magnesium.OpenGL.Backend\Magnesium.OpenGL.csproj">
+      <Project>{84924A0F-0D4C-4B0C-B16A-4F26DD838AF2}</Project>
       <Name>Magnesium.OpenGL</Name>
     </ProjectReference>
   </ItemGroup>

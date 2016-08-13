@@ -152,17 +152,17 @@ namespace Magnesium.OpenGL
 			throw new System.NotImplementedException ();
 		}
 
-		public GLQueueRendererColorBlendState Initialize (uint noOfAttachments)
+		public GLGraphicsPipelineBlendColorState Initialize (uint noOfAttachments)
 		{
-			var initialState = new GLQueueRendererColorBlendState {
+			var initialState = new GLGraphicsPipelineBlendColorState {
 				LogicOpEnable = false,
 				LogicOp = MgLogicOp.COPY,
-				Attachments = new GLQueueColorAttachmentBlendState[noOfAttachments],
+				Attachments = new GLGraphicsPipelineBlendColorAttachmentState[noOfAttachments],
 			};
 
 			for (uint i = 0; i < noOfAttachments; ++i)
 			{
-				var attachment = new GLQueueColorAttachmentBlendState {
+				var attachment = new GLGraphicsPipelineBlendColorAttachmentState {
 					BlendEnable = false,
 					ColorWriteMask = MgColorComponentFlagBits.R_BIT | MgColorComponentFlagBits.G_BIT | MgColorComponentFlagBits.B_BIT | MgColorComponentFlagBits.A_BIT,
 					ColorBlendOp = MgBlendOp.ADD,

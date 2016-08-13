@@ -10,11 +10,11 @@ namespace Magnesium.OpenGL
 		public MgPrimitiveTopology Topology { get; set;}
 		public MgPolygonMode Mode { get; set; }			
 
-		public QueueDrawItemBitFlags Flags {get;set;}
+		public GLGraphicsPipelineFlagBits Flags {get;set;}
 		public GLQueueRendererRasterizerState RasterizerValues {get;set;}
-		public GLQueueStencilState StencilValues {get;set;}
-		public GLQueueColorAttachmentBlendState BlendValues { get; set;}
-		public GLQueueDepthState DepthValues {get;set;}
+		public GLGraphicsPipelineStencilState StencilValues {get;set;}
+		public GLGraphicsPipelineBlendColorAttachmentState BlendValues { get; set;}
+		public GLGraphicsPipelineDepthState DepthValues {get;set;}
 
 //
 //		public DrawState State { get; set; }

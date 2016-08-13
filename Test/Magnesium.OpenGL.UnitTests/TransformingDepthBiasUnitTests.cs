@@ -11,7 +11,7 @@ namespace Magnesium.OpenGL.UnitTests
 			IGLCmdBufferRepository repo = new GLCmdBufferRepository ();
 			Assert.AreEqual (0, repo.DepthBias.Count);
 
-			ICmdVBOCapabilities vbo = new MockVertexBufferFactory ();
+			ICmdVBOEntrypoint vbo = new MockVertexBufferFactory ();
 			var transform = new CmdBufferInstructionSetTransformer (vbo, repo);
 
 			
@@ -26,13 +26,13 @@ namespace Magnesium.OpenGL.UnitTests
 			IGLCmdBufferRepository repo = new GLCmdBufferRepository ();
 			Assert.AreEqual (0, repo.DepthBias.Count);
 
-			ICmdVBOCapabilities vbo = new MockVertexBufferFactory ();
+			ICmdVBOEntrypoint vbo = new MockVertexBufferFactory ();
 			var transform = new CmdBufferInstructionSetTransformer (vbo, repo);
 			
 
 			var command = new GLCmdDrawCommand{ DepthBias = null , Draw = new GLCmdInternalDraw{ } };
 
-			var actual = transform.InitialiseDrawItem (repo, null, command);
+			var actual = transform.InitializeDrawItem (repo, null, command);
 			Assert.IsFalse (actual);
 			Assert.IsNotNull (transform.DepthBias);
 			Assert.AreEqual (0, transform.DepthBias.Count);
@@ -53,12 +53,12 @@ namespace Magnesium.OpenGL.UnitTests
 
 			Assert.AreEqual (1, repo.DepthBias.Count);
 
-			ICmdVBOCapabilities vbo = new MockVertexBufferFactory ();
+			ICmdVBOEntrypoint vbo = new MockVertexBufferFactory ();
 			var transform = new CmdBufferInstructionSetTransformer (vbo, repo);
 
 			var command = new GLCmdDrawCommand{ Pipeline = null, DepthBias = 0 , Draw = new GLCmdInternalDraw{ } };
 
-			var actual = transform.InitialiseDrawItem (repo, null, command);
+			var actual = transform.InitializeDrawItem (repo, null, command);
 			Assert.IsFalse (actual);
 			Assert.IsNotNull (transform.DepthBias);
 			Assert.AreEqual (0, transform.DepthBias.Count);
@@ -101,19 +101,19 @@ namespace Magnesium.OpenGL.UnitTests
 					DepthBiasSlopeFactor = DEFAULT_SLOPE,
 					Viewports = new GLCmdViewportParameter(0, new MgViewport[]{}),
 					Scissors = new GLCmdScissorParameter(0, new MgRect2D[]{}),
-					ColorBlendEnums = new GLQueueRendererColorBlendState{ Attachments = new GLQueueColorAttachmentBlendState[]{} },
+					ColorBlendEnums = new GLGraphicsPipelineBlendColorState{ Attachments = new GLGraphicsPipelineBlendColorAttachmentState[]{} },
 				}
 			);
 
 			Assert.AreEqual (1, repo.GraphicsPipelines.Count);
 
-			ICmdVBOCapabilities vbo = new MockVertexBufferFactory ();
+			ICmdVBOEntrypoint vbo = new MockVertexBufferFactory ();
 			var transform = new CmdBufferInstructionSetTransformer (vbo, repo);
 			
 
 			var command = new GLCmdDrawCommand{ Pipeline = 0, DepthBias = 0 , Draw = new GLCmdInternalDraw{ } };
 
-			var result = transform.InitialiseDrawItem (repo, pass, command);
+			var result = transform.InitializeDrawItem (repo, pass, command);
 			Assert.IsTrue (result);
 			Assert.IsNotNull (transform.DepthBias);
 			Assert.AreEqual (1, transform.DepthBias.Count);
@@ -161,20 +161,20 @@ namespace Magnesium.OpenGL.UnitTests
 					DepthBiasSlopeFactor = DEFAULT_SLOPE,
 					Viewports = new GLCmdViewportParameter(0, new MgViewport[]{}),
 					Scissors = new GLCmdScissorParameter(0, new MgRect2D[]{}),
-					ColorBlendEnums = new GLQueueRendererColorBlendState{ Attachments = new GLQueueColorAttachmentBlendState[]{} },
+					ColorBlendEnums = new GLGraphicsPipelineBlendColorState{ Attachments = new GLGraphicsPipelineBlendColorAttachmentState[]{} },
 				}
 			);
 
 			Assert.AreEqual (1, repo.GraphicsPipelines.Count);
 
-			ICmdVBOCapabilities vbo = new MockVertexBufferFactory ();
+			ICmdVBOEntrypoint vbo = new MockVertexBufferFactory ();
 			var transform = new CmdBufferInstructionSetTransformer (vbo, repo);
 			
 
 			// USE OVERRIDE 
 			var command_0 = new GLCmdDrawCommand{ Pipeline = 0, DepthBias = 0, Draw = new GLCmdInternalDraw{ }  };
 
-			var result = transform.InitialiseDrawItem (repo, pass, command_0);
+			var result = transform.InitializeDrawItem (repo, pass, command_0);
 			Assert.IsTrue (result);
 			Assert.IsNotNull (transform.DepthBias);
 			Assert.AreEqual (1, transform.DepthBias.Count);
@@ -192,7 +192,7 @@ namespace Magnesium.OpenGL.UnitTests
 			// NEXT TEST - IF VALUES DIFFER, CREATE NEW DEPTHBIAS
 			var command_1 = new GLCmdDrawCommand{ Pipeline = 0, DepthBias = null, Draw = new GLCmdInternalDraw{ }  };
 
-			result = transform.InitialiseDrawItem (repo, pass, command_1);
+			result = transform.InitializeDrawItem (repo, pass, command_1);
 			Assert.IsTrue (result);
 			Assert.AreEqual (2, transform.DepthBias.Count);
 
@@ -209,7 +209,7 @@ namespace Magnesium.OpenGL.UnitTests
 			// NEXT TEST - IF DEPTHBIAS IS SAME, REUSE INDEX 1
 			var command_2 = new GLCmdDrawCommand{ Pipeline = 0, DepthBias = null, Draw = new GLCmdInternalDraw{ }  };
 
-			result = transform.InitialiseDrawItem (repo, pass, command_2);
+			result = transform.InitializeDrawItem (repo, pass, command_2);
 			Assert.IsTrue (result);
 			Assert.AreEqual (2, transform.DepthBias.Count);
 

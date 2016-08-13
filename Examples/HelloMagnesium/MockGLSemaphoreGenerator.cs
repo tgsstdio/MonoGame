@@ -3,10 +3,10 @@ using Magnesium.OpenGL;
 
 namespace HelloMagnesium
 {
-	public class MockGLSemaphoreGenerator : IGLSemaphoreGenerator
+	public class MockGLSemaphoreGenerator : IGLSemaphoreEntrypoint
 	{
 		#region IGLSemaphoreGenerator implementation
-		public ISyncObject Generate ()
+		public IGLSemaphore CreateSemaphore ()
 		{
 			return new GLQueueSemaphore ();
 		}

@@ -8,12 +8,12 @@ namespace Magnesium.OpenGL
 	{
 		#region IDepthCapabilities implementation
 
-		public GLQueueDepthState GetDefaultEnums ()
+		public GLGraphicsPipelineDepthState GetDefaultEnums ()
 		{
-			return new GLQueueDepthState{ DepthBufferFunction = MgCompareOp.LESS };
+			return new GLGraphicsPipelineDepthState{ DepthBufferFunction = MgCompareOp.LESS };
 		}
 
-		public GLQueueDepthState Initialize ()
+		public GLGraphicsPipelineDepthState Initialize ()
 		{
 			EnableDepthBuffer ();
 			SetDepthBufferFunc (MgCompareOp.LESS);

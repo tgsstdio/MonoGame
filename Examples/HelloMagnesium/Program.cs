@@ -113,10 +113,10 @@ namespace HelloMagnesium
 					container.Register<Magnesium.OpenGL.IStencilCapabilities, Magnesium.OpenGL.FullStencilCapabilities>(Reuse.Singleton);
 					container.Register<Magnesium.OpenGL.IScissorsCapabilities, Magnesium.OpenGL.FullScissorsCapabilities>(Reuse.Singleton);
 					container.Register<Magnesium.OpenGL.ICmdDrawCapabilities, Magnesium.OpenGL.FullCmdDrawCapabilities>(Reuse.Singleton);
-					container.Register<Magnesium.OpenGL.ICmdVBOCapabilities, Magnesium.OpenGL.FullCmdVBOCapabilities>(Reuse.Singleton);
+					container.Register<Magnesium.OpenGL.ICmdVBOEntrypoint, Magnesium.OpenGL.FullCmdVBOCapabilities>(Reuse.Singleton);
 					container.Register<Magnesium.OpenGL.IGLCmdImageCapabilities, Magnesium.OpenGL.FullGLCmdImageCapabilities>(Reuse.Singleton);
 					container.Register<Magnesium.OpenGL.IShaderProgramCache, FullShaderProgramCache>(Reuse.Singleton);
-					container.Register<Magnesium.OpenGL.IGLSemaphoreGenerator, MockGLSemaphoreGenerator >(Reuse.Singleton);
+					container.Register<Magnesium.OpenGL.IGLSemaphoreEntrypoint, MockGLSemaphoreGenerator >(Reuse.Singleton);
 					container.Register<IMgDeviceQuery, MgDeviceQuery>(Reuse.Singleton);
 					container.Register<IMgImageTools, MgImageTools>(Reuse.Singleton);
 

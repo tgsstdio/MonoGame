@@ -6,16 +6,16 @@ namespace Magnesium.OpenGL
 	[Obsolete]
 	public class CmdBufferInstructionSetComposer : ICmdBufferInstructionSetComposer
 	{
-		private readonly ICmdVBOCapabilities mVBO;
+		private readonly ICmdVBOEntrypoint mVBO;
 
-		public CmdBufferInstructionSetComposer (ICmdVBOCapabilities vbo)
+		public CmdBufferInstructionSetComposer (ICmdVBOEntrypoint vbo)
 		{
 			mVBO = vbo;
 		}
 
 		#region IComposer implementation
 
-		public GLCmdVertexBufferObject GenerateVBO (GLCmdBufferRepository repository, GLCmdDrawCommand command, IGLGraphicsPipeline pipeline)
+		public GLCmdVertexBufferObject GenerateVBO (IGLCmdBufferRepository repository, GLCmdDrawCommand command, IGLGraphicsPipeline pipeline)
 		{
 			var vertexData = repository.VertexBuffers.At(command.VertexBuffer.Value);
 			var noOfBindings = pipeline.VertexInput.Bindings.Length;
@@ -97,7 +97,7 @@ namespace Magnesium.OpenGL
 
 		public GLCmdBufferPipelineItem GeneratePipelineItem (IGLGraphicsPipeline pipeline)
 		{
-			QueueDrawItemBitFlags flags = pipeline.Flags;
+			GLGraphicsPipelineFlagBits flags = pipeline.Flags;
 
 			var pipelineItem = new GLCmdBufferPipelineItem {
 				Flags = flags,
@@ -109,7 +109,7 @@ namespace Magnesium.OpenGL
 
 		static IntPtr ExtractIndirectBuffer (IMgBuffer buffer)
 		{
-			var indirectBuffer = buffer as IGLIndirectBuffer;
+			var indirectBuffer = buffer as IGLBuffer;
 			return (indirectBuffer != null && indirectBuffer.BufferType == GLMemoryBufferType.INDIRECT) ? indirectBuffer.Source : IntPtr.Zero;
 		}
 
@@ -157,7 +157,7 @@ namespace Magnesium.OpenGL
 			return (pipeline.PolygonMode == MgPolygonMode.LINE) ? GLCommandBufferFlagBits.AsLinesMode : ((pipeline.PolygonMode == MgPolygonMode.POINT) ? GLCommandBufferFlagBits.AsPointsMode : 0);
 		}
 
-		static List<GLCmdDescriptorSetParameter> SetupDescriptorSets (GLCmdBufferRepository repository)
+		static List<GLCmdDescriptorSetParameter> SetupDescriptorSets (IGLCmdBufferRepository repository)
 		{
 			var descriptorSets = new List<GLCmdDescriptorSetParameter> ();
 			if (repository == null || repository.DescriptorSets.Count == 0)
@@ -177,7 +177,7 @@ namespace Magnesium.OpenGL
 			return descriptorSets;
 		}
 
-		static List<GLCmdViewportParameter> SetupViewpoints (GLCmdBufferRepository repository)
+		static List<GLCmdViewportParameter> SetupViewpoints (IGLCmdBufferRepository repository)
 		{
 			var viewports = new List<GLCmdViewportParameter> ();
 			if (repository == null || repository.Viewports.Count == 0)
@@ -189,7 +189,7 @@ namespace Magnesium.OpenGL
 			return viewports;
 		}
 
-		static List<GLCmdScissorParameter> SetupScissors (GLCmdBufferRepository repository)
+		static List<GLCmdScissorParameter> SetupScissors (IGLCmdBufferRepository repository)
 		{
 			var scissors = new List<GLCmdScissorParameter> ();
 			if (repository == null || repository.Scissors.Count == 0)
@@ -201,7 +201,7 @@ namespace Magnesium.OpenGL
 			return scissors;
 		}
 
-		List<GLCmdVertexBufferObject> SetupVBOs (GLCmdBufferRepository repository)
+		List<GLCmdVertexBufferObject> SetupVBOs (IGLCmdBufferRepository repository)
 		{
 			var vertexArrays = new List<GLCmdVertexBufferObject> ();
 			if (repository == null || repository.VertexBuffers.Count == 0)
@@ -240,7 +240,7 @@ namespace Magnesium.OpenGL
 			return (byte) nextIndex;
 		}
 
-		byte GenerateBlendEnums (IGLGraphicsPipeline pipeline, List<GLQueueRendererColorBlendState> colorBlends)
+		byte GenerateBlendEnums (IGLGraphicsPipeline pipeline, List<GLGraphicsPipelineBlendColorState> colorBlends)
 		{
 			if (pipeline == null)
 			{
@@ -258,7 +258,7 @@ namespace Magnesium.OpenGL
 			IGLGraphicsPipeline pipeline,
 			List<GLCmdBufferPipelineItem> pipelines,
 			List<GLCmdClearValuesParameter> clearValues,
-			List<GLQueueRendererColorBlendState> colorBlends
+			List<GLGraphicsPipelineBlendColorState> colorBlends
 		)
 		{
 			var pipelineItem = GeneratePipelineItem (pipeline);
@@ -270,7 +270,7 @@ namespace Magnesium.OpenGL
 			pipelines.Add (pipelineItem);
 		}
 
-		public CmdBufferInstructionSet Compose (GLCmdBufferRepository repository, IEnumerable<GLCmdRenderPassCommand> passes)
+		public CmdBufferInstructionSet Compose (IGLCmdBufferRepository repository, IEnumerable<GLCmdRenderPassCommand> passes)
 		{
 			var output = new CmdBufferInstructionSet ();
 
@@ -305,7 +305,7 @@ namespace Magnesium.OpenGL
 			var depthBias = new List<GLCmdDepthBiasParameter> ();
 			var depthBounds = new List<GLCmdDepthBoundsParameter> ();
 			var clearValues = new List<GLCmdClearValuesParameter> ();
-			var colorBlends = new List<GLQueueRendererColorBlendState> ();
+			var colorBlends = new List<GLGraphicsPipelineBlendColorState> ();
 
 			// Generate commands here
 

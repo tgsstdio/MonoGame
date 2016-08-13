@@ -108,7 +108,7 @@ namespace Magnesium.OpenGL
 			{
 				if (inst.Target == MgImageType.TYPE_1D)
 				{
-					if (inst.PixelFormat == (PixelFormat)All.CompressedTextureFormats)
+					if (inst.PixelFormat == (int)All.CompressedTextureFormats)
 					{
 						GL.Ext.CompressedTextureSubImage1D (
 							inst.TextureId,
@@ -137,8 +137,8 @@ namespace Magnesium.OpenGL
 							inst.Level,
 							0,
 							inst.Width,
-							inst.PixelFormat,
-							inst.PixelType,
+							(PixelFormat) inst.PixelFormat,
+							(PixelType) inst.PixelType,
 							inst.Data
 						);
 
@@ -152,7 +152,7 @@ namespace Magnesium.OpenGL
 				} 
 				else if (inst.Target == MgImageType.TYPE_2D)
 				{
-					if (inst.PixelFormat == (PixelFormat)All.CompressedTextureFormats)
+					if (inst.PixelFormat == (int)All.CompressedTextureFormats)
 					{
 						GL.Ext.CompressedTextureSubImage2D (
 							inst.TextureId,
@@ -192,8 +192,8 @@ namespace Magnesium.OpenGL
 							inst.Slice,
 							inst.Width,
 							inst.Height,
-							inst.PixelFormat,
-							inst.PixelType,
+							(PixelFormat) inst.PixelFormat,
+							(PixelType) inst.PixelType,
 							inst.Data
 						);
 
@@ -212,7 +212,7 @@ namespace Magnesium.OpenGL
 				}
 				else if (inst.Target == MgImageType.TYPE_3D)
 				{
-					if (inst.PixelFormat == (PixelFormat)All.CompressedTextureFormats)
+					if (inst.PixelFormat == (int)All.CompressedTextureFormats)
 					{
 						GL.Ext.CompressedTextureSubImage3D (
 							inst.TextureId,
@@ -248,8 +248,8 @@ namespace Magnesium.OpenGL
 							inst.Width,
 							inst.Height,
 							inst.Depth,
-							inst.PixelFormat,
-							inst.PixelType,
+							(PixelFormat) inst.PixelFormat,
+							(PixelType) inst.PixelType,
 							inst.Data
 						);
 
