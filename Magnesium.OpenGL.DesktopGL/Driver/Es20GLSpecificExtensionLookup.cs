@@ -1,7 +1,7 @@
 ﻿using System.Collections.Specialized;
 using OpenTK.Graphics.ES20;
 
-namespace Magnesium.OpenGL
+namespace Magnesium.OpenGL.DesktopGL
 {
 	public class Es20GLSpecificExtensionLookup : IGLExtensionLookup
 	{

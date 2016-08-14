@@ -6,25 +6,25 @@ namespace Magnesium.OpenGL
 {
 	public class GLQueueRenderer : IGLQueueRenderer
 	{
-		private readonly IBlendCapabilities mBlend;
-		private readonly IStencilCapabilities mStencil;
-		private readonly IRasterizerCapabilities mRaster;
-		private readonly IDepthCapabilities mDepth;
-		private readonly IShaderProgramCache mCache;
-		private readonly IScissorsCapabilities mScissor;
-		private readonly ICmdDrawCapabilities mRender;
+		private readonly IGLCmdBlendEntrypoint mBlend;
+		private readonly IGLCmdStencilEntrypoint mStencil;
+		private readonly IGLCmdRasterizationEntrypoint mRaster;
+		private readonly IGLCmdDepthEntrypoint mDepth;
+		private readonly IGLCmdShaderProgramCache mCache;
+		private readonly IGLCmdScissorsEntrypoint mScissor;
+		private readonly IGLCmdDrawEntrypoint mRender;
 		private readonly IGLErrorHandler mErrHandler;
-		private readonly ICmdClearCapabilities mClear;
+		private readonly IGLCmdClearEntrypoint mClear;
 
 		public GLQueueRenderer (
-			IBlendCapabilities blend,
-			IStencilCapabilities stencil,
-			IRasterizerCapabilities raster,
-			IDepthCapabilities depth, 
-			IShaderProgramCache cache,
-			IScissorsCapabilities scissor,
-			ICmdDrawCapabilities render,
-			ICmdClearCapabilities clear,
+			IGLCmdBlendEntrypoint blend,
+			IGLCmdStencilEntrypoint stencil,
+			IGLCmdRasterizationEntrypoint raster,
+			IGLCmdDepthEntrypoint depth, 
+			IGLCmdShaderProgramCache cache,
+			IGLCmdScissorsEntrypoint scissor,
+			IGLCmdDrawEntrypoint render,
+			IGLCmdClearEntrypoint clear,
 			IGLErrorHandler errHandler
 		)
 		{

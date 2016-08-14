@@ -1,7 +1,6 @@
-using Magnesium;
 using OpenTK.Graphics;
 
-namespace Magnesium.OpenGL
+namespace Magnesium.OpenGL.DesktopGL
 {
 	public class GLSwapchainKHR : IOpenTKSwapchainKHR
 	{

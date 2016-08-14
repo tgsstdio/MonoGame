@@ -1,4 +1,4 @@
-namespace Magnesium.OpenGL
+namespace Magnesium.OpenGL.DesktopGL
 {
 	public interface IMgGraphicsDeviceLogger
 	{

@@ -2,7 +2,7 @@
 {
 	public interface IGLDeviceEntrypoint
 	{
-		ICmdVBOEntrypoint VBO { get; }
+		IGLCmdVBOEntrypoint VBO { get; }
 		IGLSamplerEntrypoint Sampler { get; }
 		IGLImageEntrypoint Image {get; }
 		IGLImageViewEntrypoint ImageView { get; }

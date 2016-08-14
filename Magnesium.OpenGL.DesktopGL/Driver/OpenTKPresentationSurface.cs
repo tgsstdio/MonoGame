@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using Magnesium;
 
-namespace Magnesium.OpenGL
+namespace Magnesium.OpenGL.DesktopGL
 {
 	public class OpenTKPresentationSurface : IMgPresentationSurface
 	{

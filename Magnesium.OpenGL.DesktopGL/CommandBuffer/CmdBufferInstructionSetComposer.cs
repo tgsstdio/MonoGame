@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System;
 
-namespace Magnesium.OpenGL
+namespace Magnesium.OpenGL.DesktopGL
 {
 	[Obsolete]
 	public class CmdBufferInstructionSetComposer : ICmdBufferInstructionSetComposer

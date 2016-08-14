@@ -1,7 +1,7 @@
 ﻿using System;
 using OpenTK.Graphics.OpenGL;
 
-namespace Magnesium.OpenGL
+namespace Magnesium.OpenGL.DesktopGL.DesktopGL
 {
 	public class GLIndirectBuffer : IGLBuffer
 	{

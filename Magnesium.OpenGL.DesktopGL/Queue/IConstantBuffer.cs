@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Magnesium.OpenGL
+namespace Magnesium.OpenGL.DesktopGL
 {
 	public interface IConstantBuffer : IDisposable
 	{

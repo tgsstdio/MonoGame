@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 using System.Diagnostics;
 using OpenTK.Graphics.OpenGL;
 
-namespace Magnesium.OpenGL
+namespace Magnesium.OpenGL.DesktopGL.DesktopGL
 {
 	public class GLDeviceMemory : IGLDeviceMemory
 	{

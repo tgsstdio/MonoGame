@@ -5,8 +5,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{156D7F9D-1243-4EDB-9E45-24FAF2F40A4C}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>Magnesium.OpenGL</RootNamespace>
-    <AssemblyName>Magnesium.OpenGL</AssemblyName>
+    <RootNamespace>Magnesium.OpenGL.DesktopGL</RootNamespace>
+    <AssemblyName>Magnesium.OpenGL.DesktopGL</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -32,31 +32,26 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
     <Reference Include="OpenTK">
-      <HintPath>..\packages\OpenTK.Next.1.2.2336.6514-pre\lib\net20\OpenTK.dll</HintPath>
+      <HintPath>..\Examples\HelloMagnesium.Android\packages\OpenTK.Next.1.2.2336.6514-pre\lib\net20\OpenTK.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="GLSLTextShader.cs" />
-    <Compile Include="Queue\IShaderProgram.cs" />
-    <Compile Include="Queue\FullShaderProgram.cs" />
     <Compile Include="Queue\IConstantBufferCollection.cs" />
     <Compile Include="Queue\IConstantBuffer.cs" />
-    <Compile Include="Queue\DrawState.cs" />
     <Compile Include="Queue\GLQueueDrawItem.cs" />
-    <Compile Include="Queue\IGPUSyncObject.cs" />
-    <Compile Include="Entrypoint\FullBlendingCapabilities.cs" />
-    <Compile Include="Entrypoint\FullRasterizerCapabilities.cs" />
-    <Compile Include="Entrypoint\FullStencilCapabilities.cs" />
-    <Compile Include="Entrypoint\FullDepthCapabilities.cs" />
+    <Compile Include="Entrypoint\FullGLCmdBlendEntrypoint.cs" />
+    <Compile Include="Entrypoint\FullGLCmdRasterizationEntrypoint.cs" />
+    <Compile Include="Entrypoint\FullGLCmdStencilEntrypoint.cs" />
+    <Compile Include="Entrypoint\FullGLCmdDepthEntrypoint.cs" />
     <Compile Include="Queue\GLQueueSemaphore.cs" />
     <Compile Include="Queue\GLQueueFence.cs" />
-    <Compile Include="Entrypoint\FullScissorsCapabilities.cs" />
-    <Compile Include="Entrypoint\FullCmdDrawCapabilities.cs" />
-    <Compile Include="Entrypoint\FullShaderProgramCache.cs" />
-    <Compile Include="CommandBuffer\CmdBufferInstructionSetComposer.cs" />
-    <Compile Include="Entrypoint\FullCmdVBOCapabilities.cs" />
-    <Compile Include="Entrypoint\FullGLCmdImageCapabilities.cs" />
+    <Compile Include="Entrypoint\FullGLCmdScissorsEntrypoint.cs" />
+    <Compile Include="Entrypoint\FullGLCmdDrawEntrypoint.cs" />
+    <Compile Include="Entrypoint\FullGLCmdShaderProgramCache.cs" />
+    <Compile Include="Entrypoint\FullGLCmdVBOEntrypoint.cs" />
+    <Compile Include="Entrypoint\FullGLCmdImageEntrypoint.cs" />
     <Compile Include="GLSwapchainKHR.cs" />
     <Compile Include="IOpenTKSwapchainKHR.cs" />
     <Compile Include="Driver\OpenTKPresentationSurface.cs" />
@@ -81,32 +76,32 @@
     <Compile Include="Device\GLDeviceMemory.cs" />
     <Compile Include="Device\GLIndirectBuffer.cs" />
     <Compile Include="Entrypoint\FullGLShaderModuleEntrypoint.cs" />
-    <Compile Include="Entrypoint\FullDescriptorPoolEntrypoint.cs" />
+    <Compile Include="Entrypoint\FullGLDescriptorPoolEntrypoint.cs" />
     <Compile Include="Entrypoint\FullGLImageDescriptorEntrypoint.cs" />
     <Compile Include="Entrypoint\FullGLSamplerEntrypoint.cs" />
     <Compile Include="Device\GLDescriptorPool.cs" />
     <Compile Include="Device\FullGLImageEntrypoint.cs" />
     <Compile Include="Device\FullGLImageViewEntrypoint.cs" />
     <Compile Include="Entrypoint\DesktopGLImageFormatEntrypoint.cs" />
-    <Compile Include="Driver\FullCmdClearCapabilities.cs" />
+    <Compile Include="Driver\FullGLCmdClearEntrypoint.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <ItemGroup>
-    <ProjectReference Include="..\Magnesium.OpenGL.Backend\Magnesium.OpenGL.csproj">
-      <Project>{84924A0F-0D4C-4B0C-B16A-4F26DD838AF2}</Project>
-      <Name>Magnesium.OpenGL</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Magnesium\Magnesium.csproj">
-      <Project>{9F9AC448-9D17-43E5-8889-285426290891}</Project>
-      <Name>Magnesium</Name>
-    </ProjectReference>
-  </ItemGroup>
   <ItemGroup>
     <Folder Include="CommandBuffer\" />
     <Folder Include="Queue\" />
     <Folder Include="Entrypoint\" />
     <Folder Include="Driver\" />
     <Folder Include="Device\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Magnesium\Magnesium.csproj">
+      <Project>{9F9AC448-9D17-43E5-8889-285426290891}</Project>
+      <Name>Magnesium</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Magnesium.OpenGL\Magnesium.OpenGL.csproj">
+      <Project>{84924A0F-0D4C-4B0C-B16A-4F26DD838AF2}</Project>
+      <Name>Magnesium.OpenGL</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="OpenTK.dll.config" />

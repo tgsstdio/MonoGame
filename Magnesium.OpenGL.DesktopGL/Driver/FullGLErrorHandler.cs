@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using OpenTK.Graphics.OpenGL4;
 
-namespace Magnesium.OpenGL
+namespace Magnesium.OpenGL.DesktopGL
 {
 	public class FullGLErrorHandler : IGLErrorHandler
 	{

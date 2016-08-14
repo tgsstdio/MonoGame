@@ -1,6 +1,6 @@
 ﻿using System.Collections.Concurrent;
 
-namespace Magnesium.OpenGL
+namespace Magnesium.OpenGL.DesktopGL
 {
 	public class GLDescriptorPool : IGLDescriptorPool
 	{

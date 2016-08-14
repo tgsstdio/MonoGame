@@ -6,7 +6,7 @@ namespace Magnesium.OpenGL
 	{
 		public DefaultGLDeviceEntrypoint 
 		(
-			ICmdVBOEntrypoint vbo,
+			IGLCmdVBOEntrypoint vbo,
 			IGLSamplerEntrypoint sampler,
 			IGLImageEntrypoint image,
 			IGLImageViewEntrypoint imageView,
@@ -41,7 +41,7 @@ namespace Magnesium.OpenGL
 			private set;
 		}
 
-		public ICmdVBOEntrypoint VBO {
+		public IGLCmdVBOEntrypoint VBO {
 			get ;
 			private set;
 		}

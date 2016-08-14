@@ -1,7 +1,7 @@
 using OpenTK.Graphics.OpenGL;
 using System;
 
-namespace Magnesium.OpenGL
+namespace Magnesium.OpenGL.DesktopGL
 {
 	public class FullGLSamplerEntrypoint : IGLSamplerEntrypoint
 	{

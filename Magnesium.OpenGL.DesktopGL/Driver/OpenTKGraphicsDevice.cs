@@ -5,7 +5,7 @@ using OpenTK;
 using Magnesium.OpenGL;
 using System.Diagnostics;
 
-namespace Magnesium.OpenGL
+namespace Magnesium.OpenGL.DesktopGL
 {
 	public class OpenTKGraphicsDevice : IMgGraphicsDevice
 	{

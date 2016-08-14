@@ -37,9 +37,9 @@ namespace Magnesium.OpenGL
 			mIsDisposed = true;
 		}
 
-		private IGLCmdImageCapabilities mImageOps;
+		private IGLCmdImageEntrypoint mImageOps;
 
-		public GLQueue (IGLQueueRenderer renderer, IGLSemaphoreEntrypoint generator, IGLCmdImageCapabilities imageOps)
+		public GLQueue (IGLQueueRenderer renderer, IGLSemaphoreEntrypoint generator, IGLCmdImageEntrypoint imageOps)
 		{
 			mRenderer = renderer;
 			mSignalModule = generator;

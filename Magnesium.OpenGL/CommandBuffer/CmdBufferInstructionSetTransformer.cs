@@ -53,9 +53,9 @@ namespace Magnesium.OpenGL
 
 		#endregion
 
-		ICmdVBOEntrypoint mVBO;
+		IGLCmdVBOEntrypoint mVBO;
 
-		public CmdBufferInstructionSetTransformer (ICmdVBOEntrypoint vbo, IGLCmdBufferRepository repository)
+		public CmdBufferInstructionSetTransformer (IGLCmdVBOEntrypoint vbo, IGLCmdBufferRepository repository)
 		{
 			mVBO = vbo;
 			VBOs = new List<GLCmdVertexBufferObject>();

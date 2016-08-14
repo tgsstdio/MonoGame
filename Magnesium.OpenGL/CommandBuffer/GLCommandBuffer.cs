@@ -15,9 +15,9 @@ namespace Magnesium.OpenGL
 		private List<GLCmdDrawCommand> mIncompleteDraws = new List<GLCmdDrawCommand>();
 
 		private IGLCmdBufferRepository mRepository;
-		private ICmdVBOEntrypoint mVBO;
+		private IGLCmdVBOEntrypoint mVBO;
 		private IGLImageFormatEntrypoint mImageFormat;
-		public GLCommandBuffer (bool canBeManuallyReset, IGLCmdBufferRepository repository, ICmdVBOEntrypoint vbo, IGLImageFormatEntrypoint imgFormat)
+		public GLCommandBuffer (bool canBeManuallyReset, IGLCmdBufferRepository repository, IGLCmdVBOEntrypoint vbo, IGLImageFormatEntrypoint imgFormat)
 		{
 			mIsRecording = false;
 			mIsExecutable = false;

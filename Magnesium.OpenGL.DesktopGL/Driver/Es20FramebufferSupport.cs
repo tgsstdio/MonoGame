@@ -1,4 +1,6 @@
-﻿namespace Magnesium.OpenGL
+﻿using Magnesium.OpenGL;
+
+namespace Magnesium.OpenGL.DesktopGL
 {
 	public class Es20FramebufferSupport : IGLFramebufferSupport
 	{

@@ -1,7 +1,7 @@
 ﻿using Magnesium;
 using Magnesium.OpenGL;
 
-namespace Magnesium.OpenGL
+namespace Magnesium.OpenGL.DesktopGL
 {
 	public class OpenTKSwapchainCollection : IMgSwapchainCollection
 	{

@@ -2,7 +2,7 @@
 using OpenTK.Graphics.ES20;
 using System.Diagnostics;
 
-namespace Magnesium.OpenGL
+namespace Magnesium.OpenGL.DesktopGL
 {
 	public class Es20GLFramebufferHelper : IGLFramebufferHelper
 	{

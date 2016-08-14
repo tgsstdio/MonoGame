@@ -1,6 +1,6 @@
 using Magnesium;
 
-namespace Magnesium.OpenGL
+namespace Magnesium.OpenGL.DesktopGL
 {
 	public class GLNullImageView : IMgImageView
 	{

@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace Magnesium.OpenGL
+namespace Magnesium.OpenGL.DesktopGL
 {
 	[StructLayout(LayoutKind.Sequential)]
 	public struct GLQueueDrawItem

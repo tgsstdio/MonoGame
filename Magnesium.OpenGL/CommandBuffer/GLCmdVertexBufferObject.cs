@@ -7,9 +7,9 @@ namespace Magnesium.OpenGL
 		public int VBO { get; private set; }
 		private int mVertexBuffer;
 		private int? mIndexBuffer;
-		private readonly ICmdVBOEntrypoint mFactory;
+		private readonly IGLCmdVBOEntrypoint mFactory;
 
-		public GLCmdVertexBufferObject (int vbo, int vertexBuffer, int? indexBuffer, ICmdVBOEntrypoint factory)
+		public GLCmdVertexBufferObject (int vbo, int vertexBuffer, int? indexBuffer, IGLCmdVBOEntrypoint factory)
 		{
 			VBO = vbo;
 			mVertexBuffer = vertexBuffer;

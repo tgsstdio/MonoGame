@@ -1,12 +1,12 @@
 ﻿using System;
 using OpenTK.Graphics.OpenGL;
 
-namespace Magnesium.OpenGL
+namespace Magnesium.OpenGL.DesktopGL
 {
 	/// <summary>
 	/// Graphic implementation of sync object.
 	/// </summary>
-	public class GLQueueSemaphore : IMgSemaphore, IGLSemaphore
+	public class GLQueueSemaphore : IGLSemaphore
 	{
 		public int Index {get;set;}
 		public IntPtr ObjectPtr {get;set;}

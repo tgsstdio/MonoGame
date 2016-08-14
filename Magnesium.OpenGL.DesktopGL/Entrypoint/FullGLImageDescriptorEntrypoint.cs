@@ -1,7 +1,6 @@
-﻿using System;
-using OpenTK.Graphics.OpenGL;
+﻿using OpenTK.Graphics.OpenGL;
 
-namespace Magnesium.OpenGL
+namespace Magnesium.OpenGL.DesktopGL
 {
 	public class FullGLImageDescriptorEntrypoint : IGLImageDescriptorEntrypoint
 	{

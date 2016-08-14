@@ -7,7 +7,7 @@
     <ProjectGuid>{84924A0F-0D4C-4B0C-B16A-4F26DD838AF2}</ProjectGuid>
     <OutputType>Library</OutputType>
     <RootNamespace>Magnesium.OpenGL</RootNamespace>
-    <AssemblyName>Magnesium.OpenGL.Backend</AssemblyName>
+    <AssemblyName>Magnesium.OpenGL</AssemblyName>
     <TargetFrameworkProfile>Profile259</TargetFrameworkProfile>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
@@ -61,7 +61,7 @@
     <Compile Include="Entrypoint\IGLImageViewEntrypoint.cs" />
     <Compile Include="Entrypoint\IGLImageEntrypoint.cs" />
     <Compile Include="Entrypoint\IGLImageDescriptorEntrypoint.cs" />
-    <Compile Include="Entrypoint\ICmdVBOEntrypoint.cs" />
+    <Compile Include="Entrypoint\IGLCmdVBOEntrypoint.cs" />
     <Compile Include="Device\IGLBuffer.cs" />
     <Compile Include="Entrypoint\IGLBufferEntrypoint.cs" />
     <Compile Include="Entrypoint\IGLDeviceMemoryEntrypoint.cs" />
@@ -130,22 +130,22 @@
     <Compile Include="Queue\GLQueue.cs" />
     <Compile Include="Queue\GLQueueSubmission.cs" />
     <Compile Include="Queue\IGLQueueRenderer.cs" />
-    <Compile Include="Queue\IGLCmdImageCapabilities.cs" />
+    <Compile Include="Queue\IGLCmdImageEntrypoint.cs" />
     <Compile Include="Queue\GLQueueSubmitOrder.cs" />
     <Compile Include="Queue\IGLQueueFence.cs" />
     <Compile Include="Queue\GLQueueRenderer.cs" />
-    <Compile Include="Entrypoint\IBlendCapabilities.cs" />
-    <Compile Include="Entrypoint\ICmdDrawCapabilities.cs" />
-    <Compile Include="Entrypoint\IRasterizerCapabilities.cs" />
-    <Compile Include="Entrypoint\IScissorsCapabilities.cs" />
-    <Compile Include="Entrypoint\IStencilCapabilities.cs" />
-    <Compile Include="Entrypoint\IDepthCapabilities.cs" />
-    <Compile Include="Entrypoint\IShaderProgramCache.cs" />
+    <Compile Include="Entrypoint\IGLCmdBlendEntrypoint.cs" />
+    <Compile Include="Entrypoint\IGLCmdDrawEntrypoint.cs" />
+    <Compile Include="Entrypoint\IGLCmdRasterizationEntrypoint.cs" />
+    <Compile Include="Entrypoint\IGLCmdScissorsEntrypoint.cs" />
+    <Compile Include="Entrypoint\IGLCmdStencilEntrypoint.cs" />
+    <Compile Include="Entrypoint\IGLCmdDepthEntrypoint.cs" />
+    <Compile Include="Entrypoint\IGLCmdShaderProgramCache.cs" />
     <Compile Include="Queue\GLQueueRendererStencilState.cs" />
     <Compile Include="Queue\GLQueueRendererRasterizerState.cs" />
     <Compile Include="Entrypoint\IGLErrorHandler.cs" />
     <Compile Include="Queue\GLQueueClearBufferMask.cs" />
-    <Compile Include="Queue\ICmdClearCapabilities.cs" />
+    <Compile Include="Queue\IGLCmdClearEntrypoint.cs" />
     <Compile Include="Queue\GLQueueRendererClearValueState.cs" />
     <Compile Include="Entrypoint\IGLFramebufferHelperSelector.cs" />
     <Compile Include="Entrypoint\IGLFramebufferSupport.cs" />

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Specialized;
 using OpenTK.Graphics.OpenGL;
 
-namespace Magnesium.OpenGL
+namespace Magnesium.OpenGL.DesktopGL
 {
 	public class FullGLExtensionLookup : IGLExtensionLookup
 	{

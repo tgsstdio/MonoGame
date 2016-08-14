@@ -2,7 +2,7 @@
 using OpenTK.Graphics.OpenGL;
 using System.Diagnostics;
 
-namespace Magnesium.OpenGL
+namespace Magnesium.OpenGL.DesktopGL
 {
 	public class FullGLFramebufferHelper : IGLFramebufferHelper
 	{

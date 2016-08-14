@@ -33,25 +33,35 @@ namespace Magnesium.OpenGL
 		{
 			throw new NotImplementedException ();
 		}
+
 		public void DestroySurfaceKHR (IMgSurfaceKHR surface, MgAllocationCallbacks allocator)
 		{
 			throw new NotImplementedException ();
 		}
+
 		public Result CreateWin32SurfaceKHR (MgWin32SurfaceCreateInfoKHR pCreateInfo, MgAllocationCallbacks allocator, out IMgSurfaceKHR pSurface)
 		{
 			throw new NotImplementedException ();
 		}
+
 		public Result CreateDebugReportCallbackEXT (MgDebugReportCallbackCreateInfoEXT pCreateInfo, MgAllocationCallbacks allocator, out MgDebugReportCallbackEXT pCallback)
 		{
 			throw new NotImplementedException ();
 		}
+
 		public void DestroyDebugReportCallbackEXT (MgDebugReportCallbackEXT callback, MgAllocationCallbacks allocator)
 		{
 			throw new NotImplementedException ();
 		}
+
 		public void DebugReportMessageEXT (MgDebugReportFlagBitsEXT flags, MgDebugReportObjectTypeEXT objectType, ulong @object, IntPtr location, int messageCode, string pLayerPrefix, string pMessage)
 		{
 			throw new NotImplementedException ();
+		}
+
+		public Result CreateAndroidSurfaceKHR(MgAndroidSurfaceCreateInfoKHR pCreateInfo, MgAllocationCallbacks allocator, out IMgSurfaceKHR pSurface)
+		{
+			throw new NotImplementedException();
 		}
 		#endregion
 	}

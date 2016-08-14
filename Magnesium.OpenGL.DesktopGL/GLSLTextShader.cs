@@ -1,10 +1,10 @@
 ﻿using System;
-using OpenTK.Graphics.OpenGL;
 using System.Text;
 using System.IO;
 using System.Threading.Tasks;
+using OpenTK.Graphics.OpenGL;
 
-namespace Magnesium.OpenGL
+namespace Magnesium.OpenGL.DesktopGL
 {
 	internal class GLSLTextShader
 	{

@@ -2,7 +2,7 @@
 using OpenTK.Graphics.ES30;
 using System.Diagnostics;
 
-namespace Magnesium.OpenGL
+namespace Magnesium.OpenGL.DesktopGL
 {
 	public class ES30GLErrorHandler : IGLErrorHandler
 	{

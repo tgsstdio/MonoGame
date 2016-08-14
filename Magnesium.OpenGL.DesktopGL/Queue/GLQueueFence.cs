@@ -1,4 +1,4 @@
-namespace Magnesium.OpenGL
+namespace Magnesium.OpenGL.DesktopGL
 {
 	public class GLQueueFence : IMgFence, IGLQueueFence
 	{

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Magnesium.OpenGL
+﻿namespace Magnesium.OpenGL
 {
 	public interface IGLExtensionLookup
 	{
