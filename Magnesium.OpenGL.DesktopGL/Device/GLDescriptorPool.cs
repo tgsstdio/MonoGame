@@ -2,7 +2,7 @@
 
 namespace Magnesium.OpenGL.DesktopGL
 {
-	public class GLDescriptorPool : IGLDescriptorPool
+	internal class GLDescriptorPool : IGLDescriptorPool
 	{
 		public GLDescriptorPool (int poolSize, IGLImageDescriptorEntrypoint imgDescriptor)
 		{

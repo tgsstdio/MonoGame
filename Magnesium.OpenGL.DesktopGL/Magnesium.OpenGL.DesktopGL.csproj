@@ -74,16 +74,20 @@
     <Compile Include="Driver\FullGLDevicePlatform.cs" />
     <Compile Include="Driver\IMgGraphicsDeviceLogger.cs" />
     <Compile Include="Device\GLDeviceMemory.cs" />
-    <Compile Include="Device\GLIndirectBuffer.cs" />
+    <Compile Include="Device\FullGLBuffer.cs" />
     <Compile Include="Entrypoint\FullGLShaderModuleEntrypoint.cs" />
     <Compile Include="Entrypoint\FullGLDescriptorPoolEntrypoint.cs" />
     <Compile Include="Entrypoint\FullGLImageDescriptorEntrypoint.cs" />
     <Compile Include="Entrypoint\FullGLSamplerEntrypoint.cs" />
     <Compile Include="Device\GLDescriptorPool.cs" />
-    <Compile Include="Device\FullGLImageEntrypoint.cs" />
-    <Compile Include="Device\FullGLImageViewEntrypoint.cs" />
     <Compile Include="Entrypoint\DesktopGLImageFormatEntrypoint.cs" />
     <Compile Include="Driver\FullGLCmdClearEntrypoint.cs" />
+    <Compile Include="Entrypoint\FullGLSemaphoreEntrypoint.cs" />
+    <Compile Include="Entrypoint\FullGLDeviceImageViewEntrypoint.cs" />
+    <Compile Include="Entrypoint\FullGLDeviceImageEntrypoint.cs" />
+    <Compile Include="Entrypoint\FullGLBufferEntrypoint.cs" />
+    <Compile Include="Entrypoint\FullGLDeviceMemoryEntrypoint.cs" />
+    <Compile Include="Entrypoint\FullGLGraphicsPipelineEntrypoint.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

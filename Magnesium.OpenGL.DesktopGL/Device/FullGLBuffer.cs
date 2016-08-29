@@ -1,9 +1,9 @@
 ﻿using System;
 using OpenTK.Graphics.OpenGL;
 
-namespace Magnesium.OpenGL.DesktopGL.DesktopGL
+namespace Magnesium.OpenGL.DesktopGL
 {
-	public class GLIndirectBuffer : IGLBuffer
+	internal class FullGLBuffer : IGLBuffer
 	{
 		private static BufferTarget GetBufferTarget(GLMemoryBufferType bufferType)
 		{
@@ -22,7 +22,7 @@ namespace Magnesium.OpenGL.DesktopGL.DesktopGL
 			}
 		}
 
-		public GLIndirectBuffer (MgBufferCreateInfo info)
+		public FullGLBuffer (MgBufferCreateInfo info)
 		{	
 			switch(info.Usage)
 			{

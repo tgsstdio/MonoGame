@@ -1,7 +1,7 @@
 
 namespace Magnesium.OpenGL
 {
-	public interface IGLImageEntrypoint
+	public interface IGLDeviceImageEntrypoint
 	{
 		void DeleteImage (int textureId);
 

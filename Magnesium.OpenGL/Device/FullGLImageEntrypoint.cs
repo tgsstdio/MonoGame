@@ -1,11 +1,11 @@
 ﻿using System;
 using OpenTK.Graphics.OpenGL;
 
-namespace Magnesium.OpenGL.DesktopGL.DesktopGL
+namespace Magnesium.OpenGL.DesktopGL
 {
-	public class FullGLImageEntrypoint : IGLImageEntrypoint
+	public class FullGLDeviceImageEntrypoint : IGLDeviceImageEntrypoint
 	{
-		public FullGLImageEntrypoint ()
+		public FullGLDeviceImageEntrypoint ()
 		{
 			
 		}

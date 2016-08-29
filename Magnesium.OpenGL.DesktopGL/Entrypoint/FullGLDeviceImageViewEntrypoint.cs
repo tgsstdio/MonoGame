@@ -3,7 +3,7 @@ using System;
 
 namespace Magnesium.OpenGL.DesktopGL
 {
-	public class FullGLImageViewEntrypoint : IGLImageViewEntrypoint
+	public class FullGLDeviceImageViewEntrypoint : IGLDeviceImageViewEntrypoint
 	{
 		private static TextureTarget GetGLTextureTarget(MgImageViewType viewType)
 		{
@@ -27,7 +27,7 @@ namespace Magnesium.OpenGL.DesktopGL
 		IGLErrorHandler mErrHandler;
 		IGLImageFormatEntrypoint mImgFormat;
 
-		public FullGLImageViewEntrypoint (IGLErrorHandler errHandler, IGLImageFormatEntrypoint imgFormat)
+		public FullGLDeviceImageViewEntrypoint (IGLErrorHandler errHandler, IGLImageFormatEntrypoint imgFormat)
 		{
 			mErrHandler = errHandler;
 			mImgFormat = imgFormat;

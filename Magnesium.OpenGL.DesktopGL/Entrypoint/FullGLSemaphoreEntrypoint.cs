@@ -1,9 +1,6 @@
-using Magnesium.OpenGL;
-using Magnesium.OpenGL.DesktopGL;
-
-namespace HelloMagnesium
+namespace Magnesium.OpenGL.DesktopGL
 {
-	public class MockGLSemaphoreGenerator : IGLSemaphoreEntrypoint
+	public class FullGLSemaphoreEntrypoint : IGLSemaphoreEntrypoint
 	{
 		#region IGLSemaphoreGenerator implementation
 		public IGLSemaphore CreateSemaphore ()

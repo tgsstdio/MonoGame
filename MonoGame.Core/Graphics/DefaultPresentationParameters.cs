@@ -3,13 +3,12 @@
 // file 'LICENSE.txt', which is part of this source code package.
 
 using System;
-using MonoGame.Core;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 
-namespace Microsoft.Core.Graphics
+namespace MonoGame.Core.Graphics
 {
-    public class DefaultPresentationParameters : IPresentationParameters
+	public class DefaultPresentationParameters : IPresentationParameters
     {
         #region Constants
 

@@ -8,8 +8,8 @@ namespace Magnesium.OpenGL
 		(
 			IGLCmdVBOEntrypoint vbo,
 			IGLSamplerEntrypoint sampler,
-			IGLImageEntrypoint image,
-			IGLImageViewEntrypoint imageView,
+			IGLDeviceImageEntrypoint image,
+			IGLDeviceImageViewEntrypoint imageView,
 			IGLImageDescriptorEntrypoint imageDescriptor,
 			IGLShaderModuleEntrypoint shaderModule,
 			IGLDescriptorPoolEntrypoint descriptorPool,
@@ -51,12 +51,12 @@ namespace Magnesium.OpenGL
 			private set;
 		}
 
-		public IGLImageEntrypoint Image {
+		public IGLDeviceImageEntrypoint Image {
 			get;
 			private set;
 		}
 
-		public IGLImageViewEntrypoint ImageView {
+		public IGLDeviceImageViewEntrypoint ImageView {
 			get;
 			private set;
 		}

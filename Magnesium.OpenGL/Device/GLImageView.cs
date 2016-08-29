@@ -4,9 +4,9 @@
 	{
 		public int TextureId { get; private set; }
 
-		readonly IGLImageViewEntrypoint mModule;
+		readonly IGLDeviceImageViewEntrypoint mModule;
 
-		public GLImageView (int textureId, IGLImageViewEntrypoint module)
+		public GLImageView (int textureId, IGLDeviceImageViewEntrypoint module)
 		{
 			TextureId = textureId;
 			mModule = module;

@@ -52,8 +52,8 @@ namespace Magnesium.OpenGL
 
 		private int mLayers;
 
-		private IGLImageEntrypoint mEntrypoint;
-		public GLImage (IGLImageEntrypoint entrypoint, int textureId, MgImageType imageType, MgFormat format, int width, int height, int depth, int levels, int arrayLayers)
+		private IGLDeviceImageEntrypoint mEntrypoint;
+		public GLImage (IGLDeviceImageEntrypoint entrypoint, int textureId, MgImageType imageType, MgFormat format, int width, int height, int depth, int levels, int arrayLayers)
 		{
 			mEntrypoint = entrypoint;
 			mTextureId = textureId;

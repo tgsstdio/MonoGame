@@ -33,11 +33,13 @@
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
-    <Reference Include="DryIoc">
-      <HintPath>..\..\packages\DryIoc.dll.2.6.2\lib\net45\DryIoc.dll</HintPath>
-    </Reference>
     <Reference Include="OpenTK">
       <HintPath>..\..\packages\OpenTK.Next.1.2.2336.6514-pre\lib\net20\OpenTK.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Core" />
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="DryIoc">
+      <HintPath>..\..\packages\DryIoc.dll.2.7.0\lib\net45\DryIoc.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -45,7 +47,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="MockGraphicsDevicePreferences.cs" />
     <Compile Include="HelloMagnesiumGame.cs" />
-    <Compile Include="MockGLSemaphoreGenerator.cs" />
     <Compile Include="MockTouchListener.cs" />
     <Compile Include="MgPresentationLayer.cs" />
     <Compile Include="IMgPresentationLayer.cs" />

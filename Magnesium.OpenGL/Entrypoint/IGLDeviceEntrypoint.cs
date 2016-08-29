@@ -4,8 +4,8 @@
 	{
 		IGLCmdVBOEntrypoint VBO { get; }
 		IGLSamplerEntrypoint Sampler { get; }
-		IGLImageEntrypoint Image {get; }
-		IGLImageViewEntrypoint ImageView { get; }
+		IGLDeviceImageEntrypoint Image {get; }
+		IGLDeviceImageViewEntrypoint ImageView { get; }
 		IGLImageDescriptorEntrypoint ImageDescriptor { get; }
 		IGLShaderModuleEntrypoint ShaderModule { get; }
 		IGLDescriptorPoolEntrypoint DescriptorPool { get; }

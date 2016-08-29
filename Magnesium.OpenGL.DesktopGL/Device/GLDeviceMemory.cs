@@ -3,9 +3,9 @@ using System.Runtime.InteropServices;
 using System.Diagnostics;
 using OpenTK.Graphics.OpenGL;
 
-namespace Magnesium.OpenGL.DesktopGL.DesktopGL
+namespace Magnesium.OpenGL.DesktopGL
 {
-	public class GLDeviceMemory : IGLDeviceMemory
+	internal class GLDeviceMemory : IGLDeviceMemory
 	{
 		private static BufferTarget GetBufferTarget(GLMemoryBufferType bufferType)
 		{

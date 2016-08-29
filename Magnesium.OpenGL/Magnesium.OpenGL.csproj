@@ -58,8 +58,8 @@
     <Compile Include="Entrypoint\DefaultGLDeviceEntrypoint.cs" />
     <Compile Include="Device\GLShaderModule.cs" />
     <Compile Include="Entrypoint\IGLShaderModuleEntrypoint.cs" />
-    <Compile Include="Entrypoint\IGLImageViewEntrypoint.cs" />
-    <Compile Include="Entrypoint\IGLImageEntrypoint.cs" />
+    <Compile Include="Entrypoint\IGLDeviceImageViewEntrypoint.cs" />
+    <Compile Include="Entrypoint\IGLDeviceImageEntrypoint.cs" />
     <Compile Include="Entrypoint\IGLImageDescriptorEntrypoint.cs" />
     <Compile Include="Entrypoint\IGLCmdVBOEntrypoint.cs" />
     <Compile Include="Device\IGLBuffer.cs" />
@@ -130,7 +130,6 @@
     <Compile Include="Queue\GLQueue.cs" />
     <Compile Include="Queue\GLQueueSubmission.cs" />
     <Compile Include="Queue\IGLQueueRenderer.cs" />
-    <Compile Include="Queue\IGLCmdImageEntrypoint.cs" />
     <Compile Include="Queue\GLQueueSubmitOrder.cs" />
     <Compile Include="Queue\IGLQueueFence.cs" />
     <Compile Include="Queue\GLQueueRenderer.cs" />
@@ -145,12 +144,13 @@
     <Compile Include="Queue\GLQueueRendererRasterizerState.cs" />
     <Compile Include="Entrypoint\IGLErrorHandler.cs" />
     <Compile Include="Queue\GLQueueClearBufferMask.cs" />
-    <Compile Include="Queue\IGLCmdClearEntrypoint.cs" />
     <Compile Include="Queue\GLQueueRendererClearValueState.cs" />
     <Compile Include="Entrypoint\IGLFramebufferHelperSelector.cs" />
     <Compile Include="Entrypoint\IGLFramebufferSupport.cs" />
     <Compile Include="Entrypoint\IGLFramebufferHelper.cs" />
     <Compile Include="Entrypoint\IGLExtensionLookup.cs" />
+    <Compile Include="Entrypoint\IGLCmdClearEntrypoint.cs" />
+    <Compile Include="Entrypoint\IGLCmdImageEntrypoint.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>
