@@ -83,7 +83,7 @@ namespace MonoGame.Graphics
 
 		#region IMgTexture implementation
 
-		public void DestroyTexture (IMgDevice device, MgAllocationCallbacks allocator)
+		public void DestroyTexture (IMgDevice device, IMgAllocationCallbacks allocator)
 		{
 			View.DestroyImageView(device, allocator);
 			Image.DestroyImage(device, allocator);

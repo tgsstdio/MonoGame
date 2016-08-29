@@ -9,7 +9,7 @@ namespace MonoGame.Graphics
 		IMgDeviceMemory DeviceMemory { get; }
 		IMgSampler Sampler {get; }
 
-		void DestroyTexture(IMgDevice device, MgAllocationCallbacks allocator);
+		void DestroyTexture(IMgDevice device, IMgAllocationCallbacks allocator);
 	}
 
 }

@@ -11,7 +11,7 @@ namespace Magnesium.OpenGL.UnitTests
 			IGLCmdBufferRepository repo = new GLCmdBufferRepository ();
 			Assert.AreEqual (0, repo.Viewports.Count);
 
-			ICmdVBOEntrypoint vbo = new MockVertexBufferFactory ();
+			IGLCmdVBOEntrypoint vbo = new MockVertexBufferFactory ();
 			var transform = new CmdBufferInstructionSetTransformer (vbo, repo);
 
 			
@@ -32,7 +32,7 @@ namespace Magnesium.OpenGL.UnitTests
 			IGLCmdBufferRepository repo = new GLCmdBufferRepository ();
 			Assert.AreEqual (0, repo.Viewports.Count);
 
-			ICmdVBOEntrypoint vbo = new MockVertexBufferFactory ();
+			IGLCmdVBOEntrypoint vbo = new MockVertexBufferFactory ();
 			var transform = new CmdBufferInstructionSetTransformer (vbo, repo);
 			
 
@@ -76,7 +76,7 @@ namespace Magnesium.OpenGL.UnitTests
 
 			Assert.AreEqual (1, repo.Viewports.Count);
 
-			ICmdVBOEntrypoint vbo = new MockVertexBufferFactory ();
+			IGLCmdVBOEntrypoint vbo = new MockVertexBufferFactory ();
 			var transform = new CmdBufferInstructionSetTransformer (vbo, repo);
 			
 
@@ -187,7 +187,7 @@ namespace Magnesium.OpenGL.UnitTests
 
 			Assert.AreEqual (1, repo.GraphicsPipelines.Count);
 
-			ICmdVBOEntrypoint vbo = new MockVertexBufferFactory ();
+			IGLCmdVBOEntrypoint vbo = new MockVertexBufferFactory ();
 			var transform = new CmdBufferInstructionSetTransformer (vbo, repo);
 			
 
@@ -255,7 +255,7 @@ namespace Magnesium.OpenGL.UnitTests
 
 			Assert.AreEqual (1, repo.GraphicsPipelines.Count);
 
-			ICmdVBOEntrypoint vbo = new MockVertexBufferFactory ();
+			IGLCmdVBOEntrypoint vbo = new MockVertexBufferFactory ();
 			var transform = new Transformer (vbo, repo);
 			
 

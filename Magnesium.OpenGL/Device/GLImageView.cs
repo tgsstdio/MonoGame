@@ -14,7 +14,7 @@
 
 		#region IMgImageView implementation
 		private bool mIsDisposed = false;
-		public void DestroyImageView (IMgDevice device, MgAllocationCallbacks allocator)
+		public void DestroyImageView (IMgDevice device, IMgAllocationCallbacks allocator)
 		{
 			if (mIsDisposed)
 				return;

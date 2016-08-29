@@ -1,5 +1,5 @@
 using Magnesium.OpenGL;
-
+using Magnesium.OpenGL.DesktopGL;
 
 namespace HelloMagnesium
 {

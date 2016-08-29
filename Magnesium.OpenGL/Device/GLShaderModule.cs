@@ -15,7 +15,7 @@ namespace Magnesium.OpenGL
 
 		#region IMgShaderModule implementation
 		private bool mIsDisposed = false;
-		public void DestroyShaderModule (IMgDevice device, MgAllocationCallbacks allocator)
+		public void DestroyShaderModule (IMgDevice device, IMgAllocationCallbacks allocator)
 		{
 			if (mIsDisposed)
 				return;

@@ -141,7 +141,7 @@ namespace Magnesium.OpenGL
 		}
 
 		#region IMgRenderPass implementation
-		public void DestroyRenderPass (IMgDevice device, MgAllocationCallbacks allocator)
+		public void DestroyRenderPass (IMgDevice device, IMgAllocationCallbacks allocator)
 		{
 
 		}

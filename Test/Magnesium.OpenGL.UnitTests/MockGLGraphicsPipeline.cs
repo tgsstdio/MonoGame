@@ -4,7 +4,7 @@ namespace Magnesium.OpenGL.UnitTests
 	{
 		#region IMgPipeline implementation
 
-		public void DestroyPipeline (IMgDevice device, MgAllocationCallbacks allocator)
+		public void DestroyPipeline (IMgDevice device, IMgAllocationCallbacks allocator)
 		{
 			throw new System.NotImplementedException ();
 		}

@@ -9,7 +9,7 @@ namespace Magnesium.OpenGL.DesktopGL
 
 		#region IMgFence implementation
 
-		public void DestroyFence (IMgDevice device, MgAllocationCallbacks allocator)
+		public void DestroyFence (IMgDevice device, IMgAllocationCallbacks allocator)
 		{
 			
 		}

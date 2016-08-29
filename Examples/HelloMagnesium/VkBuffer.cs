@@ -46,7 +46,7 @@ namespace HelloMagnesium
 			DeviceMemory = deviceMemory;
 		}
 
-		public void Destroy(IMgDevice device, MgAllocationCallbacks allocator)
+		public void Destroy(IMgDevice device, IMgAllocationCallbacks allocator)
 		{
 			Buffer.DestroyBuffer (device, allocator);
 			DeviceMemory.FreeMemory (device, allocator);

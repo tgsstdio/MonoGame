@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Graphics;
 using OpenTK.Graphics.OpenGL;
 using System.Collections.Generic;
-using Magnesium.OpenGL;
+using Magnesium.OpenGL.DesktopGL;
 
 namespace HelloMagnesium
 {

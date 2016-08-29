@@ -7,7 +7,7 @@ namespace Magnesium.OpenGL.UnitTests
 	[TestFixture]
 	public class CmdBufferTests
 	{
-		ICmdVBOEntrypoint mFactory;
+		IGLCmdVBOEntrypoint mFactory;
 		ICmdBufferInstructionSetComposer mComposer;
 		GLCmdBufferRepository mRepository;
 
@@ -550,7 +550,7 @@ namespace Magnesium.OpenGL.UnitTests
 			Result err;
 
 			GLCmdBufferRepository repository = new GLCmdBufferRepository ();
-			ICmdVBOEntrypoint vbo = new MockVertexBufferFactory ();
+			IGLCmdVBOEntrypoint vbo = new MockVertexBufferFactory ();
 			var imgFormat = new MockGLImageFormatEntrypoint ();
 			IMgCommandBuffer cmdBuf = new GLCommandBuffer (true, repository, vbo, imgFormat);
 

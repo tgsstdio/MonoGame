@@ -47,11 +47,11 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <ProjectReference Include="..\..\Magnesium.OpenGL.Backend\Magnesium.OpenGL.csproj">
+    <ProjectReference Include="..\..\Magnesium.OpenGL\Magnesium.OpenGL.csproj">
       <Project>{84924A0F-0D4C-4B0C-B16A-4F26DD838AF2}</Project>
       <Name>Magnesium.OpenGL</Name>
     </ProjectReference>
   </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

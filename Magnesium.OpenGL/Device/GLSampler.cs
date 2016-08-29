@@ -108,7 +108,7 @@ namespace Magnesium.OpenGL
 
 		#region IMgSampler implementation
 		private bool mIsDisposed = false;
-		public void DestroySampler (IMgDevice device, MgAllocationCallbacks allocator)
+		public void DestroySampler (IMgDevice device, IMgAllocationCallbacks allocator)
 		{
 			if (mIsDisposed)
 				return;

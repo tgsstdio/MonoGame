@@ -1,7 +1,7 @@
 
 namespace Magnesium.OpenGL.UnitTests
 {
-	public class MockVertexBufferFactory : ICmdVBOEntrypoint
+	public class MockVertexBufferFactory : IGLCmdVBOEntrypoint
 	{
 		#region IGLVertexBufferFactory implementation
 

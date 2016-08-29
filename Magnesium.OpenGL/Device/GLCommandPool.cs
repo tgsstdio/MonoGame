@@ -17,7 +17,7 @@ namespace Magnesium.OpenGL
 
 		#region IMgCommandPool implementation
 		private bool mIsDisposed = false;
-		public void DestroyCommandPool (IMgDevice device, MgAllocationCallbacks allocator)
+		public void DestroyCommandPool (IMgDevice device, IMgAllocationCallbacks allocator)
 		{
 			if (mIsDisposed)
 				return;

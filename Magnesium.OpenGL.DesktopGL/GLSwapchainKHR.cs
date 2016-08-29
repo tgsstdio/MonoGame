@@ -32,7 +32,7 @@ namespace Magnesium.OpenGL.DesktopGL
 		#endregion
 
 		#region IMgSwapchainKHR implementation
-		public void DestroySwapchainKHR (IMgDevice device, MgAllocationCallbacks allocator)
+		public void DestroySwapchainKHR (IMgDevice device, IMgAllocationCallbacks allocator)
 		{
 
 		}

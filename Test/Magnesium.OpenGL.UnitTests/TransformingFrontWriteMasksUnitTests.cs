@@ -11,7 +11,7 @@ namespace Magnesium.OpenGL.UnitTests
 			IGLCmdBufferRepository repo = new GLCmdBufferRepository ();
 			Assert.AreEqual (0, repo.FrontWriteMasks.Count);
 
-			ICmdVBOEntrypoint vbo = new MockVertexBufferFactory ();
+			IGLCmdVBOEntrypoint vbo = new MockVertexBufferFactory ();
 			var transform = new CmdBufferInstructionSetTransformer (vbo, repo);
 
 			Assert.IsNotNull (transform.FrontWriteMasks);
@@ -24,7 +24,7 @@ namespace Magnesium.OpenGL.UnitTests
 			IGLCmdBufferRepository repo = new GLCmdBufferRepository ();
 			Assert.AreEqual (0, repo.FrontWriteMasks.Count);
 
-			ICmdVBOEntrypoint vbo = new MockVertexBufferFactory ();
+			IGLCmdVBOEntrypoint vbo = new MockVertexBufferFactory ();
 			var transform = new CmdBufferInstructionSetTransformer (vbo, repo);
 
 			var command = new GLCmdDrawCommand{ FrontWriteMask = null, Draw = new GLCmdInternalDraw{ }  };
@@ -45,7 +45,7 @@ namespace Magnesium.OpenGL.UnitTests
 
 			Assert.AreEqual (1, repo.FrontWriteMasks.Count);
 
-			ICmdVBOEntrypoint vbo = new MockVertexBufferFactory ();
+			IGLCmdVBOEntrypoint vbo = new MockVertexBufferFactory ();
 			var transform = new CmdBufferInstructionSetTransformer (vbo, repo);
 
 			var command = new GLCmdDrawCommand{ Pipeline = null, FrontWriteMask = 0, Draw = new GLCmdInternalDraw{ }  };
@@ -86,7 +86,7 @@ namespace Magnesium.OpenGL.UnitTests
 
 			Assert.AreEqual (1, repo.GraphicsPipelines.Count);
 
-			ICmdVBOEntrypoint vbo = new MockVertexBufferFactory ();
+			IGLCmdVBOEntrypoint vbo = new MockVertexBufferFactory ();
 			var transform = new CmdBufferInstructionSetTransformer (vbo, repo);
 
 			var command = new GLCmdDrawCommand{ Pipeline = 0, FrontWriteMask = 0, Draw = new GLCmdInternalDraw{ }  };
@@ -131,7 +131,7 @@ namespace Magnesium.OpenGL.UnitTests
 
 			Assert.AreEqual (1, repo.GraphicsPipelines.Count);
 
-			ICmdVBOEntrypoint vbo = new MockVertexBufferFactory ();
+			IGLCmdVBOEntrypoint vbo = new MockVertexBufferFactory ();
 			var transform = new CmdBufferInstructionSetTransformer (vbo, repo);
 
 			// USE OVERRIDE 

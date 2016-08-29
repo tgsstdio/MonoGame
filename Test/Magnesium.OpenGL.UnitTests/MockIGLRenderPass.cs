@@ -11,7 +11,7 @@ namespace Magnesium.OpenGL.UnitTests
 
 		#region IMgRenderPass implementation
 
-		public void DestroyRenderPass (IMgDevice device, MgAllocationCallbacks allocator)
+		public void DestroyRenderPass (IMgDevice device, IMgAllocationCallbacks allocator)
 		{
 			throw new System.NotImplementedException ();
 		}

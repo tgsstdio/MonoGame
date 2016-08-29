@@ -13,7 +13,7 @@ namespace Magnesium.OpenGL
 			throw new NotImplementedException ();		
 		}
 
-		public void DestroyDevice (MgAllocationCallbacks allocator)
+		public void DestroyDevice (IMgAllocationCallbacks allocator)
 		{
 
 		}
@@ -36,12 +36,12 @@ namespace Magnesium.OpenGL
 			return Result.SUCCESS;
 		}
 
-		public Result AllocateMemory (MgMemoryAllocateInfo pAllocateInfo, MgAllocationCallbacks allocator, out IMgDeviceMemory pMemory)
+		public Result AllocateMemory (MgMemoryAllocateInfo pAllocateInfo, IMgAllocationCallbacks allocator, out IMgDeviceMemory pMemory)
 		{
 			pMemory = mEntrypoint.DeviceMemory.CreateDeviceMemory(pAllocateInfo);
 			return Result.SUCCESS;
 		}
-//		public void FreeMemory (IMgDeviceMemory memory, MgAllocationCallbacks allocator)
+//		public void FreeMemory (IMgDeviceMemory memory, IMgAllocationCallbacks allocator)
 //		{
 //			throw new NotImplementedException ();
 //		}
@@ -165,11 +165,11 @@ namespace Magnesium.OpenGL
 		{
 			throw new NotImplementedException ();
 		}
-		public Result CreateFence (MgFenceCreateInfo pCreateInfo, MgAllocationCallbacks allocator, out IMgFence fence)
+		public Result CreateFence (MgFenceCreateInfo pCreateInfo, IMgAllocationCallbacks allocator, out IMgFence fence)
 		{
 			throw new NotImplementedException ();
 		}
-//		public void DestroyFence (MgFence fence, MgAllocationCallbacks allocator)
+//		public void DestroyFence (MgFence fence, IMgAllocationCallbacks allocator)
 //		{
 //			throw new NotImplementedException ();
 //		}
@@ -185,20 +185,20 @@ namespace Magnesium.OpenGL
 		{
 			throw new NotImplementedException ();
 		}
-		public Result CreateSemaphore (MgSemaphoreCreateInfo pCreateInfo, MgAllocationCallbacks allocator, out IMgSemaphore pSemaphore)
+		public Result CreateSemaphore (MgSemaphoreCreateInfo pCreateInfo, IMgAllocationCallbacks allocator, out IMgSemaphore pSemaphore)
 		{
 			pSemaphore = mEntrypoint.Semaphore.CreateSemaphore();
 			return Result.SUCCESS;
 		}
-//		public void DestroySemaphore (IMgSemaphore semaphore, MgAllocationCallbacks allocator)
+//		public void DestroySemaphore (IMgSemaphore semaphore, IMgAllocationCallbacks allocator)
 //		{
 //			throw new NotImplementedException ();
 //		}
-		public Result CreateEvent (MgEventCreateInfo pCreateInfo, MgAllocationCallbacks allocator, out IMgEvent @event)
+		public Result CreateEvent (MgEventCreateInfo pCreateInfo, IMgAllocationCallbacks allocator, out IMgEvent @event)
 		{
 			throw new NotImplementedException ();
 		}
-		public void DestroyEvent (IMgEvent @event, MgAllocationCallbacks allocator)
+		public void DestroyEvent (IMgEvent @event, IMgAllocationCallbacks allocator)
 		{
 			throw new NotImplementedException ();
 		}
@@ -214,11 +214,11 @@ namespace Magnesium.OpenGL
 		{
 			throw new NotImplementedException ();
 		}
-		public Result CreateQueryPool (MgQueryPoolCreateInfo pCreateInfo, MgAllocationCallbacks allocator, out IMgQueryPool queryPool)
+		public Result CreateQueryPool (MgQueryPoolCreateInfo pCreateInfo, IMgAllocationCallbacks allocator, out IMgQueryPool queryPool)
 		{
 			throw new NotImplementedException ();
 		}
-		public void DestroyQueryPool (IMgQueryPool queryPool, MgAllocationCallbacks allocator)
+		public void DestroyQueryPool (IMgQueryPool queryPool, IMgAllocationCallbacks allocator)
 		{
 			throw new NotImplementedException ();
 		}
@@ -226,20 +226,20 @@ namespace Magnesium.OpenGL
 		{
 			throw new NotImplementedException ();
 		}
-		public Result CreateBuffer (MgBufferCreateInfo pCreateInfo, MgAllocationCallbacks allocator, out IMgBuffer pBuffer)
+		public Result CreateBuffer (MgBufferCreateInfo pCreateInfo, IMgAllocationCallbacks allocator, out IMgBuffer pBuffer)
 		{
 			pBuffer = mEntrypoint.Buffers.CreateBuffer(pCreateInfo);
 			return Result.SUCCESS;
 		}
-//		public void DestroyBuffer (IMgBuffer buffer, MgAllocationCallbacks allocator)
+//		public void DestroyBuffer (IMgBuffer buffer, IMgAllocationCallbacks allocator)
 //		{
 //			throw new NotImplementedException ();
 //		}
-		public Result CreateBufferView (MgBufferViewCreateInfo pCreateInfo, MgAllocationCallbacks allocator, out IMgBufferView pView)
+		public Result CreateBufferView (MgBufferViewCreateInfo pCreateInfo, IMgAllocationCallbacks allocator, out IMgBufferView pView)
 		{
 			throw new NotImplementedException ();
 		}
-		public void DestroyBufferView (IMgBufferView bufferView, MgAllocationCallbacks allocator)
+		public void DestroyBufferView (IMgBufferView bufferView, IMgAllocationCallbacks allocator)
 		{
 			throw new NotImplementedException ();
 		}
@@ -328,7 +328,7 @@ namespace Magnesium.OpenGL
 			}
 		}
 
-		public Result CreateImage (MgImageCreateInfo pCreateInfo, MgAllocationCallbacks allocator, out IMgImage pImage)
+		public Result CreateImage (MgImageCreateInfo pCreateInfo, IMgAllocationCallbacks allocator, out IMgImage pImage)
 		{
 			if (pCreateInfo == null)
 			{
@@ -372,7 +372,7 @@ namespace Magnesium.OpenGL
 			return Result.SUCCESS;
 		}
 
-//		public void DestroyImage (MgImage image, MgAllocationCallbacks allocator)
+//		public void DestroyImage (MgImage image, IMgAllocationCallbacks allocator)
 //		{
 //			mImages [image.Key].Destroy ();
 //		}
@@ -393,7 +393,7 @@ namespace Magnesium.OpenGL
 			}
 		}
 
-		public Result CreateImageView (MgImageViewCreateInfo pCreateInfo, MgAllocationCallbacks allocator, out IMgImageView pView)
+		public Result CreateImageView (MgImageViewCreateInfo pCreateInfo, IMgAllocationCallbacks allocator, out IMgImageView pView)
 		{
 			if (pCreateInfo == null)
 			{
@@ -422,32 +422,32 @@ namespace Magnesium.OpenGL
 			return Result.SUCCESS;
 		}
 
-//		public void DestroyImageView (IMgImageView imageView, MgAllocationCallbacks allocator)
+//		public void DestroyImageView (IMgImageView imageView, IMgAllocationCallbacks allocator)
 //		{
 //			mImageViews [imageView.Key].Destroy ();
 //		}
 
 		//private List<GLShaderModule> mShaderModules = new List<GLShaderModule>();
-		public Result CreateShaderModule (MgShaderModuleCreateInfo pCreateInfo, MgAllocationCallbacks allocator, out IMgShaderModule pShaderModule)
+		public Result CreateShaderModule (MgShaderModuleCreateInfo pCreateInfo, IMgAllocationCallbacks allocator, out IMgShaderModule pShaderModule)
 		{			
 			pShaderModule = new GLShaderModule (pCreateInfo, mEntrypoint.ShaderModule);
 			return Result.SUCCESS;
 		}
 
-//		public void DestroyShaderModule (IMgShaderModule shaderModule, MgAllocationCallbacks allocator)
+//		public void DestroyShaderModule (IMgShaderModule shaderModule, IMgAllocationCallbacks allocator)
 //		{
 //			mShaderModules[shaderModule.Key].Destroy();
 //		}
 
-		public Result CreatePipelineCache (MgPipelineCacheCreateInfo pCreateInfo, MgAllocationCallbacks allocator, out IMgPipelineCache pPipelineCache)
+		public Result CreatePipelineCache (MgPipelineCacheCreateInfo pCreateInfo, IMgAllocationCallbacks allocator, out IMgPipelineCache pPipelineCache)
 		{
 			throw new NotImplementedException ();
 		}
-//		public void DestroyPipelineCache (IMgPipelineCache pipelineCache, MgAllocationCallbacks allocator)
+//		public void DestroyPipelineCache (IMgPipelineCache pipelineCache, IMgAllocationCallbacks allocator)
 //		{
 //			throw new NotImplementedException ();
 //		}
-		public Result GetPipelineCacheData (IMgPipelineCache pipelineCache, UIntPtr pDataSize, IntPtr pData)
+		public Result GetPipelineCacheData (IMgPipelineCache pipelineCache, out byte[] pData)
 		{
 			throw new NotImplementedException ();
 		}
@@ -502,7 +502,7 @@ namespace Magnesium.OpenGL
 //			}
 //			return GLSLTextShader.LinkShaders (modules.ToArray ());
 //		}
-		public Result CreateGraphicsPipelines (IMgPipelineCache pipelineCache, MgGraphicsPipelineCreateInfo[] pCreateInfos, MgAllocationCallbacks allocator, out IMgPipeline[] pPipelines)
+		public Result CreateGraphicsPipelines (IMgPipelineCache pipelineCache, MgGraphicsPipelineCreateInfo[] pCreateInfos, IMgAllocationCallbacks allocator, out IMgPipeline[] pPipelines)
 		{
 			var output = new List<IMgPipeline> ();
 
@@ -576,17 +576,17 @@ namespace Magnesium.OpenGL
 			pPipelines = output.ToArray ();
 			return Result.SUCCESS;
 		}
-		public Result CreateComputePipelines (IMgPipelineCache pipelineCache, MgComputePipelineCreateInfo[] pCreateInfos, MgAllocationCallbacks allocator, out IMgPipeline[] pPipelines)
+		public Result CreateComputePipelines (IMgPipelineCache pipelineCache, MgComputePipelineCreateInfo[] pCreateInfos, IMgAllocationCallbacks allocator, out IMgPipeline[] pPipelines)
 		{
 			throw new NotImplementedException ();
 		}
-//		public void DestroyPipeline (IMgPipeline pipeline, MgAllocationCallbacks allocator)
+//		public void DestroyPipeline (IMgPipeline pipeline, IMgAllocationCallbacks allocator)
 //		{
 //			mPipelines [pipeline.Key].Destroy ();	
 //		}
 
 		//private List<GLPipelineLayout> mPipelineLayouts = new List<GLPipelineLayout> ();
-		public Result CreatePipelineLayout (MgPipelineLayoutCreateInfo pCreateInfo, MgAllocationCallbacks allocator, out IMgPipelineLayout pPipelineLayout)
+		public Result CreatePipelineLayout (MgPipelineLayoutCreateInfo pCreateInfo, IMgAllocationCallbacks allocator, out IMgPipelineLayout pPipelineLayout)
 		{
 			if (pCreateInfo == null)
 			{
@@ -606,23 +606,23 @@ namespace Magnesium.OpenGL
 			pPipelineLayout = new GLPipelineLayout (pCreateInfo);
 			return Result.SUCCESS;
 		}
-//		public void DestroyPipelineLayout (IMgPipelineLayout pipelineLayout, MgAllocationCallbacks allocator)
+//		public void DestroyPipelineLayout (IMgPipelineLayout pipelineLayout, IMgAllocationCallbacks allocator)
 //		{
 //			mPipelineLayouts [pipelineLayout.Key].Destroy ();
 //		}
 
-		public Result CreateSampler (MgSamplerCreateInfo pCreateInfo, MgAllocationCallbacks allocator, out IMgSampler pSampler)
+		public Result CreateSampler (MgSamplerCreateInfo pCreateInfo, IMgAllocationCallbacks allocator, out IMgSampler pSampler)
 		{
 			pSampler = new GLSampler (mEntrypoint.Sampler.CreateSampler (), pCreateInfo, mEntrypoint.Sampler);
 			return Result.SUCCESS;
 		}
-//		public void DestroySampler (IMgSampler sampler, MgAllocationCallbacks allocator)
+//		public void DestroySampler (IMgSampler sampler, IMgAllocationCallbacks allocator)
 //		{
 //			mSamplers [sampler.Key].Destroy ();	
 //		}
 
 		//private List<GLDescriptorSetLayout> mDescriptorSetLayouts = new List<GLDescriptorSetLayout> ();
-		public Result CreateDescriptorSetLayout (MgDescriptorSetLayoutCreateInfo pCreateInfo, MgAllocationCallbacks allocator, out IMgDescriptorSetLayout pSetLayout)
+		public Result CreateDescriptorSetLayout (MgDescriptorSetLayoutCreateInfo pCreateInfo, IMgAllocationCallbacks allocator, out IMgDescriptorSetLayout pSetLayout)
 		{
 			if (pCreateInfo == null)
 			{
@@ -631,18 +631,18 @@ namespace Magnesium.OpenGL
 			pSetLayout  = new GLDescriptorSetLayout (pCreateInfo); 
 			return Result.SUCCESS;
 		}
-//		public void DestroyDescriptorSetLayout (IMgDescriptorSetLayout descriptorSetLayout, MgAllocationCallbacks allocator)
+//		public void DestroyDescriptorSetLayout (IMgDescriptorSetLayout descriptorSetLayout, IMgAllocationCallbacks allocator)
 //		{
 //			mDescriptorSetLayouts [descriptorSetLayout.Key].Destroy ();
 //		}
 
-		public Result CreateDescriptorPool (MgDescriptorPoolCreateInfo pCreateInfo, MgAllocationCallbacks allocator, out IMgDescriptorPool pDescriptorPool)
+		public Result CreateDescriptorPool (MgDescriptorPoolCreateInfo pCreateInfo, IMgAllocationCallbacks allocator, out IMgDescriptorPool pDescriptorPool)
 		{
 			pDescriptorPool = mEntrypoint.DescriptorPool.CreatePool (pCreateInfo);
 			return Result.SUCCESS;
 		}
 
-//		public void DestroyDescriptorPool (IMgDescriptorPool descriptorPool, MgAllocationCallbacks allocator)
+//		public void DestroyDescriptorPool (IMgDescriptorPool descriptorPool, IMgAllocationCallbacks allocator)
 //		{
 //			mPools [descriptorPool.Key].Destroy ();
 //		}
@@ -790,23 +790,23 @@ namespace Magnesium.OpenGL
 				}
 			}
 		}
-		public Result CreateFramebuffer (MgFramebufferCreateInfo pCreateInfo, MgAllocationCallbacks allocator, out IMgFramebuffer pFramebuffer)
+		public Result CreateFramebuffer (MgFramebufferCreateInfo pCreateInfo, IMgAllocationCallbacks allocator, out IMgFramebuffer pFramebuffer)
 		{
 			pFramebuffer = new GLFramebuffer ();
 			return Result.SUCCESS;
 		}
 
-//		public void DestroyFramebuffer (IMgFramebuffer framebuffer, MgAllocationCallbacks allocator)
+//		public void DestroyFramebuffer (IMgFramebuffer framebuffer, IMgAllocationCallbacks allocator)
 //		{
 //			throw new NotImplementedException ();
 //		}
 
-		public Result CreateRenderPass (MgRenderPassCreateInfo pCreateInfo, MgAllocationCallbacks allocator, out IMgRenderPass pRenderPass)
+		public Result CreateRenderPass (MgRenderPassCreateInfo pCreateInfo, IMgAllocationCallbacks allocator, out IMgRenderPass pRenderPass)
 		{
 			pRenderPass = new GLRenderPass (pCreateInfo.Attachments);
 			return Result.SUCCESS;
 		}
-//		public void DestroyRenderPass (IMgRenderPass renderPass, MgAllocationCallbacks allocator)
+//		public void DestroyRenderPass (IMgRenderPass renderPass, IMgAllocationCallbacks allocator)
 //		{
 //			throw new NotImplementedException ();
 //		}
@@ -814,12 +814,12 @@ namespace Magnesium.OpenGL
 		{
 			throw new NotImplementedException ();
 		}
-		public Result CreateCommandPool (MgCommandPoolCreateInfo pCreateInfo, MgAllocationCallbacks allocator, out IMgCommandPool pCommandPool)
+		public Result CreateCommandPool (MgCommandPoolCreateInfo pCreateInfo, IMgAllocationCallbacks allocator, out IMgCommandPool pCommandPool)
 		{
 			pCommandPool = new GLCommandPool (pCreateInfo.Flags);
 			return Result.SUCCESS;
 		}
-//		public void DestroyCommandPool (IMgCommandPool commandPool, MgAllocationCallbacks allocator)
+//		public void DestroyCommandPool (IMgCommandPool commandPool, IMgAllocationCallbacks allocator)
 //		{
 //			throw new NotImplementedException ();
 //		}
@@ -864,15 +864,15 @@ namespace Magnesium.OpenGL
 				cmdBuf.ResetAllData ();
 			}
 		}
-		public Result CreateSharedSwapchainsKHR (MgSwapchainCreateInfoKHR[] pCreateInfos, MgAllocationCallbacks allocator, out IMgSwapchainKHR[] pSwapchains)
+		public Result CreateSharedSwapchainsKHR (MgSwapchainCreateInfoKHR[] pCreateInfos, IMgAllocationCallbacks allocator, out IMgSwapchainKHR[] pSwapchains)
 		{
 			throw new NotImplementedException ();
 		}
-		public Result CreateSwapchainKHR (MgSwapchainCreateInfoKHR pCreateInfo, MgAllocationCallbacks allocator, out IMgSwapchainKHR pSwapchain)
+		public Result CreateSwapchainKHR (MgSwapchainCreateInfoKHR pCreateInfo, IMgAllocationCallbacks allocator, out IMgSwapchainKHR pSwapchain)
 		{
 			throw new NotImplementedException ();
 		}
-//		public void DestroySwapchainKHR (IMgSwapchainKHR swapchain, MgAllocationCallbacks allocator)
+//		public void DestroySwapchainKHR (IMgSwapchainKHR swapchain, IMgAllocationCallbacks allocator)
 //		{
 //			throw new NotImplementedException ();
 //		}

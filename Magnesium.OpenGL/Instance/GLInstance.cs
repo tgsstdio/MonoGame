@@ -13,7 +13,7 @@ namespace Magnesium.OpenGL
 		private GLPhysicalDevice[] mPhysicalDevices;
 
 		#region IMgInstance implementation
-		public void DestroyInstance (MgAllocationCallbacks allocator)
+		public void DestroyInstance (IMgAllocationCallbacks allocator)
 		{
 	
 		}
@@ -29,27 +29,27 @@ namespace Magnesium.OpenGL
 			throw new NotImplementedException ();
 		}
 
-		public Result CreateDisplayPlaneSurfaceKHR (MgDisplaySurfaceCreateInfoKHR createInfo, MgAllocationCallbacks allocator, out IMgSurfaceKHR pSurface)
+		public Result CreateDisplayPlaneSurfaceKHR (MgDisplaySurfaceCreateInfoKHR createInfo, IMgAllocationCallbacks allocator, out IMgSurfaceKHR pSurface)
 		{
 			throw new NotImplementedException ();
 		}
 
-		public void DestroySurfaceKHR (IMgSurfaceKHR surface, MgAllocationCallbacks allocator)
+		public void DestroySurfaceKHR (IMgSurfaceKHR surface, IMgAllocationCallbacks allocator)
 		{
 			throw new NotImplementedException ();
 		}
 
-		public Result CreateWin32SurfaceKHR (MgWin32SurfaceCreateInfoKHR pCreateInfo, MgAllocationCallbacks allocator, out IMgSurfaceKHR pSurface)
+		public Result CreateWin32SurfaceKHR (MgWin32SurfaceCreateInfoKHR pCreateInfo, IMgAllocationCallbacks allocator, out IMgSurfaceKHR pSurface)
 		{
 			throw new NotImplementedException ();
 		}
 
-		public Result CreateDebugReportCallbackEXT (MgDebugReportCallbackCreateInfoEXT pCreateInfo, MgAllocationCallbacks allocator, out MgDebugReportCallbackEXT pCallback)
+		public Result CreateDebugReportCallbackEXT (MgDebugReportCallbackCreateInfoEXT pCreateInfo, IMgAllocationCallbacks allocator, out IMgDebugReportCallbackEXT pCallback)
 		{
 			throw new NotImplementedException ();
 		}
 
-		public void DestroyDebugReportCallbackEXT (MgDebugReportCallbackEXT callback, MgAllocationCallbacks allocator)
+		public void DestroyDebugReportCallbackEXT (IMgDebugReportCallbackEXT callback, IMgAllocationCallbacks allocator)
 		{
 			throw new NotImplementedException ();
 		}
@@ -59,7 +59,7 @@ namespace Magnesium.OpenGL
 			throw new NotImplementedException ();
 		}
 
-		public Result CreateAndroidSurfaceKHR(MgAndroidSurfaceCreateInfoKHR pCreateInfo, MgAllocationCallbacks allocator, out IMgSurfaceKHR pSurface)
+		public Result CreateAndroidSurfaceKHR(MgAndroidSurfaceCreateInfoKHR pCreateInfo, IMgAllocationCallbacks allocator, out IMgSurfaceKHR pSurface)
 		{
 			throw new NotImplementedException();
 		}

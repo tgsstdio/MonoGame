@@ -39,7 +39,6 @@
     <Compile Include="MockGLGraphicsPipeline.cs" />
     <Compile Include="MockVertexBufferFactory.cs" />
     <Compile Include="IndexTypeValidation.cs" />
-    <Compile Include="CmdBufferRepoUnitTests.cs" />
     <Compile Include="MockGLIndirectBuffer.cs" />
     <Compile Include="ViewportMergeUnitTests.cs" />
     <Compile Include="MockGLCmdImageCapabilities.cs" />
@@ -73,17 +72,13 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Magnesium.OpenGL\Magnesium.OpenGL.csproj">
+      <Project>{84924A0F-0D4C-4B0C-B16A-4F26DD838AF2}</Project>
+      <Name>Magnesium.OpenGL</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Magnesium\Magnesium.csproj">
       <Project>{9F9AC448-9D17-43E5-8889-285426290891}</Project>
       <Name>Magnesium</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Magnesium.OpenGL\Magnesium.OpenGL.DesktopGL.csproj">
-      <Project>{156D7F9D-1243-4EDB-9E45-24FAF2F40A4C}</Project>
-      <Name>Magnesium.OpenGL.DesktopGL</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Magnesium.OpenGL.Backend\Magnesium.OpenGL.csproj">
-      <Project>{84924A0F-0D4C-4B0C-B16A-4F26DD838AF2}</Project>
-      <Name>Magnesium.OpenGL</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>

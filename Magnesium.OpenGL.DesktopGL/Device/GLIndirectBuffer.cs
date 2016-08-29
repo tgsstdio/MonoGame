@@ -87,7 +87,7 @@ namespace Magnesium.OpenGL.DesktopGL.DesktopGL
 		}
 
 		private bool mIsDisposed = false;
-		public void DestroyBuffer (IMgDevice device, MgAllocationCallbacks allocator)
+		public void DestroyBuffer (IMgDevice device, IMgAllocationCallbacks allocator)
 		{
 			if (mIsDisposed)
 				return;

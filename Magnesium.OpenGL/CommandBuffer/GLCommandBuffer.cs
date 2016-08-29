@@ -347,7 +347,7 @@ namespace Magnesium.OpenGL
 			throw new NotImplementedException ();
 		}
 
-		public void CmdUpdateBuffer (IMgBuffer dstBuffer, ulong dstOffset, UIntPtr dataSize, IntPtr pData)
+		public void CmdUpdateBuffer (IMgBuffer dstBuffer, UInt64 dstOffset, UInt64 dataSize, IntPtr pData)
 		{
 			throw new NotImplementedException ();
 		}

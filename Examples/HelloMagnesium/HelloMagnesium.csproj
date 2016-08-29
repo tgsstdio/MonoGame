@@ -57,9 +57,32 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <ProjectReference Include="..\..\MonoGame.Platform.DesktopGL\MonoGame.Platform.DesktopGL.csproj">
-      <Project>{B512C831-4562-447E-9F99-C66F86B1279F}</Project>
-      <Name>MonoGame.Platform.DesktopGL</Name>
+    <None Include="packages.config" />
+    <None Include="Content\80000000\80000002.vs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Content\80000000\80000003.fs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="OpenTK.dll.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\80000000\80000001.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Magnesium.OpenGL\Magnesium.OpenGL.csproj">
+      <Project>{84924A0F-0D4C-4B0C-B16A-4F26DD838AF2}</Project>
+      <Name>Magnesium.OpenGL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Magnesium.OpenGL.DesktopGL\Magnesium.OpenGL.DesktopGL.csproj">
+      <Project>{156D7F9D-1243-4EDB-9E45-24FAF2F40A4C}</Project>
+      <Name>Magnesium.OpenGL.DesktopGL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\MonoGame.Framework\Microsoft.Xna.Framework.csproj">
+      <Project>{6E03191C-70AE-4B0B-8782-68D377B72A0F}</Project>
+      <Name>Microsoft.Xna.Framework</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\MonoGame.Core\MonoGame.Core.csproj">
       <Project>{699977AD-6D8C-4E0B-ADDA-554B66002D08}</Project>
@@ -77,13 +100,17 @@
       <Project>{D68E983C-FA4D-418A-8353-43C4CDE75B23}</Project>
       <Name>MonoGame.Audio.OpenAL.DesktopGL</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Magnesium\Magnesium.csproj">
-      <Project>{9F9AC448-9D17-43E5-8889-285426290891}</Project>
-      <Name>Magnesium</Name>
+    <ProjectReference Include="..\..\MonoGame.Platform.DesktopGL\MonoGame.Platform.DesktopGL.csproj">
+      <Project>{B512C831-4562-447E-9F99-C66F86B1279F}</Project>
+      <Name>MonoGame.Platform.DesktopGL</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\MonoGame.Content\MonoGame.Content.csproj">
       <Project>{E44E47ED-2203-4E45-85A9-C755B10AC044}</Project>
       <Name>MonoGame.Content</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Magnesium\Magnesium.csproj">
+      <Project>{9F9AC448-9D17-43E5-8889-285426290891}</Project>
+      <Name>Magnesium</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\FreeImageNET-PCL\FreeImageAPI-PCL.csproj">
       <Project>{30E16C50-498F-4E07-AFB5-084FB43F0228}</Project>
@@ -93,32 +120,13 @@
       <Project>{EEC1E6BC-AF82-413A-BA6A-7E80C032BCFD}</Project>
       <Name>MonoGame.Textures.FreeImageNET</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\MonoGame.Textures\MonoGame.Textures.csproj">
+      <Project>{99F73D50-EDBB-4918-B99C-B785E9563795}</Project>
+      <Name>MonoGame.Textures</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\MonoGame.Content.Dirs\MonoGame.Content.Dirs.csproj">
       <Project>{9D3DE491-E6D0-4D12-9A2D-D31B23D7D71D}</Project>
       <Name>MonoGame.Content.Dirs</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Magnesium.OpenGL\Magnesium.OpenGL.DesktopGL.csproj">
-      <Project>{156D7F9D-1243-4EDB-9E45-24FAF2F40A4C}</Project>
-      <Name>Magnesium.OpenGL.DesktopGL</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Magnesium.OpenGL.Backend\Magnesium.OpenGL.csproj">
-      <Project>{84924A0F-0D4C-4B0C-B16A-4F26DD838AF2}</Project>
-      <Name>Magnesium.OpenGL</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-    <None Include="Content\80000000\80000002.vs">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Content\80000000\80000003.fs">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="OpenTK.dll.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Content\80000000\80000001.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
 </Project>

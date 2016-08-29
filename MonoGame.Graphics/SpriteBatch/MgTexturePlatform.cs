@@ -11,9 +11,9 @@ namespace MonoGame.Graphics
 	public class MgTexturePlatform : IMgTexturePlatform
     {
 		readonly IMgDevice mDevice;
-		readonly MgAllocationCallbacks mCallbacks;
+		readonly IMgAllocationCallbacks mCallbacks;
 
-		public MgTexturePlatform (IMgDevice device, MgAllocationCallbacks callbacks)
+		public MgTexturePlatform (IMgDevice device, IMgAllocationCallbacks callbacks)
 		{
 			mDevice = device;
 			mCallbacks = callbacks;

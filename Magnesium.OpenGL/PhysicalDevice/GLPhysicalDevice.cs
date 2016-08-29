@@ -90,7 +90,7 @@ namespace Magnesium.OpenGL
 		{
 			throw new NotImplementedException ();
 		}
-		public Result CreateDevice (MgDeviceCreateInfo pCreateInfo, MgAllocationCallbacks allocator, out IMgDevice pDevice)
+		public Result CreateDevice (MgDeviceCreateInfo pCreateInfo, IMgAllocationCallbacks allocator, out IMgDevice pDevice)
 		{
 			// USING SINGLE DEVICE & SINGLE QUEUE 
 				// SHOULD BE 
@@ -117,15 +117,15 @@ namespace Magnesium.OpenGL
 		{
 			throw new NotImplementedException ();
 		}
-		public Result GetDisplayPlaneSupportedDisplaysKHR (uint planeIndex, out MgDisplayKHR[] pDisplays)
+		public Result GetDisplayPlaneSupportedDisplaysKHR (uint planeIndex, out IMgDisplayKHR[] pDisplays)
 		{
 			throw new NotImplementedException ();
 		}
-		public Result GetDisplayModePropertiesKHR (MgDisplayKHR display, out MgDisplayModePropertiesKHR[] pProperties)
+		public Result GetDisplayModePropertiesKHR (IMgDisplayKHR display, out MgDisplayModePropertiesKHR[] pProperties)
 		{
 			throw new NotImplementedException ();
 		}
-		public Result GetDisplayPlaneCapabilitiesKHR (MgDisplayModeKHR mode, uint planeIndex, out MgDisplayPlaneCapabilitiesKHR pCapabilities)
+		public Result GetDisplayPlaneCapabilitiesKHR (IMgDisplayModeKHR mode, uint planeIndex, out MgDisplayPlaneCapabilitiesKHR pCapabilities)
 		{
 			throw new NotImplementedException ();
 		}
@@ -149,8 +149,13 @@ namespace Magnesium.OpenGL
 		{
 			throw new NotImplementedException ();
 		}
+
+		public Result CreateDisplayModeKHR(IMgDisplayKHR display, MgDisplayModeCreateInfoKHR pCreateInfo, IMgAllocationCallbacks allocator, out IMgDisplayModeKHR pMode)
+		{
+			throw new NotImplementedException();
+		}
 		#endregion
-		
+
 	}
 }
 

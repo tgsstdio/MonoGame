@@ -4,7 +4,7 @@ namespace Magnesium.OpenGL.UnitTests
 	public class MockMgIndexBuffer : IMgBuffer
 	{
 		#region IMgBuffer implementation
-		public void DestroyBuffer (IMgDevice device, MgAllocationCallbacks allocator)
+		public void DestroyBuffer (IMgDevice device, IMgAllocationCallbacks allocator)
 		{
 			throw new System.NotImplementedException ();
 		}

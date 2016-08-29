@@ -406,7 +406,7 @@ namespace Magnesium.OpenGL
 			return (pipeline.PolygonMode == MgPolygonMode.LINE) ? GLCommandBufferFlagBits.AsLinesMode : ((pipeline.PolygonMode == MgPolygonMode.POINT) ? GLCommandBufferFlagBits.AsPointsMode : 0);
 		}
 
-		static GLCommandBufferFlagBits ExtractIndexType (IGLCmdBufferRepository repo, GLCmdDrawCommand command)
+		public static GLCommandBufferFlagBits ExtractIndexType (IGLCmdBufferRepository repo, GLCmdDrawCommand command)
 		{
 			if (command.IndexBuffer.HasValue)
 			{

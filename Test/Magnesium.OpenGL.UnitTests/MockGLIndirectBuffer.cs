@@ -3,7 +3,7 @@ namespace Magnesium.OpenGL.UnitTests
 	public class MockGLIndirectBuffer : IGLBuffer
 	{
 		#region IMgBuffer implementation
-		public void DestroyBuffer (IMgDevice device, MgAllocationCallbacks allocator)
+		public void DestroyBuffer (IMgDevice device, IMgAllocationCallbacks allocator)
 		{
 			
 		}

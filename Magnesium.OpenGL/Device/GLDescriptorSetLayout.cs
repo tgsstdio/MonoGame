@@ -22,7 +22,7 @@ namespace Magnesium.OpenGL
 
 		#region IMgDescriptorSetLayout implementation
 		private bool mIsDisposed = false;
-		public void DestroyDescriptorSetLayout (IMgDevice device, MgAllocationCallbacks allocator)
+		public void DestroyDescriptorSetLayout (IMgDevice device, IMgAllocationCallbacks allocator)
 		{
 			if (mIsDisposed)
 				return;

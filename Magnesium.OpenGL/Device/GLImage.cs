@@ -292,7 +292,7 @@ namespace Magnesium.OpenGL
 		}
 
 		private bool mIsDisposed = false;
-		public void DestroyImage (IMgDevice device, MgAllocationCallbacks allocator)
+		public void DestroyImage (IMgDevice device, IMgAllocationCallbacks allocator)
 		{
 			if (mIsDisposed)
 				return;

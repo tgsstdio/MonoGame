@@ -78,7 +78,7 @@ namespace Magnesium.OpenGL.DesktopGL
 
 		#region IMgSemaphore implementation
 
-		public void DestroySemaphore (IMgDevice device, MgAllocationCallbacks allocator)
+		public void DestroySemaphore (IMgDevice device, IMgAllocationCallbacks allocator)
 		{
 			if (ObjectPtr != IntPtr.Zero)
 			{

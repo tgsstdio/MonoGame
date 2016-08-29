@@ -22,7 +22,7 @@ namespace Magnesium.OpenGL
 
 		#region IMgPipelineLayout implementation
 		private bool mIsDisposed = false;
-		public void DestroyPipelineLayout (IMgDevice device, MgAllocationCallbacks allocator)
+		public void DestroyPipelineLayout (IMgDevice device, IMgAllocationCallbacks allocator)
 		{
 			if (mIsDisposed)
 				return;

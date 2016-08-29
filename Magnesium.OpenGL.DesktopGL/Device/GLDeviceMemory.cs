@@ -111,7 +111,7 @@ namespace Magnesium.OpenGL.DesktopGL.DesktopGL
 
 		#region IMgDeviceMemory implementation
 		private bool mIsDisposed = false;
-		public void FreeMemory (IMgDevice device, MgAllocationCallbacks allocator)
+		public void FreeMemory (IMgDevice device, IMgAllocationCallbacks allocator)
 		{
 			if (mIsDisposed)
 				return;

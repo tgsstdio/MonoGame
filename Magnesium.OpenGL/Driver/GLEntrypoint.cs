@@ -14,7 +14,7 @@ namespace Magnesium.OpenGL
 
 		#region IMgEntrypoint implementation
 
-		public Result CreateInstance (MgInstanceCreateInfo createInfo, MgAllocationCallbacks allocator, out IMgInstance instance)
+		public Result CreateInstance (MgInstanceCreateInfo createInfo, IMgAllocationCallbacks allocator, out IMgInstance instance)
 		{
 			instance = new GLInstance (mQueue, mEntrypoint);
 			return Result.SUCCESS;
@@ -28,6 +28,11 @@ namespace Magnesium.OpenGL
 		public Result EnumerateInstanceExtensionProperties (string layerName, out MgExtensionProperties[] pProperties)
 		{
 			throw new NotImplementedException ();
+		}
+
+		public IMgAllocationCallbacks CreateAllocationCallbacks()
+		{
+			throw new NotImplementedException();
 		}
 
 		#endregion

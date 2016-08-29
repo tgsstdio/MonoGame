@@ -1,33 +1,11 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 
 namespace Magnesium.OpenGL.UnitTests
 {
 	[TestFixture ()]
 	public class Queue
 	{
-		public class MockQueueRenderer : IGLQueueRenderer
-		{
-			#region IGLQueueRenderer implementation
-
-			public void Render (CmdBufferInstructionSet[] items)
-			{
-				throw new System.NotImplementedException ();
-			}
-			public void SetDefault ()
-			{
-				throw new System.NotImplementedException ();
-			}
-			public void CheckProgram (GLQueueDrawItem nextState)
-			{
-				throw new System.NotImplementedException ();
-			}
-			public void Render (GLQueueDrawItem[] items)
-			{
-				
-			}
-			#endregion
-		}
-
 		public class MockSemaphoreGenerator : IGLSemaphoreEntrypoint
 		{
 			private readonly MockGLSemaphore mMainSemaphore;
@@ -52,7 +30,7 @@ namespace Magnesium.OpenGL.UnitTests
 		{
 			IGLQueueRenderer renderer = new MockQueueRenderer ();
 			IGLSemaphoreEntrypoint generator = new MockSemaphoreGenerator (null);
-			IGLCmdImageCapabilities imageOps = new MockGLCmdImageCapabilities ();
+			IGLCmdImageEntrypoint imageOps = new MockGLCmdImageCapabilities ();
 
 			IGLQueue queue = new GLQueue (renderer, generator, imageOps);
 			var actual = queue.QueueSubmit (null, null);
@@ -68,7 +46,7 @@ namespace Magnesium.OpenGL.UnitTests
 
 			public uint Count { get; set; }
 
-			public void DestroyFence (IMgDevice device, MgAllocationCallbacks allocator)
+			public void DestroyFence (IMgDevice device, IMgAllocationCallbacks allocator)
 			{
 				throw new System.NotImplementedException ();
 			}
@@ -86,7 +64,7 @@ namespace Magnesium.OpenGL.UnitTests
 		{
 			IGLQueueRenderer renderer = new MockQueueRenderer ();
 			IGLSemaphoreEntrypoint generator = new MockSemaphoreGenerator (null);
-			IGLCmdImageCapabilities imageOps = new MockGLCmdImageCapabilities ();
+			IGLCmdImageEntrypoint imageOps = new MockGLCmdImageCapabilities ();
 
 			IGLQueue queue = new GLQueue (renderer, generator, imageOps);
 			var fence = new MockGLQueueFence ();
@@ -167,7 +145,7 @@ namespace Magnesium.OpenGL.UnitTests
 			}
 			#endregion
 			#region IMgSemaphore implementation
-			public void DestroySemaphore (IMgDevice device, MgAllocationCallbacks allocator)
+			public void DestroySemaphore (IMgDevice device, IMgAllocationCallbacks allocator)
 			{
 				throw new System.NotImplementedException ();
 			}
@@ -178,7 +156,7 @@ namespace Magnesium.OpenGL.UnitTests
 		public void PreviousWorkCompleted()
 		{
 			IGLQueueRenderer renderer = new MockQueueRenderer ();
-			IGLCmdImageCapabilities imageOps = new MockGLCmdImageCapabilities ();
+			IGLCmdImageEntrypoint imageOps = new MockGLCmdImageCapabilities ();
 
 			var internalSema = new MockGLSemaphore (true);
 
@@ -222,7 +200,7 @@ namespace Magnesium.OpenGL.UnitTests
 		public void FenceOn()
 		{
 			IGLQueueRenderer renderer = new MockQueueRenderer ();
-			IGLCmdImageCapabilities imageOps = new MockGLCmdImageCapabilities ();
+			IGLCmdImageEntrypoint imageOps = new MockGLCmdImageCapabilities ();
 
 			var internalSema = new MockGLSemaphore (true);
 
@@ -280,13 +258,26 @@ namespace Magnesium.OpenGL.UnitTests
 			#endregion
 		}
 
+		class MockQueueRenderer : IGLQueueRenderer
+		{
+			public void Render(CmdBufferInstructionSet[] items)
+			{
+				//throw new NotImplementedException();
+			}
+
+			public void SetDefault()
+			{
+				//throw new NotImplementedException();
+			}
+		}
+
 		/**
 		HYPOTHESIS - there might be bug here.
 		[Test()]
 		public void SemaphoreIdsClash()
 		{
 			IGLQueueRenderer renderer = new MockQueueRenderer ();
-			IGLCmdImageCapabilities imageOps = new MockGLCmdImageCapabilities ();
+			IGLCmdImageEntrypoint imageOps = new MockGLCmdImageCapabilities ();
 
 			var generator = new FakeSemaphoreGenerator ();
 
