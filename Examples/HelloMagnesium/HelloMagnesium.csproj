@@ -52,7 +52,6 @@
     <Compile Include="IMgPresentationLayer.cs" />
     <Compile Include="VkBuffer.cs" />
     <Compile Include="GraphicsBank.cs" />
-    <Compile Include="IHelloGraphicsDevice.cs" />
     <Compile Include="MgSpriteBatch.cs" />
     <Compile Include="MockGraphicsDeviceLogger.cs" />
   </ItemGroup>

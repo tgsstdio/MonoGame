@@ -22,7 +22,7 @@ namespace HelloMagnesium
 				using (var container = new Container ())
 				{
 					// GAME
-					container.Register<Game, HelloMagnesiumGame> (Reuse.Singleton);
+					container.Register<Game, HelloMagnesiumGame>(Reuse.Singleton);
 
 					container.Register<HelloMagnesium.IMgPresentationLayer, HelloMagnesium.MgPresentationLayer>(Reuse.Singleton);
 
@@ -30,39 +30,8 @@ namespace HelloMagnesium
 					container.Register<Magnesium.IMgDriver, Magnesium.MgDriver>(Reuse.Singleton);
 					container.Register<Magnesium.IMgImageTools, Magnesium.MgImageTools>(Reuse.Singleton);
 
-					container.Register<Magnesium.IMgEntrypoint, Magnesium.OpenGL.GLEntrypoint>(Reuse.Singleton);
-					container.Register<Magnesium.IMgTextureGenerator, Magnesium.MgLinearImageOptimizer>(Reuse.Singleton);
-
-					// Magnesium.OpenGL
-					container.Register<Magnesium.OpenGL.IGLQueue, Magnesium.OpenGL.GLQueue>(Reuse.Singleton);
-					container.Register<Magnesium.OpenGL.IGLQueueRenderer, Magnesium.OpenGL.GLQueueRenderer>(Reuse.Singleton);
-					container.Register<Magnesium.OpenGL.IGLCmdBlendEntrypoint, Magnesium.OpenGL.DesktopGL.FullGLCmdBlendEntrypoint>(Reuse.Singleton);
-					container.Register<Magnesium.OpenGL.IGLCmdStencilEntrypoint, Magnesium.OpenGL.DesktopGL.FullGLCmdStencilEntrypoint>(Reuse.Singleton);
-					container.Register<Magnesium.OpenGL.IGLCmdRasterizationEntrypoint, Magnesium.OpenGL.DesktopGL.FullGLCmdRasterizationEntrypoint>(Reuse.Singleton);
-					container.Register<Magnesium.OpenGL.IGLErrorHandler, Magnesium.OpenGL.DesktopGL.FullGLErrorHandler>(Reuse.Singleton);
-					container.Register<Magnesium.OpenGL.IGLCmdDepthEntrypoint, Magnesium.OpenGL.DesktopGL.FullGLCmdDepthEntrypoint>(Reuse.Singleton);
-					container.Register<Magnesium.OpenGL.IGLCmdShaderProgramCache, Magnesium.OpenGL.DesktopGL.FullGLCmdShaderProgramCache>(Reuse.Singleton);
-					container.Register<Magnesium.OpenGL.IGLCmdScissorsEntrypoint, Magnesium.OpenGL.DesktopGL.FullGLCmdScissorsEntrypoint>(Reuse.Singleton);
-					container.Register<Magnesium.OpenGL.IGLCmdDrawEntrypoint, Magnesium.OpenGL.DesktopGL.FullGLCmdDrawEntrypoint>(Reuse.Singleton);
-					container.Register<Magnesium.OpenGL.IGLCmdClearEntrypoint, Magnesium.OpenGL.DesktopGL.FullGLCmdClearEntrypoint>(Reuse.Singleton);
-					container.Register<Magnesium.OpenGL.IGLSemaphoreEntrypoint, Magnesium.OpenGL.DesktopGL.FullGLSemaphoreEntrypoint>(Reuse.Singleton);
-					container.Register<Magnesium.OpenGL.IGLCmdImageEntrypoint, Magnesium.OpenGL.DesktopGL.FullGLCmdImageEntrypoint>(Reuse.Singleton);
-
-					container.Register<Magnesium.OpenGL.IGLDeviceEntrypoint, Magnesium.OpenGL.DefaultGLDeviceEntrypoint>(Reuse.Singleton);
-					container.Register<Magnesium.OpenGL.IGLCmdVBOEntrypoint, Magnesium.OpenGL.DesktopGL.FullGLCmdVBOEntrypoint>(Reuse.Singleton);
-					container.Register<Magnesium.OpenGL.IGLSamplerEntrypoint, Magnesium.OpenGL.DesktopGL.FullGLSamplerEntrypoint>(Reuse.Singleton);
-					container.Register<Magnesium.OpenGL.IGLDeviceImageEntrypoint, Magnesium.OpenGL.DesktopGL.FullGLDeviceImageEntrypoint>(Reuse.Singleton);
-					container.Register<Magnesium.OpenGL.IGLDeviceImageViewEntrypoint, Magnesium.OpenGL.DesktopGL.FullGLDeviceImageViewEntrypoint>(Reuse.Singleton);
-					container.Register<Magnesium.OpenGL.IGLImageFormatEntrypoint, Magnesium.OpenGL.DesktopGL.DesktopGLImageFormatEntrypoint>(Reuse.Singleton);
-					container.Register<Magnesium.OpenGL.IGLImageDescriptorEntrypoint, Magnesium.OpenGL.DesktopGL.FullGLImageDescriptorEntrypoint>(Reuse.Singleton);
-					container.Register<Magnesium.OpenGL.IGLShaderModuleEntrypoint, Magnesium.OpenGL.DesktopGL.FullGLShaderModuleEntrypoint>(Reuse.Singleton);
-					container.Register<Magnesium.OpenGL.IGLDescriptorPoolEntrypoint, Magnesium.OpenGL.DesktopGL.FullGLDescriptorPoolEntrypoint>(Reuse.Singleton);
-					container.Register<Magnesium.OpenGL.IGLBufferEntrypoint, Magnesium.OpenGL.DesktopGL.FullGLBufferEntrypoint>(Reuse.Singleton);
-					container.Register<Magnesium.OpenGL.IGLDeviceMemoryEntrypoint, Magnesium.OpenGL.DesktopGL.FullGLDeviceMemoryEntrypoint>(Reuse.Singleton);
-					container.Register<Magnesium.OpenGL.IGLGraphicsPipelineEntrypoint, Magnesium.OpenGL.DesktopGL.FullGLGraphicsPipelineEntrypoint>(Reuse.Singleton);
-
-					// GLSL 
-					container.Register<Magnesium.OpenGL.IGLGraphicsPipelineCompiler, Magnesium.OpenGL.GLSLGraphicsPipelineCompilier>(Reuse.Singleton);
+					SetupOpenGL(container);
+					//SetupVulkan(container);
 
 					//// AUDIO
 					container.Register<MonoGame.Audio.OpenAL.IOpenALSoundContext, MonoGame.Audio.OpenAL.DesktopGL.DesktopGLOpenALSoundContext>(Reuse.Singleton);
@@ -83,30 +52,18 @@ namespace HelloMagnesium
 					container.Register<MonoGame.Core.IThreadSleeper, MonoGame.Platform.DesktopGL.DesktopGLThreadSleeper>(Reuse.Singleton);
 					container.Register<MonoGame.Platform.DesktopGL.IWindowExitStrategy, MonoGame.Platform.DesktopGL.DesktopGLExitStrategy>(Reuse.Singleton);
 
-					container.Register<IGraphicsDeviceManager, MonoGame.Platform.DesktopGL.MgDesktopGLGraphicsDeviceManager>(Reuse.Singleton);
+					container.Register<MonoGame.Graphics.IGraphicsDeviceManager, MonoGame.Platform.DesktopGL.MgDesktopGLGraphicsDeviceManager>(Reuse.Singleton);
 					container.Register<MonoGame.Platform.DesktopGL.IOpenTKWindowResetter, MonoGame.Platform.DesktopGL.DesktopGLWindowResetter>(Reuse.Singleton);
 					container.Register<MonoGame.Platform.DesktopGL.IOpenTKGameWindow, MonoGame.Platform.DesktopGL.OpenTKGameWindow>(Reuse.Singleton);
 					container.RegisterMapping<Microsoft.Xna.Framework.IGameWindow, MonoGame.Platform.DesktopGL.IOpenTKGameWindow>();
 					container.Register<Microsoft.Xna.Framework.Input.IMouseListener, MonoGame.Platform.DesktopGL.Input.DesktopGLMouseListener>(Reuse.Singleton);
 					container.Register<Microsoft.Xna.Framework.Input.IKeyboardInputListener, Microsoft.Xna.Framework.Input.KeyboardInputListener>(Reuse.Singleton);
 
-					// IMgGraphicsDevice
-					container.Register<Magnesium.IMgGraphicsDevice, Magnesium.OpenGL.DesktopGL.OpenTKGraphicsDevice>(Reuse.Singleton);
-					container.Register<Magnesium.OpenGL.IGLFramebufferHelperSelector, Magnesium.OpenGL.DesktopGL.FullGLFramebufferHelperSelector>(Reuse.Singleton);
-					container.Register<Magnesium.OpenGL.IGLFramebufferSupport, Magnesium.OpenGL.DesktopGL.FullGLFramebufferSupport>(Reuse.Singleton);
-					container.Register<Magnesium.OpenGL.IGLExtensionLookup, Magnesium.OpenGL.DesktopGL.FullGLExtensionLookup>(Reuse.Singleton);
-					container.Register<Magnesium.OpenGL.DesktopGL.IGLDevicePlatform, Magnesium.OpenGL.DesktopGL.FullGLDevicePlatform>(Reuse.Singleton);
-					container.Register<Magnesium.OpenGL.DesktopGL.IMgGraphicsDeviceLogger, MockGraphicsDeviceLogger>(Reuse.Singleton);
-
-					// IMgSwapchainCollection
-					container.Register<Magnesium.IMgSwapchainCollection, Magnesium.OpenGL.DesktopGL.OpenTKSwapchainCollection>(Reuse.Singleton);
-					container.Register<Magnesium.OpenGL.DesktopGL.IOpenTKSwapchainKHR, Magnesium.OpenGL.DesktopGL.GLSwapchainKHR>(Reuse.Singleton);
-
 					// MonoGame
 					container.Register<Microsoft.Xna.Framework.Graphics.IPresentationParameters, MonoGame.Core.Graphics.DefaultPresentationParameters>(Reuse.Singleton);
 					container.Register<Microsoft.Xna.Framework.IBackBufferPreferences, MonoGame.Platform.DesktopGL.DesktopGLBackBufferPreferences>();
 					container.Register<Microsoft.Xna.Framework.Graphics.IGraphicsAdapterCollection, MonoGame.Platform.DesktopGL.Graphics.DesktopGLGraphicsAdapterCollection>(Reuse.Singleton);
-					container.Register<MonoGame.Core.IGraphicsProfiler, MonoGame.Core.DefaultGraphicsDeviceProfiler> (Reuse.Singleton);
+					container.Register<MonoGame.Core.IGraphicsProfiler, MonoGame.Core.DefaultGraphicsDeviceProfiler>(Reuse.Singleton);
 					container.Register<Microsoft.Xna.Framework.IDrawSuppressor, Microsoft.Xna.Framework.DrawSupressor>(Reuse.Singleton);
 					container.Register<MonoGame.Core.IClientWindowBounds, MonoGame.Core.DefaultClientWindowBounds>(Reuse.Singleton);
 					container.Register<Microsoft.Xna.Framework.IGraphicsDeviceQuery, MonoGame.Core.DefaultGraphicsDeviceQuery>(Reuse.Singleton);
@@ -120,121 +77,40 @@ namespace HelloMagnesium
 					container.Register<MonoGame.Core.ITextureSortingKeyGenerator, MonoGame.Core.DefaultTextureSortingKeyGenerator>(Reuse.Singleton);
 
 
-
-
-					//// DESKTOPGL SPECIFIC
-
-
-
-
-
-
-					//container.Register<IGraphicsDeviceService, NullGraphicsDeviceService>(Reuse.Singleton);
-
-
-
-					//container.Register<IGraphicsCapabilities, GraphicsCapabilities>(Reuse.Singleton);
-					////container.Register<IGLExtensionLookup, FullGLExtensionLookup>(Reuse.Singleton);
-					////container.Register<IGraphicsDevicePlatform, MagnesiumGraphicsDevicePlatform> (Reuse.Singleton);
-
-					////container.Register<IGraphicsCapabilitiesLookup, FullGLSpecificGraphicsCapabilitiesLookup>(Reuse.Singleton);
-
-
-					//container.Register<IGraphicsDevicePreferences, MockGraphicsDevicePreferences>(Reuse.Singleton);
-
-					////container.Register<IGraphicsDeviceLogger, MockGraphicsDeviceLogger>(Reuse.Singleton);
-
-
-
-
-					//// TOUCH 
-					//container.Register<ITouchListener, MockTouchListener>(Reuse.Singleton);
-
-					//// WINDOW EXIT
-
-
-
-					//container.Register<IOpenTKDeviceQuery, OpenTKDeviceQuery>(Reuse.Singleton);
-
-
-
-					//container.Register<IWindowOrientationListener, DefaultWindowOrientationListener> (Reuse.Singleton);
-
-
-
-
-					//// MOCK 
-
-
-
-					////container.Register<ISamplerStateCollectionPlatform, MockSamplerStateCollectionPlatform>(Reuse.Singleton);
-					////container.Register<ITextureCollectionPlatform, NullTextureCollectionPlatform>(Reuse.Singleton);
-
-
-
-
-
-
-					//// MAGNESIUM
-
-
-					////container.Register<IMgPresentationSurface, Win32PresentationSurface>(Reuse.Singleton);
-
-
-
-
-
-
-
-
-
-
-					//container.Register<IMgDeviceQuery, MgDeviceQuery>(Reuse.Singleton);
-
-
-
-
-
-
-
-
-
-
-
-
-					using (var scope = container.OpenScope ())
-					{					
-						using (var window = new NativeWindow())						
-						using (var driver = container.Resolve<IMgDriver>())								
-						{							
+					using (var scope = container.OpenScope())
+					{
+						using (var window = new NativeWindow())
+						using (var driver = container.Resolve<IMgDriver>())
+						{
 							container.RegisterInstance<INativeWindow>(window);
-							driver.Initialize(new MgApplicationInfo{
+							driver.Initialize(new MgApplicationInfo
+							{
 								ApplicationName = "HelloMagnesium",
 								ApplicationVersion = 1,
 								EngineName = "MonoGame",
 								EngineVersion = 1,
-								ApiVersion = 1,
+								ApiVersion = MgApplicationInfo.GenerateApiVersion(1, 20, 0),
 							});
 
 							using (var device = driver.CreateLogicalDevice())
 							using (var partition = device.Queues[0].CreatePartition())
 							{
-								container.RegisterInstance<IMgThreadPartition>(partition);							
-								using (var audioContext = container.Resolve<IOpenALSoundContext>())														
+								container.RegisterInstance<IMgThreadPartition>(partition);
+								using (var audioContext = container.Resolve<IOpenALSoundContext>())
 								using (var manager = container.Resolve<IGraphicsDeviceManager>())
 								{
 									audioContext.Initialize();
 
-//									var capabilities = container.Resolve<IGraphicsCapabilities>();
-//									capabilities.Initialize();
+									//									var capabilities = container.Resolve<IGraphicsCapabilities>();
+									//									capabilities.Initialize();
 
-									using (var backbone = container.Resolve<IGameBackbone> ())
+									using (var backbone = container.Resolve<IGameBackbone>())
 									{
 										var exitStrategy = container.Resolve<IWindowExitStrategy>();
 										exitStrategy.Initialize();
 
-										backbone.Run ();
-									}								
+										backbone.Run();
+									}
 
 								}
 							}
@@ -242,11 +118,73 @@ namespace HelloMagnesium
 					}
 				}
 			}
-			catch(Exception ex)
+			catch (Exception ex)
 			{
-				Console.WriteLine (ex.Message);
-				Console.WriteLine (ex.StackTrace);
+				Console.WriteLine(ex.Message);
+				Console.WriteLine(ex.StackTrace);
 			}
+		}
+
+		static void SetupVulkan(Container container)
+		{
+			container.Register<Magnesium.IMgTextureGenerator, Magnesium.MgStagingBufferOptimizer>(Reuse.Singleton);
+
+			// IMgGraphicsDevice
+			container.Register<Magnesium.IMgGraphicsDevice, Magnesium.MgDefaultGraphicsDevice>(Reuse.Singleton);
+
+			// IMgSwapchainCollection
+			container.Register<Magnesium.IMgSwapchainCollection, Magnesium.MgSwapchainCollection>(Reuse.Singleton);
+		}
+
+		static void SetupOpenGL(Container container)
+		{
+			container.Register<Magnesium.IMgTextureGenerator, Magnesium.MgLinearImageOptimizer>(Reuse.Singleton);
+
+			// Magnesium.OpenGL
+			container.Register<Magnesium.IMgEntrypoint, Magnesium.OpenGL.GLEntrypoint>(Reuse.Singleton);
+
+			// IMgGraphicsDevice
+			container.Register<Magnesium.IMgGraphicsDevice, Magnesium.OpenGL.DesktopGL.OpenTKGraphicsDevice>(Reuse.Singleton);
+
+			// IMgSwapchainCollection
+			container.Register<Magnesium.IMgSwapchainCollection, Magnesium.OpenGL.DesktopGL.OpenTKSwapchainCollection>(Reuse.Singleton);
+
+			// Magnesium.OpenGL INTERNALS
+			container.Register<Magnesium.OpenGL.IGLGraphicsPipelineCompiler, Magnesium.OpenGL.GLSLGraphicsPipelineCompilier>(Reuse.Singleton);
+			container.Register<Magnesium.OpenGL.IGLQueue, Magnesium.OpenGL.GLQueue>(Reuse.Singleton);
+			container.Register<Magnesium.OpenGL.IGLQueueRenderer, Magnesium.OpenGL.GLQueueRenderer>(Reuse.Singleton);
+			container.Register<Magnesium.OpenGL.IGLDeviceEntrypoint, Magnesium.OpenGL.DefaultGLDeviceEntrypoint>(Reuse.Singleton);
+
+			container.Register<Magnesium.OpenGL.IGLCmdBlendEntrypoint, Magnesium.OpenGL.DesktopGL.FullGLCmdBlendEntrypoint>(Reuse.Singleton);
+			container.Register<Magnesium.OpenGL.IGLCmdStencilEntrypoint, Magnesium.OpenGL.DesktopGL.FullGLCmdStencilEntrypoint>(Reuse.Singleton);
+			container.Register<Magnesium.OpenGL.IGLCmdRasterizationEntrypoint, Magnesium.OpenGL.DesktopGL.FullGLCmdRasterizationEntrypoint>(Reuse.Singleton);
+			container.Register<Magnesium.OpenGL.IGLErrorHandler, Magnesium.OpenGL.DesktopGL.FullGLErrorHandler>(Reuse.Singleton);
+			container.Register<Magnesium.OpenGL.IGLCmdDepthEntrypoint, Magnesium.OpenGL.DesktopGL.FullGLCmdDepthEntrypoint>(Reuse.Singleton);
+			container.Register<Magnesium.OpenGL.IGLCmdShaderProgramCache, Magnesium.OpenGL.DesktopGL.FullGLCmdShaderProgramCache>(Reuse.Singleton);
+			container.Register<Magnesium.OpenGL.IGLCmdScissorsEntrypoint, Magnesium.OpenGL.DesktopGL.FullGLCmdScissorsEntrypoint>(Reuse.Singleton);
+			container.Register<Magnesium.OpenGL.IGLCmdDrawEntrypoint, Magnesium.OpenGL.DesktopGL.FullGLCmdDrawEntrypoint>(Reuse.Singleton);
+			container.Register<Magnesium.OpenGL.IGLCmdClearEntrypoint, Magnesium.OpenGL.DesktopGL.FullGLCmdClearEntrypoint>(Reuse.Singleton);
+			container.Register<Magnesium.OpenGL.IGLSemaphoreEntrypoint, Magnesium.OpenGL.DesktopGL.FullGLSemaphoreEntrypoint>(Reuse.Singleton);
+			container.Register<Magnesium.OpenGL.IGLCmdImageEntrypoint, Magnesium.OpenGL.DesktopGL.FullGLCmdImageEntrypoint>(Reuse.Singleton);
+			container.Register<Magnesium.OpenGL.IGLCmdVBOEntrypoint, Magnesium.OpenGL.DesktopGL.FullGLCmdVBOEntrypoint>(Reuse.Singleton);
+			container.Register<Magnesium.OpenGL.IGLSamplerEntrypoint, Magnesium.OpenGL.DesktopGL.FullGLSamplerEntrypoint>(Reuse.Singleton);
+			container.Register<Magnesium.OpenGL.IGLDeviceImageEntrypoint, Magnesium.OpenGL.DesktopGL.FullGLDeviceImageEntrypoint>(Reuse.Singleton);
+			container.Register<Magnesium.OpenGL.IGLDeviceImageViewEntrypoint, Magnesium.OpenGL.DesktopGL.FullGLDeviceImageViewEntrypoint>(Reuse.Singleton);
+			container.Register<Magnesium.OpenGL.IGLImageFormatEntrypoint, Magnesium.OpenGL.DesktopGL.DesktopGLImageFormatEntrypoint>(Reuse.Singleton);
+			container.Register<Magnesium.OpenGL.IGLImageDescriptorEntrypoint, Magnesium.OpenGL.DesktopGL.FullGLImageDescriptorEntrypoint>(Reuse.Singleton);
+			container.Register<Magnesium.OpenGL.IGLShaderModuleEntrypoint, Magnesium.OpenGL.DesktopGL.FullGLShaderModuleEntrypoint>(Reuse.Singleton);
+			container.Register<Magnesium.OpenGL.IGLDescriptorPoolEntrypoint, Magnesium.OpenGL.DesktopGL.FullGLDescriptorPoolEntrypoint>(Reuse.Singleton);
+			container.Register<Magnesium.OpenGL.IGLBufferEntrypoint, Magnesium.OpenGL.DesktopGL.FullGLBufferEntrypoint>(Reuse.Singleton);
+			container.Register<Magnesium.OpenGL.IGLDeviceMemoryEntrypoint, Magnesium.OpenGL.DesktopGL.FullGLDeviceMemoryEntrypoint>(Reuse.Singleton);
+			container.Register<Magnesium.OpenGL.IGLGraphicsPipelineEntrypoint, Magnesium.OpenGL.DesktopGL.FullGLGraphicsPipelineEntrypoint>(Reuse.Singleton);
+			container.Register<Magnesium.OpenGL.IGLFramebufferHelperSelector, Magnesium.OpenGL.DesktopGL.FullGLFramebufferHelperSelector>(Reuse.Singleton);
+			container.Register<Magnesium.OpenGL.IGLFramebufferSupport, Magnesium.OpenGL.DesktopGL.FullGLFramebufferSupport>(Reuse.Singleton);
+			container.Register<Magnesium.OpenGL.IGLExtensionLookup, Magnesium.OpenGL.DesktopGL.FullGLExtensionLookup>(Reuse.Singleton);
+
+			// Magnesium.OpenGL.DesktopGL INTERNALS
+			container.Register<Magnesium.OpenGL.DesktopGL.IOpenTKSwapchainKHR, Magnesium.OpenGL.DesktopGL.GLSwapchainKHR>(Reuse.Singleton);
+			container.Register<Magnesium.OpenGL.DesktopGL.IGLDevicePlatform, Magnesium.OpenGL.DesktopGL.FullGLDevicePlatform>(Reuse.Singleton);
+			container.Register<Magnesium.OpenGL.DesktopGL.IMgGraphicsDeviceLogger, MockGraphicsDeviceLogger>(Reuse.Singleton);
 		}
 	}
 }

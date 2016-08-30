@@ -36,7 +36,6 @@
     <Compile Include="AssetInfo.cs" />
     <Compile Include="AssetType.cs" />
     <Compile Include="BlockIdentifier.cs" />
-    <Compile Include="IExtensionChecker.cs" />
     <Compile Include="IBlockLocator.cs" />
     <Compile Include="ContentStreamer.cs" />
     <Compile Include="IContentStreamer.cs" />
