@@ -2,16 +2,18 @@
 {
 	public interface IGLShaderModuleEntrypoint
 	{
-		bool CheckUniformLocation (int programId, int location);
-
 		/// int CompileProgram (MgGraphicsPipelineCreateInfo info);
 
-		int GetActiveUniforms (int programId);
-
 		int CreateShaderModule(MgShaderStageFlagBits stage);
+
+		bool HasCompilerMessages(int module);
+
 		void CompileShaderModule(int module, string sourceCode);
 
+		bool IsCompiled(int module);
+
 		void DeleteShaderModule (int module);
-}
+		string GetCompilerMessages(int module);
+	}
 }
 

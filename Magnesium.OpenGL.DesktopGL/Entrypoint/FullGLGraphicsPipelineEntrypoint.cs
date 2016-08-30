@@ -5,11 +5,10 @@ namespace Magnesium.OpenGL.DesktopGL
 {
 	public class FullGLGraphicsPipelineEntrypoint : IGLGraphicsPipelineEntrypoint
 	{
-		public bool AreShadersLinkedCorrectly(int programID)
+		private IGLErrorHandler mErrHandler;
+		public FullGLGraphicsPipelineEntrypoint(IGLErrorHandler errHandler)
 		{
-			int linkStatus = 0;
-			GL.GetProgram(programID, GetProgramParameterName.LinkStatus, out linkStatus);
-			return (linkStatus == (int)All.True);
+			mErrHandler = errHandler;
 		}
 
 		public void AttachShaderToProgram(int programID, int shader)
@@ -37,6 +36,34 @@ namespace Magnesium.OpenGL.DesktopGL
 			int glinfoLogLength = 0;
 			GL.GetProgram(programID, GetProgramParameterName.InfoLogLength, out glinfoLogLength);
 			return (glinfoLogLength > 1);
+		}
+
+		public bool CheckUniformLocation(int programId, int location)
+		{
+			int locationQuery;
+			GL.Ext.GetUniform(programId, location, out locationQuery);
+			mErrHandler.LogGLError("FullGLShaderModuleEntrypoint.CheckUniformLocation");
+			return (locationQuery != -1);
+		}
+
+		public int GetActiveUniforms(int programId)
+		{
+			int noOfActiveUniforms;
+			GL.GetProgram(programId, GetProgramParameterName.ActiveUniforms, out noOfActiveUniforms);
+			mErrHandler.LogGLError("FullGLShaderModuleEntrypoint.GetActiveUniforms");
+			return noOfActiveUniforms;
+		}
+
+		public string GetCompilerMessages(int programID)
+		{
+			return GL.GetProgramInfoLog(programID);
+		}
+
+		public bool IsCompiled(int programID)
+		{
+			int linkStatus = 0;
+			GL.GetProgram(programID, GetProgramParameterName.LinkStatus, out linkStatus);
+			return (linkStatus == (int)All.True);
 		}
 	}
 }

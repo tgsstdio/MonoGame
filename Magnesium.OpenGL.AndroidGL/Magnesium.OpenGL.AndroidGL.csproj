@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -64,12 +64,10 @@
       <Project>{9F9AC448-9D17-43E5-8889-285426290891}</Project>
       <Name>Magnesium</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Magnesium.OpenGL.Backend\Magnesium.OpenGL.csproj">
+    <ProjectReference Include="..\Magnesium.OpenGL\Magnesium.OpenGL.csproj">
       <Project>{84924A0F-0D4C-4B0C-B16A-4F26DD838AF2}</Project>
       <Name>Magnesium.OpenGL</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Entrypoint\" />
-  </ItemGroup>
+  <ItemGroup />
 </Project>

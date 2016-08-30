@@ -272,7 +272,7 @@ namespace Magnesium.OpenGL.DesktopGL
 			}
 			mEntrypoint.CompileProgram(retVal);
 
-			bool isLinked = mEntrypoint.AreShadersLinkedCorrectly(retVal);
+			bool isLinked = mEntrypoint.IsCompiled(retVal);
 			//int linkStatus = 0;
 			//GL.GetProgram(retVal,GetProgramParameterName.LinkStatus, out linkStatus);
 			// return (linkStatus == (int)All.True)

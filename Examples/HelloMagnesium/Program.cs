@@ -7,6 +7,7 @@ using MonoGame.Audio.OpenAL.DesktopGL;
 using OpenTK;
 using MonoGame.Platform.DesktopGL;
 using Magnesium;
+using Microsoft.Xna.Framework.Content;
 
 namespace HelloMagnesium
 {
@@ -60,15 +61,28 @@ namespace HelloMagnesium
 					container.Register<Magnesium.OpenGL.IGLDeviceMemoryEntrypoint, Magnesium.OpenGL.DesktopGL.FullGLDeviceMemoryEntrypoint>(Reuse.Singleton);
 					container.Register<Magnesium.OpenGL.IGLGraphicsPipelineEntrypoint, Magnesium.OpenGL.DesktopGL.FullGLGraphicsPipelineEntrypoint>(Reuse.Singleton);
 
+					// GLSL 
+					container.Register<Magnesium.OpenGL.IGLGraphicsPipelineCompiler, Magnesium.OpenGL.GLSLGraphicsPipelineCompilier>(Reuse.Singleton);
+
 					//// AUDIO
-					container.Register<IOpenALSoundContext, DesktopGLOpenALSoundContext>(Reuse.Singleton);
-					//container.Register<IOpenALSoundController, DesktopGLOALSoundController>(Reuse.Singleton);
-					//container.Register<IOALSourceArray, DesktopGLOALSourcesArray>(Reuse.Singleton);
-					//container.Register<ISoundEffectInstancePoolPlatform, DesktopGLSoundEffectInstancePoolPlatform>(Reuse.Singleton);
-					//container.Register<ISoundEffectInstancePool, DesktopGLOALSoundEffectInstancePool>(Reuse.Singleton);
+					container.Register<MonoGame.Audio.OpenAL.IOpenALSoundContext, MonoGame.Audio.OpenAL.DesktopGL.DesktopGLOpenALSoundContext>(Reuse.Singleton);
+					container.Register<MonoGame.Audio.OpenAL.IOpenALSoundController, MonoGame.Audio.OpenAL.DesktopGL.DesktopGLOALSoundController>(Reuse.Singleton);
+					container.Register<MonoGame.Audio.OpenAL.IOALSourceArray, MonoGame.Audio.OpenAL.DesktopGL.DesktopGLOALSourcesArray>(Reuse.Singleton);
+					container.Register<Microsoft.Xna.Framework.Audio.ISoundEffectInstancePoolPlatform, MonoGame.Audio.OpenAL.DesktopGL.DesktopGLSoundEffectInstancePoolPlatform>(Reuse.Singleton);
+					container.Register<Microsoft.Xna.Framework.Audio.ISoundEffectInstancePool, MonoGame.Audio.OpenAL.DesktopGL.DesktopGLOALSoundEffectInstancePool>(Reuse.Singleton);
 					//container.Register<ISoundEnvironment, SoundEnvironment>(Reuse.Singleton);
 
+					// RUNTIME
+					container.Register<Microsoft.Xna.Framework.IGameBackbone, Microsoft.Xna.Framework.GameBackbone>(Reuse.Singleton);
+					container.Register<Microsoft.Xna.Framework.Content.IContentManager, Microsoft.Xna.Framework.Content.NullContentManager>(Reuse.Singleton);
+					container.Register<Microsoft.Xna.Framework.Content.IContentTypeReaderManager, Microsoft.Xna.Framework.Content.NullContentTypeReaderManager>(Reuse.Singleton);
+
 					// MonoGame.Platform.DesktopGL
+					container.Register<Microsoft.Xna.Framework.IGamePlatform, MonoGame.Platform.DesktopGL.OpenTKGamePlatform>(Reuse.Singleton);
+					container.Register<Microsoft.Xna.Framework.IPlatformActivator, Microsoft.Xna.Framework.PlatformActivator>(Reuse.Singleton);
+					container.Register<MonoGame.Core.IThreadSleeper, MonoGame.Platform.DesktopGL.DesktopGLThreadSleeper>(Reuse.Singleton);
+					container.Register<MonoGame.Platform.DesktopGL.IWindowExitStrategy, MonoGame.Platform.DesktopGL.DesktopGLExitStrategy>(Reuse.Singleton);
+
 					container.Register<IGraphicsDeviceManager, MonoGame.Platform.DesktopGL.MgDesktopGLGraphicsDeviceManager>(Reuse.Singleton);
 					container.Register<MonoGame.Platform.DesktopGL.IOpenTKWindowResetter, MonoGame.Platform.DesktopGL.DesktopGLWindowResetter>(Reuse.Singleton);
 					container.Register<MonoGame.Platform.DesktopGL.IOpenTKGameWindow, MonoGame.Platform.DesktopGL.OpenTKGameWindow>(Reuse.Singleton);
@@ -97,9 +111,6 @@ namespace HelloMagnesium
 					container.Register<MonoGame.Core.IClientWindowBounds, MonoGame.Core.DefaultClientWindowBounds>(Reuse.Singleton);
 					container.Register<Microsoft.Xna.Framework.IGraphicsDeviceQuery, MonoGame.Core.DefaultGraphicsDeviceQuery>(Reuse.Singleton);
 
-					// RUNTIME
-					container.Register<Microsoft.Xna.Framework.IGameBackbone, Microsoft.Xna.Framework.GameBackbone> (Reuse.Singleton);
-
 					// MAGNESIUM TEXTURES 
 					container.Register<MonoGame.Graphics.IMgBaseTextureLoader, MonoGame.Textures.FreeImageNET.FITexture2DLoader>(Reuse.Singleton);
 					container.Register<MonoGame.Content.IContentStreamer, MonoGame.Content.ContentStreamer>(Reuse.Singleton);
@@ -114,12 +125,12 @@ namespace HelloMagnesium
 					//// DESKTOPGL SPECIFIC
 
 
-					//container.Register<IGamePlatform, OpenTKGamePlatform>(Reuse.Singleton);
+
 
 
 
 					//container.Register<IGraphicsDeviceService, NullGraphicsDeviceService>(Reuse.Singleton);
-					//container.Register<IPlatformActivator, PlatformActivator>(Reuse.Singleton);
+
 
 
 					//container.Register<IGraphicsCapabilities, GraphicsCapabilities>(Reuse.Singleton);
@@ -141,7 +152,7 @@ namespace HelloMagnesium
 
 					//// WINDOW EXIT
 
-					//container.Register<IWindowExitStrategy, DesktopGLExitStrategy>(Reuse.Singleton);
+
 
 					//container.Register<IOpenTKDeviceQuery, OpenTKDeviceQuery>(Reuse.Singleton);
 
@@ -154,15 +165,15 @@ namespace HelloMagnesium
 
 					//// MOCK 
 
-					//container.Register<IContentManager, NullContentManager> (Reuse.Singleton);
-					//container.Register<IContentTypeReaderManager, NullContentTypeReaderManager> (Reuse.Singleton);
+
+
 					////container.Register<ISamplerStateCollectionPlatform, MockSamplerStateCollectionPlatform>(Reuse.Singleton);
 					////container.Register<ITextureCollectionPlatform, NullTextureCollectionPlatform>(Reuse.Singleton);
 
 
 
 
-					//container.Register<IThreadSleeper, DesktopGLThreadSleeper>(Reuse.Singleton);
+
 
 					//// MAGNESIUM
 

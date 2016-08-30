@@ -13,6 +13,7 @@
 		IGLDeviceMemoryEntrypoint DeviceMemory { get; }
 		IGLSemaphoreEntrypoint Semaphore {get; }
 		IGLGraphicsPipelineEntrypoint GraphicsPipeline { get; }
+		IGLGraphicsPipelineCompiler GraphicsCompiler { get; }
 		IGLImageFormatEntrypoint ImageFormat { get; }
 	}
 }

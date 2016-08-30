@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 
 namespace Magnesium.OpenGL
 {
@@ -11,13 +12,14 @@ namespace Magnesium.OpenGL
 		public GLSampler (int samplerId, MgSamplerCreateInfo pCreateInfo, IGLSamplerEntrypoint entrypoint)
 		{
 			SamplerId = samplerId;
-			Populate (pCreateInfo);
 			mEntrypoint = entrypoint;
+			Populate (pCreateInfo);
 		}
 
 		private void Populate (MgSamplerCreateInfo pCreateInfo)
 		{
-
+			Debug.Assert(mEntrypoint != null);
+			Debug.Assert(pCreateInfo != null);
 			// ARB_SAMPLER_OBJECTS
 			mEntrypoint.SetTextureWrapS(SamplerId, pCreateInfo.AddressModeU);
 			//GL.SamplerParameter (SamplerId, SamplerParameterName.TextureWrapS, (int) GetAddressMode(pCreateInfo.AddressModeU));

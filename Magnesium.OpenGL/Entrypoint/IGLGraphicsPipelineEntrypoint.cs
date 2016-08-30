@@ -8,11 +8,17 @@ namespace Magnesium.OpenGL
 
 		int CreateProgram();
 
+		string GetCompilerMessages(int programID);
+
 		bool HasCompilerMessages(int programID);
 
 		void AttachShaderToProgram(int programID, int shader);
 
-		bool AreShadersLinkedCorrectly(int programID);
+		bool IsCompiled(int programID);
+
+		bool CheckUniformLocation (int programId, int location);
+
+		int GetActiveUniforms (int programId);
 	}
 }
 

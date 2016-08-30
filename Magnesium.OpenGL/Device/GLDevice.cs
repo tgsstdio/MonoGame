@@ -529,10 +529,10 @@ namespace Magnesium.OpenGL
 					throw new ArgumentNullException ("pCreateInfos[].RasterizationState");
 				}
 
-				var programId = mEntrypoint.ShaderModule.CompileProgram (info);
+				var programId = mEntrypoint.GraphicsCompiler.Compile (info);
 
 				/// MAKE SURE ACTIVE UNIFORMS ARE AVAILABLE
-				int noOfActiveUniforms = mEntrypoint.ShaderModule.GetActiveUniforms(programId);
+				int noOfActiveUniforms = mEntrypoint.GraphicsPipeline.GetActiveUniforms(programId);
 
 				var uniqueLocations = new SortedDictionary<int, GLVariableBind> ();
 				foreach (var binding in layout.Bindings)
@@ -541,7 +541,7 @@ namespace Magnesium.OpenGL
 
 					if (noOfActiveUniforms > 0)
 					{
-						uniformFound = mEntrypoint.ShaderModule.CheckUniformLocation (programId, binding.Location);
+						uniformFound = mEntrypoint.GraphicsPipeline.CheckUniformLocation (programId, binding.Location);
 					}
 
 					// ONLY ACTIVE UNIFORMS

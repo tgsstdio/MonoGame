@@ -8,10 +8,19 @@ namespace Magnesium.OpenGL
 {
 	public class GLSLGraphicsPipelineCompilier : IGLGraphicsPipelineCompiler
 	{
-		private IGLShaderModuleEntrypoint mEntrypoint;
-		public GLSLGraphicsPipelineCompilier(IGLShaderModuleEntrypoint entrypoint)
+		private IGLShaderModuleEntrypoint mShaderModuleEntrypoint;
+		private IGLGraphicsPipelineEntrypoint mProgramEntrypoint;
+		private IGLErrorHandler mErrHandler;
+
+		public GLSLGraphicsPipelineCompilier(
+			IGLShaderModuleEntrypoint shaderModule,
+			IGLGraphicsPipelineEntrypoint program,
+			IGLErrorHandler errHandler
+		)
 		{
-			mEntrypoint = entrypoint;
+			mShaderModuleEntrypoint = shaderModule;
+			mProgramEntrypoint = program;
+			mErrHandler = errHandler;
 		}
 
 		public int Compile(MgGraphicsPipelineCreateInfo info)
@@ -52,18 +61,67 @@ namespace Magnesium.OpenGL
 						using (var sr = new StreamReader(ms))
 						{
 							string fileContents = sr.ReadToEnd();
-							module.ShaderId = CompileShader(stage.Stage, fileContents, string.Empty);
+							module.ShaderId = CompileShader(mShaderModuleEntrypoint, stage.Stage, fileContents, string.Empty);
 							modules.Add(module.ShaderId.Value);
 						}
 					}
 				}
 			}
-			return GLSLTextShader.LinkShaders(modules.ToArray());
+			return LinkShaders(mProgramEntrypoint, mErrHandler, modules.ToArray());
 		}
 
-		internal int CompileShader(MgShaderStageFlagBits stage, string fileContents, string shaderPrefix)
+		internal static int LinkShaders(IGLGraphicsPipelineEntrypoint entrypoint, IGLErrorHandler errHandler, int[] shaders)
 		{
-			int retVal = mEntrypoint.CreateShaderModule(stage);
+			int retVal = entrypoint.CreateProgram();
+			foreach (var shader in shaders)
+			{
+				entrypoint.AttachShaderToProgram(retVal, shader);
+				//GL.AttachShader (retVal, shader);
+			}
+			entrypoint.CompileProgram(retVal);
+
+			bool isCompiled = entrypoint.IsCompiled(retVal);
+			//int linkStatus = 0;
+			//GL.GetProgram(retVal,GetProgramParameterName.LinkStatus, out linkStatus);
+			// return (linkStatus == (int)All.True)
+
+			//int glinfoLogLength = 0;
+			//GL.GetProgram(retVal, GetProgramParameterName.InfoLogLength, out glinfoLogLength);
+			// return (glinfoLogLength > 1)
+
+			bool hasMessages = entrypoint.HasCompilerMessages(retVal);
+
+			if (hasMessages)
+			{
+				string buffer = entrypoint.GetCompilerMessages(retVal);
+
+					// GL.GetProgramInfoLog(retVal);
+				if (!isCompiled)
+				{
+					errHandler.Trace("Shader Linking failed with the following errors:");
+				}
+				else {
+					errHandler.Trace("Shader Linking succeeded, with following warnings/messages:\n");
+				}
+
+				errHandler.Trace(buffer);
+			}
+
+			if (!isCompiled)
+			{
+				//		        #ifndef POSIX
+				//		            assert(!"Shader failed linking, here's an assert to break you in the debugger.");
+				//		        #endif
+				entrypoint.DeleteProgram(retVal);
+				retVal = 0;
+			}
+
+			return retVal;
+		}
+
+		internal static int CompileShader(IGLShaderModuleEntrypoint entrypoint, MgShaderStageFlagBits stage, string fileContents, string shaderPrefix)
+		{
+			int retVal = entrypoint.CreateShaderModule(stage);
 			// GL.CreateShader(type);
 			//string includePath = ".";
 
@@ -80,20 +138,28 @@ namespace Magnesium.OpenGL
 			builder.AppendLine(shaderPrefix);
 			builder.Append(shaderContents);
 
-			mEntrypoint.CompileShaderModule(retVal, builder.ToString());
+			entrypoint.CompileShaderModule(retVal, builder.ToString());
 
 			//GL.ShaderSource(retVal, builder.ToString());
 			//GL.CompileShader(retVal);
 
-			int compileStatus = 0;
-			GL.GetShader(retVal, ShaderParameter.CompileStatus, out compileStatus);
+			bool isCompiled = entrypoint.IsCompiled(retVal);
 
-			int glinfoLogLength = 0;
-			GL.GetShader(retVal, ShaderParameter.InfoLogLength, out glinfoLogLength);
-			if (glinfoLogLength > 1)
+			//int compileStatus = 0;
+			//GL.GetShader(retVal, ShaderParameter.CompileStatus, out compileStatus);
+			//// if (compileStatus != (int)All.True)
+
+			//int glinfoLogLength = 0;
+			//GL.GetShader(retVal, ShaderParameter.InfoLogLength, out glinfoLogLength);
+			//if (glinfoLogLength > 1)
+
+			bool hasMessages = entrypoint.HasCompilerMessages(retVal);
+
+			if (hasMessages)
 			{
-				string buffer = GL.GetShaderInfoLog(retVal);
-				if (compileStatus != (int)All.True)
+				string buffer = entrypoint.GetCompilerMessages(retVal);
+					//	GL.GetShaderInfoLog(retVal);
+				if (!isCompiled)
 				{
 					throw new Exception("Shader Compilation failed for shader with the following errors: " + buffer);
 				}
@@ -104,9 +170,9 @@ namespace Magnesium.OpenGL
 				//				Console.WriteLine(buffer);
 			}
 
-			if (compileStatus != (int)All.True)
+			if (!isCompiled)
 			{
-				GL.DeleteShader(retVal);
+				entrypoint.DeleteShaderModule(retVal);
 				retVal = 0;
 			}
 
@@ -140,6 +206,130 @@ namespace Magnesium.OpenGL
 			}
 
 			return new Tuple<string, string>("", srcString);
+		}
+
+		private static bool MatchVersionLine(string srcString, int startPos, int endPos)
+		{
+			int checkPos = startPos;
+			//Assert(_endPos <= _srcString.Length);
+
+			// GCC doesn't support regexps yet, so we're doing a hand-coded look for 
+			// ^\s*#\s*version\s+\d+\s*$
+			// Annoying!
+
+			// ^ was handled by the caller.
+
+			// \s*
+			while (checkPos < endPos && (srcString[checkPos] == ' ' || srcString[checkPos] == '\t'))
+			{
+				++checkPos;
+			}
+
+			if (checkPos == endPos)
+			{
+				return false;
+			}
+
+			// #
+			if (srcString[checkPos] == '#')
+			{
+				++checkPos;
+			}
+			else {
+				return false;
+			}
+
+			if (checkPos == endPos)
+			{
+				return false;
+			}
+
+			// \s*
+			while (checkPos < endPos && (srcString[checkPos] == ' ' || srcString[checkPos] == '\t'))
+			{
+				++checkPos;
+			}
+
+			if (checkPos == endPos)
+			{
+				return false;
+			}
+
+			// version
+			const string kSearchString = "version";
+			int kSearchStringLen = kSearchString.Length;
+
+			if (checkPos + kSearchStringLen >= endPos)
+			{
+				return false;
+			}
+
+			if (string.Compare(kSearchString, 0, srcString, checkPos, kSearchStringLen, StringComparison.Ordinal) == 0)
+			{
+				checkPos += kSearchStringLen;
+			}
+			else {
+				return false;
+			}
+
+			// \s+ (as \s\s*)
+			if (srcString[checkPos] == ' ' || srcString[checkPos] == '\t')
+			{
+				++checkPos;
+			}
+			else {
+				return false;
+			}
+
+			while (checkPos < endPos && (srcString[checkPos] == ' ' || srcString[checkPos] == '\t'))
+			{
+				++checkPos;
+			}
+
+			if (checkPos == endPos)
+			{
+				return false;
+			}
+
+			// \d+ (as \d\d*)
+			if (srcString[checkPos] >= '0' && srcString[checkPos] <= '9')
+			{
+				++checkPos;
+			}
+			else {
+				return false;
+			}
+
+			// Check the version number
+			while (checkPos < endPos && (srcString[checkPos] >= '0' && srcString[checkPos] <= '9'))
+			{
+				++checkPos;
+			}
+
+			while (checkPos < endPos && (srcString[checkPos] == ' ' || srcString[checkPos] == '\t'))
+			{
+				++checkPos;
+			}
+
+			while (checkPos < endPos && (srcString[checkPos] == '\r' || srcString[checkPos] == '\n'))
+			{
+				++checkPos;
+			}
+
+			// NOTE that if the string terminates here we're successful (unlike above)
+			if (checkPos == endPos)
+			{
+				return true;
+			}
+
+			return false;
+		}
+
+		private static Tuple<string, string> DivideString(string srcString, int splitEndPos)
+		{
+			return new Tuple<string, string>(
+				srcString.Substring(0, splitEndPos),
+				srcString.Substring(splitEndPos));
 		}
 	}
 }

@@ -17,7 +17,8 @@ namespace Magnesium.OpenGL
 			IGLDeviceMemoryEntrypoint deviceMemory,
 			IGLSemaphoreEntrypoint semaphore,
 			IGLGraphicsPipelineEntrypoint graphicsPipeline,
-			IGLImageFormatEntrypoint imageFormat
+			IGLImageFormatEntrypoint imageFormat,
+			IGLGraphicsPipelineCompiler graphicsCompiler
 		)
 		{
 			VBO = vbo;
@@ -32,6 +33,7 @@ namespace Magnesium.OpenGL
 			Semaphore = semaphore;
 			GraphicsPipeline = graphicsPipeline;
 			ImageFormat = imageFormat;
+			GraphicsCompiler = graphicsCompiler;
 		}
 
 		#region IGLDeviceCapabilities implementation
@@ -93,6 +95,12 @@ namespace Magnesium.OpenGL
 		}
 
 		public IGLGraphicsPipelineEntrypoint GraphicsPipeline {
+			get;
+			private set;
+		}
+
+		public IGLGraphicsPipelineCompiler GraphicsCompiler
+		{
 			get;
 			private set;
 		}
