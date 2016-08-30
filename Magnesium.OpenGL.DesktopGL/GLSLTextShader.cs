@@ -8,6 +8,12 @@ namespace Magnesium.OpenGL.DesktopGL
 {
 	internal class GLSLTextShader
 	{
+		readonly IGLGraphicsPipelineEntrypoint mEntrypoint;
+		public GLSLTextShader(IGLGraphicsPipelineEntrypoint program)
+		{
+			mEntrypoint = program;
+		}
+
 		internal static int CompileShader(ShaderType type, string fileContents, string shaderPrefix)
 		{			
 			int retVal = GL.CreateShader(type);
@@ -184,7 +190,7 @@ namespace Magnesium.OpenGL.DesktopGL
 			return false;
 		}
 
-		public static int CreateFragmentProgram(Stream vsFile, Stream psFile, string shaderPrefix)
+		public int CreateFragmentProgram(Stream vsFile, Stream psFile, string shaderPrefix)
 		{
 			using (var vertex = new StreamReader(vsFile))
 			using (var frag = new StreamReader(psFile))
@@ -204,14 +210,14 @@ namespace Magnesium.OpenGL.DesktopGL
 
 				// Flag these now, they're either attached (linked in) and will be cleaned up with the link, or the
 				// link failed and we're about to lose track of them anyways.
-				GL.DeleteShader(fs);
-				GL.DeleteShader(vs);
+				//GL.DeleteShader(fs);
+				//GL.DeleteShader(vs);
 
 				return retProgram;
 			}
 		}
 
-		public static int CreateComputeShader(Stream fs, string shaderPrefix)
+		public int CreateComputeShader(Stream fs, string shaderPrefix)
 		{
 			using (var vertex = new StreamReader (fs))
 			{
@@ -219,7 +225,7 @@ namespace Magnesium.OpenGL.DesktopGL
 				int cs = CompileShader (ShaderType.ComputeShader, vertexShaderString, shaderPrefix);
 
 				int retProgram = LinkShaders(cs);
-				GL.DeleteShader(cs);
+				//GL.DeleteShader(cs);
 				return retProgram;
 			}
 		}
@@ -256,24 +262,30 @@ namespace Magnesium.OpenGL.DesktopGL
 
 		#endregion
 
-		internal static int LinkShaders(params int[] shaders)
+		internal int LinkShaders(params int[] shaders)
 		{
-			int retVal = GL.CreateProgram ();
+			int retVal = mEntrypoint.CreateProgram ();
 			foreach (var shader in shaders)
 			{
-				GL.AttachShader (retVal, shader);
+				mEntrypoint.AttachShaderToProgram(retVal, shader);
+				//GL.AttachShader (retVal, shader);
 			}
-			GL.LinkProgram(retVal);
+			mEntrypoint.CompileProgram(retVal);
 
-			int linkStatus = 0;
-			GL.GetProgram(retVal,GetProgramParameterName.LinkStatus, out linkStatus);
+			bool isLinked = mEntrypoint.AreShadersLinkedCorrectly(retVal);
+			//int linkStatus = 0;
+			//GL.GetProgram(retVal,GetProgramParameterName.LinkStatus, out linkStatus);
+			// return (linkStatus == (int)All.True)
 
-			int glinfoLogLength = 0;
-			GL.GetProgram(retVal, GetProgramParameterName.InfoLogLength, out glinfoLogLength);
+			//int glinfoLogLength = 0;
+			//GL.GetProgram(retVal, GetProgramParameterName.InfoLogLength, out glinfoLogLength);
+			// return (glinfoLogLength > 1)
 
-			if (glinfoLogLength > 1) {
+			bool hasMessages = mEntrypoint.HasCompilerMessages(retVal);
+
+			if (hasMessages) {
 				string buffer = GL.GetProgramInfoLog(retVal);
-				if (linkStatus != (int) All.True) {
+				if (!isLinked) {
 					Console.WriteLine("Shader Linking failed with the following errors:");
 				}
 				else {
@@ -283,11 +295,11 @@ namespace Magnesium.OpenGL.DesktopGL
 				Console.WriteLine(buffer);
 			}
 
-			if (linkStatus != (int) All.True) {
+			if (!isLinked) {
 				//		        #ifndef POSIX
 				//		            assert(!"Shader failed linking, here's an assert to break you in the debugger.");
 				//		        #endif
-				GL.DeleteProgram(retVal);
+				mEntrypoint.DeleteProgram(retVal);
 				retVal = 0;
 			}
 

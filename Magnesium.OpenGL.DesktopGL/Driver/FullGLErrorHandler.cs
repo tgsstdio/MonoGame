@@ -27,6 +27,11 @@ namespace Magnesium.OpenGL.DesktopGL
 			}
 		}
 
+		public void Trace(string message)
+		{
+
+		}
+
 		#endregion
 	}
 }

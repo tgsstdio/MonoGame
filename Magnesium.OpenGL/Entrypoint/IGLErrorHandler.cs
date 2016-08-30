@@ -4,6 +4,7 @@
 	{
 		void CheckGLError();
 		void LogGLError(string location);
+		void Trace(string message);
 	}
 }
 

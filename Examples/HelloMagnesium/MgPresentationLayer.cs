@@ -1,6 +1,7 @@
 ﻿using System;
 using Magnesium;
 using System.Diagnostics;
+using System.Collections.Generic;
 
 namespace HelloMagnesium
 {
@@ -27,20 +28,28 @@ namespace HelloMagnesium
 			return nextImage;
 		}
 
-		public void EndDraw (uint nextImage, IMgCommandBuffer prePresent, IMgSemaphore[] renderComplete)
+		public void EndDraw (uint[] nextImage, IMgCommandBuffer prePresent, IMgSemaphore[] renderComplete)
 		{
 			Result err;
-			var currentBuffer = mCollection.Buffers [nextImage];
-			submitPrePresentBarrier (prePresent, currentBuffer.Image);
+
+			var presentImages = new List<MgPresentInfoKHRImage>();
+			foreach (var image in nextImage)
+			{
+				var currentBuffer = mCollection.Buffers[image];
+				submitPrePresentBarrier(prePresent, currentBuffer.Image);
+
+				presentImages.Add(new MgPresentInfoKHRImage
+				{
+					ImageIndex = image,
+					Swapchain = mCollection.Swapchain,
+				});
+			}
+
 			var presentInfo = new MgPresentInfoKHR {
 				WaitSemaphores = renderComplete,
-				Images = new[] {
-					new MgPresentInfoKHRImage {
-						ImageIndex = nextImage,
-						Swapchain = mCollection.Swapchain,
-					}
-				},
+				Images = presentImages.ToArray(),
 			};
+
 			//err = swapChain.queuePresent(queue, currentBuffer, semaphores.renderComplete);
 			err = mPartition.Queue.QueuePresentKHR (presentInfo);
 			Debug.Assert (err == Result.SUCCESS);

@@ -350,7 +350,7 @@ namespace HelloMagnesium
 			// should use semaphores instead
 			mPartition.Queue.QueueWaitIdle ();
 
-			mPresentationLayer.EndDraw (frameIndex, Bank.PrePresentBarrierCmd, null);
+			mPresentationLayer.EndDraw (new uint[] { frameIndex }, Bank.PrePresentBarrierCmd, null);
 		}
 
 		void ExplicitSwapbuffers ()

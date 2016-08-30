@@ -23,10 +23,15 @@ namespace HelloMagnesium
 					// GAME
 					container.Register<Game, HelloMagnesiumGame> (Reuse.Singleton);
 
+					container.Register<HelloMagnesium.IMgPresentationLayer, HelloMagnesium.MgPresentationLayer>(Reuse.Singleton);
+
 					// Magnesium
 					container.Register<Magnesium.IMgDriver, Magnesium.MgDriver>(Reuse.Singleton);
+					container.Register<Magnesium.IMgImageTools, Magnesium.MgImageTools>(Reuse.Singleton);
 
 					container.Register<Magnesium.IMgEntrypoint, Magnesium.OpenGL.GLEntrypoint>(Reuse.Singleton);
+					container.Register<Magnesium.IMgTextureGenerator, Magnesium.MgLinearImageOptimizer>(Reuse.Singleton);
+
 					// Magnesium.OpenGL
 					container.Register<Magnesium.OpenGL.IGLQueue, Magnesium.OpenGL.GLQueue>(Reuse.Singleton);
 					container.Register<Magnesium.OpenGL.IGLQueueRenderer, Magnesium.OpenGL.GLQueueRenderer>(Reuse.Singleton);
@@ -94,6 +99,16 @@ namespace HelloMagnesium
 
 					// RUNTIME
 					container.Register<Microsoft.Xna.Framework.IGameBackbone, Microsoft.Xna.Framework.GameBackbone> (Reuse.Singleton);
+
+					// MAGNESIUM TEXTURES 
+					container.Register<MonoGame.Graphics.IMgBaseTextureLoader, MonoGame.Textures.FreeImageNET.FITexture2DLoader>(Reuse.Singleton);
+					container.Register<MonoGame.Content.IContentStreamer, MonoGame.Content.ContentStreamer>(Reuse.Singleton);
+					container.Register<MonoGame.Content.IBlockLocator, MonoGame.Content.MaskedBlockLocator>(Reuse.Singleton);
+					container.Register<MonoGame.Content.IFileSystem, MonoGame.Content.Dirs.DirectoryFileSystem>(Reuse.Singleton);
+					container.Register<Microsoft.Xna.Framework.ITitleContainer, MonoGame.Platform.DesktopGL.DesktopGLTitleContainer>(Reuse.Singleton);
+					container.Register<MonoGame.Core.ITextureSortingKeyGenerator, MonoGame.Core.DefaultTextureSortingKeyGenerator>(Reuse.Singleton);
+
+
 
 
 					//// DESKTOPGL SPECIFIC
@@ -164,20 +179,17 @@ namespace HelloMagnesium
 
 
 					//container.Register<IMgDeviceQuery, MgDeviceQuery>(Reuse.Singleton);
-					//container.Register<IMgImageTools, MgImageTools>(Reuse.Singleton);
 
 
-					//container.Register<IMgPresentationLayer, MgPresentationLayer>(Reuse.Singleton);
 
 
-					// MAGNESIUM TEXTURES 
-					container.Register<IMgBaseTextureLoader, FITexture2DLoader>(Reuse.Singleton);
-					//container.Register<ITextureSortingKeyGenerator, DefaultTextureSortingKeyGenerator>(Reuse.Singleton);
-					//container.Register<IMgTextureGenerator, MgLinearImageOptimizer>(Reuse.Singleton);
-					//container.Register<IContentStreamer, ContentStreamer>(Reuse.Singleton);
-					//container.Register<IBlockLocator, MaskedBlockLocator>(Reuse.Singleton);
-					//container.Register<IFileSystem, DirectoryFileSystem>(Reuse.Singleton);
-					//container.Register<ITitleContainer, DesktopGLTitleContainer>(Reuse.Singleton);
+
+
+
+
+
+
+
 
 					using (var scope = container.OpenScope ())
 					{					

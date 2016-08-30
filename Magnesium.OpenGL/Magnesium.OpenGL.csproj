@@ -151,6 +151,8 @@
     <Compile Include="Entrypoint\IGLExtensionLookup.cs" />
     <Compile Include="Entrypoint\IGLCmdClearEntrypoint.cs" />
     <Compile Include="Entrypoint\IGLCmdImageEntrypoint.cs" />
+    <Compile Include="Entrypoint\IGLGraphicsPipelineCompiler.cs" />
+    <Compile Include="Entrypoint\GLSLGraphicsPipelineCompilier.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>

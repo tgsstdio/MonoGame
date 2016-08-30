@@ -10,7 +10,7 @@ namespace Magnesium.OpenGL
 			mEntrypoint = entrypoint;
 		}
 
-		public int? ShaderId { get; private set; }
+		public int? ShaderId { get; set; }
 		public MgShaderModuleCreateInfo Info { get; private set; }
 
 		#region IMgShaderModule implementation
