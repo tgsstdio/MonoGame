@@ -13,6 +13,10 @@ namespace HelloMagnesium
 {
 	class MainClass
 	{
+		/// <summary>
+		/// REQUIRES FREEIMAGE BINARY TO RUN
+		/// </summary>
+		/// <param name="args">The command-line arguments.</param>
 		public static void Main (string[] args)
 		{
 			//Console.ReadKey ();
@@ -30,8 +34,8 @@ namespace HelloMagnesium
 					container.Register<Magnesium.IMgDriver, Magnesium.MgDriver>(Reuse.Singleton);
 					container.Register<Magnesium.IMgImageTools, Magnesium.MgImageTools>(Reuse.Singleton);
 
-					SetupOpenGL(container);
-					//SetupVulkan(container);
+					//SetupOpenGL(container);
+					SetupVulkan(container);
 
 					//// AUDIO
 					container.Register<MonoGame.Audio.OpenAL.IOpenALSoundContext, MonoGame.Audio.OpenAL.DesktopGL.DesktopGLOpenALSoundContext>(Reuse.Singleton);
@@ -128,6 +132,9 @@ namespace HelloMagnesium
 		static void SetupVulkan(Container container)
 		{
 			container.Register<Magnesium.IMgTextureGenerator, Magnesium.MgStagingBufferOptimizer>(Reuse.Singleton);
+
+			// Magnesium.VUlkan
+			container.Register<Magnesium.IMgEntrypoint, Magnesium.Vulkan.VkEntrypoint>(Reuse.Singleton);
 
 			// IMgGraphicsDevice
 			container.Register<Magnesium.IMgGraphicsDevice, Magnesium.MgDefaultGraphicsDevice>(Reuse.Singleton);

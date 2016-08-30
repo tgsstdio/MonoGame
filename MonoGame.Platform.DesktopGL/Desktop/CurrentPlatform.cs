@@ -5,7 +5,7 @@
 using System.Runtime.InteropServices;
 using System;
 
-namespace MonoGame.Utilities
+namespace MonoGame.Platform.DesktopGL
 {
     public enum OS
     {

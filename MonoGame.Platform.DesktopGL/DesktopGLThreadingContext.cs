@@ -47,8 +47,6 @@ using OpenTK.Graphics.OpenGL;
 
 namespace MonoGame.Platform.DesktopGL
 {
-	using GraphicsExtensions = MonoGame.Platform.DesktopGL.Graphics.GraphicsExtensions;
-
 	public class DesktopGLThreadingContext : IThreadingContext
 	{
 		public const int MAX_WAIT_FOR_UI_THREAD = 750; // In milliseconds
@@ -99,7 +97,7 @@ namespace MonoGame.Platform.DesktopGL
 				action();
 				// Must flush the GL calls so the texture is ready for the main context to use
 				GL.Flush();
-				GraphicsExtensions.CheckGLError();
+				//GraphicsExtensions.CheckGLError();
 				// Must make the context not current on this thread or the next thread will get error 170 from the MakeCurrent call
 				BackgroundContext.MakeCurrent(null);
 			}

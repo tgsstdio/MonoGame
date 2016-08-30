@@ -52,7 +52,6 @@ using System.Reflection;
 using Microsoft.Xna.Framework.Input;
 using OpenTK;
 using OpenTK.Graphics;
-using MonoGame.Utilities;
 using Microsoft.Xna.Framework;
 
 #endregion Using Statements
@@ -352,7 +351,7 @@ namespace MonoGame.Platform.DesktopGL
                 var assembly = Assembly.GetEntryAssembly();
                 if (assembly != null)
                     window.Icon = Icon.ExtractAssociatedIcon(assembly.Location);
-                Title = MonoGame.Utilities.AssemblyHelper.GetDefaultWindowTitle();
+                Title = AssemblyHelper.GetDefaultWindowTitle();
             }
 
             updateClientBounds = false;

@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>MonoGame.Core</RootNamespace>
     <AssemblyName>MonoGame.Core</AssemblyName>
-    <TargetFrameworkProfile>Profile259</TargetFrameworkProfile>
+    <TargetFrameworkProfile>Profile111</TargetFrameworkProfile>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -227,6 +227,10 @@
     <Compile Include="Audio\ISoundEffectInstancePoolPlatform.cs" />
     <Compile Include="Graphics\DefaultPresentationParameters.cs" />
     <Compile Include="Audio\BaseSoundEffectInstancePool.cs" />
+    <Compile Include="TextInputEventArgs.cs" />
+    <Compile Include="Audio\BaseSoundEffectInstance.cs" />
+    <Compile Include="Audio\InstancePlayLimitException.cs" />
+    <Compile Include="IThreadingContext.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>

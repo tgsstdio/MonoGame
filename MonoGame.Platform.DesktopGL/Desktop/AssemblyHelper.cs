@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 
-namespace MonoGame.Utilities
+namespace MonoGame.Platform.DesktopGL
 {
     public static class AssemblyHelper
     {
