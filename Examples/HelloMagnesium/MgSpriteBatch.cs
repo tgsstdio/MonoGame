@@ -8,10 +8,10 @@ namespace HelloMagnesium
 {
 	public class MgSpriteBatch : IDisposable
 	{
-		readonly IContentStreamer mContent;
+		readonly IShaderContentStreamer mContent;
 		readonly IMgThreadPartition mPartition;
 
-		public MgSpriteBatch (IMgThreadPartition partition, IContentStreamer content)
+		public MgSpriteBatch (IMgThreadPartition partition, IShaderContentStreamer content)
 		{
 			mPartition = partition;
 			mContent = content;
@@ -34,14 +34,9 @@ namespace HelloMagnesium
 
 		public void GenerateEffectPipeline (IMgGraphicsDevice graphicsDevice)
 		{
-			{
-				var error = GL.GetError ();
-				Debug.WriteLineIf (error != ErrorCode.NoError, "GenerateEffectPipeline (PREVIOUS) : " + error);
-			}
-
 			// Create effect / pass / sub pass / pipeline tree
-			using (var vs = mContent.LoadContent (new AssetIdentifier {AssetId = 0x80000002}, new[] {".vs"}))
-			using (var fs = mContent.LoadContent (new AssetIdentifier {AssetId = 0x80000003}, new[] {".fs"}))
+			using (var vs = mContent.Load (new AssetIdentifier {AssetId = 0x80000002}))
+			using (var fs = mContent.Load (new AssetIdentifier {AssetId = 0x80000003}))
 			{
 				IMgShaderModule vertSM;
 				var vertCreateInfo = new MgShaderModuleCreateInfo {
@@ -194,17 +189,12 @@ namespace HelloMagnesium
 				vertSM.DestroyShaderModule (mPartition.Device, null);
 				fragSM.DestroyShaderModule (mPartition.Device, null);
 			}
-
-			{
-				var error = GL.GetError ();
-				Debug.WriteLineIf (error != ErrorCode.NoError, "GenerateEffectPipeline (END) : " + error);
-			}
 		}
 
 		#region IDisposable implementation
 		public void Dispose ()
 		{
-			throw new NotImplementedException ();
+			
 		}
 		#endregion
 	}

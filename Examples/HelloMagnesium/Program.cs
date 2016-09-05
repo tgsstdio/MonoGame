@@ -31,7 +31,7 @@ namespace HelloMagnesium
 					container.Register<HelloMagnesium.IMgPresentationLayer, HelloMagnesium.MgPresentationLayer>(Reuse.Singleton);
 
 					// Magnesium
-					container.Register<Magnesium.IMgDriver, Magnesium.MgDriver>(Reuse.Singleton);
+					container.Register<Magnesium.MgDriver>(Reuse.Singleton);
 					container.Register<Magnesium.IMgImageTools, Magnesium.MgImageTools>(Reuse.Singleton);
 
 					//SetupOpenGL(container);
@@ -84,7 +84,7 @@ namespace HelloMagnesium
 					using (var scope = container.OpenScope())
 					{
 						using (var window = new NativeWindow())
-						using (var driver = container.Resolve<IMgDriver>())
+						using (var driver = container.Resolve<MgDriver>())
 						{
 							container.RegisterInstance<INativeWindow>(window);
 							driver.Initialize(new MgApplicationInfo
@@ -93,31 +93,36 @@ namespace HelloMagnesium
 								ApplicationVersion = 1,
 								EngineName = "MonoGame",
 								EngineVersion = 1,
-								ApiVersion = MgApplicationInfo.GenerateApiVersion(1, 20, 0),
-							});
+								ApiVersion = MgApplicationInfo.GenerateApiVersion(1, 0, 17),
+							},
+                            MgEnableExtensionsOption.ALL);
 
-							using (var device = driver.CreateLogicalDevice())
-							using (var partition = device.Queues[0].CreatePartition())
-							{
-								container.RegisterInstance<IMgThreadPartition>(partition);
-								using (var audioContext = container.Resolve<IOpenALSoundContext>())
-								using (var manager = container.Resolve<IGraphicsDeviceManager>())
-								{
-									audioContext.Initialize();
+                            using (var presentationSurface = container.Resolve<IMgPresentationSurface>())
+                            {
+                                presentationSurface.Initialize();
+                                using (var device = driver.CreateLogicalDevice(presentationSurface.Surface, MgEnableExtensionsOption.ALL))
+                                using (var partition = device.Queues[0].CreatePartition())
+                                {
+                                    container.RegisterInstance<IMgThreadPartition>(partition);
+                                    using (var audioContext = container.Resolve<IOpenALSoundContext>())
+                                    using (var manager = container.Resolve<IGraphicsDeviceManager>())
+                                    {
+                                        audioContext.Initialize();
 
-									//									var capabilities = container.Resolve<IGraphicsCapabilities>();
-									//									capabilities.Initialize();
+                                        //									var capabilities = container.Resolve<IGraphicsCapabilities>();
+                                        //									capabilities.Initialize();
 
-									using (var backbone = container.Resolve<IGameBackbone>())
-									{
-										var exitStrategy = container.Resolve<IWindowExitStrategy>();
-										exitStrategy.Initialize();
+                                        using (var backbone = container.Resolve<IGameBackbone>())
+                                        {
+                                            var exitStrategy = container.Resolve<IWindowExitStrategy>();
+                                            exitStrategy.Initialize();
 
-										backbone.Run();
-									}
+                                            backbone.Run();
+                                        }
 
-								}
-							}
+                                    }
+                                }
+                            }
 						}
 					}
 				}
@@ -141,6 +146,8 @@ namespace HelloMagnesium
 
 			// IMgSwapchainCollection
 			container.Register<Magnesium.IMgSwapchainCollection, Magnesium.MgSwapchainCollection>(Reuse.Singleton);
+
+            container.Register<Magnesium.IMgPresentationSurface, Magnesium.OpenGL.DesktopGL.OpenTKPresentationSurface>(Reuse.Singleton);           
 		}
 
 		static void SetupOpenGL(Container container)

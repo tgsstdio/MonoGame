@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Magnesium;
 using MonoGame.Core;
 using MonoGame.Graphics;
+using System.Diagnostics;
 
 namespace MonoGame.Graphics
 {
@@ -101,9 +102,11 @@ namespace MonoGame.Graphics
 
 			mPartition.Device.AllocateCommandBuffers (pAllocateInfo, buffers);
 
-			var dsCreateInfo = new MgGraphicsDeviceCreateInfo
+            var setupCmdBuffer = buffers[0];
+
+            var dsCreateInfo = new MgGraphicsDeviceCreateInfo
 			{
-				Command = buffers[0],
+				Command = setupCmdBuffer,
 				Color = MgFormat.R8G8B8A8_UINT,
 				DepthStencil = MgFormat.D24_UNORM_S8_UINT,
 				Width = width,
@@ -111,7 +114,21 @@ namespace MonoGame.Graphics
 				Samples = MgSampleCountFlagBits.COUNT_1_BIT,
 				Swapchains = mSwapchainCollection,
 			};
-			mDevice.Create(dsCreateInfo);
+            // TODO : 
+
+            var cmdBufInfo = new MgCommandBufferBeginInfo
+            {
+
+            };
+
+
+            var err = setupCmdBuffer.BeginCommandBuffer(cmdBufInfo);
+
+            Debug.Assert(err == Result.SUCCESS, err + " != Result.SUCCESS");
+
+            mDevice.Create(dsCreateInfo);
+
+            setupCmdBuffer.EndCommandBuffer();
 
 			var submitInfo = new MgSubmitInfo {				
 				CommandBuffers = buffers,

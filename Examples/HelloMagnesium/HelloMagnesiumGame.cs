@@ -17,7 +17,7 @@ namespace HelloMagnesium
 		private readonly IMgBaseTextureLoader mTex2D;
 
 		private IPresentationParameters mPresentation;
-		private IContentStreamer mContent;
+		private IShaderContentStreamer mContent;
 
 		private readonly GraphicsBank Bank = new GraphicsBank ();
 
@@ -69,7 +69,6 @@ namespace HelloMagnesium
 
 		readonly IMgSwapchainCollection mSwapchain;
 
-		IOpenTKSwapchainKHR mInternalChain;
 
 		public HelloMagnesiumGame(
 			IGraphicsDeviceManager manager,
@@ -78,8 +77,7 @@ namespace HelloMagnesium
 			IPresentationParameters presentation,
 			IMgSwapchainCollection swapChain,
 			IMgPresentationLayer presentationLayer,
-			IContentStreamer content,
-			IOpenTKSwapchainKHR internalChain
+			IShaderContentStreamer content
 		)
 		{
 			mTex2D = tex2DLoader;
@@ -89,7 +87,6 @@ namespace HelloMagnesium
 			mContent = content;
 			mPresentationLayer = presentationLayer;
 			mSwapchain = swapChain;
-			mInternalChain = internalChain;
 
 			// Create device
 			mManager.CreateDevice();
@@ -353,25 +350,25 @@ namespace HelloMagnesium
 			mPresentationLayer.EndDraw (new uint[] { frameIndex }, Bank.PrePresentBarrierCmd, null);
 		}
 
-		void ExplicitSwapbuffers ()
-		{
-			GL.ClearColor (0f, 0f, 0f, 0f);
-			GL.Viewport (0, 0, (int)mSwapchain.Width, (int)mSwapchain.Height);
-			GL.ColorMask (true, false, true, true);
-			GL.Clear (ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+		//void ExplicitSwapbuffers ()
+		//{ ONLY FOR OPENGL
+		//	GL.ClearColor (0f, 0f, 0f, 0f);
+		//	GL.Viewport (0, 0, (int)mSwapchain.Width, (int)mSwapchain.Height);
+		//	GL.ColorMask (true, false, true, true);
+		//	GL.Clear (ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-			GL.Begin(OpenTK.Graphics.OpenGL.PrimitiveType.Quads);
-				GL.Color3(1.0f, 1.0f, 1.0);
-				GL.Vertex2(-1f, -1f);
-				GL.Color3(0.9f, 0.9f, 0.9f);
-				GL.Vertex2(-1f, 1f);
-				GL.Color3(0.9f, 0.9f, 0.9f);
-				GL.Vertex2(1f, 1f);
-				GL.Color3(0.9f, 0.9f, 0.9f);
-				GL.Vertex2(1f, -1f);
-			GL.End();
+		//	GL.Begin(OpenTK.Graphics.OpenGL.PrimitiveType.Quads);
+		//		GL.Color3(1.0f, 1.0f, 1.0);
+		//		GL.Vertex2(-1f, -1f);
+		//		GL.Color3(0.9f, 0.9f, 0.9f);
+		//		GL.Vertex2(-1f, 1f);
+		//		GL.Color3(0.9f, 0.9f, 0.9f);
+		//		GL.Vertex2(1f, 1f);
+		//		GL.Color3(0.9f, 0.9f, 0.9f);
+		//		GL.Vertex2(1f, -1f);
+		//	GL.End();
 
-			mInternalChain.SwapBuffers();
-		}
+		//	mInternalChain.SwapBuffers();
+		//}
 	}
 }

@@ -6,9 +6,9 @@ namespace Magnesium.OpenGL.DesktopGL
 {
 	public class OpenTKPresentationSurface : IMgPresentationSurface
 	{
-		private readonly IMgDriver mDriver;
+		private readonly MgDriver mDriver;
 		private readonly INativeWindow mWindow;
-		public OpenTKPresentationSurface (IMgDriver driver, INativeWindow window)
+		public OpenTKPresentationSurface (MgDriver driver, INativeWindow window)
 		{
 			mDriver = driver;
 			mWindow = window;

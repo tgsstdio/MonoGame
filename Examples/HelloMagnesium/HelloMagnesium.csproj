@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -43,6 +43,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GLSLShaderContentStreamer.cs" />
+    <Compile Include="IShaderContentStreamer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="MockGraphicsDevicePreferences.cs" />
@@ -50,6 +52,7 @@
     <Compile Include="MockTouchListener.cs" />
     <Compile Include="MgPresentationLayer.cs" />
     <Compile Include="IMgPresentationLayer.cs" />
+    <Compile Include="SPIRVShaderContentStreamer.cs" />
     <Compile Include="VkBuffer.cs" />
     <Compile Include="GraphicsBank.cs" />
     <Compile Include="MgSpriteBatch.cs" />
@@ -58,10 +61,10 @@
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="Content\80000000\80000002.vs">
+    <None Include="Content\80000000\80000002.vert">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Content\80000000\80000003.fs">
+    <None Include="Content\80000000\80000003.frag">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="OpenTK.dll.config" />
@@ -73,7 +76,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Magnesium\Magnesium.csproj">
-      <Project>{9F9AC448-9D17-43E5-8889-285426290891}</Project>
+      <Project>{9f9ac448-9d17-43e5-8889-285426290891}</Project>
       <Name>Magnesium</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\MonoGame.Core\MonoGame.Core.csproj">

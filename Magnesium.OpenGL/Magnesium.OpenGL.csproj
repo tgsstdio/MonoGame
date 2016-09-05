@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>Magnesium.OpenGL</RootNamespace>
     <AssemblyName>Magnesium.OpenGL</AssemblyName>
-    <TargetFrameworkProfile>Profile259</TargetFrameworkProfile>
+    <TargetFrameworkProfile>Profile111</TargetFrameworkProfile>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -157,18 +157,8 @@
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>
     <ProjectReference Include="..\Magnesium\Magnesium.csproj">
-      <Project>{9F9AC448-9D17-43E5-8889-285426290891}</Project>
+      <Project>{9f9ac448-9d17-43e5-8889-285426290891}</Project>
       <Name>Magnesium</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Driver\" />
-    <Folder Include="Queue\" />
-    <Folder Include="Entrypoint\" />
-    <Folder Include="Instance\" />
-    <Folder Include="PhysicalDevice\" />
-    <Folder Include="Device\" />
-    <Folder Include="CommandBuffer\" />
-    <Folder Include="GraphicsPipeline\" />
   </ItemGroup>
 </Project>
