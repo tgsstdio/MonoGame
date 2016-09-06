@@ -14,7 +14,7 @@ namespace HelloMagnesium
 
         public Stream Load(AssetIdentifier assetId)
         {
-            return mLoader.LoadContent(assetId, new[] {".spirv"});
+            return mLoader.LoadContent(assetId, new[] {".spv"});
         }
     }
 }

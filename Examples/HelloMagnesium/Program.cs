@@ -34,8 +34,8 @@ namespace HelloMagnesium
 					container.Register<Magnesium.MgDriver>(Reuse.Singleton);
 					container.Register<Magnesium.IMgImageTools, Magnesium.MgImageTools>(Reuse.Singleton);
 
-					//SetupOpenGL(container);
-					SetupVulkan(container);
+					SetupOpenGL(container);
+					//SetupVulkan(container);
 
 					//// AUDIO
 					container.Register<MonoGame.Audio.OpenAL.IOpenALSoundContext, MonoGame.Audio.OpenAL.DesktopGL.DesktopGLOpenALSoundContext>(Reuse.Singleton);
@@ -199,6 +199,9 @@ namespace HelloMagnesium
 			container.Register<Magnesium.OpenGL.DesktopGL.IOpenTKSwapchainKHR, Magnesium.OpenGL.DesktopGL.GLSwapchainKHR>(Reuse.Singleton);
 			container.Register<Magnesium.OpenGL.DesktopGL.IGLDevicePlatform, Magnesium.OpenGL.DesktopGL.FullGLDevicePlatform>(Reuse.Singleton);
 			container.Register<Magnesium.OpenGL.DesktopGL.IMgGraphicsDeviceLogger, MockGraphicsDeviceLogger>(Reuse.Singleton);
+
+            container.Register<Magnesium.IMgPresentationSurface, MockMgPresentationSurface>(Reuse.Singleton);
+            container.Register<IShaderContentStreamer, GLSLShaderContentStreamer>(Reuse.Singleton);
 		}
 	}
 }

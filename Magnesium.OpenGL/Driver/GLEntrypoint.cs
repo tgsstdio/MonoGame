@@ -27,7 +27,8 @@ namespace Magnesium.OpenGL
 
 		public Result EnumerateInstanceExtensionProperties (string layerName, out MgExtensionProperties[] pProperties)
 		{
-			throw new NotImplementedException ();
+            pProperties = new MgExtensionProperties[] { };
+            return Result.SUCCESS;
 		}
 
 		public IMgAllocationCallbacks CreateAllocationCallbacks()

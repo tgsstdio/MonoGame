@@ -103,7 +103,8 @@ namespace Magnesium.OpenGL
 		}
 		public Result EnumerateDeviceExtensionProperties (string layerName, out MgExtensionProperties[] pProperties)
 		{
-			throw new NotImplementedException ();
+            pProperties = new MgExtensionProperties[] { };
+            return Result.SUCCESS;
 		}
 		public void GetPhysicalDeviceSparseImageFormatProperties (MgFormat format, MgImageType type, MgSampleCountFlagBits samples, MgImageUsageFlagBits usage, MgImageTiling tiling, out MgSparseImageFormatProperties[] pProperties)
 		{
