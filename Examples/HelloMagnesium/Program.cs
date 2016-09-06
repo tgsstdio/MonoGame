@@ -34,8 +34,8 @@ namespace HelloMagnesium
 					container.Register<Magnesium.MgDriver>(Reuse.Singleton);
 					container.Register<Magnesium.IMgImageTools, Magnesium.MgImageTools>(Reuse.Singleton);
 
-					SetupOpenGL(container);
-					//SetupVulkan(container);
+					//SetupOpenGL(container);
+					SetupVulkan(container);
 
 					//// AUDIO
 					container.Register<MonoGame.Audio.OpenAL.IOpenALSoundContext, MonoGame.Audio.OpenAL.DesktopGL.DesktopGLOpenALSoundContext>(Reuse.Singleton);
@@ -100,28 +100,39 @@ namespace HelloMagnesium
                             using (var presentationSurface = container.Resolve<IMgPresentationSurface>())
                             {
                                 presentationSurface.Initialize();
-                                using (var device = driver.CreateLogicalDevice(presentationSurface.Surface, MgEnableExtensionsOption.ALL))
-                                using (var partition = device.Queues[0].CreatePartition())
-                                {
-                                    container.RegisterInstance<IMgThreadPartition>(partition);
-                                    using (var audioContext = container.Resolve<IOpenALSoundContext>())
-                                    using (var manager = container.Resolve<IGraphicsDeviceManager>())
+                                var device = driver.CreateLogicalDevice(presentationSurface.Surface, MgEnableExtensionsOption.ALL);
+                                
+                                container.RegisterInstance<IMgLogicalDevice>(device);
+                                var partition = device.Queues[0].CreatePartition(
+                                    0,
+                                    new MgDescriptorPoolCreateInfo
                                     {
-                                        audioContext.Initialize();
+                                       PoolSizes = new MgDescriptorPoolSize[]
+                                       {
+                                            new MgDescriptorPoolSize { Type = MgDescriptorType.SAMPLER, DescriptorCount = 10 },
+                                       },
+                                       MaxSets= 100,
+                                    });
+                                
+                                container.RegisterInstance<IMgThreadPartition>(partition);
 
-                                        //									var capabilities = container.Resolve<IGraphicsCapabilities>();
-                                        //									capabilities.Initialize();
+                                using (var audioContext = container.Resolve<IOpenALSoundContext>())
+                                using (var manager = container.Resolve<IGraphicsDeviceManager>())
+                                {
+                                    audioContext.Initialize();
+                                    //									var capabilities = container.Resolve<IGraphicsCapabilities>();
+                                    //									capabilities.Initialize();     
+                                    using (var backbone = container.Resolve<IGameBackbone>())
+                                    {
+                                        var exitStrategy = container.Resolve<IWindowExitStrategy>();
+                                        exitStrategy.Initialize();
 
-                                        using (var backbone = container.Resolve<IGameBackbone>())
-                                        {
-                                            var exitStrategy = container.Resolve<IWindowExitStrategy>();
-                                            exitStrategy.Initialize();
-
-                                            backbone.Run();
-                                        }
-
+                                        backbone.Run();
                                     }
+
                                 }
+                                partition.Dispose();
+                                device.Dispose();                                                         
                             }
 						}
 					}
@@ -147,7 +158,9 @@ namespace HelloMagnesium
 			// IMgSwapchainCollection
 			container.Register<Magnesium.IMgSwapchainCollection, Magnesium.MgSwapchainCollection>(Reuse.Singleton);
 
-            container.Register<Magnesium.IMgPresentationSurface, Magnesium.OpenGL.DesktopGL.OpenTKPresentationSurface>(Reuse.Singleton);           
+            container.Register<Magnesium.IMgPresentationSurface, Magnesium.OpenGL.DesktopGL.OpenTKPresentationSurface>(Reuse.Singleton);
+
+            container.Register<IShaderContentStreamer, SPIRVShaderContentStreamer>(Reuse.Singleton);
 		}
 
 		static void SetupOpenGL(Container container)

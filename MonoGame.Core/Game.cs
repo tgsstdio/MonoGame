@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Microsoft.Xna.Framework
 {
-	public abstract class Game
+	public abstract class Game : IDisposable
 	{
 		public SortingFilteringCollection<IUpdateable> Updateables =
 			new SortingFilteringCollection<IUpdateable>(
@@ -31,7 +31,6 @@ namespace Microsoft.Xna.Framework
 
 		public virtual void Draw(GameTime gameTime)
 		{
-
 			Drawables.ForEachFilteredItem(DrawAction, gameTime);
 		}
 
@@ -53,6 +52,37 @@ namespace Microsoft.Xna.Framework
 		{
 
 		}
-	}
+
+        ~Game()
+        {
+            Dispose(false);
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected bool mDisposing { get; private set; }
+        protected virtual void Dispose(bool disposing)
+        {
+            if (mDisposing)
+                return;
+
+            ReleaseUnmanagedResources();
+
+            if (disposing)
+            {
+                ReleaseManagedResources();
+            }
+
+            mDisposing = true;
+        }
+
+        protected abstract void ReleaseManagedResources();
+
+        protected abstract void ReleaseUnmanagedResources();
+    }
 }
 

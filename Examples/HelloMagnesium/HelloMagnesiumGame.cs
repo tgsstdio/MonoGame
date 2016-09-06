@@ -11,7 +11,7 @@ using Magnesium.OpenGL.DesktopGL;
 
 namespace HelloMagnesium
 {
-	public class HelloMagnesiumGame : Game, IDisposable
+	public class HelloMagnesiumGame : Game
 	{
 		private readonly IMgThreadPartition mPartition;
 		private readonly IMgBaseTextureLoader mTex2D;
@@ -27,42 +27,18 @@ namespace HelloMagnesium
 
 		#region IDisposable implementation
 
-		~HelloMagnesiumGame()
+		protected override void ReleaseUnmanagedResources ()
 		{
-			Dispose (false);
+            if (mPartition != null)
+            {
+                Bank.Destroy(mPartition);
+                batch.Dispose();
+            }
 		}
 
-		public void Dispose ()
-		{
-			Dispose (true);
-			GC.SuppressFinalize (this);
-		}
-
-		void ReleaseUnmanagedResources ()
-		{
-			if (mPartition != null)
-				Bank.Destroy (mPartition);
-		}
-
-		void ReleaseManagedResources ()
+        protected override void ReleaseManagedResources ()
 		{
 
-		}
-
-		bool mDisposing = false;
-		public void Dispose (bool disposing)
-		{
-			if (mDisposing)
-				return;
-
-			ReleaseUnmanagedResources ();
-
-			if (disposing)
-			{
-				ReleaseManagedResources ();
-			}
-
-			mDisposing = true;
 		}
 
 		#endregion
@@ -148,17 +124,8 @@ namespace HelloMagnesium
 		/// </summary>
 		public override void LoadContent()
 		{
-			{
-				var error = GL.GetError ();
-				Debug.WriteLineIf (error != ErrorCode.NoError, "LoadContent (BEFORE) : " + error);
-			}
 
 			mBackground = mTex2D.Load (new AssetIdentifier { AssetId = 0x80000001 });
-
-			{
-				var error = GL.GetError ();
-				Debug.WriteLineIf (error != ErrorCode.NoError, "mTex2D.Load (AFTER) : " + error);
-			}
 
 			// create vertex buffer set of quad
 			// vertex buffer of vertices, tex2d
@@ -283,13 +250,14 @@ namespace HelloMagnesium
 			IMgDescriptorSet[] descriptorSets;
 			var dsAllocateInfo = new MgDescriptorSetAllocateInfo {
 				DescriptorPool = mPartition.DescriptorPool,
+                DescriptorSetCount = 1,
 				SetLayouts = new []
 				{
 					batch.DescriptorSetLayout,
 				},
 			};
 			result = mPartition.Device.AllocateDescriptorSets (dsAllocateInfo, out descriptorSets);
-			Debug.Assert (result == Result.SUCCESS);
+			Debug.Assert (result == Result.SUCCESS, result + " != Result.SUCCESS");
 
 			var writes = new MgWriteDescriptorSet [] {
 //				new MgWriteDescriptorSet
