@@ -1,4 +1,5 @@
-﻿using Magnesium;
+﻿using System;
+using Magnesium;
 using Magnesium.OpenGL;
 
 namespace Magnesium.OpenGL.DesktopGL
@@ -48,11 +49,17 @@ namespace Magnesium.OpenGL.DesktopGL
 			private set;
 		}
 
-		#endregion
+        public MgFormat Format
+        {
+            get;
+            set;
+        }
 
-		#region IDisposable implementation
+        #endregion
 
-		public void Dispose ()
+        #region IDisposable implementation
+
+        public void Dispose ()
 		{
 
 		}

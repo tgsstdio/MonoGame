@@ -64,8 +64,17 @@ namespace HelloMagnesium
 			mPresentationLayer = presentationLayer;
 			mSwapchain = swapChain;
 
-			// Create device
-			mManager.CreateDevice();
+            // Create device
+
+            var dsCreateInfo = new MgGraphicsDeviceCreateInfo
+            {
+                Color = MgFormat.R8G8B8A8_UINT,
+                DepthStencil = MgFormat.D24_UNORM_S8_UINT,
+                Width = (uint) mPresentation.BackBufferWidth,
+                Height = (uint) mPresentation.BackBufferHeight,
+                Samples = MgSampleCountFlagBits.COUNT_1_BIT,
+            };
+            mManager.CreateDevice(dsCreateInfo);
 //
 //			Bank.Width = (uint)mPresentation.BackBufferWidth;
 //			Bank.Height = (uint)mPresentation.BackBufferHeight;
@@ -118,6 +127,8 @@ namespace HelloMagnesium
 		MgSpriteBatch batch;
 
 		private MgBaseTexture mBackground;
+
+
 		/// <summary>
 		/// LoadContent will be called once per game and is the place to load
 		/// all of your content.
@@ -194,24 +205,22 @@ namespace HelloMagnesium
 					Flags = 0,
 				};
 				cmdBuf.BeginCommandBuffer (beginInfo);
-				var passBeginInfo = new MgRenderPassBeginInfo {
-					Framebuffer = mManager.Device.Framebuffers[i],
-					RenderPass = mManager.Device.Renderpass,
-					RenderArea = new MgRect2D {
-						// FIXME: specific screen width
-						Extent = new MgExtent2D {
-							Width = mSwapchain.Width,
-							Height = mSwapchain.Height,
-						},
-						Offset = new MgOffset2D {
-							X = 0,
-							Y = 0,
-						}
-					},
-					ClearValues = new [] {
-						new MgClearValue {
-							Color = new MgClearColorValue (uint.MaxValue, 0, uint.MaxValue, uint.MaxValue),
-						},
+                var passBeginInfo = new MgRenderPassBeginInfo {
+                    Framebuffer = mManager.Device.Framebuffers[i],
+                    RenderPass = mManager.Device.Renderpass,
+                    RenderArea = new MgRect2D {
+                        // FIXME: specific screen width
+                        Extent = new MgExtent2D {
+                            Width = mSwapchain.Width,
+                            Height = mSwapchain.Height,
+                        },
+                        Offset = new MgOffset2D {
+                            X = 0,
+                            Y = 0,
+                        }
+                    },
+                    ClearValues = new[] {
+                        MgClearValue.FromColorAndFormat(mSwapchain.Format, new MgColor4f(1f, 0, 1f, 1f)),
 						new MgClearValue {
 							DepthStencil = new MgClearDepthStencilValue (1f, 0),							
 						}
@@ -227,11 +236,20 @@ namespace HelloMagnesium
 
 				cmdBuf.CmdEndRenderPass ();
 
-				cmdBuf.EndCommandBuffer ();
+				var err = cmdBuf.EndCommandBuffer ();
+                Debug.Assert(err == Result.SUCCESS, err + " != Result.SUCCESS");
 
 				var node = new SubmitInfoGraphNode {
 					Submit = new MgSubmitInfo
 					{
+                        WaitSemaphores = new MgSubmitInfoWaitSemaphoreInfo[]
+                        {
+                            new MgSubmitInfoWaitSemaphoreInfo
+                            {
+                                WaitSemaphore = Bank.PresentComplete,
+                                WaitDstStageMask = MgPipelineStageFlagBits.ALL_GRAPHICS_BIT,
+                            },
+                        },
 						CommandBuffers = new [] {cmdBuf},
 						SignalSemaphores = new [] {Bank.RenderComplete},
 					},
@@ -315,7 +333,7 @@ namespace HelloMagnesium
 			// should use semaphores instead
 			mPartition.Queue.QueueWaitIdle ();
 
-			mPresentationLayer.EndDraw (new uint[] { frameIndex }, Bank.PrePresentBarrierCmd, null);
+			mPresentationLayer.EndDraw (new uint[] { frameIndex }, Bank.PrePresentBarrierCmd, new[] { Bank.RenderComplete });
 		}
 
 		//void ExplicitSwapbuffers ()

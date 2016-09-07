@@ -43,9 +43,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MgGLWindowResetter.cs" />
     <Compile Include="GLSLShaderContentStreamer.cs" />
     <Compile Include="IShaderContentStreamer.cs" />
     <Compile Include="MockMgPresentationSurface.cs" />
+    <Compile Include="MgOpenTKPresentationSurface.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="MockGraphicsDevicePreferences.cs" />

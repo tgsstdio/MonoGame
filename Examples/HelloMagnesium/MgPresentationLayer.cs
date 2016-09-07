@@ -52,10 +52,10 @@ namespace HelloMagnesium
 
 			//err = swapChain.queuePresent(queue, currentBuffer, semaphores.renderComplete);
 			err = mPartition.Queue.QueuePresentKHR (presentInfo);
-			Debug.Assert (err == Result.SUCCESS);
+			Debug.Assert (err == Result.SUCCESS, err + " != Result.SUCCESS");
 			err = mPartition.Queue.QueueWaitIdle ();
-			Debug.Assert (err == Result.SUCCESS);
-		}
+			Debug.Assert (err == Result.SUCCESS, err + " != Result.SUCCESS");
+        }
 
 		public uint BeginDraw (IMgCommandBuffer postPresent, IMgSemaphore presentComplete, ulong timeout)
 		{
@@ -82,9 +82,9 @@ namespace HelloMagnesium
 			};
 
 			var vkRes = postPresent.BeginCommandBuffer(cmdBufInfo);
-			Debug.Assert(vkRes == Result.SUCCESS);
+			Debug.Assert(vkRes == Result.SUCCESS, vkRes + " != Result.SUCCESS");
 
-			const uint VK_QUEUE_FAMILY_IGNORED = ~0U;
+            const uint VK_QUEUE_FAMILY_IGNORED = ~0U;
 
 			var postPresentBarrier = new MgImageMemoryBarrier
 			{
@@ -114,9 +114,9 @@ namespace HelloMagnesium
 				new [] {postPresentBarrier});
 
 			vkRes = postPresent.EndCommandBuffer();
-			Debug.Assert(vkRes == Result.SUCCESS);
+			Debug.Assert(vkRes == Result.SUCCESS, vkRes + " != Result.SUCCESS");
 
-			var submitInfo = new [] {
+            var submitInfo = new [] {
 				new MgSubmitInfo
 				{
 					CommandBuffers = new []
@@ -127,8 +127,8 @@ namespace HelloMagnesium
 			};
 
 			vkRes = mPartition.Queue.QueueSubmit(submitInfo, null);
-			Debug.Assert(vkRes == Result.SUCCESS);
-		}
+			Debug.Assert(vkRes == Result.SUCCESS, vkRes + " != Result.SUCCESS");
+        }
 
 		void submitPrePresentBarrier(IMgCommandBuffer prePresent, IMgImage image)
 		{
@@ -140,9 +140,9 @@ namespace HelloMagnesium
 			};
 
 			var vkRes = prePresent.BeginCommandBuffer(cmdBufInfo);
-			Debug.Assert(vkRes == Result.SUCCESS);
+			Debug.Assert(vkRes == Result.SUCCESS, vkRes + " != Result.SUCCESS");
 
-			const uint VK_QUEUE_FAMILY_IGNORED = ~0U;
+            const uint VK_QUEUE_FAMILY_IGNORED = ~0U;
 
 			var prePresentBarrier = new MgImageMemoryBarrier {
 				Image = image,
@@ -172,9 +172,9 @@ namespace HelloMagnesium
 				new []{ prePresentBarrier} );
 
 			vkRes = prePresent.EndCommandBuffer();
-			Debug.Assert(vkRes == Result.SUCCESS);
+			Debug.Assert(vkRes == Result.SUCCESS, vkRes + " != Result.SUCCESS");
 
-			var submitInfo = new []
+            var submitInfo = new []
 			{
 				new MgSubmitInfo
 				{
@@ -183,8 +183,8 @@ namespace HelloMagnesium
 			};
 
 			vkRes = mPartition.Queue.QueueSubmit(submitInfo, null);
-			Debug.Assert(vkRes == Result.SUCCESS);
-		}
+			Debug.Assert(vkRes == Result.SUCCESS, vkRes + " != Result.SUCCESS");
+        }
 	}
 }
 

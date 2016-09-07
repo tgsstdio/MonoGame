@@ -15,8 +15,8 @@ namespace MonoGame.Graphics
 			set;
 		}
 
-//        bool BeginDraw();
-        void CreateDevice();
+        //  bool BeginDraw();
+        void CreateDevice(MgGraphicsDeviceCreateInfo dsCreateInfo);
 //        void EndDraw();
 
 		IMgGraphicsDevice Device { get; }

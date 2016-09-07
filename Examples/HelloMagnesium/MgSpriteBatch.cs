@@ -43,14 +43,16 @@ namespace HelloMagnesium
 					Code = vs,
 					CodeSize = new UIntPtr ((ulong)vs.Length),
 				};
-				mPartition.Device.CreateShaderModule (vertCreateInfo, null, out vertSM);
-				IMgShaderModule fragSM;
+				var err =mPartition.Device.CreateShaderModule (vertCreateInfo, null, out vertSM);
+                Debug.Assert(err == Result.SUCCESS, err + " != Result.SUCCESS");
+                IMgShaderModule fragSM;
 				var fragCreateInfo = new MgShaderModuleCreateInfo {
 					Code = fs,
 					CodeSize = new UIntPtr ((ulong)fs.Length),
 				};
-				mPartition.Device.CreateShaderModule (fragCreateInfo, null, out fragSM);
-				MgDescriptorSetLayoutCreateInfo dslCreateInfo = new MgDescriptorSetLayoutCreateInfo {
+				err = mPartition.Device.CreateShaderModule (fragCreateInfo, null, out fragSM);
+                Debug.Assert(err == Result.SUCCESS, err + " != Result.SUCCESS");
+                MgDescriptorSetLayoutCreateInfo dslCreateInfo = new MgDescriptorSetLayoutCreateInfo {
 					Bindings = new[] {
 						//						new MgDescriptorSetLayoutBinding
 						//						{
@@ -68,16 +70,18 @@ namespace HelloMagnesium
 					},
 				};
 				IMgDescriptorSetLayout setLayout;
-				mPartition.Device.CreateDescriptorSetLayout (dslCreateInfo, null, out setLayout);
-				DescriptorSetLayout = setLayout;
+				err = mPartition.Device.CreateDescriptorSetLayout (dslCreateInfo, null, out setLayout);
+                Debug.Assert(err == Result.SUCCESS, err + " != Result.SUCCESS");
+                DescriptorSetLayout = setLayout;
 				var pLayoutCreateInfo = new MgPipelineLayoutCreateInfo {
 					SetLayouts = new[] {
 						setLayout
 					},
 				};
 				IMgPipelineLayout layout;
-				mPartition.Device.CreatePipelineLayout (pLayoutCreateInfo, null, out layout);
-				PipelineLayout = layout;
+				err = mPartition.Device.CreatePipelineLayout (pLayoutCreateInfo, null, out layout);
+                Debug.Assert(err == Result.SUCCESS, err + " != Result.SUCCESS");
+                PipelineLayout = layout;
 				var pipelineParameters = new[] {
 					new MgGraphicsPipelineCreateInfo {
 						RenderPass = graphicsDevice.Renderpass,
@@ -184,7 +188,8 @@ namespace HelloMagnesium
 					},
 				};
 				IMgPipeline[] graphicsPipelines;
-				mPartition.Device.CreateGraphicsPipelines (null, pipelineParameters, null, out graphicsPipelines);
+				err = mPartition.Device.CreateGraphicsPipelines (null, pipelineParameters, null, out graphicsPipelines);
+                Debug.Assert(err == Result.SUCCESS, err + " != Result.SUCCESS");
 				GraphicsPipelines = graphicsPipelines;
 				vertSM.DestroyShaderModule (mPartition.Device, null);
 				fragSM.DestroyShaderModule (mPartition.Device, null);
@@ -194,8 +199,24 @@ namespace HelloMagnesium
 		#region IDisposable implementation
 		public void Dispose ()
 		{
-			
-		}
+            if (GraphicsPipelines != null)
+            {
+                foreach (var pipeline in GraphicsPipelines)
+                {
+                    pipeline.DestroyPipeline(mPartition.Device, null);
+                }
+            }
+
+            if (DescriptorSetLayout != null)
+            {
+                DescriptorSetLayout.DestroyDescriptorSetLayout(mPartition.Device, null);
+            }
+
+            if (PipelineLayout != null)
+            {
+                PipelineLayout.DestroyPipelineLayout(mPartition.Device, null);
+            }
+        }
 		#endregion
 	}
 }

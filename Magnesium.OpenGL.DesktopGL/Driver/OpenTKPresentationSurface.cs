@@ -24,7 +24,7 @@ namespace Magnesium.OpenGL.DesktopGL
 
 		private IMgSurfaceKHR mSurface;
 		public void Initialize ()
-		{
+		{                                  
 			var createInfo = new MgWin32SurfaceCreateInfoKHR {
 				// DOUBLE CHECK 
 				Hinstance = Process.GetCurrentProcess ().Handle,

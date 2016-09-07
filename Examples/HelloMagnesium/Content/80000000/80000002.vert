@@ -6,5 +6,5 @@ layout(location = 1) in vec2 in_uv;
 
 void main()
 {
-	gl_Position = vec4(in_position, 0, 1);
+	gl_Position = vec4(in_position.x, -in_position.y, 0, 1);
 }

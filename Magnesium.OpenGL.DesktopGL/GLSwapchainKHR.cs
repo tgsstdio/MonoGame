@@ -4,20 +4,25 @@ namespace Magnesium.OpenGL.DesktopGL
 {
 	public class GLSwapchainKHR : IOpenTKSwapchainKHR
 	{
-		public uint Index { get; private set; }
+        private IBackbufferContext mBBContext;
+
+        public uint Index { get; private set; }
 		public uint MaxNoOfImages {	get; private set; }
 
-		#region IOpenTKSwapchainKHR implementation
+        public GLSwapchainKHR(IBackbufferContext bbContext)
+        {
+            mBBContext = bbContext;
+        }
 
-		private IGraphicsContext mContext;
-		public void Initialize(IGraphicsContext context, uint maxNoOfImages)
-		{
-			Index = maxNoOfImages - 1;
-			MaxNoOfImages = maxNoOfImages;
-			mContext = context;
-		}
+        public void Initialize(uint maxNoOfImages)
+        {
+            Index = maxNoOfImages - 1;
+            MaxNoOfImages = maxNoOfImages;
+        }
 
-		public uint GetNextImage()
+        #region IOpenTKSwapchainKHR implementation
+
+        public uint GetNextImage()
 		{
 			Index = (Index + 1) % MaxNoOfImages;
 			return Index;
@@ -25,8 +30,8 @@ namespace Magnesium.OpenGL.DesktopGL
 
 		public void SwapBuffers ()
 		{
-			if (mContext != null && !mContext.IsDisposed)
-				mContext.SwapBuffers ();
+			if (mBBContext.Context != null && !mBBContext.Context.IsDisposed)
+                mBBContext.Context.SwapBuffers ();
 		}
 
 		#endregion

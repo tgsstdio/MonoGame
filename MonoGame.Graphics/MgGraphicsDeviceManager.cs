@@ -85,7 +85,7 @@ namespace MonoGame.Graphics
 		}
 
 
-		public void CreateDevice ()
+		public void CreateDevice (MgGraphicsDeviceCreateInfo dsCreateInfo)
 		{
 			Initialize ();
 
@@ -104,16 +104,14 @@ namespace MonoGame.Graphics
 
             var setupCmdBuffer = buffers[0];
 
-            var dsCreateInfo = new MgGraphicsDeviceCreateInfo
-			{
-				Command = setupCmdBuffer,
-				Color = MgFormat.R8G8B8A8_UINT,
-				DepthStencil = MgFormat.D24_UNORM_S8_UINT,
-				Width = width,
-				Height = height,
-				Samples = MgSampleCountFlagBits.COUNT_1_BIT,
-				Swapchains = mSwapchainCollection,
-			};
+   //         var dsCreateInfo = new MgGraphicsDeviceCreateInfo
+			//{
+			//	Color = MgFormat.R8G8B8A8_UINT,
+			//	DepthStencil = MgFormat.D24_UNORM_S8_UINT,
+			//	Width = width,
+			//	Height = height,
+			//	Samples = MgSampleCountFlagBits.COUNT_1_BIT,
+			//};
             // TODO : 
 
             var cmdBufInfo = new MgCommandBufferBeginInfo
@@ -126,7 +124,7 @@ namespace MonoGame.Graphics
 
             Debug.Assert(err == Result.SUCCESS, err + " != Result.SUCCESS");
 
-            mDevice.Create(dsCreateInfo);
+            mDevice.Create(setupCmdBuffer, mSwapchainCollection, dsCreateInfo);
 
             setupCmdBuffer.EndCommandBuffer();
 
