@@ -35,8 +35,8 @@ namespace HelloMagnesium
 					container.Register<Magnesium.MgDriver>(Reuse.Singleton);
 					container.Register<Magnesium.IMgImageTools, Magnesium.MgImageTools>(Reuse.Singleton);
 
-					SetupOpenGL(container);
-					//SetupVulkan(container);
+					//SetupOpenGL(container);
+					SetupVulkan(container);
 
 					//// AUDIO
 					container.Register<MonoGame.Audio.OpenAL.IOpenALSoundContext, MonoGame.Audio.OpenAL.DesktopGL.DesktopGLOpenALSoundContext>(Reuse.Singleton);

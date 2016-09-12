@@ -91,11 +91,13 @@ namespace HelloMagnesium
 							{
 								new MgPipelineColorBlendAttachmentState
 								{
-									BlendEnable = true,
+                                    // WORKS NOW, 
+									BlendEnable = false,
 									ColorWriteMask = MgColorComponentFlagBits.R_BIT | MgColorComponentFlagBits.G_BIT | MgColorComponentFlagBits.B_BIT | MgColorComponentFlagBits.A_BIT,
 									SrcColorBlendFactor = MgBlendFactor.SRC_COLOR,
 									SrcAlphaBlendFactor = MgBlendFactor.SRC_ALPHA,
-									ColorBlendOp = MgBlendOp.ADD,
+                                    AlphaBlendOp = MgBlendOp.ADD,
+                                    ColorBlendOp = MgBlendOp.ADD,
 									DstColorBlendFactor = MgBlendFactor.ZERO,
 									DstAlphaBlendFactor = MgBlendFactor.ZERO,
 								}
