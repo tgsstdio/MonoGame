@@ -34,6 +34,21 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SpriteBatch\MgSpriteBatchCreateInfo.cs" />
+    <Compile Include="SpriteBatch\MgSpriteBatch.cs" />
+    <Compile Include="SpriteBatch\IShaderContentStreamer.cs" />
+    <Compile Include="SpriteBatch\MgBatchQuad.cs" />
+    <Compile Include="SpriteBatch\MgCmdDepthBias.cs" />
+    <Compile Include="SpriteBatch\MgCmdDepthBounds.cs" />
+    <Compile Include="SpriteBatch\MgSpriteBatchBuffer.cs" />
+    <Compile Include="SpriteBatch\MgSpriteBatchBufferDomain.cs" />
+    <Compile Include="SpriteBatch\MgSpriteBatchEffect.cs" />
+    <Compile Include="SpriteBatch\MgSpriteBatchPoolCreateInfo.cs" />
+    <Compile Include="SpriteBatch\MgSpriteInstanceData.cs" />
+    <Compile Include="SpriteBatch\MgSpriteMaterialData.cs" />
+    <Compile Include="SpriteBatch\MgSpriteVertexData.cs" />
+    <Compile Include="SpriteBatch\MgSpriteBatchPool.cs" />
+    <Compile Include="SpriteBatch\MgSpriteVertexDataItem.cs" />
     <Compile Include="StateGroup.cs" />
     <Compile Include="DrawItem.cs" />
     <Compile Include="RenderPass.cs" />
@@ -106,7 +121,6 @@
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>
-    <Folder Include="SpriteBatch\" />
     <Folder Include="SpriteBatch\Utilties\" />
   </ItemGroup>
   <ItemGroup>
