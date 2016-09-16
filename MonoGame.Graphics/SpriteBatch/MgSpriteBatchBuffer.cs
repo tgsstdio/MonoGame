@@ -14,7 +14,7 @@ namespace MonoGame.Graphics
         public MgSpriteBatchBufferDomain Indirects { get; private set; }
 
         public MgIndexType IndexType { get; private set; }
-        private UInt64 mBufferSize;
+        public UInt64 BufferSize { get; private set; }
 
         public IMgBuffer Buffer {
             get;
@@ -24,8 +24,29 @@ namespace MonoGame.Graphics
         private IMgThreadPartition mPartition;
         private IMgAllocationCallbacks mAllocator;
 
-        public MgSpriteBatchBuffer(IMgThreadPartition partition, IMgAllocationCallbacks allocator, MgSpriteBatchPoolCreateInfo createInfo)
+        public IMgDeviceMemory DeviceMemory { get; private set; }
+
+        public MgSpriteBatchBuffer(IMgThreadPartition partition, MgSpriteBatchBufferCreateInfo createInfo, IMgAllocationCallbacks allocator)
         {
+            if (partition == null)
+                throw new ArgumentNullException(nameof(partition));
+
+            if (createInfo == null)
+                throw new ArgumentNullException(nameof(createInfo));
+
+            if (createInfo.IndicesCount % 6 != 0)
+                throw new ArgumentException(nameof(createInfo.IndicesCount) + " is not a multiple of 6");
+
+            if (createInfo.VerticesCount % 4 != 0)
+                throw new ArgumentException(nameof(createInfo.VerticesCount) + " is not a multiple of 4");
+
+            if (createInfo.MaterialsCount <= 0)
+                throw new ArgumentException(nameof(createInfo.MaterialsCount) + " must be > 0");
+
+            if (createInfo.InstancesCount <= 0)
+                throw new ArgumentException(nameof(createInfo.InstancesCount) + " must be > 0");
+
+
             mPartition = partition;
             mAllocator = allocator;
 
@@ -61,7 +82,7 @@ namespace MonoGame.Graphics
                 limit: createInfo.IndirectCount
             );
 
-            mBufferSize = (ulong)(Indirects.Offset + Indirects.ArraySize);
+            BufferSize = (ulong)(Indirects.Offset + Indirects.ArraySize);
 
             var usage = MgBufferUsageFlagBits.INDEX_BUFFER_BIT | MgBufferUsageFlagBits.VERTEX_BUFFER_BIT | MgBufferUsageFlagBits.STORAGE_BUFFER_BIT;
 
@@ -73,14 +94,47 @@ namespace MonoGame.Graphics
             var bufferCreateInfo = new MgBufferCreateInfo
             {
                 Usage = usage,
-                Size = mBufferSize,
+                Size = BufferSize,
             };
 
-            IMgBuffer buffer;
-            var err = mPartition.Device.CreateBuffer(bufferCreateInfo, mAllocator, out buffer);
-            Debug.Assert(err == Result.SUCCESS, err + " != Result.SUCCESS");
-            Buffer = buffer;
+            {
+                IMgBuffer buffer;
+                var err = mPartition.Device.CreateBuffer(bufferCreateInfo, mAllocator, out buffer);
+                Debug.Assert(err == Result.SUCCESS, err + " != Result.SUCCESS");
+                Buffer = buffer;
+            }
 
+            MgMemoryRequirements memReqs;
+            mPartition.Device.GetBufferMemoryRequirements(Buffer, out memReqs);
+
+            uint memoryTypeIndex;
+            var memoryPropertyFlags = MgMemoryPropertyFlagBits.HOST_VISIBLE_BIT | MgMemoryPropertyFlagBits.HOST_COHERENT_BIT;
+            mPartition.GetMemoryType(memReqs.MemoryTypeBits, memoryPropertyFlags, out memoryTypeIndex);
+
+            {
+                var memAlloc = new MgMemoryAllocateInfo
+                {
+                    MemoryTypeIndex = memoryTypeIndex,
+                    AllocationSize = memReqs.Size,
+                };
+
+                IMgDeviceMemory deviceMemory;
+                var err = mPartition.Device.AllocateMemory(memAlloc, mAllocator, out deviceMemory);
+                Debug.Assert(err == Result.SUCCESS, err + " != Result.SUCCESS");
+                DeviceMemory = deviceMemory;
+            }
+
+            Buffer.BindBufferMemory(mPartition.Device, DeviceMemory, 0UL);
+
+        }
+
+        internal void Reset()
+        {
+            Indices.Reset();
+            Vertices.Reset();
+            Materials.Reset();
+            Instances.Reset();
+            Indirects.Reset();            
         }
 
         ~MgSpriteBatchBuffer()
@@ -99,6 +153,10 @@ namespace MonoGame.Graphics
         {
             if (mIsDisposed)
                 return;
+
+            if (DeviceMemory != null)
+                DeviceMemory.FreeMemory(mPartition.Device, mAllocator);
+
 
             if (Buffer != null)
                 Buffer.DestroyBuffer(mPartition.Device, mAllocator);

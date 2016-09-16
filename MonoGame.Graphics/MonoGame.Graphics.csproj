@@ -43,6 +43,7 @@
     <Compile Include="SpriteBatch\MgSpriteBatchBuffer.cs" />
     <Compile Include="SpriteBatch\MgSpriteBatchBufferDomain.cs" />
     <Compile Include="SpriteBatch\MgSpriteBatchEffect.cs" />
+    <Compile Include="SpriteBatch\MgSpriteBatchBufferCreateInfo.cs" />
     <Compile Include="SpriteBatch\MgSpriteBatchPoolCreateInfo.cs" />
     <Compile Include="SpriteBatch\MgSpriteInstanceData.cs" />
     <Compile Include="SpriteBatch\MgSpriteMaterialData.cs" />

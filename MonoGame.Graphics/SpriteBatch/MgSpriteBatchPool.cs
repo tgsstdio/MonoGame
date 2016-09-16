@@ -49,48 +49,35 @@ namespace MonoGame.Graphics
     {
         private IMgThreadPartition mPartition;
         private IMgAllocationCallbacks mAllocator;
-        private MgSpriteBatchBuffer mBatchBuffer;
-        public MgSpriteBatchPool(IMgThreadPartition partition, MgSpriteBatchBuffer batchBuffer, MgSpriteBatchPoolCreateInfo createInfo, IMgAllocationCallbacks allocator)
+        public MgSpriteBatchPool(IMgThreadPartition partition, MgSpriteBatchPoolCreateInfo createInfo, IMgAllocationCallbacks allocator)
         {
             if (partition == null)
                 throw new ArgumentNullException(nameof(partition));
 
-            if (batchBuffer == null)
-                throw new ArgumentNullException(nameof(batchBuffer));
-
             if (createInfo == null)
                 throw new ArgumentNullException(nameof(createInfo));
 
-            if (createInfo.IndicesCount % 6 != 0)
-                throw new ArgumentException(nameof(createInfo.IndicesCount) + " is not a multiple of 6");
+            if (createInfo.SetLayout == null)
+                throw new ArgumentNullException(nameof(createInfo.SetLayout));
 
-            if (createInfo.VerticesCount % 4 != 0)
-                throw new ArgumentException(nameof(createInfo.VerticesCount) + " is not a multiple of 4");
-
-            if (createInfo.MaterialsCount <= 0)
-                throw new ArgumentException(nameof(createInfo.MaterialsCount) + " must be > 0");
-
-            if (createInfo.InstancesCount <= 0)
-                throw new ArgumentException(nameof(createInfo.InstancesCount) + " must be > 0");
 
             mPartition = partition;
             mAllocator = allocator;
-            mBatchBuffer = batchBuffer;
 
             {
                 var descPoolCreateInfo = new MgDescriptorPoolCreateInfo {                    
-                    MaxSets = createInfo.MaterialsCount,
+                    MaxSets = createInfo.DescriptorSetCount,
                     PoolSizes = new MgDescriptorPoolSize[]
                     {
                         new MgDescriptorPoolSize
                         {
                             Type = MgDescriptorType.STORAGE_BUFFER,
-                            DescriptorCount = createInfo.MaterialsCount,
+                            DescriptorCount = createInfo.DescriptorSetCount,
                         },
                         new MgDescriptorPoolSize
                         {
-                            Type = MgDescriptorType.STORAGE_BUFFER,
-                            DescriptorCount = createInfo.MaterialsCount,
+                            Type = MgDescriptorType.COMBINED_IMAGE_SAMPLER,
+                            DescriptorCount = createInfo.DescriptorSetCount,
                         },
                     },
                 };
@@ -99,7 +86,25 @@ namespace MonoGame.Graphics
                 var err = mPartition.Device.CreateDescriptorPool(descPoolCreateInfo, mAllocator, out pDescriptorPool);
                 Debug.Assert(err == Result.SUCCESS, err + " != Result.SUCCESS");
                 mDescriptorPool = pDescriptorPool;
-            }
+
+                var descSets = new IMgDescriptorSet[createInfo.DescriptorSetCount];
+
+                var setLayouts = new IMgDescriptorSetLayout[createInfo.DescriptorSetCount];
+                for (var i = 0; i < createInfo.DescriptorSetCount; ++i)
+                {
+                    setLayouts[i] = createInfo.SetLayout;
+                }
+
+                var allocateInfo = new MgDescriptorSetAllocateInfo
+                {
+                    DescriptorPool = mDescriptorPool,
+                    DescriptorSetCount = createInfo.DescriptorSetCount,
+                    SetLayouts = setLayouts,
+                };
+                mPartition.Device.AllocateDescriptorSets(allocateInfo, out descSets);
+
+                mDescriptorSets = descSets;
+            }            
 
             {
                 var cmdPoolCreateInfo = new MgCommandPoolCreateInfo {
@@ -110,30 +115,42 @@ namespace MonoGame.Graphics
                 var err = mPartition.Device.CreateCommandPool(cmdPoolCreateInfo, mAllocator, out pCommandPool);
                 Debug.Assert(err == Result.SUCCESS, err + " != Result.SUCCESS");
                 mCommandPool = pCommandPool;
-            }
 
+                var buffers = new IMgCommandBuffer[1];
 
-            MgMemoryRequirements memReqs;
-            mPartition.Device.GetBufferMemoryRequirements(mBatchBuffer.Buffer, out memReqs);
-
-            uint memoryTypeIndex;
-            var memoryPropertyFlags = MgMemoryPropertyFlagBits.HOST_VISIBLE_BIT | MgMemoryPropertyFlagBits.HOST_COHERENT_BIT;
-            mPartition.GetMemoryType(memReqs.MemoryTypeBits, memoryPropertyFlags, out memoryTypeIndex);
-
-            {
-                var memAlloc = new MgMemoryAllocateInfo
+                var allocateInfo = new MgCommandBufferAllocateInfo
                 {
-                    MemoryTypeIndex = memoryTypeIndex,
-                    AllocationSize = memReqs.Size,
+                    CommandBufferCount = 1,
+                    CommandPool = mCommandPool,
+                    Level = MgCommandBufferLevel.PRIMARY,
                 };
-
-                IMgDeviceMemory deviceMemory;
-                var err = mPartition.Device.AllocateMemory(memAlloc, mAllocator, out deviceMemory);
-                Debug.Assert(err == Result.SUCCESS, err + " != Result.SUCCESS");
-                mDeviceMemory = deviceMemory;
+                mPartition.Device.AllocateCommandBuffers(allocateInfo, buffers);
+                mCommandBuffer = buffers[0];
             }
+        }
 
-            mBatchBuffer.Buffer.BindBufferMemory(mPartition.Device, mDeviceMemory, 0UL);
+        private IMgDescriptorSet[] mDescriptorSets;
+        public IMgDescriptorSet[] DescriptorSets
+        {
+            get
+            {
+                return mDescriptorSets;
+            }
+        }
+
+        public IMgCommandBuffer CommandBuffer
+        {
+            get
+            {
+                return mCommandBuffer;
+            }
+        }
+
+        public void Reset()
+        {
+            Debug.Assert(!mIsDisposed);
+            mDescriptorPool.ResetDescriptorPool(mPartition.Device, 0);
+            mCommandPool.ResetCommandPool(mPartition.Device, 0);
         }
 
         ~MgSpriteBatchPool()
@@ -149,26 +166,33 @@ namespace MonoGame.Graphics
 
         private IMgDescriptorPool mDescriptorPool;
         private IMgCommandPool mCommandPool;
-        private IMgDeviceMemory mDeviceMemory;
+        private IMgCommandBuffer mCommandBuffer;
 
         private bool mIsDisposed = false;
-
         protected virtual void Dispose(bool disposing)
         {
             if (mIsDisposed)
                 return;
 
             if (mDescriptorPool != null)
+            {
+                if (mDescriptorSets != null)
+                {
+                    mPartition.Device.FreeDescriptorSets(mDescriptorPool, mDescriptorSets);
+                }
+
                 mDescriptorPool.DestroyDescriptorPool(mPartition.Device, mAllocator);
+            }
 
             if (mCommandPool != null)
+            {
+                if (mCommandBuffer != null)
+                {
+                    mPartition.Device.FreeCommandBuffers(mCommandPool, new[] { mCommandBuffer });
+                }
+
                 mCommandPool.DestroyCommandPool(mPartition.Device, mAllocator);
-
-            if (mDeviceMemory != null)
-                mDeviceMemory.FreeMemory(mPartition.Device, mAllocator);
-
-            if (mBatchBuffer != null)
-                mBatchBuffer.Dispose();
+            }
 
             mIsDisposed = true;
         }

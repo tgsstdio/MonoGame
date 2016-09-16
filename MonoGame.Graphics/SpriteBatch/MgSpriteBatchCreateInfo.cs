@@ -8,7 +8,7 @@ namespace MonoGame.Graphics
     {
         public uint PipelineIndex { get; set; }
 
-        public IMgImage Image { get; set; }
+        public IMgImageView ImageView { get; set; }
         public IMgSampler Sampler { get; set; }
         public MgImageSource ImageSource { get; set; }
 
