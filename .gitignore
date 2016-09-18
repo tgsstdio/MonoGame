@@ -82,6 +82,13 @@ Test/*.csproj
 #Nuget Packages
 **/*.nupkg
 packages/*
+*/[Pp]ackages/*
+*/[Bb]in/*
+*/[Oo]bj/*
+
+Examples/*/[Pp]ackages/*
+Examples/*/[Bb]in/*
+Examples/*/[Oo]bj/*
 
 #Zip files
 *.zip

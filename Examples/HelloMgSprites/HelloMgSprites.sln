@@ -1,0 +1,52 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelloMgSprites", "HelloMgSprites\HelloMgSprites.csproj", "{81D66A48-72DA-448D-9E3F-B16737150893}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoGame.Core", "..\..\MonoGame.Core\MonoGame.Core.csproj", "{699977AD-6D8C-4E0B-ADDA-554B66002D08}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoGame.Graphics", "..\..\MonoGame.Graphics\MonoGame.Graphics.csproj", "{52C293E3-DCC5-43BE-A94F-DBE0CF44E25E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Magnesium", "..\..\Magnesium\Magnesium\Magnesium.csproj", "{9F9AC448-9D17-43E5-8889-285426290891}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoGame.Platform.DesktopGL", "..\..\MonoGame.Platform.DesktopGL\MonoGame.Platform.DesktopGL.csproj", "{B512C831-4562-447E-9F99-C66F86B1279F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoGame.Content", "..\..\MonoGame.Content\MonoGame.Content.csproj", "{E44E47ED-2203-4E45-85A9-C755B10AC044}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{81D66A48-72DA-448D-9E3F-B16737150893}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{81D66A48-72DA-448D-9E3F-B16737150893}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{81D66A48-72DA-448D-9E3F-B16737150893}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{81D66A48-72DA-448D-9E3F-B16737150893}.Release|Any CPU.Build.0 = Release|Any CPU
+		{699977AD-6D8C-4E0B-ADDA-554B66002D08}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{699977AD-6D8C-4E0B-ADDA-554B66002D08}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{699977AD-6D8C-4E0B-ADDA-554B66002D08}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{699977AD-6D8C-4E0B-ADDA-554B66002D08}.Release|Any CPU.Build.0 = Release|Any CPU
+		{52C293E3-DCC5-43BE-A94F-DBE0CF44E25E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{52C293E3-DCC5-43BE-A94F-DBE0CF44E25E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{52C293E3-DCC5-43BE-A94F-DBE0CF44E25E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{52C293E3-DCC5-43BE-A94F-DBE0CF44E25E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9F9AC448-9D17-43E5-8889-285426290891}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F9AC448-9D17-43E5-8889-285426290891}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F9AC448-9D17-43E5-8889-285426290891}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F9AC448-9D17-43E5-8889-285426290891}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B512C831-4562-447E-9F99-C66F86B1279F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B512C831-4562-447E-9F99-C66F86B1279F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B512C831-4562-447E-9F99-C66F86B1279F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B512C831-4562-447E-9F99-C66F86B1279F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E44E47ED-2203-4E45-85A9-C755B10AC044}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E44E47ED-2203-4E45-85A9-C755B10AC044}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E44E47ED-2203-4E45-85A9-C755B10AC044}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E44E47ED-2203-4E45-85A9-C755B10AC044}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
