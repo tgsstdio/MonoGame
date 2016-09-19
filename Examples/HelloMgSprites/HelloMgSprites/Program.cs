@@ -1,6 +1,11 @@
 ﻿using Magnesium;
 using Microsoft.Xna.Framework;
+using MonoGame.Audio.OpenAL;
+using MonoGame.Graphics;
+using MonoGame.Platform.DesktopGL;
+using OpenTK;
 using SimpleInjector;
+using SimpleInjector.Extensions.LifetimeScoping;
 using System;
 
 namespace HelloMgSprites
@@ -19,11 +24,12 @@ namespace HelloMgSprites
             {
                 using (var container = new SimpleInjector.Container())
                 {
+                    container.Options.DefaultScopedLifestyle = new LifetimeScopeLifestyle();
 
                     // GAME
                     container.Register<Game, HelloMgSpriteGame>(Lifestyle.Scoped);
 
-                    container.Register<HelloMagnesium.IMgPresentationLayer, HelloMagnesium.MgPresentationLayer>(Reuse.Singleton);
+                    container.Register<IMgPresentationLayer, MgPresentationLayer>(Lifestyle.Singleton);
 
                     // Magnesium
                     container.Register<Magnesium.MgDriver>(Lifestyle.Singleton);
@@ -41,7 +47,7 @@ namespace HelloMgSprites
                     //container.Register<ISoundEnvironment, SoundEnvironment>(Reuse.Singleton);
 
                     // RUNTIME
-                    container.Register<Microsoft.Xna.Framework.IGameBackbone, Microsoft.Xna.Framework.GameBackbone>(Lifestyle.InCurrentScope);
+                    container.Register<Microsoft.Xna.Framework.IGameBackbone, Microsoft.Xna.Framework.GameBackbone>(Lifestyle.Scoped);
                     container.Register<Microsoft.Xna.Framework.Content.IContentManager, Microsoft.Xna.Framework.Content.NullContentManager>(Lifestyle.Singleton);
                     container.Register<Microsoft.Xna.Framework.Content.IContentTypeReaderManager, Microsoft.Xna.Framework.Content.NullContentTypeReaderManager>(Lifestyle.Singleton);
 
@@ -54,12 +60,14 @@ namespace HelloMgSprites
                     container.Register<MonoGame.Graphics.IGraphicsDeviceManager, MonoGame.Platform.DesktopGL.MgDesktopGLGraphicsDeviceManager>(Lifestyle.Scoped);
 
                     // OPENTK BACKBUFFER STUFF
-                    container.Register<MonoGame.Platform.DesktopGL.IOpenTKWindowResetter, MgGLWindowResetter>(Lifestyle.Singleton);
-                    container.Register<Magnesium.OpenGL.DesktopGL.IBackbufferContext, Magnesium.OpenGL.DesktopGL.OpenTKBackbufferContext>(Lifestyle.Singleton);
-                    container.Register<Magnesium.OpenGL.DesktopGL.IMgGraphicsDeviceLogger, MockGraphicsDeviceLogger>(Lifestyle.Singleton);
+                    container.Register<MonoGame.Platform.DesktopGL.IOpenTKWindowResetter, MonoGame.Platform.DesktopGL.DesktopGLWindowResetter>(Lifestyle.Singleton);
+                    container.Register<Magnesium.OpenGL.DesktopGL.IMgGraphicsDeviceLogger, Magnesium.OpenGL.DesktopGL.NullMgGraphicsDeviceLogger>(Lifestyle.Singleton);
 
-                    container.Register<MonoGame.Platform.DesktopGL.IOpenTKGameWindow, MonoGame.Platform.DesktopGL.OpenTKGameWindow>(Lifestyle.Singleton);
-                    container.RegisterMapping<Microsoft.Xna.Framework.IGameWindow, MonoGame.Platform.DesktopGL.IOpenTKGameWindow>(Lifestyle.Singleton);
+                    {
+                        var registration = Lifestyle.Singleton.CreateRegistration<MonoGame.Platform.DesktopGL.OpenTKGameWindow>(container);
+                        container.AddRegistration(typeof(MonoGame.Platform.DesktopGL.IOpenTKGameWindow), registration);
+                        container.AddRegistration(typeof(Microsoft.Xna.Framework.IGameWindow), registration);
+                    }
                     container.Register<Microsoft.Xna.Framework.Input.IMouseListener, MonoGame.Platform.DesktopGL.Input.DesktopGLMouseListener>(Lifestyle.Singleton);
                     container.Register<Microsoft.Xna.Framework.Input.IKeyboardInputListener, Microsoft.Xna.Framework.Input.KeyboardInputListener>(Lifestyle.Singleton);
 
@@ -84,12 +92,12 @@ namespace HelloMgSprites
                     using (var scope = container.BeginLifetimeScope())
                     {
                         using (var window = new NativeWindow())
-                        using (var driver = container.Resolve<MgDriver>())
+                        using (var driver = container.GetInstance<MgDriver>())
                         {
-                            container.RegisterInstance<INativeWindow>(window);
+                            container.RegisterSingleton<INativeWindow>(window);
                             driver.Initialize(new MgApplicationInfo
                             {
-                                ApplicationName = "HelloMagnesium",
+                                ApplicationName = "HelloMgSprite",
                                 ApplicationVersion = 1,
                                 EngineName = "MonoGame",
                                 EngineVersion = 1,
@@ -97,7 +105,7 @@ namespace HelloMgSprites
                             },
                             MgEnableExtensionsOption.ALL);
 
-                            using (var presentationSurface = container.Resolve<IMgPresentationSurface>())
+                            using (var presentationSurface = container.GetInstance<IMgPresentationSurface>())
                             {
                                 presentationSurface.Initialize();
                                 var device = driver.CreateLogicalDevice(presentationSurface.Surface, MgEnableExtensionsOption.ALL);
@@ -112,19 +120,19 @@ namespace HelloMgSprites
                                         });
 
                                 //container.RegisterInstance<IMgLogicalDevice>(device, Reuse.Singleton);
-                                container.RegisterInstance<IMgThreadPartition>(partition, Reuse.Singleton);
+                                container.RegisterSingleton<IMgThreadPartition>(partition);
 
                                 using (var scopedContext = container.BeginLifetimeScope())
                                 {
-                                    using (var audioContext = container.Resolve<IOpenALSoundContext>())
-                                    using (var manager = container.Resolve<IGraphicsDeviceManager>())
+                                    using (var audioContext = container.GetInstance<IOpenALSoundContext>())
+                                    using (var manager = container.GetInstance<IGraphicsDeviceManager>())
                                     {
                                         audioContext.Initialize();
                                         //									var capabilities = container.Resolve<IGraphicsCapabilities>();
                                         //									capabilities.Initialize();     
-                                        using (var backbone = scopedContext.Resolve<IGameBackbone>())
+                                        using (var backbone = scopedContext.GetInstance<IGameBackbone>())
                                         {
-                                            var exitStrategy = scopedContext.Resolve<IWindowExitStrategy>();
+                                            var exitStrategy = scopedContext.GetInstance<IWindowExitStrategy>();
                                             exitStrategy.Initialize();
 
                                             backbone.Run();
@@ -144,6 +152,11 @@ namespace HelloMgSprites
                 Console.WriteLine(ex.Message);
                 Console.WriteLine(ex.StackTrace);
             }
-        }       
+        }
+
+        private static void SetupVulkan(Container container)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

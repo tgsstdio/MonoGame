@@ -3,7 +3,7 @@ using System.Diagnostics;
 using Magnesium;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace HelloMagnesium
+namespace MonoGame.Platform.DesktopGL
 {
     // HANDLES THE WINDOWING ISSUE
 	public class MgOpenTKPresentationSurface : IMgPresentationSurface

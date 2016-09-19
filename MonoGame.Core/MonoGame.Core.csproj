@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -233,21 +233,9 @@
     <Compile Include="IThreadingContext.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="Input\" />
-    <Folder Include="Input\Touch\" />
-    <Folder Include="Graphics\" />
-    <Folder Include="Media\" />
-    <Folder Include="Content\" />
-    <Folder Include="Graphics\Vertices\" />
-    <Folder Include="Audio\" />
-    <Folder Include="SpriteBatch\" />
-    <Folder Include="SpriteBatch\Utilities\" />
-    <Folder Include="Utilities\" />
-    <Folder Include="Audio\Xact\" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Magnesium\Magnesium.csproj">
+    <ProjectReference Include="..\Magnesium\Magnesium\Magnesium.csproj">
       <Project>{9F9AC448-9D17-43E5-8889-285426290891}</Project>
       <Name>Magnesium</Name>
     </ProjectReference>

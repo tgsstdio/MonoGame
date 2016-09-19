@@ -7,7 +7,16 @@ using System.Threading.Tasks;
 
 namespace HelloMgSprites
 {
-    class HelloMgSpriteGame : Game
+    public class HelloMgSpriteGame : Game
     {
+        protected override void ReleaseManagedResources()
+        {
+
+        }
+
+        protected override void ReleaseUnmanagedResources()
+        {
+    
+        }
     }
 }

@@ -29,7 +29,7 @@ namespace HelloMagnesium
 					// GAME
 					container.Register<Game, HelloMagnesiumGame>(Reuse.InCurrentScope);
 
-					container.Register<HelloMagnesium.IMgPresentationLayer, HelloMagnesium.MgPresentationLayer>(Reuse.Singleton);
+					container.Register<Magnesium.IMgPresentationLayer, Magnesium.MgPresentationLayer>(Reuse.Singleton);
 
 					// Magnesium
 					container.Register<Magnesium.MgDriver>(Reuse.Singleton);
@@ -60,9 +60,7 @@ namespace HelloMagnesium
 					container.Register<MonoGame.Graphics.IGraphicsDeviceManager, MonoGame.Platform.DesktopGL.MgDesktopGLGraphicsDeviceManager>(Reuse.InCurrentScope);
                     
                     // OPENTK BACKBUFFER STUFF
-                    container.Register<MonoGame.Platform.DesktopGL.IOpenTKWindowResetter, MgGLWindowResetter>(Reuse.Singleton);
-                    container.Register<Magnesium.OpenGL.DesktopGL.IBackbufferContext, Magnesium.OpenGL.DesktopGL.OpenTKBackbufferContext>(Reuse.Singleton);
-                    container.Register<Magnesium.OpenGL.DesktopGL.IMgGraphicsDeviceLogger, MockGraphicsDeviceLogger>(Reuse.Singleton);
+                    container.Register<MonoGame.Platform.DesktopGL.IOpenTKWindowResetter, MonoGame.Platform.DesktopGL.DesktopGLWindowResetter>(Reuse.Singleton);
 
                     container.Register<MonoGame.Platform.DesktopGL.IOpenTKGameWindow, MonoGame.Platform.DesktopGL.OpenTKGameWindow>(Reuse.Singleton);
 					container.RegisterMapping<Microsoft.Xna.Framework.IGameWindow, MonoGame.Platform.DesktopGL.IOpenTKGameWindow>();
@@ -218,8 +216,10 @@ namespace HelloMagnesium
 			// Magnesium.OpenGL.DesktopGL INTERNALS
 			container.Register<Magnesium.OpenGL.DesktopGL.IOpenTKSwapchainKHR, Magnesium.OpenGL.DesktopGL.GLSwapchainKHR>(Reuse.Singleton);
 			container.Register<Magnesium.OpenGL.DesktopGL.IGLDevicePlatform, Magnesium.OpenGL.DesktopGL.FullGLDevicePlatform>(Reuse.Singleton);
+            container.Register<Magnesium.OpenGL.DesktopGL.IBackbufferContext, Magnesium.OpenGL.DesktopGL.OpenTKBackbufferContext>(Reuse.Singleton);
+            container.Register<Magnesium.OpenGL.DesktopGL.IMgGraphicsDeviceLogger, Magnesium.OpenGL.DesktopGL.NullMgGraphicsDeviceLogger>(Reuse.Singleton);
 
-            container.Register<Magnesium.IMgPresentationSurface, MockMgPresentationSurface>(Reuse.Singleton);
+            //container.Register<Magnesium.IMgPresentationSurface, MockMgPresentationSurface>(Reuse.Singleton);
             container.Register<IShaderContentStreamer, GLSLShaderContentStreamer>(Reuse.Singleton);
 		}
 	}

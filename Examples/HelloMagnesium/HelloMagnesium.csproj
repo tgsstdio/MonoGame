@@ -43,23 +43,16 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MgGLWindowResetter.cs" />
     <Compile Include="GLSLShaderContentStreamer.cs" />
     <Compile Include="IShaderContentStreamer.cs" />
-    <Compile Include="MockMgPresentationSurface.cs" />
-    <Compile Include="MgOpenTKPresentationSurface.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="MockGraphicsDevicePreferences.cs" />
     <Compile Include="HelloMagnesiumGame.cs" />
-    <Compile Include="MockTouchListener.cs" />
-    <Compile Include="MgPresentationLayer.cs" />
-    <Compile Include="IMgPresentationLayer.cs" />
     <Compile Include="SPIRVShaderContentStreamer.cs" />
     <Compile Include="VkBuffer.cs" />
     <Compile Include="GraphicsBank.cs" />
     <Compile Include="MgSpriteBatch.cs" />
-    <Compile Include="MockGraphicsDeviceLogger.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -84,7 +77,19 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Magnesium\Magnesium.csproj">
+    <ProjectReference Include="..\..\Magnesium\Magnesium.OpenGL.DesktopGL\Magnesium.OpenGL.DesktopGL.csproj">
+      <Project>{156d7f9d-1243-4edb-9e45-24faf2f40a4c}</Project>
+      <Name>Magnesium.OpenGL.DesktopGL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Magnesium\Magnesium.OpenGL\Magnesium.OpenGL.csproj">
+      <Project>{84924a0f-0d4c-4b0c-b16a-4f26dd838af2}</Project>
+      <Name>Magnesium.OpenGL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Magnesium\Magnesium.Vulkan\Magnesium.Vulkan\Magnesium.Vulkan.csproj">
+      <Project>{8ef770d0-2dbc-4a8c-bf5d-dc3d429190f8}</Project>
+      <Name>Magnesium.Vulkan</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Magnesium\Magnesium\Magnesium.csproj">
       <Project>{9f9ac448-9d17-43e5-8889-285426290891}</Project>
       <Name>Magnesium</Name>
     </ProjectReference>
@@ -116,14 +121,6 @@
       <Project>{C06188B4-0C78-42CB-B868-336EB7B6B3DF}</Project>
       <Name>MonoGame.Audio.OpenAL</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Magnesium.OpenGL.DesktopGL\Magnesium.OpenGL.DesktopGL.csproj">
-      <Project>{156D7F9D-1243-4EDB-9E45-24FAF2F40A4C}</Project>
-      <Name>Magnesium.OpenGL.DesktopGL</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Magnesium.OpenGL\Magnesium.OpenGL.csproj">
-      <Project>{84924A0F-0D4C-4B0C-B16A-4F26DD838AF2}</Project>
-      <Name>Magnesium.OpenGL</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\FreeImageNET-PCL\FreeImageAPI-PCL.csproj">
       <Project>{30E16C50-498F-4E07-AFB5-084FB43F0228}</Project>
       <Name>FreeImageAPI-PCL</Name>
@@ -131,10 +128,6 @@
     <ProjectReference Include="..\..\MonoGame.Content.Dirs\MonoGame.Content.Dirs.csproj">
       <Project>{9D3DE491-E6D0-4D12-9A2D-D31B23D7D71D}</Project>
       <Name>MonoGame.Content.Dirs</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Magnesium.Vulkan\Magnesium.Vulkan\Magnesium.Vulkan.csproj">
-      <Project>{8EF770D0-2DBC-4A8C-BF5D-DC3D429190F8}</Project>
-      <Name>Magnesium.Vulkan</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>
