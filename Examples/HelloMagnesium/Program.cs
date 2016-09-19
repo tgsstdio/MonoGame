@@ -165,7 +165,7 @@ namespace HelloMagnesium
 
             container.Register<Magnesium.IMgPresentationSurface, MgOpenTKPresentationSurface>(Reuse.Singleton);
 
-            container.Register<IShaderContentStreamer, SPIRVShaderContentStreamer>(Reuse.Singleton);
+            container.Register<MonoGame.Graphics.IShaderContentStreamer, MonoGame.Graphics.SPIRVShaderContentStreamer>(Reuse.Singleton);
 		}
 
 		static void SetupOpenGL(Container container)
@@ -220,7 +220,7 @@ namespace HelloMagnesium
             container.Register<Magnesium.OpenGL.DesktopGL.IMgGraphicsDeviceLogger, Magnesium.OpenGL.DesktopGL.NullMgGraphicsDeviceLogger>(Reuse.Singleton);
 
             //container.Register<Magnesium.IMgPresentationSurface, MockMgPresentationSurface>(Reuse.Singleton);
-            container.Register<IShaderContentStreamer, GLSLShaderContentStreamer>(Reuse.Singleton);
+            container.Register<MonoGame.Graphics.IShaderContentStreamer, MonoGame.Graphics.GLSLShaderContentStreamer>(Reuse.Singleton);
 		}
 	}
 }

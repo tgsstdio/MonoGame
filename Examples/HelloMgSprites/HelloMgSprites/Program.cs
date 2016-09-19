@@ -154,9 +154,22 @@ namespace HelloMgSprites
             }
         }
 
-        private static void SetupVulkan(Container container)
+        static void SetupVulkan(Container container)
         {
-            throw new NotImplementedException();
+            container.Register<Magnesium.IMgTextureGenerator, Magnesium.MgStagingBufferOptimizer>(Lifestyle.Singleton);
+
+            // Magnesium.VUlkan
+            container.Register<Magnesium.IMgEntrypoint, Magnesium.Vulkan.VkEntrypoint>(Lifestyle.Singleton);
+
+            // IMgGraphicsDevice
+            container.Register<Magnesium.IMgGraphicsDevice, Magnesium.MgDefaultGraphicsDevice>(Lifestyle.Scoped);
+
+            // IMgSwapchainCollection
+            container.Register<Magnesium.IMgSwapchainCollection, Magnesium.MgSwapchainCollection>(Lifestyle.Scoped);
+
+            container.Register<Magnesium.IMgPresentationSurface, MgOpenTKPresentationSurface>(Lifestyle.Singleton);
+
+            container.Register<IShaderContentStreamer, SPIRVShaderContentStreamer>(Lifestyle.Singleton);
         }
     }
 }

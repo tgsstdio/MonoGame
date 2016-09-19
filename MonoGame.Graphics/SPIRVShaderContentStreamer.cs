@@ -1,10 +1,9 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using MonoGame.Content;
 
-namespace HelloMagnesium
+namespace MonoGame.Graphics
 {
-    class SPIRVShaderContentStreamer : IShaderContentStreamer
+    public class SPIRVShaderContentStreamer : IShaderContentStreamer
     {
         private readonly IContentStreamer mLoader;
         public SPIRVShaderContentStreamer(IContentStreamer loader)

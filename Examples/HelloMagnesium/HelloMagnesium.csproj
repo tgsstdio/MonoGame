@@ -43,13 +43,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GLSLShaderContentStreamer.cs" />
     <Compile Include="IShaderContentStreamer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="MockGraphicsDevicePreferences.cs" />
     <Compile Include="HelloMagnesiumGame.cs" />
-    <Compile Include="SPIRVShaderContentStreamer.cs" />
     <Compile Include="VkBuffer.cs" />
     <Compile Include="GraphicsBank.cs" />
     <Compile Include="MgSpriteBatch.cs" />

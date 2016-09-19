@@ -4,7 +4,7 @@
 	{
 		public int Pass { get; set;}
 		public IEffectPipelineCollection Variants {get; private set;}
-		public StateGroup PassGroup { get; set; }
+		//public StateGroup PassGroup { get; set; }
 
 		public static int GeneratePass(int index)
 		{

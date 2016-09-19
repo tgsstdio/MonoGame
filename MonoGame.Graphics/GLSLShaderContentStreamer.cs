@@ -1,10 +1,9 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using MonoGame.Content;
 
-namespace HelloMagnesium
+namespace MonoGame.Graphics
 {
-    class GLSLShaderContentStreamer : IShaderContentStreamer
+    public class GLSLShaderContentStreamer : IShaderContentStreamer
     {
         private IContentStreamer mLoader;
         public GLSLShaderContentStreamer(IContentStreamer loader)
