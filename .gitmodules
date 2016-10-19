@@ -4,10 +4,6 @@
 [submodule "ThirdParty/Dependencies"]
 	path = ThirdParty/Dependencies
 	url = https://github.com/Mono-Game/MonoGame.Dependencies.git
-[submodule "Magnesium"]
-	path = Magnesium
-	url = ./Magnesium
-	branch = master
 [submodule "Examples/Samples"]
 	path = Examples/Samples
 	url = https://github.com/tgsstdio/MonoGame.Samples.git
