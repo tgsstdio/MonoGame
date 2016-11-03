@@ -11,3 +11,7 @@
 [submodule "FreeImageNET-PCL"]
 	path = FreeImageNET-PCL
 	url = ../FreeImageNET-PCL
+[submodule "Magnesium"]
+	path = Magnesium
+	url = https://github.com/tgsstdio/Mg.git
+	branch = v400

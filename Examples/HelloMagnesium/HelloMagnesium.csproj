@@ -30,12 +30,29 @@
     <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Magnesium, Version=4.0.6136.42367, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\Magnesium.4.0.0\lib\portable-net45+win+wpa81+MonoAndroid10+xamarinios10+MonoTouch10\Magnesium.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Magnesium.OpenGL, Version=1.0.6150.2059, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\Magnesium.OpenGL.4.0.0\lib\portable45-net45+win8+wpa81\Magnesium.OpenGL.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Magnesium.OpenGL.DesktopGL, Version=1.0.6150.2156, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\Magnesium.OpenGL.DesktopGL.4.0.0\lib\net45\Magnesium.OpenGL.DesktopGL.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Magnesium.Vulkan, Version=1.0.6136.42367, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\Magnesium.Vulkan.4.0.1\lib\portable45-net45+win8+wpa81\Magnesium.Vulkan.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="OpenTK, Version=2.0.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
+      <HintPath>packages\OpenTK.2.0.0\lib\net20\OpenTK.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
-    <Reference Include="OpenTK">
-      <HintPath>..\..\packages\OpenTK.Next.1.2.2336.6514-pre\lib\net20\OpenTK.dll</HintPath>
-    </Reference>
     <Reference Include="System.Core" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="DryIoc">
@@ -43,7 +60,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IShaderContentStreamer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="MockGraphicsDevicePreferences.cs" />
@@ -60,6 +76,7 @@
     <None Include="Content\80000000\80000003.spv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="OpenTK.dll.config" />
     <None Include="packages.config" />
     <None Include="Content\80000000\80000002.vert">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -67,7 +84,6 @@
     <None Include="Content\80000000\80000003.frag">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="OpenTK.dll.config" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\80000000\80000001.png">
@@ -75,22 +91,6 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Magnesium\Magnesium.OpenGL.DesktopGL\Magnesium.OpenGL.DesktopGL.csproj">
-      <Project>{156d7f9d-1243-4edb-9e45-24faf2f40a4c}</Project>
-      <Name>Magnesium.OpenGL.DesktopGL</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Magnesium\Magnesium.OpenGL\Magnesium.OpenGL.csproj">
-      <Project>{84924a0f-0d4c-4b0c-b16a-4f26dd838af2}</Project>
-      <Name>Magnesium.OpenGL</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Magnesium\Magnesium.Vulkan\Magnesium.Vulkan\Magnesium.Vulkan.csproj">
-      <Project>{8ef770d0-2dbc-4a8c-bf5d-dc3d429190f8}</Project>
-      <Name>Magnesium.Vulkan</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Magnesium\Magnesium\Magnesium.csproj">
-      <Project>{9f9ac448-9d17-43e5-8889-285426290891}</Project>
-      <Name>Magnesium</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\MonoGame.Core\MonoGame.Core.csproj">
       <Project>{699977AD-6D8C-4E0B-ADDA-554B66002D08}</Project>
       <Name>MonoGame.Core</Name>

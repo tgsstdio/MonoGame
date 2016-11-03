@@ -28,14 +28,19 @@
     <DefineConstants>DESKTOPGL; OPENGL;</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Magnesium, Version=4.0.6136.42367, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\Examples\HelloMagnesium\packages\Magnesium.4.0.0\lib\portable-net45+win+wpa81+MonoAndroid10+xamarinios10+MonoTouch10\Magnesium.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="OpenTK, Version=2.0.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
+      <HintPath>..\Examples\HelloMagnesium\packages\OpenTK.2.0.0\lib\net20\OpenTK.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
     <Reference Include="NVorbis">
       <HintPath>..\Examples\Samples\packages\NVorbis.0.8.4.0\lib\NVorbis.dll</HintPath>
-    </Reference>
-    <Reference Include="OpenTK">
-      <HintPath>..\packages\OpenTK.Next.1.2.2336.6514-pre\lib\net20\OpenTK.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -70,8 +75,8 @@
     <Folder Include="Graphics\Shader\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
     <None Include="OpenTK.dll.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MonoGame.Core\MonoGame.Core.csproj">
@@ -85,10 +90,6 @@
     <ProjectReference Include="..\MonoGame.Graphics\MonoGame.Graphics.csproj">
       <Project>{52C293E3-DCC5-43BE-A94F-DBE0CF44E25E}</Project>
       <Name>MonoGame.Graphics</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Magnesium\Magnesium\Magnesium.csproj">
-      <Project>{9F9AC448-9D17-43E5-8889-285426290891}</Project>
-      <Name>Magnesium</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>

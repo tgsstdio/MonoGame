@@ -3,6 +3,7 @@ using OpenTK.Graphics.OpenGL;
 using Magnesium;
 using System.Diagnostics;
 using MonoGame.Content;
+using MonoGame.Graphics;
 
 namespace HelloMagnesium
 {

@@ -30,6 +30,10 @@
     <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Magnesium, Version=4.0.6136.42367, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\Examples\HelloMagnesium\packages\Magnesium.4.0.0\lib\portable-net45+win+wpa81+MonoAndroid10+xamarinios10+MonoTouch10\Magnesium.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
@@ -87,10 +91,6 @@
     <Folder Include="SpriteBatch\Utilties\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Magnesium\Magnesium\Magnesium.csproj">
-      <Project>{9f9ac448-9d17-43e5-8889-285426290891}</Project>
-      <Name>Magnesium</Name>
-    </ProjectReference>
     <ProjectReference Include="..\MonoGame.Core\MonoGame.Core.csproj">
       <Project>{699977AD-6D8C-4E0B-ADDA-554B66002D08}</Project>
       <Name>MonoGame.Core</Name>
@@ -99,5 +99,8 @@
       <Project>{E44E47ED-2203-4E45-85A9-C755B10AC044}</Project>
       <Name>MonoGame.Content</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>

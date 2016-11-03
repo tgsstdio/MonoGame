@@ -34,7 +34,9 @@ namespace HelloMagnesium
 					// Magnesium
 					container.Register<Magnesium.MgDriver>(Reuse.Singleton);
 					container.Register<Magnesium.IMgImageTools, Magnesium.MgImageTools>(Reuse.Singleton);
+                    container.Register<Magnesium.IMgPresentationBarrierEntrypoint, Magnesium.MgPresentationBarrierEntrypoint>(Reuse.Singleton);
 
+                    // TODO: fix shader functions
 					//SetupOpenGL(container);
 					SetupVulkan(container);
 
@@ -99,12 +101,12 @@ namespace HelloMagnesium
                                 EngineVersion = 1,
                                 ApiVersion = MgApplicationInfo.GenerateApiVersion(1, 0, 17),
                             },
-                            MgEnableExtensionsOption.ALL);
+                            MgInstanceExtensionOptions.ALL);
 
                             using (var presentationSurface = container.Resolve<IMgPresentationSurface>())
                             {
                                 presentationSurface.Initialize();
-                                var device = driver.CreateLogicalDevice(presentationSurface.Surface, MgEnableExtensionsOption.ALL);
+                                var device = driver.CreateLogicalDevice(presentationSurface.Surface, MgDeviceExtensionOptions.ALL);
                                 var partition = device.Queues[0].CreatePartition(0,
                                         new MgDescriptorPoolCreateInfo
                                         {
