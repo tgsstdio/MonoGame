@@ -6,7 +6,7 @@ layout (location = 0) uniform sampler2D Texture;
 
 out vec4 fragColor;
 
-void main()
+void fmain()
 {
 	fragColor = vec4(0, 0, 1, 1.0f);
 }

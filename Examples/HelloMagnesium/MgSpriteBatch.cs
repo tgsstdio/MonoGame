@@ -133,12 +133,12 @@ namespace HelloMagnesium
 						Stages = new[] {
 							new MgPipelineShaderStageCreateInfo {
 								Module = vertSM,
-								Name = "main",
+								Name = "vmain",
 								Stage = MgShaderStageFlagBits.VERTEX_BIT,
 							},
 							new MgPipelineShaderStageCreateInfo {
 								Module = fragSM,
-								Name = "main",
+								Name = "fmain",
 								Stage = MgShaderStageFlagBits.FRAGMENT_BIT,
 							},
 						},

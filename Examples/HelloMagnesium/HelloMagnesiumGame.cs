@@ -13,7 +13,7 @@ namespace HelloMagnesium
 {
 	public class HelloMagnesiumGame : Game
 	{
-		private readonly IMgThreadPartition mPartition;
+		private readonly IMgGraphicsConfiguration mGraphicsConfiguration;
 		private readonly IMgBaseTextureLoader mTex2D;
 
 		private IPresentationParameters mPresentation;
@@ -29,9 +29,9 @@ namespace HelloMagnesium
 
 		protected override void ReleaseUnmanagedResources ()
 		{
-            if (mPartition != null)
+            if (mGraphicsConfiguration != null)
             {
-                Bank.Destroy(mPartition);
+                Bank.Destroy(mGraphicsConfiguration.Partition);
                 batch.Dispose();
             }
 		}
@@ -48,7 +48,8 @@ namespace HelloMagnesium
 
 		public HelloMagnesiumGame(
 			IGraphicsDeviceManager manager,
-			IMgThreadPartition partition,
+            MgDriverContext driverContext,
+			IMgGraphicsConfiguration graphicsConfiguration,
 			IMgBaseTextureLoader tex2DLoader,
 			IPresentationParameters presentation,
 			IMgSwapchainCollection swapChain,
@@ -56,13 +57,36 @@ namespace HelloMagnesium
 			IShaderContentStreamer content
 		)
 		{
+            mDriverContext = driverContext;
 			mTex2D = tex2DLoader;
-			mPartition = partition;
+			mGraphicsConfiguration = graphicsConfiguration;
 			mManager = manager;
 			mPresentation = presentation;
 			mContent = content;
 			mPresentationLayer = presentationLayer;
 			mSwapchain = swapChain;
+
+            var errorCode = mDriverContext.Initialize(
+                new MgApplicationInfo
+                {
+                    ApplicationName = "HelloMagnesium",
+                    EngineName = "Magnesium",
+                    ApplicationVersion = 1,
+                    EngineVersion = 1,
+                    ApiVersion = MgApplicationInfo.GenerateApiVersion(1, 0, 17),
+                },
+                  MgInstanceExtensionOptions.ALL
+             );
+
+            if (errorCode != Result.SUCCESS)
+            {
+                throw new InvalidOperationException("mDriverContext error : " + errorCode);
+            }
+
+            var width = (uint) mPresentation.BackBufferWidth;
+            var height = (uint) mPresentation.BackBufferHeight;
+
+            mGraphicsConfiguration.Initialize(width, height);
 
             // Create device
 
@@ -70,70 +94,58 @@ namespace HelloMagnesium
             {
                 Color = MgFormat.R8G8B8A8_UINT,
                 DepthStencil = MgFormat.D24_UNORM_S8_UINT,
-                Width = (uint) mPresentation.BackBufferWidth,
-                Height = (uint) mPresentation.BackBufferHeight,
+                Width = width,
+                Height = height,
                 Samples = MgSampleCountFlagBits.COUNT_1_BIT,
             };
             mManager.CreateDevice(dsCreateInfo);
-//
-//			Bank.Width = (uint)mPresentation.BackBufferWidth;
-//			Bank.Height = (uint)mPresentation.BackBufferHeight;
-//
+
+            Debug.Assert(mGraphicsConfiguration.Partition != null);
+
 			const int NO_OF_BUFFERS = 2;
 			var buffers = new IMgCommandBuffer[NO_OF_BUFFERS];
 			var pAllocateInfo = new MgCommandBufferAllocateInfo {
 				CommandBufferCount = NO_OF_BUFFERS,
-				CommandPool = mPartition.CommandPool,
+				CommandPool = mGraphicsConfiguration.Partition.CommandPool,
 				Level = MgCommandBufferLevel.PRIMARY,
 			};
 
-			mPartition.Device.AllocateCommandBuffers (pAllocateInfo, buffers);
+			mGraphicsConfiguration.Device.AllocateCommandBuffers (pAllocateInfo, buffers);
 
 			Bank.PrePresentBarrierCmd = buffers [0];
 			Bank.PostPresentBarrierCmd = buffers [1];
-//
-//			var dsCreateInfo = new MgGraphicsDeviceCreateInfo
-//			{
-//				Command = buffers[2],
-//				Color = MgFormat.R8G8B8A8_UINT,
-//				DepthStencil = MgFormat.D24_UNORM_S8_UINT,
-//				Width = Bank.Width,
-//				Height = Bank.Height,
-//				Samples = MgSampleCountFlagBits.COUNT_1_BIT,
-//				Swapchains = swapChain,
-//			};
-			//mManager.CreateDevice();
 
 			// Create synchronization objects
 
 			// Create a semaphore used to synchronize image presentation
 			// Ensures that the image is displayed before we start submitting new commands to the queu
 			IMgSemaphore presentComplete;
-			var err = mPartition.Device.CreateSemaphore(new MgSemaphoreCreateInfo(), null, out presentComplete);
+			var err = mGraphicsConfiguration.Device.CreateSemaphore(new MgSemaphoreCreateInfo(), null, out presentComplete);
 			Debug.Assert(err == Result.SUCCESS);
 			Bank.PresentComplete = presentComplete;
 
 			// Create a semaphore used to synchronize command submission
 			// Ensures that the image is not presented until all commands have been sumbitted and executed
 			IMgSemaphore renderComplete;
-			err = mPartition.Device.CreateSemaphore(new MgSemaphoreCreateInfo(), null, out renderComplete);
+			err = mGraphicsConfiguration.Device.CreateSemaphore(new MgSemaphoreCreateInfo(), null, out renderComplete);
 			Debug.Assert(err == Result.SUCCESS);
 			Bank.RenderComplete = renderComplete;
 
-			batch = new MgSpriteBatch (mPartition, content);
+			batch = new MgSpriteBatch (mGraphicsConfiguration.Partition, content);
 			batch.GenerateEffectPipeline (mManager.Device);
 		}
 
 		MgSpriteBatch batch;
 
 		private MgBaseTexture mBackground;
+        private MgDriverContext mDriverContext;
 
 
-		/// <summary>
-		/// LoadContent will be called once per game and is the place to load
-		/// all of your content.
-		/// </summary>
-		public override void LoadContent()
+        /// <summary>
+        /// LoadContent will be called once per game and is the place to load
+        /// all of your content.
+        /// </summary>
+        public override void LoadContent()
 		{
 
 			mBackground = mTex2D.Load (new AssetIdentifier { AssetId = 0x80000001 });
@@ -144,7 +156,8 @@ namespace HelloMagnesium
 
 			const uint NO_OF_VERTICES = 4;
 
-			var vertexBuf = new VkBuffer (mPartition, MgBufferUsageFlagBits.VERTEX_BUFFER_BIT, (4 * sizeof(float)) * NO_OF_VERTICES);
+            Debug.Assert(mGraphicsConfiguration.Partition != null);
+            var vertexBuf = new VkBuffer (mGraphicsConfiguration.Partition, MgBufferUsageFlagBits.VERTEX_BUFFER_BIT, (4 * sizeof(float)) * NO_OF_VERTICES);
 
 			float[] vertexData = {
 				-1f, -1f,
@@ -160,19 +173,19 @@ namespace HelloMagnesium
 				0.9f, 0.9f,
 			};
 
-			vertexBuf.SetData(mPartition.Device, vertexBuf.BufferSize, vertexData, 0, vertexData.Length);
+			vertexBuf.SetData(mGraphicsConfiguration.Device, vertexBuf.BufferSize, vertexData, 0, vertexData.Length);
 
 
 			// create index buffer of quad
 			const int NO_OF_INDICES = 6;
-			var indexBuf = new VkBuffer (mPartition, MgBufferUsageFlagBits.INDEX_BUFFER_BIT, sizeof(Int32) * NO_OF_INDICES);
+			var indexBuf = new VkBuffer (mGraphicsConfiguration.Partition, MgBufferUsageFlagBits.INDEX_BUFFER_BIT, sizeof(Int32) * NO_OF_INDICES);
 
 			uint[] elementData = {
 				0, 1, 2,
 				2, 3, 0,
 			};
 
-			indexBuf.SetData(mPartition.Device, indexBuf.BufferSize, elementData, 0, elementData.Length);
+			indexBuf.SetData(mGraphicsConfiguration.Device, indexBuf.BufferSize, elementData, 0, elementData.Length);
 
 			if (mManager.Device == null)
 				return;
@@ -184,10 +197,10 @@ namespace HelloMagnesium
 			var pCommandBuffers = new IMgCommandBuffer[NO_OF_FRAMEBUFFERS];
 			var allocateInfo = new MgCommandBufferAllocateInfo {
 				CommandBufferCount = NO_OF_FRAMEBUFFERS,
-				CommandPool = mPartition.CommandPool,
+				CommandPool = mGraphicsConfiguration.Partition.CommandPool,
 				Level = MgCommandBufferLevel.PRIMARY
 			};
-			var result = mPartition.Device.AllocateCommandBuffers (allocateInfo, pCommandBuffers);
+			var result = mGraphicsConfiguration.Device.AllocateCommandBuffers (allocateInfo, pCommandBuffers);
 			Debug.Assert (result == Result.SUCCESS);
 			Bank.CommandBuffers = pCommandBuffers;
 
@@ -260,59 +273,6 @@ namespace HelloMagnesium
 
 			var graphNode = new PrecompiledGraphNode (frameInstances.ToArray());
 			Bank.Renderer.Renderables.Add (graphNode);
-
-			// create descriptor set for 
-				// background image
-				// constant buffer SSBO
-
-			IMgDescriptorSet[] descriptorSets;
-			var dsAllocateInfo = new MgDescriptorSetAllocateInfo {
-				DescriptorPool = mPartition.DescriptorPool,
-                DescriptorSetCount = 1,
-				SetLayouts = new []
-				{
-					batch.DescriptorSetLayout,
-				},
-			};
-			result = mPartition.Device.AllocateDescriptorSets (dsAllocateInfo, out descriptorSets);
-			Debug.Assert (result == Result.SUCCESS, result + " != Result.SUCCESS");
-
-			var writes = new MgWriteDescriptorSet [] {
-//				new MgWriteDescriptorSet
-//				{
-//					DstSet = descriptorSets[0],
-//					DescriptorType = MgDescriptorType.STORAGE_BUFFER,
-//					DstBinding = 0,
-//					DescriptorCount = 1,
-//					BufferInfo = new []
-//					{
-//						new MgDescriptorBufferInfo
-//						{
-//							Buffer = buffer,
-//							Offset = 0,
-//							Range = 0,
-//						}
-//					}
-//				},
-//				new MgWriteDescriptorSet
-//				{
-//					DstSet = descriptorSets[0],
-//					DescriptorType = MgDescriptorType.SAMPLED_IMAGE,
-//					DstBinding = 0,
-//					DescriptorCount = 1,
-//					ImageInfo = new []
-//					{
-//						new MgDescriptorImageInfo
-//						{
-//							Sampler = mBackground.Sampler,
-//							ImageView = mBackground.View,
-//							ImageLayout = MgImageLayout.GENERAL,
-//						},
-//					},
-//				}
-			};
-			MgCopyDescriptorSet[] copies = null;
-			mPartition.Device.UpdateDescriptorSets (writes, copies);	
 		}
 
 		public override void Draw(GameTime gameTime)
@@ -329,9 +289,9 @@ namespace HelloMagnesium
 		{
 			uint frameIndex = mPresentationLayer.BeginDraw (Bank.PostPresentBarrierCmd, Bank.PresentComplete);
 			//GL.ColorMask (true, true, true, true);
-			Bank.Renderer.Render (mPartition.Queue, gameTime, frameIndex);
+			Bank.Renderer.Render (mGraphicsConfiguration.Queue, gameTime, frameIndex);
 			// should use semaphores instead
-			mPartition.Queue.QueueWaitIdle ();
+			mGraphicsConfiguration.Queue.QueueWaitIdle ();
 
 			mPresentationLayer.EndDraw (new uint[] { frameIndex }, Bank.PrePresentBarrierCmd, new[] { Bank.RenderComplete });
 		}

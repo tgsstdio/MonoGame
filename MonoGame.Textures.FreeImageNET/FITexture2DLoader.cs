@@ -14,13 +14,13 @@ namespace MonoGame.Textures.FreeImageNET
 	{
 		private readonly IContentStreamer mContentStreamer;
 		private readonly ITextureSortingKeyGenerator mKeyGenerator;
-		private readonly IMgThreadPartition mPartition;	
+		private readonly IMgGraphicsConfiguration mGraphicsConfiguration;	
 		private readonly IMgTextureGenerator mLoader;
-		public FITexture2DLoader (IContentStreamer cStreamer, ITextureSortingKeyGenerator keyGenerator, IMgThreadPartition partition, IMgTextureGenerator loader)
+		public FITexture2DLoader (IContentStreamer cStreamer, ITextureSortingKeyGenerator keyGenerator, IMgGraphicsConfiguration partition, IMgTextureGenerator loader)
 		{
 			mContentStreamer = cStreamer;
 			mKeyGenerator = keyGenerator;
-			mPartition = partition;
+			mGraphicsConfiguration = partition;
 			mLoader = loader;
 
 			// Check if FreeImage is available
@@ -137,7 +137,7 @@ namespace MonoGame.Textures.FreeImageNET
 						},
 					};
 
-					var result = mPartition.Device.CreateImageView(viewCreateInfo, null, out view);
+					var result = mGraphicsConfiguration.Device.CreateImageView(viewCreateInfo, null, out view);
 					Debug.Assert(result == Result.SUCCESS);
 
 						// For best compatibility and to keep the default wrap mode of XNA, only set ClampToEdge if either
@@ -165,7 +165,7 @@ namespace MonoGame.Textures.FreeImageNET
 						AnisotropyEnable = true,
 						BorderColor = MgBorderColor.FLOAT_OPAQUE_WHITE,
 					};
-					result = mPartition.Device.CreateSampler(samplerCreateInfo, null, out sampler);
+					result = mGraphicsConfiguration.Device.CreateSampler(samplerCreateInfo, null, out sampler);
 					Debug.Assert(result == Result.SUCCESS);
 
 					var texture = new FITexture2D(key, image, view, sampler, textureInfo.ImageLayout, textureInfo.DeviceMemory);
@@ -174,9 +174,9 @@ namespace MonoGame.Textures.FreeImageNET
 					texture.Width = (int)width;
 					texture.Height = (int)height;
 
-					result = mPartition.Queue.QueueWaitIdle();
+					result = mGraphicsConfiguration.Queue.QueueWaitIdle();
 					Debug.Assert(result == Result.SUCCESS);
-					mPartition.Device.FreeCommandBuffers(mPartition.CommandPool, new[]{textureInfo.Command});
+					mGraphicsConfiguration.Device.FreeCommandBuffers(mGraphicsConfiguration.Partition.CommandPool, new[]{textureInfo.Command});
 
 					return texture;
 				}

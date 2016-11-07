@@ -10,14 +10,14 @@ namespace MonoGame.Platform.DesktopGL
 		readonly IOpenTKWindowResetter mWindowReset;
 		public MgDesktopGLGraphicsDeviceManager(
 			IMgGraphicsDevice device,
-			IMgThreadPartition partition,
+			IMgGraphicsConfiguration graphicsConfiguration,
 			IPresentationParameters presentationParameters,
 			IMgSwapchainCollection swapchainCollection,
 			IGraphicsAdapterCollection adapters,
 			IGraphicsProfiler profiler,
 			IOpenTKWindowResetter windowReset
 		)
-		: base (device, partition, presentationParameters, swapchainCollection, adapters, profiler)
+		: base (device, graphicsConfiguration, presentationParameters, swapchainCollection, adapters, profiler)
 		{
 			mWindowReset = windowReset;
 		}

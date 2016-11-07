@@ -11,7 +11,7 @@ namespace MonoGame.Graphics
 	public abstract class MgGraphicsDeviceManager : IGraphicsDeviceManager
 	{
 		protected IPresentationParameters PresentationParameters { get; private set; }
-		readonly IMgThreadPartition mPartition;
+		readonly IMgGraphicsConfiguration mGraphicsConfiguration;
 		readonly IMgSwapchainCollection mSwapchainCollection;
 
 		bool _synchronizedWithVerticalRetrace;
@@ -31,7 +31,7 @@ namespace MonoGame.Graphics
 
 		protected MgGraphicsDeviceManager (
 			IMgGraphicsDevice device,
-			IMgThreadPartition partition,
+			IMgGraphicsConfiguration graphicsConfiguration,
 			IPresentationParameters presentationParameters,
 			IMgSwapchainCollection swapchainCollection,
 			IGraphicsAdapterCollection adapters,
@@ -39,7 +39,7 @@ namespace MonoGame.Graphics
 		)
 		{
 			mDevice = device;
-			mPartition = partition;
+			mGraphicsConfiguration = graphicsConfiguration;
 			PresentationParameters = presentationParameters;
 			mSwapchainCollection = swapchainCollection;
 			mAdapters = adapters;
@@ -96,11 +96,11 @@ namespace MonoGame.Graphics
 			IMgCommandBuffer[] buffers = new IMgCommandBuffer[NO_OF_BUFFERS];
 			var pAllocateInfo = new MgCommandBufferAllocateInfo {
 				CommandBufferCount = NO_OF_BUFFERS,
-				CommandPool = mPartition.CommandPool,
+				CommandPool = mGraphicsConfiguration.Partition.CommandPool,
 				Level = MgCommandBufferLevel.PRIMARY,
 			};
 
-			mPartition.Device.AllocateCommandBuffers (pAllocateInfo, buffers);
+			mGraphicsConfiguration.Device.AllocateCommandBuffers (pAllocateInfo, buffers);
 
             var setupCmdBuffer = buffers[0];
 
@@ -132,7 +132,7 @@ namespace MonoGame.Graphics
 				CommandBuffers = buffers,
 			};
 
-			var queue = mPartition.Queue;
+			var queue = mGraphicsConfiguration.Queue;
 			queue.QueueSubmit(new[] {submitInfo}, null);
 			queue.QueueWaitIdle ();
 

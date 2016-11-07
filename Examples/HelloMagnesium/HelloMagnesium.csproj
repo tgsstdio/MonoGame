@@ -30,20 +30,24 @@
     <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Magnesium, Version=4.0.6136.42367, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\Magnesium.4.0.0\lib\portable-net45+win+wpa81+MonoAndroid10+xamarinios10+MonoTouch10\Magnesium.dll</HintPath>
+    <Reference Include="Magnesium, Version=4.0.6155.28560, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\Magnesium.5.0.3\lib\portable45-net45+win8+wpa81\Magnesium.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Magnesium.OpenGL, Version=1.0.6150.2059, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\Magnesium.OpenGL.4.0.0\lib\portable45-net45+win8+wpa81\Magnesium.OpenGL.dll</HintPath>
+    <Reference Include="Magnesium.OpenGL, Version=1.0.6137.447, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\Magnesium.OpenGL.5.0.0\lib\portable45-net45+win8+wpa81\Magnesium.OpenGL.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Magnesium.OpenGL.DesktopGL, Version=1.0.6150.2156, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\Magnesium.OpenGL.DesktopGL.4.0.0\lib\net45\Magnesium.OpenGL.DesktopGL.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Magnesium.Vulkan, Version=1.0.6136.42367, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\Magnesium.Vulkan.4.0.1\lib\portable45-net45+win8+wpa81\Magnesium.Vulkan.dll</HintPath>
+    <Reference Include="Magnesium.PresentationSurfaces.OpenTK, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\Magnesium.PresentationSurfaces.OpenTK.1.0.1\lib\net45\Magnesium.PresentationSurfaces.OpenTK.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Magnesium.Vulkan, Version=1.0.6150.1264, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\Magnesium.Vulkan.5.0.0\lib\portable45-net45+win8+wpa81\Magnesium.Vulkan.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="OpenTK, Version=2.0.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">

@@ -27,18 +27,22 @@ namespace HelloMagnesium
 				using (var container = new Container ())
 				{
 					// GAME
-					container.Register<Game, HelloMagnesiumGame>(Reuse.InCurrentScope);
+					container.Register<Game, HelloMagnesiumGame>(Reuse.Singleton);
 
 					container.Register<Magnesium.IMgPresentationLayer, Magnesium.MgPresentationLayer>(Reuse.Singleton);
 
 					// Magnesium
-					container.Register<Magnesium.MgDriver>(Reuse.Singleton);
+					container.Register<Magnesium.MgDriverContext>(Reuse.Singleton);
+                    container.Register<Magnesium.IMgGraphicsConfiguration, Magnesium.MgDefaultGraphicsConfiguration>(Reuse.Singleton);
 					container.Register<Magnesium.IMgImageTools, Magnesium.MgImageTools>(Reuse.Singleton);
                     container.Register<Magnesium.IMgPresentationBarrierEntrypoint, Magnesium.MgPresentationBarrierEntrypoint>(Reuse.Singleton);
+                    container.Register<Magnesium.MgFramebufferCollection>(Reuse.Singleton);
+
+                    container.Register<Magnesium.IMgPresentationSurface, Magnesium.PresentationSurfaces.OpenTK.OpenTKPresentationSurface>(Reuse.Singleton);
 
                     // TODO: fix shader functions
-					//SetupOpenGL(container);
-					SetupVulkan(container);
+                    //SetupOpenGL(container);
+                    SetupVulkan(container);
 
 					//// AUDIO
 					container.Register<MonoGame.Audio.OpenAL.IOpenALSoundContext, MonoGame.Audio.OpenAL.DesktopGL.DesktopGLOpenALSoundContext>(Reuse.Singleton);
@@ -49,7 +53,7 @@ namespace HelloMagnesium
 					//container.Register<ISoundEnvironment, SoundEnvironment>(Reuse.Singleton);
 
 					// RUNTIME
-					container.Register<Microsoft.Xna.Framework.IGameBackbone, Microsoft.Xna.Framework.GameBackbone>(Reuse.InCurrentScope);
+					container.Register<Microsoft.Xna.Framework.IGameBackbone, Microsoft.Xna.Framework.GameBackbone>(Reuse.Singleton);
 					container.Register<Microsoft.Xna.Framework.Content.IContentManager, Microsoft.Xna.Framework.Content.NullContentManager>(Reuse.Singleton);
 					container.Register<Microsoft.Xna.Framework.Content.IContentTypeReaderManager, Microsoft.Xna.Framework.Content.NullContentTypeReaderManager>(Reuse.Singleton);
 
@@ -59,7 +63,7 @@ namespace HelloMagnesium
 					container.Register<MonoGame.Core.IThreadSleeper, MonoGame.Platform.DesktopGL.DesktopGLThreadSleeper>(Reuse.Singleton);
 					container.Register<MonoGame.Platform.DesktopGL.IWindowExitStrategy, MonoGame.Platform.DesktopGL.DesktopGLExitStrategy>(Reuse.Singleton);
 
-					container.Register<MonoGame.Graphics.IGraphicsDeviceManager, MonoGame.Platform.DesktopGL.MgDesktopGLGraphicsDeviceManager>(Reuse.InCurrentScope);
+					container.Register<MonoGame.Graphics.IGraphicsDeviceManager, MonoGame.Platform.DesktopGL.MgDesktopGLGraphicsDeviceManager>(Reuse.Singleton);
                     
                     // OPENTK BACKBUFFER STUFF
                     container.Register<MonoGame.Platform.DesktopGL.IOpenTKWindowResetter, MonoGame.Platform.DesktopGL.DesktopGLWindowResetter>(Reuse.Singleton);
@@ -87,63 +91,25 @@ namespace HelloMagnesium
 					container.Register<MonoGame.Core.ITextureSortingKeyGenerator, MonoGame.Core.DefaultTextureSortingKeyGenerator>(Reuse.Singleton);
 
 
-					using (var scope = container.OpenScope())
-					{
+                    using (var scope = container.OpenScope())
+                    {
                         using (var window = new NativeWindow())
-                        using (var driver = container.Resolve<MgDriver>())
                         {
                             container.RegisterInstance<INativeWindow>(window);
-                            driver.Initialize(new MgApplicationInfo
-                            {
-                                ApplicationName = "HelloMagnesium",
-                                ApplicationVersion = 1,
-                                EngineName = "MonoGame",
-                                EngineVersion = 1,
-                                ApiVersion = MgApplicationInfo.GenerateApiVersion(1, 0, 17),
-                            },
-                            MgInstanceExtensionOptions.ALL);
-
-                            using (var presentationSurface = container.Resolve<IMgPresentationSurface>())
-                            {
-                                presentationSurface.Initialize();
-                                var device = driver.CreateLogicalDevice(presentationSurface.Surface, MgDeviceExtensionOptions.ALL);
-                                var partition = device.Queues[0].CreatePartition(0,
-                                        new MgDescriptorPoolCreateInfo
-                                        {
-                                            PoolSizes = new MgDescriptorPoolSize[]
-                                           {
-                                                    new MgDescriptorPoolSize { Type = MgDescriptorType.SAMPLER, DescriptorCount = 10 },
-                                           },
-                                            MaxSets = 100,
-                                        });
-
-                                //container.RegisterInstance<IMgLogicalDevice>(device, Reuse.Singleton);
-                                container.RegisterInstance<IMgThreadPartition>(partition, Reuse.Singleton);
-
-                                using (var scopedContext = container.OpenScope())
+                            using (var audioContext = container.Resolve<IOpenALSoundContext>())
+                            {                                
+                                audioContext.Initialize();
+                                using (var backbone = container.Resolve<IGameBackbone>())
                                 {
-                                    using (var audioContext = scopedContext.Resolve<IOpenALSoundContext>())
-                                    using (var manager = scopedContext.Resolve<IGraphicsDeviceManager>())
-                                    {
-                                        audioContext.Initialize();
-                                        //									var capabilities = container.Resolve<IGraphicsCapabilities>();
-                                        //									capabilities.Initialize();     
-                                        using (var backbone = scopedContext.Resolve<IGameBackbone>())
-                                        {
-                                            var exitStrategy = scopedContext.Resolve<IWindowExitStrategy>();
-                                            exitStrategy.Initialize();
+                                    var exitStrategy = container.Resolve<IWindowExitStrategy>();
+                                    exitStrategy.Initialize();
 
-                                            backbone.Run();
-                                        }
-
-                                    }
+                                    backbone.Run();
                                 }
-                                partition.Dispose();
-                                device.Dispose();
-                            }
+                             }
                         }
-					}
-				}
+                    }
+                }
 			}
 			catch (Exception ex)
 			{
@@ -160,12 +126,10 @@ namespace HelloMagnesium
 			container.Register<Magnesium.IMgEntrypoint, Magnesium.Vulkan.VkEntrypoint>(Reuse.Singleton);
 
 			// IMgGraphicsDevice
-			container.Register<Magnesium.IMgGraphicsDevice, Magnesium.MgDefaultGraphicsDevice>(Reuse.InCurrentScope);
+			container.Register<Magnesium.IMgGraphicsDevice, Magnesium.MgDefaultGraphicsDevice>(Reuse.Singleton);
 
 			// IMgSwapchainCollection
-			container.Register<Magnesium.IMgSwapchainCollection, Magnesium.MgSwapchainCollection>(Reuse.InCurrentScope);
-
-            container.Register<Magnesium.IMgPresentationSurface, MgOpenTKPresentationSurface>(Reuse.Singleton);
+			container.Register<Magnesium.IMgSwapchainCollection, Magnesium.MgSwapchainCollection>(Reuse.Singleton);
 
             container.Register<MonoGame.Graphics.IShaderContentStreamer, MonoGame.Graphics.SPIRVShaderContentStreamer>(Reuse.Singleton);
 		}
