@@ -34,7 +34,14 @@ namespace HelloMagnesium
                 Bank.Destroy(mGraphicsConfiguration.Partition);
                 batch.Dispose();
             }
-		}
+
+            if (mBackground != null)
+            {
+                mBackground.DestroyTexture(mGraphicsConfiguration.Device, null);
+                mBackground = null;
+            }
+
+        }
 
         protected override void ReleaseManagedResources ()
 		{
@@ -48,7 +55,6 @@ namespace HelloMagnesium
 
 		public HelloMagnesiumGame(
 			IGraphicsDeviceManager manager,
-            MgDriverContext driverContext,
 			IMgGraphicsConfiguration graphicsConfiguration,
 			IMgBaseTextureLoader tex2DLoader,
 			IPresentationParameters presentation,
@@ -57,7 +63,6 @@ namespace HelloMagnesium
 			IShaderContentStreamer content
 		)
 		{
-            mDriverContext = driverContext;
 			mTex2D = tex2DLoader;
 			mGraphicsConfiguration = graphicsConfiguration;
 			mManager = manager;
@@ -65,23 +70,6 @@ namespace HelloMagnesium
 			mContent = content;
 			mPresentationLayer = presentationLayer;
 			mSwapchain = swapChain;
-
-            var errorCode = mDriverContext.Initialize(
-                new MgApplicationInfo
-                {
-                    ApplicationName = "HelloMagnesium",
-                    EngineName = "Magnesium",
-                    ApplicationVersion = 1,
-                    EngineVersion = 1,
-                    ApiVersion = MgApplicationInfo.GenerateApiVersion(1, 0, 17),
-                },
-                  MgInstanceExtensionOptions.ALL
-             );
-
-            if (errorCode != Result.SUCCESS)
-            {
-                throw new InvalidOperationException("mDriverContext error : " + errorCode);
-            }
 
             var width = (uint) mPresentation.BackBufferWidth;
             var height = (uint) mPresentation.BackBufferHeight;
@@ -138,7 +126,6 @@ namespace HelloMagnesium
 		MgSpriteBatch batch;
 
 		private MgBaseTexture mBackground;
-        private MgDriverContext mDriverContext;
 
 
         /// <summary>
@@ -295,26 +282,5 @@ namespace HelloMagnesium
 
 			mPresentationLayer.EndDraw (new uint[] { frameIndex }, Bank.PrePresentBarrierCmd, new[] { Bank.RenderComplete });
 		}
-
-		//void ExplicitSwapbuffers ()
-		//{ ONLY FOR OPENGL
-		//	GL.ClearColor (0f, 0f, 0f, 0f);
-		//	GL.Viewport (0, 0, (int)mSwapchain.Width, (int)mSwapchain.Height);
-		//	GL.ColorMask (true, false, true, true);
-		//	GL.Clear (ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-
-		//	GL.Begin(OpenTK.Graphics.OpenGL.PrimitiveType.Quads);
-		//		GL.Color3(1.0f, 1.0f, 1.0);
-		//		GL.Vertex2(-1f, -1f);
-		//		GL.Color3(0.9f, 0.9f, 0.9f);
-		//		GL.Vertex2(-1f, 1f);
-		//		GL.Color3(0.9f, 0.9f, 0.9f);
-		//		GL.Vertex2(1f, 1f);
-		//		GL.Color3(0.9f, 0.9f, 0.9f);
-		//		GL.Vertex2(1f, -1f);
-		//	GL.End();
-
-		//	mInternalChain.SwapBuffers();
-		//}
 	}
 }
