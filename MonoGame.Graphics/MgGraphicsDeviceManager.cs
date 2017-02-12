@@ -104,16 +104,6 @@ namespace MonoGame.Graphics
 
             var setupCmdBuffer = buffers[0];
 
-   //         var dsCreateInfo = new MgGraphicsDeviceCreateInfo
-			//{
-			//	Color = MgFormat.R8G8B8A8_UINT,
-			//	DepthStencil = MgFormat.D24_UNORM_S8_UINT,
-			//	Width = width,
-			//	Height = height,
-			//	Samples = MgSampleCountFlagBits.COUNT_1_BIT,
-			//};
-            // TODO : 
-
             var cmdBufInfo = new MgCommandBufferBeginInfo
             {
 

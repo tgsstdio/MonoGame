@@ -199,9 +199,13 @@ namespace HelloMagnesium
 			}
 		}
 
-		#region IDisposable implementation
+        #region IDisposable implementation
+        private bool mIsDisposed = false;
 		public void Dispose ()
 		{
+            if (mIsDisposed)
+                return;
+
             if (GraphicsPipelines != null)
             {
                 foreach (var pipeline in GraphicsPipelines)
@@ -219,6 +223,8 @@ namespace HelloMagnesium
             {
                 PipelineLayout.DestroyPipelineLayout(mPartition.Device, null);
             }
+
+            mIsDisposed = true;
         }
 		#endregion
 	}
