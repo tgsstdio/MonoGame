@@ -170,7 +170,7 @@ namespace Microsoft.Xna.Framework.Media
 
 		protected abstract void RepeatCurrentSong ();
 
-        protected void OnSongFinishedPlaying(object sender, EventArgs args)
+        public void OnSongFinishedPlaying(object sender, EventArgs args)
 		{
 			// TODO: Check args to see if song sucessfully played
 			_numSongsInQueuePlayed++;

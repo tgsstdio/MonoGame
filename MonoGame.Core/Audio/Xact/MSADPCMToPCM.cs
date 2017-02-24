@@ -21,7 +21,7 @@ using System.IO;
 
 namespace Microsoft.Xna.Framework.Audio
 {
-	internal class MSADPCMToPCM {
+	public class MSADPCMToPCM {
 
 		/**
 		 * A bunch of magical numbers that predict the sample data from the

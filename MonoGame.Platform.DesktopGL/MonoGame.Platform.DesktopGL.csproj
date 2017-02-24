@@ -54,7 +54,6 @@
     <Compile Include="DesktopGLExitStrategy.cs" />
     <Compile Include="IWindowExitStrategy.cs" />
     <Compile Include="Desktop\IOpenTKWindowResetter.cs" />
-    <Compile Include="Utilities\OggStream.cs" />
     <Compile Include="Graphics\DesktopGLGraphicsAdapter.cs" />
     <Compile Include="Graphics\DesktopGLGraphicsAdapterCollection.cs" />
     <Compile Include="Graphics\IGraphicsDeviceLogger.cs" />
@@ -72,6 +71,7 @@
   <ItemGroup>
     <Folder Include="Audio\" />
     <Folder Include="Graphics\Shader\" />
+    <Folder Include="Utilities\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="OpenTK.dll.config" />
