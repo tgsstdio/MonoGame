@@ -14,7 +14,7 @@ namespace HelloMagnesium
 	public class HelloMagnesiumGame : Game
 	{
 		private readonly IMgGraphicsConfiguration mGraphicsConfiguration;
-		private readonly IMgBaseTextureLoader mTex2D;
+		private readonly IMgTextureLoader mTex2D;
 
 		private IPresentationParameters mPresentation;
 		private IShaderContentStreamer mContent;
@@ -56,7 +56,7 @@ namespace HelloMagnesium
 		public HelloMagnesiumGame(
 			IGraphicsDeviceManager manager,
 			IMgGraphicsConfiguration graphicsConfiguration,
-			IMgBaseTextureLoader tex2DLoader,
+			IMgTextureLoader tex2DLoader,
 			IPresentationParameters presentation,
 			IMgSwapchainCollection swapChain,
 			IMgPresentationLayer presentationLayer,
@@ -125,7 +125,7 @@ namespace HelloMagnesium
 
 		MgSpriteBatch batch;
 
-		private MgBaseTexture mBackground;
+		private IMgTexture mBackground;
 
 
         /// <summary>

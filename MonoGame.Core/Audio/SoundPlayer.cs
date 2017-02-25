@@ -5,10 +5,8 @@ namespace Microsoft.Xna.Framework.Audio
 	public class SoundPlayer : ISoundPlayer
 	{
 		private readonly ISoundEffectInstancePool mPool;
-		private readonly ISoundEffectInstancePlatform mEffectInstance;
-		public SoundPlayer (ISoundEffectInstancePlatform effectInstance, ISoundEffectInstancePool pool)
-		{
-			mEffectInstance = effectInstance;
+		public SoundPlayer(ISoundEffectInstancePool pool)
+        {
 			mPool = pool;
 		}
 

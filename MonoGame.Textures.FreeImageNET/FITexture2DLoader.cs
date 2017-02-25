@@ -4,13 +4,12 @@ using MonoGame.Content;
 using FreeImageAPI;
 using Magnesium;
 using System.Diagnostics;
-using System.IO;
 using System.Runtime.InteropServices;
 using MonoGame.Graphics;
 
 namespace MonoGame.Textures.FreeImageNET
 {
-	public class FITexture2DLoader : IMgBaseTextureLoader
+    public class FITexture2DLoader : IMgTextureLoader
 	{
 		private readonly IContentStreamer mContentStreamer;
 		private readonly ITextureSortingKeyGenerator mKeyGenerator;
@@ -22,17 +21,20 @@ namespace MonoGame.Textures.FreeImageNET
 			mKeyGenerator = keyGenerator;
 			mGraphicsConfiguration = partition;
 			mLoader = loader;
-
-			// Check if FreeImage is available
-			if (!FreeImage.IsAvailable())
-			{
-				throw new Exception("FreeImage is not available!");
-			}
 		}
 
-		#region ITexture2DLoader implementation
+        public void Initialize()
+        {
+            // Check if FreeImage is available
+            if (!FreeImage.IsAvailable())
+            {
+                throw new Exception("FreeImage is not available!");
+            }
+        }
 
-		MgFormat GetFormatType (uint bpp, FREE_IMAGE_TYPE imageType, FREE_IMAGE_COLOR_TYPE colorType)
+        #region ITexture2DLoader implementation
+
+        MgFormat GetFormatType (uint bpp, FREE_IMAGE_TYPE imageType, FREE_IMAGE_COLOR_TYPE colorType)
 		{
 			if (imageType == FREE_IMAGE_TYPE.FIT_BITMAP)
 			{
@@ -50,7 +52,7 @@ namespace MonoGame.Textures.FreeImageNET
 			throw new NotSupportedException ();
 		}
 
-		public MgBaseTexture Load (AssetIdentifier assetId)
+		public IMgTexture Load (AssetIdentifier assetId)
 		{
 			FIBITMAP dib = new FIBITMAP();
 			FIBITMAP rgba = new FIBITMAP();
@@ -168,11 +170,14 @@ namespace MonoGame.Textures.FreeImageNET
 					result = mGraphicsConfiguration.Device.CreateSampler(samplerCreateInfo, null, out sampler);
 					Debug.Assert(result == Result.SUCCESS);
 
-					var texture = new FITexture2D(key, image, view, sampler, textureInfo.ImageLayout, textureInfo.DeviceMemory);
-					texture.Format = Microsoft.Xna.Framework.Graphics.SurfaceFormat.Color;
-					texture.Bounds = new Rectangle(0,0, (int) width, (int) height);
-					texture.Width = (int)width;
-					texture.Height = (int)height;
+					var texture = new MgTexture(image, view, sampler, textureInfo.DeviceMemory);
+					//texture.Format = Microsoft.Xna.Framework.Graphics.SurfaceFormat.Color;
+					//texture.Bounds = new Rectangle(0,0, (int) width, (int) height);
+					texture.Width = width;
+					texture.Height = height;
+                    texture.Depth = 1;
+                    texture.MipmapLevels = 1;
+                    texture.ArrayLayers = 1;
 
 					result = mGraphicsConfiguration.Queue.QueueWaitIdle();
 					Debug.Assert(result == Result.SUCCESS);
@@ -188,7 +193,7 @@ namespace MonoGame.Textures.FreeImageNET
 			}
 		}
 
-		#endregion
-	}
+        #endregion
+    }
 }
 

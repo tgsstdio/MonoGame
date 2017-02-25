@@ -202,7 +202,6 @@
     <Compile Include="Audio\Xact\XactSound.cs" />
     <Compile Include="Audio\ISoundPlayer.cs" />
     <Compile Include="Audio\SoundPlayer.cs" />
-    <Compile Include="Audio\ISoundEffectInstancePlatform.cs" />
     <Compile Include="SpriteBatch\ITextureSortingKeyGenerator.cs" />
     <Compile Include="SpriteBatch\DefaultTextureSortingKeyGenerator.cs" />
     <Compile Include="Media\MediaLibrary.cs" />

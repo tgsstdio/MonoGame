@@ -10,6 +10,11 @@ namespace MonoGame.Graphics
 		IMgSampler Sampler {get; }
 
 		void DestroyTexture(IMgDevice device, IMgAllocationCallbacks allocator);
+        uint Width { get; }
+        uint Height { get; }
+        uint Depth { get; }
+        uint MipmapLevels { get; }
+        uint ArrayLayers { get; }
 	}
 
 }

@@ -2,9 +2,10 @@
 
 namespace MonoGame.Graphics
 {
-	public interface IMgTexture2DLoader
+	public interface IMgTextureLoader
 	{
-		IMgTexture2D Load(AssetIdentifier assetId);
+        void Initialize();
+		IMgTexture Load(AssetIdentifier assetId);
 	}
 }
 

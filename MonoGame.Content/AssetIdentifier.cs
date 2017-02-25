@@ -1,10 +1,15 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 
 namespace MonoGame.Content
 {
+	[StructLayout(LayoutKind.Explicit)]
 	public struct AssetIdentifier
 	{
-		public UInt32 AssetId { get; set; }
+		[FieldOffset(0)]
+		public UInt32 AssetId;
+		[FieldOffset(0)]
+		public UInt64 AssetId64;
 	}
 }
 
