@@ -30,6 +30,7 @@
     <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Audio\ISoundEffectReader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="BaseGamePlatform.cs" />
     <Compile Include="IGamePlatform.cs" />

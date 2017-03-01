@@ -33,7 +33,7 @@ namespace MonoGame.Content
 			}
 
 			// IF REACHES HERE
-			throw new Exception ("Stream not found.");
+			throw new AssetNotFoundException(assetId);
 		}
 	}
 }
