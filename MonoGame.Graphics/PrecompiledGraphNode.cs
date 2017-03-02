@@ -17,9 +17,12 @@
 
 		public void Render(QueueArgument arg)
 		{
-			var submission = FrameInstances [arg.FrameIndex];
+            if (arg.FrameIndex < FrameInstances.Length)
+            {
+                var submission = FrameInstances[arg.FrameIndex];
 
-			arg.Queue.QueueSubmit(new []{submission.Submit}, submission.Fence);
+                arg.Queue.QueueSubmit(new[] { submission.Submit }, submission.Fence);
+            }
 		}
 
 		private int mDrawOrder = 0;

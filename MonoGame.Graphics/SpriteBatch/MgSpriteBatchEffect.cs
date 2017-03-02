@@ -18,10 +18,10 @@ namespace MonoGame.Graphics
 			mContent = content;
 		}
 
-		public IMgPipeline[] GraphicsPipelines {
-			get;
-			private set;
-		}
+		public IMgPipeline GraphicsPipeline
+        {
+            get;
+        }
 
 		public IMgDescriptorSetLayout DescriptorSetLayout {
 			get;
@@ -147,12 +147,12 @@ namespace MonoGame.Graphics
 						Stages = new[] {
 							new MgPipelineShaderStageCreateInfo {
 								Module = vertSM,
-								Name = "main",
+								Name = "vertMain",
 								Stage = MgShaderStageFlagBits.VERTEX_BIT,
 							},
 							new MgPipelineShaderStageCreateInfo {
 								Module = fragSM,
-								Name = "main",
+								Name = "fragMain",
 								Stage = MgShaderStageFlagBits.FRAGMENT_BIT,
 							},
 						},

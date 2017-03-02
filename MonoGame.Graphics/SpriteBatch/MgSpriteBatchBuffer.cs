@@ -11,7 +11,7 @@ namespace MonoGame.Graphics
         public MgSpriteBatchBufferDomain Vertices { get; private set; }
         public MgSpriteBatchBufferDomain Materials { get; private set; }
         public MgSpriteBatchBufferDomain Instances { get; private set; }
-        public MgSpriteBatchBufferDomain Indirects { get; private set; }
+        //public MgSpriteBatchBufferDomain Indirects { get; private set; }
 
         public MgIndexType IndexType { get; private set; }
         public UInt64 BufferSize { get; private set; }
@@ -76,20 +76,23 @@ namespace MonoGame.Graphics
                 limit: createInfo.InstancesCount
             );
 
-            Indirects = new MgSpriteBatchBufferDomain(
-                offset: (ulong)(Instances.Offset + Instances.ArraySize),
-                stride: Marshal.SizeOf(createInfo.IndirectType),
-                limit: createInfo.IndirectCount
-            );
+            //Indirects = new MgSpriteBatchBufferDomain(
+            //    offset: (ulong)(Instances.Offset + Instances.ArraySize),
+            //    stride: Marshal.SizeOf(createInfo.IndirectType),
+            //    limit: createInfo.IndirectCount
+            //);
 
-            BufferSize = (ulong)(Indirects.Offset + Indirects.ArraySize);
+            var lastSliceOffset = Instances.Offset;
+            var lastSliceArrayLength = Instances.ArraySize;
+
+            BufferSize = (ulong)(lastSliceOffset + lastSliceArrayLength);
 
             var usage = MgBufferUsageFlagBits.INDEX_BUFFER_BIT | MgBufferUsageFlagBits.VERTEX_BUFFER_BIT | MgBufferUsageFlagBits.STORAGE_BUFFER_BIT;
 
-            if (createInfo.IndirectCount > 0)
-            {
-                usage |= MgBufferUsageFlagBits.INDIRECT_BUFFER_BIT;
-            }
+            //if (createInfo.IndirectCount > 0)
+            //{
+            //    usage |= MgBufferUsageFlagBits.INDIRECT_BUFFER_BIT;
+            //}
 
             var bufferCreateInfo = new MgBufferCreateInfo
             {
@@ -134,7 +137,7 @@ namespace MonoGame.Graphics
             Vertices.Reset();
             Materials.Reset();
             Instances.Reset();
-            Indirects.Reset();            
+            //Indirects.Reset();            
         }
 
         ~MgSpriteBatchBuffer()

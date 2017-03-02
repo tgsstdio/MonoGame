@@ -10,7 +10,7 @@ namespace MonoGame.Graphics
         public uint VerticesCount { get; set; }
         public uint MaterialsCount { get; set; }
         public uint InstancesCount { get; set; }
-        public Type IndirectType { get; set; }
-        public uint IndirectCount { get; set; }
+        //public Type IndirectType { get; set; }
+        //public uint IndirectCount { get; set; }
     }
 }
