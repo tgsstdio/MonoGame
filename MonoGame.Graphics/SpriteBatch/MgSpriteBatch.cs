@@ -344,7 +344,8 @@ namespace MonoGame.Graphics
             IMgPipelineLayout layout = effect.PipelineLayout;
             foreach (var quadInfo in sprites)
             {
-                IMgPipeline currentPipeline = effect.GraphicsPipelines[quadInfo.PipelineIndex];
+                //IMgPipeline currentPipeline = effect.GraphicsPipelines[quadInfo.PipelineIndex];
+                IMgPipeline currentPipeline = effect.GraphicsPipeline;
                 DrawIndexedQuad(cmdBuf, quadInfo, batchBuffer, layout, currentPipeline);
             }
 

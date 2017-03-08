@@ -26,6 +26,11 @@ namespace MonoGame.Graphics
 
         public IMgDeviceMemory DeviceMemory { get; private set; }
 
+        public MgSpriteBatchBuffer(IMgThreadPartition partition, MgSpriteBatchBufferCreateInfo createInfo) : this(partition, createInfo, null)
+        {
+
+        }
+
         public MgSpriteBatchBuffer(IMgThreadPartition partition, MgSpriteBatchBufferCreateInfo createInfo, IMgAllocationCallbacks allocator)
         {
             if (partition == null)

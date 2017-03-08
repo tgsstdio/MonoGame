@@ -21,6 +21,7 @@ namespace MonoGame.Graphics
 		public IMgPipeline GraphicsPipeline
         {
             get;
+            private set;
         }
 
 		public IMgDescriptorSetLayout DescriptorSetLayout {
@@ -221,7 +222,7 @@ namespace MonoGame.Graphics
 				IMgPipeline[] graphicsPipelines;
 				err = mPartition.Device.CreateGraphicsPipelines (null, pipelineParameters, null, out graphicsPipelines);
                 Debug.Assert(err == Result.SUCCESS, err + " != Result.SUCCESS");
-				GraphicsPipelines = graphicsPipelines;
+				GraphicsPipeline = graphicsPipelines[0];
 				vertSM.DestroyShaderModule (mPartition.Device, null);
 				fragSM.DestroyShaderModule (mPartition.Device, null);
 			}
@@ -230,12 +231,9 @@ namespace MonoGame.Graphics
 		#region IDisposable implementation
 		public void Dispose ()
 		{
-            if (GraphicsPipelines != null)
+            if (GraphicsPipeline != null)
             {
-                foreach (var pipeline in GraphicsPipelines)
-                {
-                    pipeline.DestroyPipeline(mPartition.Device, null);
-                }
+                GraphicsPipeline.DestroyPipeline(mPartition.Device, null);
             }
 
             if (DescriptorSetLayout != null)

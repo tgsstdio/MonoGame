@@ -34,17 +34,6 @@ namespace MonoGame.Graphics
         uint firstInstance;
     };
 
-    [StructLayout(LayoutKind.Sequential)]
-    struct VkDrawIndexedIndirectCommand
-    {
-        uint indexCount;
-        uint instanceCount;
-        uint firstIndex;
-        uint vertexOffset;
-        uint firstInstance;
-    };
-
-
     public class MgSpriteBatchPool : IDisposable
     {
         private IMgThreadPartition mPartition;

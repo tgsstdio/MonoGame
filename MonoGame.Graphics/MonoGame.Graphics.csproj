@@ -30,8 +30,8 @@
     <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Magnesium, Version=4.0.6155.29495, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\Examples\HelloMagnesium\packages\Magnesium.5.0.4\lib\portable45-net45+win8+wpa81\Magnesium.dll</HintPath>
+    <Reference Include="Magnesium, Version=5.1.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\Examples\Samples\Platformer2D\packages\Magnesium.5.1.1\lib\portable45-net45+win8+wpa81\Magnesium.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
