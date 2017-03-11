@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 namespace MonoGame.Graphics
 {
     [StructLayout(LayoutKind.Sequential)]
-    internal struct MgSpriteVertexDataItem
+    public struct MgSpriteVertexDataItem
     {
         public MgSpriteVertexData vertexTL;
         public MgSpriteVertexData vertexTR;

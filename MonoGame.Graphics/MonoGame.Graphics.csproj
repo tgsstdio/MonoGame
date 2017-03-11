@@ -42,7 +42,6 @@
     <Compile Include="SPIRVShaderContentStreamer.cs" />
     <Compile Include="SpriteBatch\IMgTexture2DLoader.cs" />
     <Compile Include="SpriteBatch\MgSpriteBatchCreateInfo.cs" />
-    <Compile Include="SpriteBatch\MgSpriteBatch.cs" />
     <Compile Include="SpriteBatch\IShaderContentStreamer.cs" />
     <Compile Include="SpriteBatch\MgBatchQuad.cs" />
     <Compile Include="SpriteBatch\MgCmdDepthBias.cs" />
