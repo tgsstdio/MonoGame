@@ -13,7 +13,7 @@ namespace MonoGame.Graphics
 
         public Stream Load(AssetIdentifier assetId)
         {
-            return mLoader.LoadContent(assetId, new[] {".spv"});
+            return mLoader.LoadContent(assetId, new[] {".spv", ".frag.spv", ".vert.spv" });
         }
     }
 }
